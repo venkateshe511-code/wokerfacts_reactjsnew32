@@ -692,11 +692,11 @@ export default function ReferralQuestions() {
                                     htmlFor={id}
                                     className={`flex items-center gap-2 p-2 rounded-md border cursor-pointer transition-colors ${
                                       isActive
-                                        ? "bg-blue-50 border-blue-600"
-                                        : "bg-white border-gray-300 hover:bg-gray-50"
+                                        ? "bg-blue-600 border-blue-600 text-white shadow-sm"
+                                        : "bg-white border-gray-300 hover:bg-gray-50 text-gray-800"
                                     }`}
                                   >
-                                    <RadioGroupItem id={id} value={level} />
+                                    <RadioGroupItem id={id} value={level} className={isActive ? "text-white border-white" : undefined} />
                                     <span className="text-sm font-medium">{level}</span>
                                   </label>
                                 );
