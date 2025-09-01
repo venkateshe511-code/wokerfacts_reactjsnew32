@@ -192,6 +192,17 @@ export default function ReferralQuestions() {
               "What are the present limitations to returning to full duties in their previous position?",
           };
         }
+        if (
+          question.question &&
+          question.question.includes("Physical Demand Classification for this client?") &&
+          !question.question.includes("(PDC)")
+        ) {
+          return {
+            ...question,
+            question:
+              "What would be the Physical Demand Classification (PDC) for this client?",
+          };
+        }
         return question;
       });
 
