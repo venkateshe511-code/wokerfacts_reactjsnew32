@@ -1867,7 +1867,7 @@ export default function DownloadReport() {
 
         <!-- Physical Demand Classification Question (moved to end) -->
         <div style="margin-bottom: 30px; page-break-inside: avoid;">
-            <h4 style="font-weight: bold; margin-bottom: 8px; color: #1e40af; font-family: Arial, sans-serif;">What would be the Physical Demand Classification for this client?</h4>
+            <h4 style="font-weight: bold; margin-bottom: 8px; color: #1e40af; font-family: Arial, sans-serif;">What would be the Physical Demand Classification (PDC) for this client?</h4>
             <p style="font-size: 11px; line-height: 1.5; margin-bottom: 12px; font-family: Arial, sans-serif;">*${getPhysicalDemandLevel(
               activityRatingData?.activities || [],
             )} which is in line with full return to duties.</p>
