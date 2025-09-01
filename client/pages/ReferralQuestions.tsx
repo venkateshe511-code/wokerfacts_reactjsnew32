@@ -197,7 +197,9 @@ export default function ReferralQuestions() {
         }
         if (
           question.question &&
-          question.question.includes("Physical Demand Classification for this client?") &&
+          question.question.includes(
+            "Physical Demand Classification for this client?",
+          ) &&
           !question.question.includes("(PDC)")
         ) {
           return {
@@ -630,9 +632,14 @@ export default function ReferralQuestions() {
                   </div>
 
                   {/* Special UI for Physical Demand Classification (PDC) */}
-                  {question.question.includes("Physical Demand Classification") ? (
+                  {question.question.includes(
+                    "Physical Demand Classification",
+                  ) ? (
                     (() => {
-                      const PDC_MAP: Record<string, { code: string; title: string; description: string }>= {
+                      const PDC_MAP: Record<
+                        string,
+                        { code: string; title: string; description: string }
+                      > = {
                         Sedentary: {
                           code: "S",
                           title: "(S) Sedentary Work",
@@ -643,7 +650,7 @@ export default function ReferralQuestions() {
                           code: "L",
                           title: "(L) Light Work",
                           description:
-                            "Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated \"Light Work\": (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting.",
+                            'Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated "Light Work": (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting.',
                         },
                         Medium: {
                           code: "M",
@@ -669,14 +676,18 @@ export default function ReferralQuestions() {
                         ? question.answer.split("|")[0].replace("PDC:", "")
                         : "";
                       const comments = question.answer.startsWith("PDC:")
-                        ? (question.answer.split("|")[1] || "")
+                        ? question.answer.split("|")[1] || ""
                         : "";
 
                       const setLevel = (level: keyof typeof PDC_MAP) => {
-                        handleAnswerChange(question.id, `PDC:${level}|${comments}`);
+                        handleAnswerChange(
+                          question.id,
+                          `PDC:${level}|${comments}`,
+                        );
                       };
 
-                      const selected = (current as keyof typeof PDC_MAP) || ("" as any);
+                      const selected =
+                        (current as keyof typeof PDC_MAP) || ("" as any);
                       const selectedInfo = (PDC_MAP as any)[current] || null;
 
                       return (
@@ -708,8 +719,18 @@ export default function ReferralQuestions() {
                                         : "bg-white border-gray-300 hover:bg-gray-50 text-gray-800"
                                     }`}
                                   >
-                                    <RadioGroupItem id={id} value={level} className={isActive ? "text-white border-white" : undefined} />
-                                    <span className="text-sm font-medium">{level}</span>
+                                    <RadioGroupItem
+                                      id={id}
+                                      value={level}
+                                      className={
+                                        isActive
+                                          ? "text-white border-white"
+                                          : undefined
+                                      }
+                                    />
+                                    <span className="text-sm font-medium">
+                                      {level}
+                                    </span>
                                   </label>
                                 );
                               })}

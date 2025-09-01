@@ -1447,8 +1447,8 @@ export default function ReviewReport() {
                     {/* Physical Demand Classification */}
                     <div className="mt-6">
                       <h4 className="font-semibold mb-3">
-                        What would be the Physical Demand Classification (PDC) for
-                        this client?
+                        What would be the Physical Demand Classification (PDC)
+                        for this client?
                       </h4>
                       <p className="mb-4">
                         *
@@ -1459,7 +1459,10 @@ export default function ReviewReport() {
                       </p>
 
                       {(() => {
-                        const PDC_MAP: Record<string, { title: string; description: string }> = {
+                        const PDC_MAP: Record<
+                          string,
+                          { title: string; description: string }
+                        > = {
                           Sedentary: {
                             title: "(S) Sedentary Work",
                             description:
@@ -1468,7 +1471,7 @@ export default function ReviewReport() {
                           Light: {
                             title: "(L) Light Work",
                             description:
-                              "Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated \"Light Work\": (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting.",
+                              'Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated "Light Work": (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting.',
                           },
                           Medium: {
                             title: "(M) Medium Work",
@@ -1486,24 +1489,42 @@ export default function ReviewReport() {
                               "Exerting over 100 lbs of force occasionally, over 50 lbs of force frequently, or over 20 lbs of force constantly to move objects. Physical demand requirements are in excess of those for heavy work.",
                           },
                         };
-                        const qa = reportData.referralQuestionsData?.questions?.find(
-                          (x: any) =>
-                            x?.question &&
-                            x.question.includes("Physical Demand Classification"),
-                        );
-                        if (!qa || !qa.answer || !String(qa.answer).startsWith("PDC:")) {
+                        const qa =
+                          reportData.referralQuestionsData?.questions?.find(
+                            (x: any) =>
+                              x?.question &&
+                              x.question.includes(
+                                "Physical Demand Classification",
+                              ),
+                          );
+                        if (
+                          !qa ||
+                          !qa.answer ||
+                          !String(qa.answer).startsWith("PDC:")
+                        ) {
                           return null;
                         }
-                        const level = String(qa.answer).split("|")[0].replace("PDC:", "");
+                        const level = String(qa.answer)
+                          .split("|")[0]
+                          .replace("PDC:", "");
                         const comments = String(qa.answer).split("|")[1] || "";
                         const info = (PDC_MAP as any)[level];
                         if (!info) return null;
                         return (
                           <div className="rounded-md border border-blue-200 bg-blue-50 p-4 mb-4">
-                            <p className="font-semibold text-blue-800 mb-2">{info.title}</p>
-                            <p className="text-sm text-gray-800">{info.description}</p>
+                            <p className="font-semibold text-blue-800 mb-2">
+                              {info.title}
+                            </p>
+                            <p className="text-sm text-gray-800">
+                              {info.description}
+                            </p>
                             {comments && (
-                              <p className="text-sm text-gray-800 mt-2"><span className="font-semibold">Additional Comments:</span> {comments}</p>
+                              <p className="text-sm text-gray-800 mt-2">
+                                <span className="font-semibold">
+                                  Additional Comments:
+                                </span>{" "}
+                                {comments}
+                              </p>
                             )}
                           </div>
                         );

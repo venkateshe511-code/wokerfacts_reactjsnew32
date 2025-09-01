@@ -1873,7 +1873,10 @@ export default function DownloadReport() {
             )} which is in line with full return to duties.</p>
 
             ${(() => {
-              const map: Record<string, { title: string; description: string }> = {
+              const map: Record<
+                string,
+                { title: string; description: string }
+              > = {
                 Sedentary: {
                   title: "(S) Sedentary Work",
                   description:
@@ -1901,9 +1904,14 @@ export default function DownloadReport() {
                 },
               };
               const qa = referralQuestionsData.questions?.find(
-                (x: any) => x?.question && x.question.toLowerCase().includes("physical demand classification"),
+                (x: any) =>
+                  x?.question &&
+                  x.question
+                    .toLowerCase()
+                    .includes("physical demand classification"),
               );
-              if (!qa || !qa.answer || !String(qa.answer).startsWith("PDC:")) return "";
+              if (!qa || !qa.answer || !String(qa.answer).startsWith("PDC:"))
+                return "";
               const level = String(qa.answer).split("|")[0].replace("PDC:", "");
               const comments = String(qa.answer).split("|")[1] || "";
               const info = (map as any)[level];
