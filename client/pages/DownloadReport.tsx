@@ -1872,6 +1872,51 @@ export default function DownloadReport() {
               activityRatingData?.activities || [],
             )} which is in line with full return to duties.</p>
 
+            ${(() => {
+              const map: Record<string, { title: string; description: string }> = {
+                Sedentary: {
+                  title: "(S) Sedentary Work",
+                  description:
+                    "Exerting up to 10 lbs of force occasionally and/or a negligible amount of force frequently to lift, carry, push, pull, or otherwise move objects, including the human body. Sedentary work involves sitting most of the time but may involve walking or standing for brief periods of time. Jobs are sedentary if walking and standing are required occasionally and all other sedentary criteria are met.",
+                },
+                Light: {
+                  title: "(L) Light Work",
+                  description:
+                    "Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated 'Light Work': (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting.",
+                },
+                Medium: {
+                  title: "(M) Medium Work",
+                  description:
+                    "Exerting 20 to 50 lbs of force occasionally, and/or 10 to 25 lbs of force frequently, and/or greater than negligible up to 10 lbs of force constantly to move objects. Physical demand requirements are in excess of those for light work.",
+                },
+                Heavy: {
+                  title: "(H) Heavy Work",
+                  description:
+                    "Exerting 50 to 100 lbs of force occasionally, and/or 25 to 50 lbs of force frequently, and/or 10 to 20 lbs of force constantly to move objects. Physical demand requirements are in excess of those for medium work.",
+                },
+                "Very Heavy": {
+                  title: "(VH) Very Heavy Work",
+                  description:
+                    "Exerting over 100 lbs of force occasionally, over 50 lbs of force frequently, or over 20 lbs of force constantly to move objects. Physical demand requirements are in excess of those for heavy work.",
+                },
+              };
+              const qa = referralQuestionsData.questions?.find(
+                (x: any) => x?.question && x.question.toLowerCase().includes("physical demand classification"),
+              );
+              if (!qa || !qa.answer || !String(qa.answer).startsWith("PDC:")) return "";
+              const level = String(qa.answer).split("|")[0].replace("PDC:", "");
+              const comments = String(qa.answer).split("|")[1] || "";
+              const info = (map as any)[level];
+              if (!info) return "";
+              return `
+                <div style="border: 1px solid #93c5fd; background: #dbeafe; padding: 8px; border-radius: 6px; margin-bottom: 12px;">
+                  <div style="font-weight: bold; color: #1d4ed8; margin-bottom: 4px;">${info.title}</div>
+                  <div style="font-size: 11px; line-height: 1.5; color: #111827;">${info.description}</div>
+                  ${comments ? `<div style="margin-top: 6px; font-size: 11px;"><strong>Additional Comments:</strong> ${comments}</div>` : ""}
+                </div>
+              `;
+            })()}
+
             <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 16px;">
                 <thead>
                     <tr style="background: #fef3c7;">
