@@ -673,25 +673,35 @@ export default function ReferralQuestions() {
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                               Select PDC Level
                             </label>
-                            <div className="flex flex-wrap gap-3">
+                            <RadioGroup
+                              value={current}
+                              onValueChange={(val) =>
+                                handleAnswerChange(
+                                  question.id,
+                                  `PDC:${val}|${comments}`,
+                                )
+                              }
+                              className="grid grid-cols-1 sm:grid-cols-5 gap-3"
+                            >
                               {Object.keys(PDC_MAP).map((level) => {
+                                const id = `pdc-${question.id}-${level}`;
                                 const isActive = current === level;
                                 return (
-                                  <button
-                                    type="button"
+                                  <label
                                     key={level}
-                                    onClick={() => setLevel(level as any)}
-                                    className={`px-4 py-2 rounded-full border transition-colors ${
+                                    htmlFor={id}
+                                    className={`flex items-center gap-2 p-2 rounded-md border cursor-pointer transition-colors ${
                                       isActive
-                                        ? "bg-blue-600 text-white border-blue-600"
-                                        : "bg-white text-gray-800 border-gray-300 hover:bg-gray-50"
+                                        ? "bg-blue-50 border-blue-600"
+                                        : "bg-white border-gray-300 hover:bg-gray-50"
                                     }`}
                                   >
-                                    {level}
-                                  </button>
+                                    <RadioGroupItem id={id} value={level} />
+                                    <span className="text-sm font-medium">{level}</span>
+                                  </label>
                                 );
                               })}
-                            </div>
+                            </RadioGroup>
                           </div>
 
                           {selectedInfo && (
