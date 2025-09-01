@@ -1,0 +1,21 @@
+{
+  "name": "WorkerFacts - Functional Capacity Evaluation",
+  "short_name": "WorkerFacts",
+  "description": "The industry's most advanced web-based platform for clinical abilities determination",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7dacdb",
+  "icons": [
+    {
+      "src": "/workerfacts-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/workerfacts-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

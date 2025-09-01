@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 211 65% 65%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 75%;
+    --input: 214.3 31.8% 75%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 35%;
+    --input: 217.2 32.6% 35%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Enhanced input styling for better visibility */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="date"],
+  input[type="number"],
+  textarea,
+  select {
+    @apply border-2 border-solid;
+  }
+
+  /* Ensure date inputs are clickable across the entire field */
+  input[type="date"] {
+    @apply cursor-pointer;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Make date input calendar icon more prominent */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    @apply cursor-pointer;
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+  }
+
+  /* Firefox compatibility */
+  input[type="date"]::-moz-calendar-picker-indicator {
+    @apply cursor-pointer;
+  }
+}
+
+@layer utilities {
+  /* Mobile-first responsive utilities */
+  .section-padding {
+    @apply py-8 px-4 sm:py-12 md:py-20;
+  }
+
+  .container-responsive {
+    @apply container mx-auto px-2 sm:px-4;
+  }
+
+  /* Custom button animations */
+  .btn-hover {
+    @apply transition-all duration-300 hover:scale-105;
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  /* Mobile navigation */
+  @media (max-width: 768px) {
+    .mobile-nav {
+      @apply hidden;
+    }
+
+    .mobile-menu-button {
+      @apply block md:hidden;
+    }
+  }
+
+  /* Responsive text sizing */
+  .hero-title {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+  }
+
+  .section-title {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  .page-title {
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl;
+  }
+
+  /* Grid responsive layouts */
+  .services-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8;
+  }
+
+  .features-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8;
+  }
+
+  .form-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+  }
+
+  /* Image responsive */
+  .responsive-image {
+    @apply w-full h-auto rounded-lg shadow-lg;
+  }
+
+  /* Mobile-specific form improvements */
+  .mobile-form-input {
+    @apply h-12 sm:h-10 text-base sm:text-sm;
+  }
+
+  .mobile-button {
+    @apply h-12 sm:h-10 px-4 sm:px-6 text-base sm:text-sm w-full sm:w-auto;
+  }
+
+  /* Touch-friendly spacing */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Mobile card styling */
+  .mobile-card {
+    @apply p-4 sm:p-6 md:p-8;
+  }
+
+  /* Responsive padding classes */
+  .mobile-px {
+    @apply px-2 sm:px-4 md:px-6;
+  }
+
+  .mobile-py {
+    @apply py-3 sm:py-4 md:py-6;
+  }
+
+  /* Mobile-optimized navigation */
+  .mobile-nav-item {
+    @apply block w-full text-left px-4 py-3 hover:bg-gray-100 transition-colors;
+  }
+
+  /* Responsive tables */
+  @media (max-width: 768px) {
+    .mobile-table {
+      @apply block overflow-x-auto whitespace-nowrap;
+    }
+
+    .mobile-table-cell {
+      @apply px-2 py-3 text-xs;
+    }
+  }
+
+  /* Responsive flexbox utilities */
+  .mobile-flex {
+    @apply flex flex-col sm:flex-row;
+  }
+
+  .mobile-flex-center {
+    @apply flex flex-col sm:flex-row items-center justify-center sm:justify-between;
+  }
+
+  /* Responsive spacing */
+  .mobile-space-y {
+    @apply space-y-4 sm:space-y-6 md:space-y-8;
+  }
+
+  .mobile-space-x {
+    @apply space-x-2 sm:space-x-4 md:space-x-6;
+  }
+
+  /* Offline handling */
+  .offline-indicator {
+    @apply fixed top-0 left-0 right-0 bg-red-500 text-white text-center py-2 z-50 transform -translate-y-full transition-transform duration-300;
+  }
+
+  .offline .offline-indicator {
+    @apply translate-y-0;
+  }
+
+  /* Image loading states */
+  .image-loading {
+    @apply bg-gray-200 animate-pulse;
+  }
+
+  .image-error {
+    @apply bg-gray-100 flex items-center justify-center text-gray-500 text-sm;
+  }
+
+  /* Offline image placeholder */
+  .offline-image-placeholder {
+    @apply bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-400 text-xs font-medium;
+  }
+}
