@@ -1447,7 +1447,7 @@ export default function ReviewReport() {
                     {/* Physical Demand Classification */}
                     <div className="mt-6">
                       <h4 className="font-semibold mb-3">
-                        What would be the Physical Demand Classification for
+                        What would be the Physical Demand Classification (PDC) for
                         this client?
                       </h4>
                       <p className="mb-4">
