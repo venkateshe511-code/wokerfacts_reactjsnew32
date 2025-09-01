@@ -49,7 +49,9 @@ export default function ReferralQuestions() {
     questions: defaultQuestions.map((q, index) => ({
       id: `default-${index + 1}`,
       question: q,
-      answer: "",
+      answer: q.includes("Physical Demand Classification")
+        ? "PDC:Sedentary|"
+        : "",
       images: [],
     })),
   });
@@ -202,6 +204,16 @@ export default function ReferralQuestions() {
             ...question,
             question:
               "What would be the Physical Demand Classification (PDC) for this client?",
+          };
+        }
+        if (
+          question.question &&
+          question.question.includes("Physical Demand Classification") &&
+          (!question.answer || !String(question.answer).startsWith("PDC:"))
+        ) {
+          return {
+            ...question,
+            answer: "PDC:Sedentary|",
           };
         }
         return question;
@@ -674,7 +686,7 @@ export default function ReferralQuestions() {
                               Select PDC Level
                             </label>
                             <RadioGroup
-                              value={current}
+                              value={current || "Sedentary"}
                               onValueChange={(val) =>
                                 handleAnswerChange(
                                   question.id,
