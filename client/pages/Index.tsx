@@ -380,11 +380,10 @@ export default function Index() {
             <div className="bg-black/50 backdrop-blur-sm rounded-lg px-6 py-4 flex flex-col justify-between">
               <div>
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 leading-tight text-white drop-shadow-lg text-center sm:text-left">
-                  Comprehensive Assessment Platform
+                  Functional Abilities Determination
                 </h1>
                 <p className="text-base md:text-lg mb-6 text-white max-w-2xl drop-shadow-lg">
-                  The industry's most advanced web-based platform for functional
-                  abilities determination
+                  The industries most Comprehensive Assessment Platform
                 </p>
               </div>
 

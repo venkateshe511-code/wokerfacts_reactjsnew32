@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Dialog,
   DialogContent,
@@ -37,7 +38,7 @@ const defaultQuestions = [
   "6a) Was the client consistent and reliable in their efforts?",
   "6b) Distraction test consistency - When performing distraction tests for sustained posture the client should demonstrate similar limitations and or abilities. Pass/Fail determination:",
   "6c) Consistency with diagnosis - Based on the diagnosis and complaints of the individual it is expected that those issues would relate to a similar function performance pattern during testing. Pass/Fail determination:",
-  "What would be the Physical Demand Classification for this client?",
+  "What would be the Physical Demand Classification (PDC) for this client?",
   "Conclusions?",
 ];
 
@@ -48,7 +49,9 @@ export default function ReferralQuestions() {
     questions: defaultQuestions.map((q, index) => ({
       id: `default-${index + 1}`,
       question: q,
-      answer: "",
+      answer: q.includes("Physical Demand Classification")
+        ? "PDC:Sedentary|"
+        : "",
       images: [],
     })),
   });
@@ -133,9 +136,8 @@ export default function ReferralQuestions() {
       {
         id: "default-9",
         question:
-          "What would be the Physical Demand Classification for this client?",
-        answer:
-          "Light duty work capacity. Occasional lifting up to 20lbs, frequent lifting up to 10lbs, with restrictions on prolonged static positioning.",
+          "What would be the Physical Demand Classification (PDC) for this client?",
+        answer: "PDC:Light|",
         images: [],
         savedImageData: [],
       },
@@ -191,6 +193,29 @@ export default function ReferralQuestions() {
             ...question,
             question:
               "What are the present limitations to returning to full duties in their previous position?",
+          };
+        }
+        if (
+          question.question &&
+          question.question.includes(
+            "Physical Demand Classification for this client?",
+          ) &&
+          !question.question.includes("(PDC)")
+        ) {
+          return {
+            ...question,
+            question:
+              "What would be the Physical Demand Classification (PDC) for this client?",
+          };
+        }
+        if (
+          question.question &&
+          question.question.includes("Physical Demand Classification") &&
+          (!question.answer || !String(question.answer).startsWith("PDC:"))
+        ) {
+          return {
+            ...question,
+            answer: "PDC:Sedentary|",
           };
         }
         return question;
@@ -606,8 +631,144 @@ export default function ReferralQuestions() {
                     </div>
                   </div>
 
-                  {/* Check if this is a Pass/Fail question (6b or 6c) */}
-                  {question.question.includes("Pass/Fail determination:") ? (
+                  {/* Special UI for Physical Demand Classification (PDC) */}
+                  {question.question.includes(
+                    "Physical Demand Classification",
+                  ) ? (
+                    (() => {
+                      const PDC_MAP: Record<
+                        string,
+                        { code: string; title: string; description: string }
+                      > = {
+                        Sedentary: {
+                          code: "S",
+                          title: "(S) Sedentary Work",
+                          description:
+                            "Exerting up to 10 lbs of force occasionally and/or a negligible amount of force frequently to lift, carry, push, pull, or otherwise move objects, including the human body. Sedentary work involves sitting most of the time but may involve walking or standing for brief periods of time. Jobs are sedentary if walking and standing are required occasionally and all other sedentary criteria are met.",
+                        },
+                        Light: {
+                          code: "L",
+                          title: "(L) Light Work",
+                          description:
+                            'Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated "Light Work": (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting.',
+                        },
+                        Medium: {
+                          code: "M",
+                          title: "(M) Medium Work",
+                          description:
+                            "Exerting 20 to 50 lbs of force occasionally, and/or 10 to 25 lbs of force frequently, and/or greater than negligible up to 10 lbs of force constantly to move objects. Physical demand requirements are in excess of those for light work.",
+                        },
+                        Heavy: {
+                          code: "H",
+                          title: "(H) Heavy Work",
+                          description:
+                            "Exerting 50 to 100 lbs of force occasionally, and/or 25 to 50 lbs of force frequently, and/or 10 to 20 lbs of force constantly to move objects. Physical demand requirements are in excess of those for medium work.",
+                        },
+                        "Very Heavy": {
+                          code: "VH",
+                          title: "(VH) Very Heavy Work",
+                          description:
+                            "Exerting over 100 lbs of force occasionally, over 50 lbs of force frequently, or over 20 lbs of force constantly to move objects. Physical demand requirements are in excess of those for heavy work.",
+                        },
+                      };
+
+                      const current = question.answer.startsWith("PDC:")
+                        ? question.answer.split("|")[0].replace("PDC:", "")
+                        : "";
+                      const comments = question.answer.startsWith("PDC:")
+                        ? question.answer.split("|")[1] || ""
+                        : "";
+
+                      const setLevel = (level: keyof typeof PDC_MAP) => {
+                        handleAnswerChange(
+                          question.id,
+                          `PDC:${level}|${comments}`,
+                        );
+                      };
+
+                      const selected =
+                        (current as keyof typeof PDC_MAP) || ("" as any);
+                      const selectedInfo = (PDC_MAP as any)[current] || null;
+
+                      return (
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Select PDC Level
+                            </label>
+                            <RadioGroup
+                              value={current || "Sedentary"}
+                              onValueChange={(val) =>
+                                handleAnswerChange(
+                                  question.id,
+                                  `PDC:${val}|${comments}`,
+                                )
+                              }
+                              className="grid grid-cols-1 sm:grid-cols-5 gap-3"
+                            >
+                              {Object.keys(PDC_MAP).map((level) => {
+                                const id = `pdc-${question.id}-${level}`;
+                                const isActive = current === level;
+                                return (
+                                  <label
+                                    key={level}
+                                    htmlFor={id}
+                                    className={`flex items-center gap-2 p-2 rounded-md border cursor-pointer transition-colors ${
+                                      isActive
+                                        ? "bg-blue-600 border-blue-600 text-white shadow-sm"
+                                        : "bg-white border-gray-300 hover:bg-gray-50 text-gray-800"
+                                    }`}
+                                  >
+                                    <RadioGroupItem
+                                      id={id}
+                                      value={level}
+                                      className={
+                                        isActive
+                                          ? "text-white border-white"
+                                          : undefined
+                                      }
+                                    />
+                                    <span className="text-sm font-medium">
+                                      {level}
+                                    </span>
+                                  </label>
+                                );
+                              })}
+                            </RadioGroup>
+                          </div>
+
+                          {selectedInfo && (
+                            <div className="border rounded-md p-4 bg-white">
+                              <p className="font-semibold text-blue-700 mb-2">
+                                {selectedInfo.title}
+                              </p>
+                              <p className="text-sm text-gray-700 text-justify">
+                                {selectedInfo.description}
+                              </p>
+                            </div>
+                          )}
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Additional Comments
+                            </label>
+                            <Textarea
+                              value={comments}
+                              onChange={(e) => {
+                                const level = current || "";
+                                handleAnswerChange(
+                                  question.id,
+                                  `PDC:${level}|${e.target.value}`,
+                                );
+                              }}
+                              placeholder="Enter any additional comments here..."
+                              className="min-h-[120px]"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })()
+                  ) : question.question.includes("Pass/Fail determination:") ? (
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
