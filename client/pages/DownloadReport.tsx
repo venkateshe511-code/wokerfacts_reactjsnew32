@@ -5092,7 +5092,7 @@ export default function DownloadReport() {
                     },
                     {
                       question:
-                        "What would be the Physical Demand Classification for this client?",
+                        "What would be the Physical Demand Classification (PDC) for this client?",
                       answer:
                         "Client can perform light to medium physical demand work activities.",
                       savedImageData: [],
