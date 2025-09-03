@@ -930,12 +930,12 @@ export default function Index() {
                     <Tablet className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-xl sm:text-lg font-semibold text-white">
+                    <h4 className="text-xl font-bold text-white">
                       Viewable on Phone/Tablet
                     </h4>
                   </div>
                 </div>
-                <p className="text-white/80 text-sm">
+                <p className="text-white/90">
                   The program is fully scalable and viewable on your phone or
                   tablet for ease of use.
                 </p>
