@@ -291,6 +291,12 @@
   /* Utility to justify all paragraphs within a container */
   .justify-paragraphs p {
     text-align: justify;
-    text-justify: inter-word;
+    text-justify: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    overflow-wrap: break-word;
+    word-break: normal;
+    text-align-last: left;
   }
 }
