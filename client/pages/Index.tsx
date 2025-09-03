@@ -383,7 +383,7 @@ export default function Index() {
                   Functional Abilities Determination
                 </h1>
                 <p className="text-base md:text-lg mb-6 text-white max-w-2xl drop-shadow-lg">
-                  The industries most Comprehensive Assessment Platform
+                  The industries most Comprehensive On-Line Assessment Platform
                 </p>
               </div>
 
