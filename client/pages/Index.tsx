@@ -404,8 +404,15 @@ export default function Index() {
       </section>
 
       {/* Assessment Platform Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white">
-        <div className="container mx-auto">
+      <section className="relative overflow-hidden py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white">
+        {/* Watermark: subtle WorkerFacts logo on the left side */}
+        <img
+          src="/workerfacts-logo.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none select-none absolute left-6 top-1/2 -translate-y-1/2 opacity-10 w-[220px] sm:w-[280px] md:w-[340px] lg:w-[420px]"
+        />
+        <div className="container mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <Badge className="mb-4 bg-blue-700 text-white">
