@@ -333,7 +333,7 @@ export default function Index() {
                     size="sm"
                     className="bg-blue-500 hover:bg-blue-600 text-white w-full font-semibold text-center"
                   >
-                    Get Started
+                    Start Evaluation
                   </Button>
                 </Link>
               </div>

@@ -1,16 +1,25 @@
 const functions = require("firebase-functions");
 const express = require("express");
+const cors = require("cors");
 const generateDocxRoute = require("./routes/generateClaimantReport");
 
 const app = express();
-app.use(express.json());
 
-// ✅ Optional: Enable global CORS (or just use it per route as you did)
-const cors = require("cors");
-app.use(cors({ origin: true }));
+// Body size limits
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ extended: true, limit: "20mb" }));
+const corsOptions = {
+  origin: ["http://localhost:8080"],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
 
-// Route registration
+// ✅ Global CORS (this handles preflight automatically)
+app.use(cors(corsOptions));
+
+// Routes
 app.use("/", generateDocxRoute);
 
-// Firebase Function export
+// ✅ Export cloud function
 exports.generateClaimantReportApi = functions.https.onRequest(app);

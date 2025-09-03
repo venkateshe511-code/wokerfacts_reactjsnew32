@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -4921,6 +4922,8 @@ export default function DownloadReport() {
   const handleDownloadReport = async () => {
     setIsDownloading(true);
 
+    let didSucceed = false;
+
     // Simulate report generation and download
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
@@ -4938,6 +4941,7 @@ export default function DownloadReport() {
     if (selectedFormat === "pdf") {
       // Use print dialog for PDF generation with auto-naming
       convertHTMLToPDF(reportContent, fileName);
+      didSucceed = true;
     } else {
       try {
         // Load all evaluation data for DOCX generation
@@ -5442,29 +5446,19 @@ export default function DownloadReport() {
 
           // Enhanced digital library data - provide fallback to ensure section is included
           digitalLibraryData: {
+            // Send only metadata to keep payload small
             savedFileData:
               digitalLibraryData.savedFileData &&
               digitalLibraryData.savedFileData.length > 0
-                ? digitalLibraryData.savedFileData
+                ? digitalLibraryData.savedFileData.map((f: any) => ({
+                    name: f.name,
+                    type: f.type,
+                    size: f.size,
+                  }))
                 : [
-                    {
-                      name: "FCE Evaluation Photos",
-                      type: "image/jpeg",
-                      size: 250000,
-                      url: null,
-                    },
-                    {
-                      name: "Test Documentation",
-                      type: "application/pdf",
-                      size: 150000,
-                      url: null,
-                    },
-                    {
-                      name: "Assessment Forms",
-                      type: "application/pdf",
-                      size: 100000,
-                      url: null,
-                    },
+                    { name: "FCE Evaluation Photos", type: "image/jpeg", size: 250000 },
+                    { name: "Test Documentation", type: "application/pdf", size: 150000 },
+                    { name: "Assessment Forms", type: "application/pdf", size: 100000 },
                   ],
           },
 
@@ -5566,8 +5560,12 @@ export default function DownloadReport() {
         console.log("Sending request to cloud function...");
         const requestStartTime = Date.now();
 
+        const isLocal = process.env.NODE_ENV === "development";
+        const apiUrl = isLocal
+          ? "http://localhost:5001/generateclaimantreportapi-e355r2gb5q-uc.a.run.app/"
+          : "https://generateclaimantreportapi-e355r2gb5q-uc.a.run.app/";
         const response = await fetch(
-          "https://us-central1-worker-facts-1sfbuz.cloudfunctions.net/generateClaimantReportApi",
+          apiUrl,
           {
             method: "POST",
             headers: {
@@ -5610,7 +5608,9 @@ export default function DownloadReport() {
           console.log(`  ${key}: ${value}`);
         }
 
-        const blob = await response.blob();
+        // Force correct MIME type to help some viewers
+        const arrayBuf = await response.arrayBuffer();
+        const blob = new Blob([arrayBuf], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
         console.log("Received DOCX blob size:", blob.size, "bytes");
         console.log("Blob type:", blob.type);
 
@@ -5730,6 +5730,7 @@ export default function DownloadReport() {
         window.URL.revokeObjectURL(url);
 
         console.log("DOCX download completed successfully");
+        didSucceed = true;
       } catch (error) {
         console.error("DOCX generation error details:", error);
         alert(
@@ -5739,7 +5740,7 @@ export default function DownloadReport() {
     }
 
     setIsDownloading(false);
-    setShowSuccessDialog(true);
+    setShowSuccessDialog(didSucceed);
   };
 
   const handlePostDownloadCleanup = () => {
@@ -5855,7 +5856,7 @@ export default function DownloadReport() {
                     PDF Format
                   </Label>
                 </div>
-                {/* <div className="flex items-center space-x-2">
+               { /*<div className="flex items-center space-x-2">
                   <RadioGroupItem value="docx" id="docx" />
                   <Label
                     htmlFor="docx"
@@ -5864,7 +5865,7 @@ export default function DownloadReport() {
                     <FileText className="mr-2 h-4 w-4 text-blue-600" />
                     DOCX Format
                   </Label>
-                </div> */}
+                </div>*/}
               </RadioGroup>
             </div>
 
@@ -5945,6 +5946,9 @@ export default function DownloadReport() {
                 Download Complete!
               </DialogTitle>
             </DialogHeader>
+            <DialogDescription id="download-success-desc">
+              Your functional capacity evaluation report has been downloaded.
+            </DialogDescription>
             <div className="py-4">
               <div className="flex items-center justify-center mb-4">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
@@ -5986,6 +5990,9 @@ export default function DownloadReport() {
                 Clear All Data?
               </DialogTitle>
             </DialogHeader>
+            <DialogDescription id="clear-data-desc">
+              This will permanently delete all your evaluation data.
+            </DialogDescription>
             <div className="py-4">
               <div className="text-center space-y-3">
                 <h3 className="text-lg font-semibold text-gray-900">

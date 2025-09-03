@@ -14,130 +14,118 @@ const {
   BorderStyle,
   ImageRun,
   WidthType,
-  VerticalAlign,
-  TableLayoutType,
-  PageBreak,
-  HeadingLevel,
 } = require("docx");
 
 const router = express.Router();
 
-router.use(cors({
-  origin: "*",
-  methods: ["POST"],
-  allowedHeaders: ["Content-Type"]
-}));
+
+// Helper to create a borderless cell
+const borderlessCell = (text, bold = false) =>
+  new TableCell({
+    children: [
+      new Paragraph({
+        children: [new TextRun({ text, bold })],
+      }),
+    ],
+    borders: {
+      top: { style: BorderStyle.NONE },
+      bottom: { style: BorderStyle.NONE },
+      left: { style: BorderStyle.NONE },
+      right: { style: BorderStyle.NONE },
+    },
+  });
+
+// Helper to load logo from data URL, HTTP(S) URL, or local path
+const getLogoBuffer = async (src) => {
+  if (!src || typeof src !== "string") return null;
+  try {
+    // Data URL
+    if (/^data:image\//i.test(src)) {
+      const mime = src.substring(5, src.indexOf(";")); // e.g., data:image/png
+      if (!/image\/(png|jpeg|jpg)/i.test(mime)) return null; // skip svg/webp
+      const base64 = src.split(",")[1] || "";
+      if (!base64) return null;
+      return Buffer.from(base64, "base64");
+    }
+    // HTTP(S) URL
+    if (/^https?:\/\//i.test(src)) {
+      const resp = await fetch(src);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const ct = resp.headers.get("content-type") || "";
+      if (!/image\/(png|jpeg|jpg)/i.test(ct)) return null; // skip unsupported
+      const arr = await resp.arrayBuffer();
+      return Buffer.from(arr);
+    }
+    // Local path
+    const abs = path.isAbsolute(src) ? src : path.resolve(src);
+    if (fs.existsSync(abs)) {
+      // Best effort: only accept png/jpg by extension
+      if (!/(\.png|\.jpg|\.jpeg)$/i.test(abs)) return null;
+      return fs.readFileSync(abs);
+    }
+  } catch (e) {
+    console.error("Logo load error:", e.message);
+  }
+  return null;
+};
 
 router.post("/", async (req, res) => {
-  const {
-    claimantName = "Anonymous",
-    claimNumber = "CLM000000",
-    evaluationDate = "01/01/2025",
-    logoPath = null,
-    clinicName = "MedSource",
-    clinicAddress = "1490-5A Quarterpath Road #242, Williamsburg, VA  23185",
-    clinicPhone = "757-220-5051",
-    clinicFax = "757-273-6198",
-    claimantData = {},
-    painIllustrationData = {},
-    activityRatingData = {},
-    referralQuestionsData = {},
-    protocolTestsData = {},
-    testData = {},
-    digitalLibraryData = {},
-    paymentData = {},
-    reportSummary = {}
-  } = req.body;
-
   try {
-    console.log("=== CLOUD FUNCTION DEBUG START ===");
-    console.log("Received claimantName:", claimantName);
-    console.log("Received testData:", JSON.stringify(testData, null, 2));
-    console.log("Test data length:", testData.tests?.length || 0);
-    console.log("Activity data length:", activityRatingData.activities?.length || 0);
-    console.log("Referral questions length:", referralQuestionsData.questions?.length || 0);
-    console.log("Protocol tests length:", protocolTestsData.selectedTests?.length || 0);
-    console.log("Digital library length:", digitalLibraryData.savedFileData?.length || 0);
+    // Allow payload inspection if needed
+    if (req.query.dryRun === "1") {
+      return res.status(200).json({ ok: true, body: req.body || {} });
+    }
+
+    const {
+      claimantName = "",
+      claimNumber = "",
+      evaluationDate = "",
+      logoPath = null,
+      clinicName = "",
+      clinicAddress = "",
+      clinicPhone = "",
+      clinicFax = "",
+      claimantData = {},
+    } = req.body || {};
+
+    const nameDisplay =
+      claimantName || `${claimantData?.lastName || ""}, ${claimantData?.firstName || ""}`.trim() || "Unknown";
 
     const children = [];
 
-    // Helper functions
-    const calculateAge = (birthDate) => {
-      if (!birthDate) return 0;
-      const today = new Date();
-      const birth = new Date(birthDate);
-      let age = today.getFullYear() - birth.getFullYear();
-      const monthDiff = today.getMonth() - birth.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-        age--;
-      }
-      return age;
-    };
-
-    const getPhysicalDemandLevel = (activities) => {
-      if (!activities || activities.length === 0) return "Medium";
-      const avgRating = activities.reduce((sum, activity) => sum + (activity.rating || 0), 0) / activities.length;
-      if (avgRating >= 8) return "Heavy";
-      if (avgRating >= 6) return "Medium";
-      if (avgRating >= 4) return "Light";
-      return "Sedentary";
-    };
-
-    // Create blue header style
-    const createBlueHeader = (text) => new Paragraph({
-      children: [
-        new TextRun({
-          text: text,
-          bold: true,
-          color: "4472C4",
-          size: 24,
-        }),
-      ],
-      spacing: { before: 240, after: 240 },
-    });
-
-    // Create borderless table cell
-    const createBorderlessCell = (text, bold = false) => new TableCell({
-      children: [new Paragraph({
-        children: [new TextRun({ text: text, bold: bold })],
-      })],
-      borders: {
-        top: { style: BorderStyle.NONE },
-        bottom: { style: BorderStyle.NONE },
-        left: { style: BorderStyle.NONE },
-        right: { style: BorderStyle.NONE }
-      },
-    });
-
-    // ----- COVER PAGE -----
-    if (logoPath && fs.existsSync(logoPath)) {
-      const imageBuffer = fs.readFileSync(path.resolve(logoPath));
-      children.push(
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          children: [new ImageRun({ data: imageBuffer, transformation: { width: 120, height: 60 } })],
-        })
-      );
-    } else {
+    // Logo or clinic name
+    const logoSrc =
+      logoPath ||
+      req.body?.clinicLogo ||
+      req.body?.logo ||
+      claimantData?.clinicLogo ||
+      req.body?.evaluatorData?.clinicLogo;
+    const imageBuffer = await getLogoBuffer(logoSrc);
+    if (imageBuffer) {
       children.push(
         new Paragraph({
           alignment: AlignmentType.CENTER,
           children: [
-            new TextRun({
-              text: clinicName,
-              bold: true,
-              color: "4472C4",
-              size: 32,
-            }),
+            new ImageRun({ data: imageBuffer, transformation: { width: 120, height: 60 } }),
           ],
+          spacing: { after: 200 },
+        })
+      );
+    } else if (clinicName) {
+      children.push(
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [new TextRun({ text: clinicName, bold: true, color: "4472C4", size: 32 })],
+          spacing: { after: 200 },
         })
       );
     }
 
+    // Title (left-aligned block as per reference)
     children.push(
       new Paragraph({
-        spacing: { before: 200, after: 200 },
-        alignment: AlignmentType.CENTER,
+        alignment: AlignmentType.LEFT,
+        indent: { left: 2880 },
         children: [
           new TextRun({
             text: "Functional Abilities Determination",
@@ -146,979 +134,94 @@ router.post("/", async (req, res) => {
             size: 28,
           }),
         ],
+        spacing: { after: 200 },
       })
     );
 
-    // Claimant Information Table (Cover Page)
+    // Cover info table (borderless, centered block with comfortable padding)
     const coverInfoTable = new Table({
+      width: { size: 60, type: WidthType.PERCENTAGE },
+      alignment: AlignmentType.CENTER,
+      borders: {
+        top: { style: BorderStyle.NONE, size: 0 },
+        bottom: { style: BorderStyle.NONE, size: 0 },
+        left: { style: BorderStyle.NONE, size: 0 },
+        right: { style: BorderStyle.NONE, size: 0 },
+        insideH: { style: BorderStyle.NONE, size: 0 },
+        insideV: { style: BorderStyle.NONE, size: 0 },
+      },
       rows: [
         new TableRow({
           children: [
-            createBorderlessCell("Claimant Name:", true),
-            createBorderlessCell(`${claimantData.lastName || ""}, ${claimantData.firstName || ""}`, true),
+            borderlessCell("Claimant Name:", true),
+            borderlessCell(nameDisplay, true),
           ],
         }),
         new TableRow({
           children: [
-            createBorderlessCell("Claimant #:", true),
-            createBorderlessCell(claimNumber),
+            borderlessCell("Claimant #:", true),
+            borderlessCell(claimNumber || "N/A"),
           ],
         }),
         new TableRow({
           children: [
-            createBorderlessCell("Date of Evaluation(s):", true),
-            createBorderlessCell(evaluationDate),
+            borderlessCell("Date of Evaluation(s):", true),
+            borderlessCell(evaluationDate || ""),
           ],
         }),
       ],
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      alignment: AlignmentType.CENTER,
     });
-
     children.push(coverInfoTable);
 
-    // Footer Information
-    children.push(
-      new Paragraph({
-        alignment: AlignmentType.CENTER,
-        spacing: { before: 480, after: 120 },
-        children: [
-          new TextRun({
-            text: "CONFIDENTIAL INFORMATION ENCLOSED",
-            bold: true,
-            size: 18,
-          }),
-        ],
-      }),
-      new Paragraph({
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 60 },
-        children: [
-          new TextRun({
-            text: clinicName,
-            bold: true,
-            size: 16,
-          }),
-        ],
-      }),
-      new Paragraph({
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 60 },
-        children: [
-          new TextRun({
-            text: clinicAddress,
-            size: 16,
-          }),
-        ],
-      }),
-      new Paragraph({
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 240 },
-        children: [
-          new TextRun({
-            text: `Phone: ${clinicPhone}    Fax: ${clinicFax}`,
-            size: 16,
-          }),
-        ],
-      })
-    );
-
-    children.push(new PageBreak());
-
-    // ----- TABLE OF CONTENTS -----
-    children.push(
-      createBlueHeader("Contents of Report"),
-      new Paragraph({
-        children: [new TextRun({ text: "Claimant Information", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Pain Illustration", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Functional Activity Rating", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Referral Questions", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Protocol & Tests", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Test Data & Results", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Comments Demonstrated Perceived", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Comments Job Requirements", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Tested Activities", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Individual Test Results", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Appendix One: Reference Charts", size: 20 })],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [new TextRun({ text: "Appendix Two: Digital Library", size: 20 })],
-        spacing: { after: 120 },
-      })
-    );
-
-    children.push(new PageBreak());
-
-    // ----- DETAILED CLAIMANT INFORMATION -----
-    children.push(createBlueHeader("Claimant Information"));
-
-    const detailedInfoTable = new Table({
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      rows: [
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "First Name:", bold: true })] })],
-              width: { size: 30, type: WidthType.PERCENTAGE },
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: claimantData.firstName || "N/A" })] })],
-              width: { size: 70, type: WidthType.PERCENTAGE },
-            }),
-          ],
-        }),
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "Last Name:", bold: true })] })],
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: claimantData.lastName || "N/A" })] })],
-            }),
-          ],
-        }),
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "Date of Birth:", bold: true })] })],
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: claimantData.dateOfBirth || "N/A" })] })],
-            }),
-          ],
-        }),
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "Age:", bold: true })] })],
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: calculateAge(claimantData.dateOfBirth).toString() + " years" })] })],
-            }),
-          ],
-        }),
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "Gender:", bold: true })] })],
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: claimantData.gender || "N/A" })] })],
-            }),
-          ],
-        }),
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "Height:", bold: true })] })],
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: claimantData.height || "N/A" })] })],
-            }),
-          ],
-        }),
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "Weight:", bold: true })] })],
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: claimantData.weight || "N/A" })] })],
-            }),
-          ],
-        }),
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "Occupation:", bold: true })] })],
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: claimantData.occupation || "N/A" })] })],
-            }),
-          ],
-        }),
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "Education:", bold: true })] })],
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: claimantData.education || "N/A" })] })],
-            }),
-          ],
-        }),
-        new TableRow({
-          children: [
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: "Hand Dominance:", bold: true })] })],
-            }),
-            new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: claimantData.handDominance || "Right" })] })],
-            }),
-          ],
-        }),
-      ],
-    });
-
-    children.push(detailedInfoTable);
-
-    children.push(
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: "Claimant History:",
-            bold: true,
-            size: 22,
-          }),
-        ],
-        spacing: { before: 240, after: 120 },
-      }),
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: claimantData.claimantHistory || "While working in assembly area, client noted pain and was subsequently diagnosed with work-related injury. Client reports ongoing symptoms affecting work capacity and daily activities. FCE requested to determine current functional abilities and return-to-work status.",
-            size: 20,
-          }),
-        ],
-        spacing: { after: 240 },
-      })
-    );
-
-    children.push(new PageBreak());
-
-    // ----- PAIN ILLUSTRATION -----
-    if (painIllustrationData.painLevel || painIllustrationData.description) {
+    // Footer (push toward bottom, centered)
+    if (clinicName || clinicAddress || clinicPhone || clinicFax) {
       children.push(
-        createBlueHeader("Pain Illustration"),
         new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { before: 2400, after: 120 },
           children: [
-            new TextRun({
-              text: "The claimant was asked to mark areas of pain and discomfort on the body diagram below:",
-              size: 20,
-            }),
+            new TextRun({ text: "CONFIDENTIAL INFORMATION ENCLOSED", bold: true, size: 18 }),
           ],
-          spacing: { after: 240 },
-        }),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: `Pain Level: ${painIllustrationData.painLevel || "Not specified"}`,
-              bold: true,
-              size: 20,
-            }),
-          ],
-          spacing: { after: 120 },
-        }),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: `Description: ${painIllustrationData.description || "No description provided"}`,
-              size: 20,
-            }),
-          ],
-          spacing: { after: 240 },
         })
       );
-
-      children.push(new PageBreak());
-    }
-
-    // ----- FUNCTIONAL ACTIVITY RATING -----
-    if (activityRatingData.activities && activityRatingData.activities.length > 0) {
-      children.push(
-        createBlueHeader("Functional Activity Rating"),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: "The following activities were rated by the claimant on a scale of 1-10 (1 = No difficulty, 10 = Unable to perform):",
-              size: 20,
-            }),
-          ],
-          spacing: { after: 240 },
-        })
-      );
-
-      const activityTable = new Table({
-        width: { size: 100, type: WidthType.PERCENTAGE },
-        rows: [
-          new TableRow({
-            children: [
-              new TableCell({
-                children: [new Paragraph({ children: [new TextRun({ text: "Activity", bold: true })] })],
-                width: { size: 70, type: WidthType.PERCENTAGE },
-              }),
-              new TableCell({
-                children: [new Paragraph({ children: [new TextRun({ text: "Rating", bold: true })] })],
-                width: { size: 30, type: WidthType.PERCENTAGE },
-              }),
-            ],
-          }),
-          ...activityRatingData.activities.map((activity) =>
-            new TableRow({
-              children: [
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: activity.name || "Unknown Activity" })] })],
-                }),
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: activity.rating?.toString() || "Not rated" })] })],
-                }),
-              ],
-            })
-          ),
-        ],
-      });
-
-      children.push(
-        activityTable,
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: `Physical Demand Level Assessment: ${getPhysicalDemandLevel(activityRatingData.activities)}`,
-              bold: true,
-              size: 20,
-            }),
-          ],
-          spacing: { before: 240, after: 240 },
-        })
-      );
-
-      children.push(new PageBreak());
-    }
-
-    // ----- REFERRAL QUESTIONS -----
-    if (referralQuestionsData.questions && referralQuestionsData.questions.length > 0) {
-      children.push(createBlueHeader("Referral Questions"));
-
-      referralQuestionsData.questions.forEach((question, index) => {
+      if (clinicName) {
         children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `${index + 1}. ${question.question || ""}`,
-                bold: true,
-                size: 20,
-              }),
-            ],
-            spacing: { before: 240, after: 120 },
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: question.answer || "No answer provided",
-                size: 18,
-              }),
-            ],
-            spacing: { after: 240 },
-          })
-        );
-      });
-
-      children.push(new PageBreak());
-    }
-
-    // ----- PROTOCOL & TESTS -----
-    if (protocolTestsData.selectedTests && protocolTestsData.selectedTests.length > 0) {
-      children.push(
-        createBlueHeader("Protocol & Tests"),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: "The following tests and protocols were administered during the evaluation:",
-              size: 20,
-            }),
-          ],
-          spacing: { after: 240 },
-        })
-      );
-
-      protocolTestsData.selectedTests.forEach((test) => {
-        children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `• ${test}`,
-                size: 18,
-              }),
-            ],
-            spacing: { after: 120 },
-          })
-        );
-      });
-
-      children.push(new PageBreak());
-    }
-
-    // ----- TEST DATA & RESULTS -----
-    console.log("Checking TEST DATA section:", testData.tests?.length || 0, "tests");
-    if (testData.tests && testData.tests.length > 0) {
-      console.log("✓ Generating TEST DATA & RESULTS section");
-      children.push(
-        createBlueHeader("Test Data & Results"),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: "Individual Test Results:",
-              bold: true,
-              size: 20,
-            }),
-          ],
-          spacing: { before: 240, after: 120 },
-        })
-      );
-
-      testData.tests.forEach((test, index) => {
-        children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `${index + 1}. ${test.testName || "Unknown Test"}`,
-                bold: true,
-                size: 18,
-              }),
-            ],
-            spacing: { before: 240, after: 120 },
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Result: ${test.result || "No result recorded"}`,
-                size: 16,
-              }),
-            ],
-            spacing: { after: 60 },
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Comments: ${test.comments || "No comments"}`,
-                size: 16,
-              }),
-            ],
-            spacing: { after: 60 },
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Effort: ${test.effort || "Not specified"}`,
-                size: 16,
-              }),
-            ],
-            spacing: { after: 60 },
-          }),
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `Demonstrated: ${test.demonstrated ? "Yes" : "No"}`,
-                size: 16,
-              }),
-            ],
-            spacing: { after: 120 },
-          })
-        );
-      });
-
-      children.push(new PageBreak());
-    }
-
-    // ----- COMMENTS DEMONSTRATED PERCEIVED -----
-    console.log("Checking COMMENTS DEMONSTRATED section:", testData.tests?.length || 0, "tests");
-    if (testData.tests && testData.tests.length > 0) {
-      console.log("✓ Generating COMMENTS DEMONSTRATED PERCEIVED section");
-      const testsWithComments = testData.tests.filter((test) => test.comments && test.comments.trim());
-
-      children.push(
-        createBlueHeader("Comments Demonstrated Perceived"),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: "Additional comments and observations from the evaluation process:",
-              size: 20,
-            }),
-          ],
-          spacing: { after: 240 },
-        })
-      );
-
-      if (testsWithComments.length > 0) {
-        testsWithComments.forEach((test) => {
-          children.push(
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: `${test.testName} - Comments:`,
-                  bold: true,
-                  size: 18,
-                }),
-              ],
-              spacing: { before: 180, after: 120 },
-            }),
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: test.comments,
-                  size: 16,
-                }),
-              ],
-              spacing: { after: 180 },
-            })
-          );
-        });
-      } else {
-        children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "No additional test-specific comments were recorded during the evaluation process.",
-                italic: true,
-                size: 16,
-              }),
-            ],
-            spacing: { after: 240 },
-          })
+          new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: clinicName, bold: true, size: 16 })] })
         );
       }
-
-      children.push(new PageBreak());
-    }
-
-    // ----- COMMENTS JOB REQUIREMENTS -----
-    console.log("Checking JOB REQUIREMENTS section:", testData.tests?.length || 0, "tests");
-    if (testData.tests && testData.tests.length > 0) {
-      console.log("✓ Generating COMMENTS JOB REQUIREMENTS section");
-      const testsWithJobRequirements = testData.tests.filter((test) => test.jobRequirements && test.jobRequirements.trim());
-
-      children.push(
-        createBlueHeader("Comments Job Requirements"),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: "Job requirements analysis and matching assessment:",
-              size: 20,
-            }),
-          ],
-          spacing: { after: 240 },
-        })
-      );
-
-      if (testsWithJobRequirements.length > 0) {
-        testsWithJobRequirements.forEach((test) => {
-          children.push(
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: `${test.testName} - Job Requirements:`,
-                  bold: true,
-                  size: 18,
-                }),
-              ],
-              spacing: { before: 180, after: 120 },
-            }),
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: test.jobRequirements,
-                  size: 16,
-                }),
-              ],
-              spacing: { after: 120 },
-            }),
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: `Test Status: ${test.demonstrated ? "Successfully Demonstrated" : "Not Demonstrated"}`,
-                  bold: true,
-                  size: 16,
-                }),
-              ],
-              spacing: { after: 180 },
-            })
-          );
-        });
-      } else {
+      if (clinicAddress) {
         children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "No specific job requirements analysis was recorded for the evaluated activities.",
-                italic: true,
-                size: 16,
-              }),
-            ],
-            spacing: { after: 240 },
-          })
+          new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: clinicAddress, size: 16 })] })
         );
       }
-
-      children.push(new PageBreak());
-    }
-
-    // ----- TESTED ACTIVITIES -----
-    if (testData.tests && testData.tests.length > 0) {
-      children.push(
-        createBlueHeader("Tested Activities"),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: "Summary of all activities tested during the evaluation:",
-              size: 20,
-            }),
-          ],
-          spacing: { after: 240 },
-        })
-      );
-
-      const testedActivitiesTable = new Table({
-        width: { size: 100, type: WidthType.PERCENTAGE },
-        rows: [
-          new TableRow({
-            children: [
-              new TableCell({
-                children: [new Paragraph({ children: [new TextRun({ text: "Tested Activities", bold: true })] })],
-                width: { size: 60, type: WidthType.PERCENTAGE },
-              }),
-              new TableCell({
-                children: [new Paragraph({ children: [new TextRun({ text: "Pass", bold: true })] })],
-                width: { size: 10, type: WidthType.PERCENTAGE },
-              }),
-              new TableCell({
-                children: [new Paragraph({ children: [new TextRun({ text: "Fail", bold: true })] })],
-                width: { size: 10, type: WidthType.PERCENTAGE },
-              }),
-              new TableCell({
-                children: [new Paragraph({ children: [new TextRun({ text: "N/A", bold: true })] })],
-                width: { size: 10, type: WidthType.PERCENTAGE },
-              }),
-              new TableCell({
-                children: [new Paragraph({ children: [new TextRun({ text: "Comments", bold: true })] })],
-                width: { size: 10, type: WidthType.PERCENTAGE },
-              }),
-            ],
-          }),
-          ...testData.tests.map((test) =>
-            new TableRow({
-              children: [
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: test.testName || "Unknown Test" })] })],
-                }),
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: test.demonstrated ? "✓" : "" })] })],
-                }),
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: test.demonstrated ? "" : "✗" })] })],
-                }),
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: test.demonstrated === null ? "N/A" : "" })] })],
-                }),
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: test.comments ? "Yes" : "No" })] })],
-                }),
-              ],
-            })
-          ),
-        ],
-      });
-
-      children.push(testedActivitiesTable);
-
-      // Test Summary Statistics
-      const demonstratedCount = testData.tests.filter((test) => test.demonstrated).length;
-      const notDemonstratedCount = testData.tests.filter((test) => !test.demonstrated).length;
-      const successRate = Math.round((demonstratedCount / testData.tests.length) * 100);
-
-      children.push(
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: "Test Summary:",
-              bold: true,
-              size: 20,
-            }),
-          ],
-          spacing: { before: 240, after: 120 },
-        }),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: `Total Tests Administered: ${testData.tests.length}`,
-              size: 18,
-            }),
-          ],
-          spacing: { after: 60 },
-        }),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: `Tests Successfully Demonstrated: ${demonstratedCount}`,
-              size: 18,
-            }),
-          ],
-          spacing: { after: 60 },
-        }),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: `Tests Not Demonstrated: ${notDemonstratedCount}`,
-              size: 18,
-            }),
-          ],
-          spacing: { after: 60 },
-        }),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: `Success Rate: ${successRate}%`,
-              bold: true,
-              size: 18,
-            }),
-          ],
-          spacing: { after: 240 },
-        })
-      );
-
-      children.push(new PageBreak());
-    }
-
-    // ----- INDIVIDUAL TEST RESULTS -----
-    if (testData.tests && testData.tests.length > 0) {
-      children.push(
-        createBlueHeader("Individual Test Results"),
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: "Detailed results for each individual test performed:",
-              size: 20,
-            }),
-          ],
-          spacing: { after: 240 },
-        })
-      );
-
-      testData.tests.forEach((test, index) => {
+      const phoneFax = `Phone: ${clinicPhone || ""}${clinicPhone && clinicFax ? "    " : ""}${clinicFax ? `Fax: ${clinicFax}` : ""}`.trim();
+      if (phoneFax) {
         children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `${index + 1}. ${test.testName || "Unknown Test"}`,
-                bold: true,
-                size: 20,
-              }),
-            ],
-            spacing: { before: 240, after: 120 },
-          })
+          new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: phoneFax, size: 16 })] })
         );
-
-        const individualTestTable = new Table({
-          width: { size: 100, type: WidthType.PERCENTAGE },
-          rows: [
-            new TableRow({
-              children: [
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: "Test Result:", bold: true })] })],
-                  width: { size: 30, type: WidthType.PERCENTAGE },
-                }),
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: test.result || "No result recorded" })] })],
-                  width: { size: 70, type: WidthType.PERCENTAGE },
-                }),
-              ],
-            }),
-            new TableRow({
-              children: [
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: "Effort Level:", bold: true })] })],
-                }),
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: test.effort || "Not specified" })] })],
-                }),
-              ],
-            }),
-            new TableRow({
-              children: [
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: "Demonstrated:", bold: true })] })],
-                }),
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: test.demonstrated ? "Yes" : "No" })] })],
-                }),
-              ],
-            }),
-            new TableRow({
-              children: [
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: "Comments:", bold: true })] })],
-                }),
-                new TableCell({
-                  children: [new Paragraph({ children: [new TextRun({ text: test.comments || "No comments" })] })],
-                }),
-              ],
-            }),
-          ],
-        });
-
-        children.push(individualTestTable);
-      });
-
-      children.push(new PageBreak());
+      }
     }
 
-    // ----- APPENDIX ONE: REFERENCE CHARTS -----
-    children.push(
-      createBlueHeader("Appendix One: Reference Charts"),
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: "Reference charts and normative data used in this evaluation:",
-            size: 20,
-          }),
-        ],
-        spacing: { after: 240 },
-      }),
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: "• Department of Labor Physical Demands Chart",
-            size: 18,
-          }),
-        ],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: "• Standardized measurement protocols",
-            size: 18,
-          }),
-        ],
-        spacing: { after: 120 },
-      }),
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: "• Normative data tables for functional capacity",
-            size: 18,
-          }),
-        ],
-        spacing: { after: 240 },
-      })
-    );
-
-    children.push(new PageBreak());
-
-    // ----- APPENDIX TWO: DIGITAL LIBRARY -----
-    children.push(
-      createBlueHeader("Appendix Two: Digital Library"),
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: "Images and documentation from the evaluation process:",
-            size: 20,
-          }),
-        ],
-        spacing: { after: 240 },
-      })
-    );
-
-    if (digitalLibraryData.savedFileData && digitalLibraryData.savedFileData.length > 0) {
-      digitalLibraryData.savedFileData.forEach((file) => {
-        children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `• ${file.name || "Image"} (${file.type || "Unknown type"})`,
-                size: 18,
-              }),
-            ],
-            spacing: { after: 120 },
-          })
-        );
-      });
-    } else {
-      children.push(
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: "No digital files were saved during this evaluation.",
-              italic: true,
-              size: 16,
-            }),
-          ],
-          spacing: { after: 240 },
-        })
-      );
-    }
-
-    // ----- BUILD AND SEND DOCX -----
-    console.log("Total sections added to document:", children.length);
-    console.log("Creating DOCX document...");
-    const doc = new Document({
-      sections: [
-        {
-          properties: {},
-          children,
-        },
-      ],
-    });
-
+    // Build and send DOCX
+    const doc = new Document({ sections: [{ properties: {}, children }] });
     const buffer = await Packer.toBuffer(doc);
-    console.log("Generated DOCX buffer size:", buffer.length, "bytes");
-    console.log("=== CLOUD FUNCTION DEBUG END ===");
 
-    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-    res.setHeader("Content-Disposition", `attachment; filename=FCE_Report_${claimantName.replace(/[^a-zA-Z0-9]/g, "_")}_${new Date().toISOString().split("T")[0]}.docx`);
-    // res.send(buffer);
-    
-
-    if (!buffer || buffer.length < 2000) { // DOCX usually > 2KB
-  console.error("Generated DOCX seems too small or empty, aborting send.");
-  return res.status(500).json({ error: "DOCX generation failed or empty." });
-}
-
-res.setHeader(
-  "Content-Type",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-);
-res.setHeader(
-  "Content-Disposition",
-  `attachment; filename=FCE_Report_${claimantName.replace(/[^a-zA-Z0-9]/g, "_")}_${new Date().toISOString().split("T")[0]}.docx`
-);
-
-// Binary-safe send
-res.end(buffer);
-
-  } catch (error) {
-    console.error("DOCX generation failed:", error);
-    res.status(500).json({ error: "Internal Server Error generating DOCX", details: error.message });
+    return res
+      .status(200)
+      .set(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      )
+      .set(
+        "Content-Disposition",
+        `attachment; filename=FCE_Report_${nameDisplay.replace(/[^a-zA-Z0-9]/g, "_")}_${new Date()
+          .toISOString()
+          .split("T")[0]}.docx`
+      )
+      .send(buffer);
+  } catch (err) {
+    console.error("DOCX generation failed:", err);
+    return res.status(500).json({ error: "Internal Server Error generating DOCX", details: err.message });
   }
 });
 
