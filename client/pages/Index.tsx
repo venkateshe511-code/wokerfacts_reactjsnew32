@@ -141,7 +141,7 @@ export default function Index() {
   }, [slideImages.length]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white justify-paragraphs">
       {/* Offline Indicator */}
       <OfflineIndicator />
 
@@ -383,7 +383,7 @@ export default function Index() {
                   Functional Abilities Determination
                 </h1>
                 <p className="text-base md:text-lg mb-6 text-white max-w-2xl drop-shadow-lg">
-                  The industries most Comprehensive Assessment Platform
+                  The industries most Comprehensive On-Line Assessment Platform
                 </p>
               </div>
 
@@ -930,12 +930,12 @@ export default function Index() {
                     <Tablet className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-xl sm:text-lg font-semibold text-white">
+                    <h4 className="text-xl font-bold text-white">
                       Viewable on Phone/Tablet
                     </h4>
                   </div>
                 </div>
-                <p className="text-white/80 text-sm">
+                <p className="text-white/90">
                   The program is fully scalable and viewable on your phone or
                   tablet for ease of use.
                 </p>

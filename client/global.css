@@ -287,4 +287,16 @@
   .offline-image-placeholder {
     @apply bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-400 text-xs font-medium;
   }
+
+  /* Utility to justify all paragraphs within a container */
+  .justify-paragraphs p {
+    text-align: justify;
+    text-justify: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    overflow-wrap: break-word;
+    word-break: normal;
+    text-align-last: left;
+  }
 }
