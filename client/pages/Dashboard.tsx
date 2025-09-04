@@ -149,36 +149,49 @@ export default function Dashboard() {
 
     // Load completed steps
     const savedCompletedSteps = localStorage.getItem("completedSteps");
+    let completedStepsArray: number[] = [];
     if (savedCompletedSteps) {
-      const completedStepsArray = JSON.parse(savedCompletedSteps);
-      setCompletedSteps(completedStepsArray);
+      completedStepsArray = JSON.parse(savedCompletedSteps);
+    }
 
-      // Auto-scroll to next available step
-      const nextStep = completedStepsArray.length + 1;
-      if (nextStep <= workflowSteps.length) {
-        setTimeout(() => {
-          const nextStepElement = document.getElementById(`step-${nextStep}`);
-          if (nextStepElement) {
-            nextStepElement.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
-            // Add a subtle highlight effect
-            nextStepElement.classList.add(
+    // If returned from Stripe success, mark payment step as completed
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("paid") === "1" && !completedStepsArray.includes(8)) {
+      completedStepsArray.push(8);
+      localStorage.setItem("completedSteps", JSON.stringify(completedStepsArray));
+      // Clean URL param
+      const url = new URL(window.location.href);
+      url.searchParams.delete("paid");
+      window.history.replaceState({}, "", url.toString());
+    }
+
+    setCompletedSteps(completedStepsArray);
+
+    // Auto-scroll to next available step
+    const nextStep = completedStepsArray.length + 1;
+    if (nextStep <= workflowSteps.length) {
+      setTimeout(() => {
+        const nextStepElement = document.getElementById(`step-${nextStep}`);
+        if (nextStepElement) {
+          nextStepElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          // Add a subtle highlight effect
+          nextStepElement.classList.add(
+            "ring-2",
+            "ring-blue-400",
+            "ring-opacity-75",
+          );
+          setTimeout(() => {
+            nextStepElement.classList.remove(
               "ring-2",
               "ring-blue-400",
               "ring-opacity-75",
             );
-            setTimeout(() => {
-              nextStepElement.classList.remove(
-                "ring-2",
-                "ring-blue-400",
-                "ring-opacity-75",
-              );
-            }, 2000);
-          }
-        }, 300);
-      }
+          }, 2000);
+        }
+      }, 300);
     }
   }, [navigate]);
 
