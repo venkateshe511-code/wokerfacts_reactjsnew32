@@ -14,15 +14,17 @@ export async function startCheckout(params: {
   };
 
   // Optional: allow using an external checkout endpoint (e.g., Firebase) via env
-  const externalUrl = (import.meta as any)?.env?.VITE_CHECKOUT_URL as string | undefined;
+  const envUrl = (import.meta as any)?.env?.VITE_CHECKOUT_URL as string | undefined;
+  const DEFAULT_FIREBASE_URL = "https://createcheckoutsessionapi-e355r2gb5q-uc.a.run.app";
+  const externalUrl = envUrl && envUrl.length ? envUrl : DEFAULT_FIREBASE_URL;
 
   const buildUrl = (base: string) => {
     const u = base.replace(/\/$/, "");
-    if (/createCheckoutSession|create-checkout-session/.test(u)) return u;
+    if (/createCheckoutSession|create-checkout-session$/.test(u)) return u;
     return `${u}/createCheckoutSession`;
   };
 
-  const primaryEndpoint = externalUrl?.length ? buildUrl(externalUrl) : "/api/stripe/create-checkout-session";
+  const primaryEndpoint = buildUrl(externalUrl);
 
   let res = await fetch(primaryEndpoint, {
     method: "POST",
