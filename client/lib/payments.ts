@@ -24,9 +24,9 @@ export async function startCheckout(params: {
     return `${u}/createCheckoutSession`;
   };
 
-  const primaryEndpoint = buildUrl(externalUrl);
+  const baseEndpoint = externalUrl.replace(/\/$/, "");
 
-  let res = await fetch(primaryEndpoint, {
+  let res = await fetch(baseEndpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -34,10 +34,10 @@ export async function startCheckout(params: {
 
   // Fallbacks if external URL provided
   if (!res.ok && externalUrl?.length) {
-    // Try base URL ("/")
-    const base = externalUrl.replace(/\/$/, "");
+    // Try camelCase path
     if (res.status === 404 || res.status === 405) {
-      res = await fetch(base || externalUrl, {
+      const camel = `${baseEndpoint}/createCheckoutSession`;
+      res = await fetch(camel, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -45,7 +45,7 @@ export async function startCheckout(params: {
     }
     // Try dashed path
     if (!res.ok) {
-      const dashed = buildUrl(externalUrl).replace("createCheckoutSession", "create-checkout-session");
+      const dashed = `${baseEndpoint}/create-checkout-session`;
       res = await fetch(dashed, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
