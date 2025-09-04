@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { createCheckoutSession } from "./routes/stripe";
 
 export function createServer() {
   const app = express();
@@ -18,6 +19,9 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Payments
+  app.post("/api/stripe/create-checkout-session", createCheckoutSession);
 
   return app;
 }
