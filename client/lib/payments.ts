@@ -67,10 +67,31 @@ export async function startCheckout(params: {
     throw new Error(`Failed to create checkout session (${res.status}) ${text}`);
   }
 
-  const data = (await res.json()) as { url?: string };
+  const data = (await res.json()) as { url?: string; id?: string };
+  const pk = (import.meta as any)?.env?.VITE_STRIPE_PUBLISHABLE_KEY as string | undefined;
+
+  // Prefer Stripe.js redirect when pk and session id are available
+  if (pk && data?.id) {
+    try {
+      const { loadStripe } = await import("@stripe/stripe-js");
+      const stripe = await loadStripe(pk);
+      if (stripe) {
+        const result = await stripe.redirectToCheckout({ sessionId: data.id });
+        if (result.error) {
+          console.error(result.error.message);
+        } else {
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("Stripe.js redirect failed, falling back", e);
+    }
+  }
+
   if (!data.url) {
     throw new Error("No checkout URL returned");
   }
+
   try {
     if (window.top && window.top !== window) {
       window.top.location.assign(data.url);
