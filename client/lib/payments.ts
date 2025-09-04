@@ -19,7 +19,7 @@ export async function startCheckout(params: {
 
   const buildUrl = (base: string) => {
     const u = base.replace(/\/$/, "");
-    if (/createCheckoutSession|create-checkout-session$/.test(u)) return u;
+    if (/(createCheckoutSession|create-checkout-session)$/.test(u)) return u;
     return `${u}/createCheckoutSession`;
   };
 
