@@ -28,6 +28,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 import { useDemoMode } from "@/hooks/use-demo-mode";
 import { startCheckout } from "@/lib/payments";
 
@@ -246,9 +247,13 @@ export default function Dashboard() {
           if (isDemoMode && !forceReal) {
             navigate("/payment");
           } else {
-            startCheckout({ amount: 25, currency: "USD" }).catch((e) => {
+            startCheckout({ amount: 25, currency: "USD" }).catch((e: any) => {
               console.error(e);
-              navigate("/payment");
+              toast({
+                title: "Payment error",
+                description: typeof e?.message === "string" ? e.message : "Unable to start checkout. Please try again.",
+                variant: "destructive",
+              });
             });
           }
         }
