@@ -258,7 +258,7 @@ export default function Dashboard() {
           if (isDemoMode && !forceReal) {
             navigate("/payment");
           } else {
-            startCheckout({ amount: 25, currency: "USD" }).catch((e: any) => {
+            startCheckout({ amount: 1, currency: "USD" }).catch((e: any) => {
               console.error(e);
               toast({
                 title: "Payment error",
