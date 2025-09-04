@@ -1,10 +1,22 @@
 const express = require("express");
 const Stripe = require("stripe");
+let functions;
+try {
+  functions = require("firebase-functions");
+} catch (_) {
+  functions = null;
+}
 
 const router = express.Router();
 
 function getStripe() {
-  const key = process.env.STRIPE_SECRET_KEY;
+  let key = process.env.STRIPE_SECRET_KEY;
+  if (!key && functions && typeof functions.config === "function") {
+    try {
+      const cfg = functions.config();
+      key = cfg?.stripe?.secret || key;
+    } catch (_) {}
+  }
   if (!key) {
     throw new Error("STRIPE_SECRET_KEY is not set");
   }
