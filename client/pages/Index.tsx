@@ -835,20 +835,20 @@ export default function Index() {
       </section>
 
       {/* Key Points Section */}
-      <section className="py-20 px-4 bg-blue-600 text-white">
+      <section className="relative overflow-hidden py-20 px-4 bg-blue-600 text-white">
+        <img
+          src="/workerfacts-logo.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none select-none absolute top-6 left-6 opacity-10 blur-sm w-40 sm:w-48 md:w-56 lg:w-64"
+        />
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <img
-                src="/workerfacts-logo.png"
-                alt=""
-                aria-hidden="true"
-                className="pointer-events-none select-none absolute -left-12 top-1/2 -translate-y-1/2 opacity-10 w-48 sm:w-56 md:w-64 lg:w-72"
-              />
-              <img
                 src="/Key_Points-min.jpg"
                 alt="Healthcare professionals collaborating with technology"
-                className="relative z-10 rounded-lg shadow-2xl w-full hover:shadow-3xl transition-shadow duration-300"
+                className="rounded-lg shadow-2xl w-full hover:shadow-3xl transition-shadow duration-300"
               />
             </div>
             <div>
