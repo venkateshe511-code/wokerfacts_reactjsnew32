@@ -25,11 +25,17 @@ export async function startCheckout(params: {
 
   const endpoint = externalUrl ? buildUrl(externalUrl) : "/api/stripe/create-checkout-session";
 
+  const attempts: { url: string; status?: number; text?: string }[] = [];
+
   let res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => "");
+    attempts.push({ url: endpoint, status: res.status, text: txt });
+  }
 
   // Fallbacks if external URL provided
   if (!res.ok && externalUrl?.length) {
