@@ -23,7 +23,8 @@
     "html-to-docx": "^1.8.0",
     "node-fetch": "^3.3.2",
     "os": "^0.1.2",
-    "pizzip": "^3.2.0"
+    "pizzip": "^3.2.0",
+    "stripe": "^18.5.0"
   },
   "devDependencies": {
     "eslint-config-google": "^0.14.0",
