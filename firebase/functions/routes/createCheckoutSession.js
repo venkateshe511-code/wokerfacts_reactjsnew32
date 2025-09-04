@@ -13,7 +13,8 @@ function getStripe() {
 
 router.post("/createCheckoutSession", async (req, res) => {
   try {
-    const { amount, currency, successUrl, cancelUrl, metadata } = req.body || {};
+    const { amount, currency, successUrl, cancelUrl, metadata } =
+      req.body || {};
     if (!amount || !currency) {
       return res.status(400).json({ error: "Missing amount or currency" });
     }

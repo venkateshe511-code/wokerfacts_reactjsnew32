@@ -433,7 +433,12 @@ export default function Index() {
                 src="/workerfacts-logo.png"
                 alt=""
                 aria-hidden="true"
-                className="pointer-events-none select-none absolute -right-12 top-1/2 -translate-y-1/2 opacity-10 w-64 sm:w-72 md:w-80 lg:w-96"
+                className="pointer-events-none select-none absolute opacity-10"
+                style={{
+                  width: "clamp(96px, 16vw, 220px)",
+                  right: "calc(-1 * clamp(8px, 2vw, 48px))",
+                  bottom: "clamp(8px, 2vw, 48px)",
+                }}
               />
               <OfflineImage
                 src="/close-up-bearded-neurology-specialist-checking.jpg"
