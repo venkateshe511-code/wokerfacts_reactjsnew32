@@ -49,7 +49,7 @@ async function handler(req, res) {
       metadata: metadata || {},
     });
 
-    return res.json({ url: session.url });
+    return res.json({ url: session.url, id: session.id });
   } catch (err) {
     console.error("[Firebase] Stripe session error", err);
     return res.status(500).json({ error: err?.message || "Internal error" });

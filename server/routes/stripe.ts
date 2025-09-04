@@ -41,7 +41,7 @@ export const createCheckoutSession: RequestHandler = async (req, res) => {
       metadata: metadata || {},
     });
 
-    return res.json({ url: session.url });
+    return res.json({ url: session.url, id: session.id });
   } catch (err: any) {
     console.error("Stripe session error", err);
     return res.status(500).json({ error: err?.message || "Internal error" });
