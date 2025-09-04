@@ -60,8 +60,8 @@ export async function startCheckout(params: {
     }
   }
 
-  // Final fallback to local API even if external set
-  if (!res.ok) {
+  // Final fallback to local API only when no external URL is configured
+  if (!res.ok && !externalUrl) {
     const localUrl = "/api/stripe/create-checkout-session";
     const localRes = await fetch(localUrl, {
       method: "POST",
