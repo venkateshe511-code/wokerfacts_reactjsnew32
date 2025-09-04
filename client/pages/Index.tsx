@@ -405,13 +405,6 @@ export default function Index() {
 
       {/* Assessment Platform Section */}
       <section className="relative overflow-hidden py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white">
-        {/* Watermark: subtle WorkerFacts logo on the left side */}
-        <img
-          src="/workerfacts-logo.png"
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none select-none absolute left-6 top-1/2 -translate-y-1/2 opacity-10 w-[220px] sm:w-[280px] md:w-[340px] lg:w-[420px]"
-        />
         <div className="container mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -436,10 +429,16 @@ export default function Index() {
               </p>
             </div>
             <div className="relative flex justify-center">
+              <img
+                src="/workerfacts-logo.png"
+                alt=""
+                aria-hidden="true"
+                className="pointer-events-none select-none absolute -right-12 top-1/2 -translate-y-1/2 opacity-10 w-64 sm:w-72 md:w-80 lg:w-96"
+              />
               <OfflineImage
                 src="/close-up-bearded-neurology-specialist-checking.jpg"
                 alt="Physiotherapist assisting patient with back pain assessment"
-                className="rounded-full shadow-2xl w-80 h-80 object-cover border-4 border-white/20"
+                className="relative z-10 rounded-full shadow-2xl w-80 h-80 object-cover border-4 border-white/20"
                 fallbackText="Healthcare Professional"
               />
             </div>
@@ -841,9 +840,15 @@ export default function Index() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <img
+                src="/workerfacts-logo.png"
+                alt=""
+                aria-hidden="true"
+                className="pointer-events-none select-none absolute -left-12 top-1/2 -translate-y-1/2 opacity-10 w-48 sm:w-56 md:w-64 lg:w-72"
+              />
+              <img
                 src="/Key_Points-min.jpg"
                 alt="Healthcare professionals collaborating with technology"
-                className="rounded-lg shadow-2xl w-full hover:shadow-3xl transition-shadow duration-300"
+                className="relative z-10 rounded-lg shadow-2xl w-full hover:shadow-3xl transition-shadow duration-300"
               />
             </div>
             <div>
