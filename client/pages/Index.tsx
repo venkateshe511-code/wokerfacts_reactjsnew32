@@ -433,7 +433,7 @@ export default function Index() {
                 src="/workerfacts-logo.png"
                 alt=""
                 aria-hidden="true"
-                className="pointer-events-none select-none absolute -right-12 top-1/2 -translate-y-1/2 opacity-10 w-64 sm:w-72 md:w-80 lg:w-96"
+                className="pointer-events-none select-none absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 opacity-10 w-40 sm:w-48 md:w-56 lg:w-64"
               />
               <OfflineImage
                 src="/close-up-bearded-neurology-specialist-checking.jpg"
@@ -1713,7 +1713,7 @@ export default function Index() {
                   </h4>
                   <p>
                     • All evaluation results and assessments are deleted once
-                    the report is completed and downloaded – no health
+                    the report is completed and downloaded �� no health
                     information is stored on this site.
                   </p>
                 </div>
