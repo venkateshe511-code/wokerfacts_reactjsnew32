@@ -71,5 +71,16 @@ export async function startCheckout(params: {
   if (!data.url) {
     throw new Error("No checkout URL returned");
   }
-  window.location.assign(data.url);
+  try {
+    if (window.top && window.top !== window) {
+      window.top.location.assign(data.url);
+    } else {
+      window.location.assign(data.url);
+    }
+  } catch {
+    const w = window.open(data.url, "_blank", "noopener,noreferrer");
+    if (!w) {
+      window.location.href = data.url;
+    }
+  }
 }
