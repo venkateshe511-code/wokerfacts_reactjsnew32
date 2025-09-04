@@ -23,9 +23,9 @@ export async function startCheckout(params: {
     return `${u}/createCheckoutSession`;
   };
 
-  const baseEndpoint = (externalUrl ? externalUrl.replace(/\/$/, "") : "/api/stripe/create-checkout-session");
+  const endpoint = externalUrl ? buildUrl(externalUrl) : "/api/stripe/create-checkout-session";
 
-  let res = await fetch(baseEndpoint, {
+  let res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -33,23 +33,21 @@ export async function startCheckout(params: {
 
   // Fallbacks if external URL provided
   if (!res.ok && externalUrl?.length) {
-    // Try camelCase path
-    if (res.status === 404 || res.status === 405) {
-      const camel = `${baseEndpoint}/createCheckoutSession`;
-      res = await fetch(camel, {
+    const alt = endpoint.endsWith("/createCheckoutSession")
+      ? endpoint.replace(/\/createCheckoutSession$/, "/create-checkout-session")
+      : endpoint.endsWith("/create-checkout-session")
+        ? endpoint.replace(/\/create-checkout-session$/, "/createCheckoutSession")
+        : undefined;
+
+    if (alt) {
+      const tryAlt = await fetch(alt, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-    }
-    // Try dashed path
-    if (!res.ok) {
-      const dashed = `${baseEndpoint}/create-checkout-session`;
-      res = await fetch(dashed, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      if (tryAlt.ok) {
+        res = tryAlt;
+      }
     }
   }
 
