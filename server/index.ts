@@ -19,5 +19,8 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Payments
+  app.post("/api/stripe/create-checkout-session", (await import("./routes/stripe")).createCheckoutSession);
+
   return app;
 }
