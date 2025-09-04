@@ -840,9 +840,9 @@ export default function Index() {
           src="/workerfacts-logo.png"
           alt=""
           aria-hidden="true"
-          className="pointer-events-none select-none absolute top-6 left-6 opacity-10 blur-sm w-40 sm:w-48 md:w-56 lg:w-64"
+          className="pointer-events-none select-none absolute top-6 left-6 opacity-10 w-64 sm:w-72 md:w-80 lg:w-96"
         />
-        <div className="container mx-auto">
+        <div className="container mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <img
