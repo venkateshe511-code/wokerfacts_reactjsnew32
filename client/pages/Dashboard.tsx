@@ -65,6 +65,7 @@ export default function Dashboard() {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showBackDialog, setShowBackDialog] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [stripePaid, setStripePaid] = useState(false);
 
   const workflowSteps: WorkflowStep[] = [
     {
@@ -155,7 +156,11 @@ export default function Dashboard() {
       completedStepsArray = JSON.parse(savedCompletedSteps);
     }
 
-    // If returned from Stripe success, mark payment step as completed
+    // Restore Stripe payment success state
+    const savedStripe = localStorage.getItem("stripePaymentSuccess") === "1";
+    if (savedStripe) setStripePaid(true);
+
+    // If returned from Stripe success, mark payment step as completed and persist flag
     const params = new URLSearchParams(window.location.search);
     if (params.get("paid") === "1" && !completedStepsArray.includes(8)) {
       completedStepsArray.push(8);
@@ -163,6 +168,8 @@ export default function Dashboard() {
         "completedSteps",
         JSON.stringify(completedStepsArray),
       );
+      localStorage.setItem("stripePaymentSuccess", "1");
+      setStripePaid(true);
       // Clean URL param
       const url = new URL(window.location.href);
       url.searchParams.delete("paid");
@@ -251,7 +258,7 @@ export default function Dashboard() {
           if (isDemoMode && !forceReal) {
             navigate("/payment");
           } else {
-            startCheckout({ amount: 25, currency: "USD" }).catch((e: any) => {
+            startCheckout({ amount: 1, currency: "USD" }).catch((e: any) => {
               console.error(e);
               toast({
                 title: "Payment error",
@@ -280,6 +287,9 @@ export default function Dashboard() {
   const isStepAvailable = (stepId: number) => {
     // Step 1 is always available
     if (stepId === 1) return true;
+
+    // Disable Pay step if Stripe checkout already succeeded
+    if (stepId === 8 && stripePaid) return false;
 
     // Other steps are available only if previous step is completed
     return completedSteps.includes(stepId - 1);
