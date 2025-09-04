@@ -56,6 +56,7 @@ interface WorkflowStep {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const isDemoMode = useDemoMode();
   const [evaluatorData, setEvaluatorData] = useState<EvaluatorData | null>(
     null,
   );
