@@ -35,8 +35,8 @@ export async function startCheckout(params: {
   // Fallbacks if external URL provided
   if (!res.ok && externalUrl?.length) {
     // Try base URL ("/")
-    if (res.status === 404) {
-      const base = externalUrl.replace(/\/$/, "");
+    const base = externalUrl.replace(/\/$/, "");
+    if (res.status === 404 || res.status === 405) {
       res = await fetch(base || externalUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,8 +54,8 @@ export async function startCheckout(params: {
     }
   }
 
-  // Final fallback to local API only if external failed
-  if (!res.ok && !externalUrl?.length) {
+  // Final fallback to local API even if external set
+  if (!res.ok) {
     res = await fetch("/api/stripe/create-checkout-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
