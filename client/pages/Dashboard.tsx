@@ -228,7 +228,15 @@ export default function Dashboard() {
         navigate("/upload-digital-library");
         break;
       case 8:
-        navigate("/payment");
+        if (isDemoMode) {
+          navigate("/payment");
+        } else {
+          // Real account -> Stripe Checkout
+          startCheckout({ amount: 25, currency: "USD" }).catch((e) => {
+            console.error(e);
+            navigate("/payment");
+          });
+        }
         break;
       case 9:
         navigate("/review-report");
@@ -237,7 +245,6 @@ export default function Dashboard() {
         navigate("/download-report");
         break;
       default:
-        // Navigation will be implemented later for other steps
         console.log(`Navigating to step ${stepId}`);
         break;
     }
