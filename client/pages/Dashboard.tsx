@@ -241,14 +241,16 @@ export default function Dashboard() {
         navigate("/upload-digital-library");
         break;
       case 8:
-        if (isDemoMode) {
-          navigate("/payment");
-        } else {
-          // Real account -> Stripe Checkout
-          startCheckout({ amount: 25, currency: "USD" }).catch((e) => {
-            console.error(e);
+        {
+          const forceReal = (import.meta as any)?.env?.VITE_FORCE_REAL_PAYMENT === "true";
+          if (isDemoMode && !forceReal) {
             navigate("/payment");
-          });
+          } else {
+            startCheckout({ amount: 25, currency: "USD" }).catch((e) => {
+              console.error(e);
+              navigate("/payment");
+            });
+          }
         }
         break;
       case 9:
