@@ -23,7 +23,7 @@ function getStripe() {
   return new Stripe(key, { apiVersion: "2024-06-20" });
 }
 
-router.post("/createCheckoutSession", async (req, res) => {
+async function handler(req, res) {
   try {
     const { amount, currency, successUrl, cancelUrl, metadata } = req.body || {};
     if (!amount || !currency) {
@@ -44,7 +44,7 @@ router.post("/createCheckoutSession", async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: successUrl || `${req.headers.origin || ""}/download-report`,
+      success_url: successUrl || `${req.headers.origin || ""}/dashboard?paid=1`,
       cancel_url: cancelUrl || `${req.headers.origin || ""}/dashboard`,
       metadata: metadata || {},
     });
@@ -54,6 +54,13 @@ router.post("/createCheckoutSession", async (req, res) => {
     console.error("[Firebase] Stripe session error", err);
     return res.status(500).json({ error: err?.message || "Internal error" });
   }
-});
+}
+
+router.options("/", (_, res) => res.sendStatus(204));
+router.options("/createCheckoutSession", (_, res) => res.sendStatus(204));
+router.options("/create-checkout-session", (_, res) => res.sendStatus(204));
+router.post("/", handler);
+router.post("/createCheckoutSession", handler);
+router.post("/create-checkout-session", handler);
 
 module.exports = router;
