@@ -15,8 +15,7 @@ export async function startCheckout(params: {
 
   // Optional: allow using an external checkout endpoint (e.g., Firebase) via env
   const envUrl = (import.meta as any)?.env?.VITE_CHECKOUT_URL as string | undefined;
-  const DEFAULT_FIREBASE_URL = "https://createcheckoutsessionapi-e355r2gb5q-uc.a.run.app";
-  const externalUrl = envUrl && envUrl.length ? envUrl : DEFAULT_FIREBASE_URL;
+  const externalUrl = envUrl && envUrl.length ? envUrl : undefined;
 
   const buildUrl = (base: string) => {
     const u = base.replace(/\/$/, "");
