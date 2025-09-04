@@ -21,6 +21,7 @@ app.use(cors(corsOptions));
 
 // Routes
 app.use("/", generateDocxRoute);
+app.use("/", createCheckoutSessionRoute);
 
 // ✅ Export cloud function
 exports.generateClaimantReportApi = functions.https.onRequest(app);
