@@ -73,10 +73,9 @@ export async function startCheckout(params: {
     }
   }
 
-  if (!res.ok) {
-    console.error("Stripe checkout creation failed", attempts);
-    const text = await res.text().catch(() => "");
-    throw new Error(`Failed to create checkout session (${res.status}) ${text}`);
+  if (!res) {
+    console.error("Stripe checkout creation failed", attempts.map(a => `${a.url} -> ${a.status || ''}`), attempts);
+    throw new Error(`Failed to create checkout session (no successful endpoint)`);
   }
 
   const data = (await res.json()) as { url?: string; id?: string };
