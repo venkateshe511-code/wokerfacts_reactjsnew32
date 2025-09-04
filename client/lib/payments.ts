@@ -23,56 +23,53 @@ export async function startCheckout(params: {
     return `${u}/createCheckoutSession`;
   };
 
-  const endpoint = externalUrl ? buildUrl(externalUrl) : "/api/stripe/create-checkout-session";
+  // Candidate endpoints (prefer env, then known Firebase/Cloud Run bases)
+  const candidates: string[] = [];
+  if (externalUrl) candidates.push(buildUrl(externalUrl));
+  candidates.push(
+    buildUrl("https://us-central1-workerfacts-60c02.cloudfunctions.net/createCheckoutSessionApi"),
+    buildUrl("https://createcheckoutsessionapi-e355r2gb5q-uc.a.run.app"),
+  );
 
   const attempts: { url: string; status?: number; text?: string }[] = [];
+  let res: Response | null = null;
 
-  let res = await fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    const txt = await res.text().catch(() => "");
-    attempts.push({ url: endpoint, status: res.status, text: txt });
-  }
-
-  // Fallbacks if external URL provided
-  if (!res.ok && externalUrl?.length) {
-    const alt = endpoint.endsWith("/createCheckoutSession")
-      ? endpoint.replace(/\/createCheckoutSession$/, "/create-checkout-session")
-      : endpoint.endsWith("/create-checkout-session")
-        ? endpoint.replace(/\/create-checkout-session$/, "/createCheckoutSession")
-        : undefined;
-
-    if (alt) {
-      const tryAlt = await fetch(alt, {
+  // Try each external candidate first
+  for (const url of candidates) {
+    try {
+      const r = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      if (tryAlt.ok) {
-        res = tryAlt;
-      } else {
-        const txt = await tryAlt.text().catch(() => "");
-        attempts.push({ url: alt, status: tryAlt.status, text: txt });
+      if (r.ok) {
+        res = r;
+        break;
       }
+      const txt = await r.text().catch(() => "");
+      attempts.push({ url, status: r.status, text: txt });
+    } catch (e) {
+      attempts.push({ url, text: String(e) });
     }
   }
 
-  // Final fallback to local API only when no external URL is configured
-  if (!res.ok && !externalUrl) {
+  // Final fallback to local API only when no external succeeded and no env is present
+  if (!res && !externalUrl) {
     const localUrl = "/api/stripe/create-checkout-session";
-    const localRes = await fetch(localUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (localRes.ok) {
-      res = localRes;
-    } else {
-      const txt = await localRes.text().catch(() => "");
-      attempts.push({ url: localUrl, status: localRes.status, text: txt });
+    try {
+      const localRes = await fetch(localUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (localRes.ok) {
+        res = localRes;
+      } else {
+        const txt = await localRes.text().catch(() => "");
+        attempts.push({ url: localUrl, status: localRes.status, text: txt });
+      }
+    } catch (e) {
+      attempts.push({ url: localUrl, text: String(e) });
     }
   }
 
