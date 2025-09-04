@@ -30,21 +30,35 @@ export async function startCheckout(params: {
     body: JSON.stringify(body),
   });
 
-  // Fallbacks: try alt path and finally local api if provided external returned 404
-  if (!res.ok && externalUrl?.length && res.status === 404) {
-    const alt = buildUrl(externalUrl).replace("createCheckoutSession", "create-checkout-session");
-    res = await fetch(alt, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) {
-      res = await fetch("/api/stripe/create-checkout-session", {
+  // Fallbacks if external URL provided
+  if (!res.ok && externalUrl?.length) {
+    // Try base URL ("/")
+    if (res.status === 404) {
+      const base = externalUrl.replace(/\/$/, "");
+      res = await fetch(base || externalUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
     }
+    // Try dashed path
+    if (!res.ok) {
+      const dashed = buildUrl(externalUrl).replace("createCheckoutSession", "create-checkout-session");
+      res = await fetch(dashed, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    }
+  }
+
+  // Final fallback to local API only if external failed
+  if (!res.ok && !externalUrl?.length) {
+    res = await fetch("/api/stripe/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
   }
 
   if (!res.ok) {
