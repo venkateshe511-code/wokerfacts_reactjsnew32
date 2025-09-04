@@ -28,6 +28,8 @@ import {
   LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useDemoMode } from "@/hooks/use-demo-mode";
+import { startCheckout } from "@/lib/payments";
 
 interface EvaluatorData {
   name: string;
