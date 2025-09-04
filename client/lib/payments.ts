@@ -9,7 +9,7 @@ export async function startCheckout(params: {
     amount,
     currency,
     metadata: metadata || {},
-    successUrl: `${window.location.origin}/download-report`,
+    successUrl: `${window.location.origin}/dashboard?paid=1`,
     cancelUrl: `${window.location.origin}/dashboard`,
   };
 
