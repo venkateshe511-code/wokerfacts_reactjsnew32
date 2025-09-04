@@ -159,7 +159,10 @@ export default function Dashboard() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("paid") === "1" && !completedStepsArray.includes(8)) {
       completedStepsArray.push(8);
-      localStorage.setItem("completedSteps", JSON.stringify(completedStepsArray));
+      localStorage.setItem(
+        "completedSteps",
+        JSON.stringify(completedStepsArray),
+      );
       // Clean URL param
       const url = new URL(window.location.href);
       url.searchParams.delete("paid");
@@ -243,7 +246,8 @@ export default function Dashboard() {
         break;
       case 8:
         {
-          const forceReal = (import.meta as any)?.env?.VITE_FORCE_REAL_PAYMENT === "true";
+          const forceReal =
+            (import.meta as any)?.env?.VITE_FORCE_REAL_PAYMENT === "true";
           if (isDemoMode && !forceReal) {
             navigate("/payment");
           } else {
@@ -251,7 +255,10 @@ export default function Dashboard() {
               console.error(e);
               toast({
                 title: "Payment error",
-                description: typeof e?.message === "string" ? e.message : "Unable to start checkout. Please try again.",
+                description:
+                  typeof e?.message === "string"
+                    ? e.message
+                    : "Unable to start checkout. Please try again.",
                 variant: "destructive",
               });
             });
@@ -417,7 +424,12 @@ export default function Dashboard() {
               <Edit className="mr-2 h-4 w-4" />
               Edit Profile
             </Button>
-            <Button variant="outline" size="sm" onClick={handleLogout} className="w-full sm:w-auto text-sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleLogout}
+              className="w-full sm:w-auto text-sm"
+            >
               <LogOut className="mr-2 h-4 w-4" />
               Logout
             </Button>
@@ -750,7 +762,8 @@ export default function Dashboard() {
                 Warning: Complete Data Wipe
               </h3>
               <p className="text-gray-600">
-                Going back to the home page will permanently delete ALL data, including:
+                Going back to the home page will permanently delete ALL data,
+                including:
               </p>
               <div className="bg-red-50 border border-red-200 rounded p-3 text-left">
                 <ul className="text-red-700 text-sm space-y-1">
@@ -766,12 +779,17 @@ export default function Dashboard() {
                 be undone!
               </p>
               <p className="text-xs text-gray-500 mt-2">
-                Note: Use "Download Report" to save your work before navigating away.
+                Note: Use "Download Report" to save your work before navigating
+                away.
               </p>
             </div>
           </div>
           <DialogFooter className="flex space-x-3">
-            <Button variant="outline" onClick={cancelBackNavigation} className="flex-1">
+            <Button
+              variant="outline"
+              onClick={cancelBackNavigation}
+              className="flex-1"
+            >
               Stay on Dashboard
             </Button>
             <Button

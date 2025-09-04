@@ -8,13 +8,19 @@ export async function startCheckout(params: {
   const body = {
     amount,
     currency: String(currency).toLowerCase(),
-    metadata: { ...(metadata || {}), source: 'web', mode: (import.meta as any)?.env?.MODE || 'production' },
+    metadata: {
+      ...(metadata || {}),
+      source: "web",
+      mode: (import.meta as any)?.env?.MODE || "production",
+    },
     successUrl: `${window.location.origin}/dashboard?paid=1`,
     cancelUrl: `${window.location.origin}/dashboard`,
   };
 
   // Optional: allow using an external checkout endpoint (e.g., Firebase) via env
-  const envUrl = (import.meta as any)?.env?.VITE_CHECKOUT_URL as string | undefined;
+  const envUrl = (import.meta as any)?.env?.VITE_CHECKOUT_URL as
+    | string
+    | undefined;
   const externalUrl = envUrl && envUrl.length ? envUrl : undefined;
 
   const buildUrl = (base: string) => {
@@ -27,7 +33,9 @@ export async function startCheckout(params: {
   const candidates: string[] = [];
   if (externalUrl) candidates.push(buildUrl(externalUrl));
   candidates.push(
-    buildUrl("https://us-central1-workerfacts-60c02.cloudfunctions.net/createCheckoutSessionApi"),
+    buildUrl(
+      "https://us-central1-workerfacts-60c02.cloudfunctions.net/createCheckoutSessionApi",
+    ),
     buildUrl("https://createcheckoutsessionapi-e355r2gb5q-uc.a.run.app"),
   );
 
@@ -74,12 +82,20 @@ export async function startCheckout(params: {
   }
 
   if (!res) {
-    console.error("Stripe checkout creation failed", attempts.map(a => `${a.url} -> ${a.status || ''}`), attempts);
-    throw new Error(`Failed to create checkout session (no successful endpoint)`);
+    console.error(
+      "Stripe checkout creation failed",
+      attempts.map((a) => `${a.url} -> ${a.status || ""}`),
+      attempts,
+    );
+    throw new Error(
+      `Failed to create checkout session (no successful endpoint)`,
+    );
   }
 
   const data = (await res.json()) as { url?: string; id?: string };
-  const pk = (import.meta as any)?.env?.VITE_STRIPE_PUBLISHABLE_KEY as string | undefined;
+  const pk = (import.meta as any)?.env?.VITE_STRIPE_PUBLISHABLE_KEY as
+    | string
+    | undefined;
 
   // Prefer Stripe.js redirect when pk and session id are available
   if (pk && data?.id) {
