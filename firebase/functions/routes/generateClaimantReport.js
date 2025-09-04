@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 const {
   Document,
   Packer,
@@ -19,7 +20,7 @@ const {
 const router = express.Router();
 
 
-// Helper to create a borderless cell
+// Helper to create a truly borderless cell
 const borderlessCell = (text, bold = false) =>
   new TableCell({
     children: [
@@ -28,46 +29,67 @@ const borderlessCell = (text, bold = false) =>
       }),
     ],
     borders: {
-      top: { style: BorderStyle.NONE },
-      bottom: { style: BorderStyle.NONE },
-      left: { style: BorderStyle.NONE },
-      right: { style: BorderStyle.NONE },
+      top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+      bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+      left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+      right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
     },
   });
+
 
 // Helper to load logo from data URL, HTTP(S) URL, or local path
 const getLogoBuffer = async (src) => {
   if (!src || typeof src !== "string") return null;
   try {
+    console.log("🔎 Logo source received:", src.slice(0, 100));
+    // log only first 100 chars to avoid dumping entire base64
+
+    let buffer = null;
+
     // Data URL
     if (/^data:image\//i.test(src)) {
-      const mime = src.substring(5, src.indexOf(";")); // e.g., data:image/png
-      if (!/image\/(png|jpeg|jpg)/i.test(mime)) return null; // skip svg/webp
-      const base64 = src.split(",")[1] || "";
+      const mime = src.substring(5, src.indexOf(";"));
+      if (!/image\/(png|jpeg|jpg)/i.test(mime)) return null;
+      const base64 = (src.split(",")[1] || "").replace(/\s/g, "");
       if (!base64) return null;
-      return Buffer.from(base64, "base64");
+      buffer = Buffer.from(base64, "base64");
     }
+
     // HTTP(S) URL
-    if (/^https?:\/\//i.test(src)) {
+    else if (/^https?:\/\//i.test(src)) {
       const resp = await fetch(src);
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const ct = resp.headers.get("content-type") || "";
-      if (!/image\/(png|jpeg|jpg)/i.test(ct)) return null; // skip unsupported
+      if (!/image\/(png|jpeg|jpg)/i.test(ct)) return null;
       const arr = await resp.arrayBuffer();
-      return Buffer.from(arr);
+      buffer = Buffer.from(arr);
     }
+
     // Local path
-    const abs = path.isAbsolute(src) ? src : path.resolve(src);
-    if (fs.existsSync(abs)) {
-      // Best effort: only accept png/jpg by extension
-      if (!/(\.png|\.jpg|\.jpeg)$/i.test(abs)) return null;
-      return fs.readFileSync(abs);
+    else {
+      const abs = path.isAbsolute(src) ? src : path.resolve(src);
+      if (fs.existsSync(abs)) {
+        if (!/(\.png|\.jpg|\.jpeg)$/i.test(abs)) return null;
+        buffer = fs.readFileSync(abs);
+      }
     }
+
+    if (buffer) {
+      console.log("✅ Logo buffer loaded, size:", buffer.length, "bytes");
+
+      // 🔽 Write a copy to tmp folder for inspection
+      const tmpPath = path.join(os.tmpdir(), "debug_logo.png");
+      fs.writeFileSync(tmpPath, buffer);
+      console.log("🖼️ Debug logo written to:", tmpPath);
+    }
+
+    return buffer;
   } catch (e) {
     console.error("Logo load error:", e.message);
   }
   return null;
 };
+
 
 router.post("/", async (req, res) => {
   try {
@@ -96,11 +118,22 @@ router.post("/", async (req, res) => {
     // Logo or clinic name
     const logoSrc =
       logoPath ||
-      req.body?.clinicLogo ||
-      req.body?.logo ||
-      claimantData?.clinicLogo ||
       req.body?.evaluatorData?.clinicLogo;
     const imageBuffer = await getLogoBuffer(logoSrc);
+
+    children.push(
+      new Paragraph({
+        children: [],
+        spacing: { after: 2000 },
+      })
+    );
+    children.push(
+      new Paragraph({
+        children: [],
+        spacing: { after: 2000 }, 
+      })
+    );
+
     if (imageBuffer) {
       children.push(
         new Paragraph({
@@ -138,39 +171,32 @@ router.post("/", async (req, res) => {
       })
     );
 
-    // Cover info table (borderless, centered block with comfortable padding)
+    // Cover info table (completely borderless)
     const coverInfoTable = new Table({
       width: { size: 60, type: WidthType.PERCENTAGE },
       alignment: AlignmentType.CENTER,
       borders: {
-        top: { style: BorderStyle.NONE, size: 0 },
-        bottom: { style: BorderStyle.NONE, size: 0 },
-        left: { style: BorderStyle.NONE, size: 0 },
-        right: { style: BorderStyle.NONE, size: 0 },
-        insideH: { style: BorderStyle.NONE, size: 0 },
-        insideV: { style: BorderStyle.NONE, size: 0 },
+        top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        insideH: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+        insideV: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
       },
       rows: [
         new TableRow({
-          children: [
-            borderlessCell("Claimant Name:", true),
-            borderlessCell(nameDisplay, true),
-          ],
+          children: [borderlessCell("Claimant Name:", true), borderlessCell(nameDisplay)],
         }),
         new TableRow({
-          children: [
-            borderlessCell("Claimant #:", true),
-            borderlessCell(claimNumber || "N/A"),
-          ],
+          children: [borderlessCell("Claimant #:", true), borderlessCell(claimNumber || "N/A")],
         }),
         new TableRow({
-          children: [
-            borderlessCell("Date of Evaluation(s):", true),
-            borderlessCell(evaluationDate || ""),
-          ],
+          children: [borderlessCell("Date of Evaluation(s):", true), borderlessCell(evaluationDate || "")],
         }),
       ],
     });
+
+
     children.push(coverInfoTable);
 
     // Footer (push toward bottom, centered)
@@ -203,7 +229,20 @@ router.post("/", async (req, res) => {
     }
 
     // Build and send DOCX
-    const doc = new Document({ sections: [{ properties: {}, children }] });
+    const doc = new Document({
+      sections: [{
+        properties: {
+          page: {
+            margin: {
+              top: 1480,
+              right: 720,
+              bottom: 720,
+              left: 720,
+            },
+          },
+        }, children
+      }]
+    });
     const buffer = await Packer.toBuffer(doc);
 
     return res

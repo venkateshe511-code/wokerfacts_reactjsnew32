@@ -5561,9 +5561,7 @@ export default function DownloadReport() {
         const requestStartTime = Date.now();
 
         const isLocal = process.env.NODE_ENV === "development";
-        const apiUrl = isLocal
-          ? "http://localhost:5001/generateclaimantreportapi-e355r2gb5q-uc.a.run.app/"
-          : "https://generateclaimantreportapi-e355r2gb5q-uc.a.run.app/";
+        const apiUrl =  "https://generateclaimantreportapi-e355r2gb5q-uc.a.run.app/";
         const response = await fetch(
           apiUrl,
           {
@@ -5856,7 +5854,7 @@ export default function DownloadReport() {
                     PDF Format
                   </Label>
                 </div>
-               { /*<div className="flex items-center space-x-2">
+               {/* <div className="flex items-center space-x-2">
                   <RadioGroupItem value="docx" id="docx" />
                   <Label
                     htmlFor="docx"
@@ -5865,7 +5863,7 @@ export default function DownloadReport() {
                     <FileText className="mr-2 h-4 w-4 text-blue-600" />
                     DOCX Format
                   </Label>
-                </div>*/}
+                </div> */}
               </RadioGroup>
             </div>
 
