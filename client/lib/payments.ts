@@ -53,20 +53,31 @@ export async function startCheckout(params: {
       });
       if (tryAlt.ok) {
         res = tryAlt;
+      } else {
+        const txt = await tryAlt.text().catch(() => "");
+        attempts.push({ url: alt, status: tryAlt.status, text: txt });
       }
     }
   }
 
   // Final fallback to local API even if external set
   if (!res.ok) {
-    res = await fetch("/api/stripe/create-checkout-session", {
+    const localUrl = "/api/stripe/create-checkout-session";
+    const localRes = await fetch(localUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+    if (localRes.ok) {
+      res = localRes;
+    } else {
+      const txt = await localRes.text().catch(() => "");
+      attempts.push({ url: localUrl, status: localRes.status, text: txt });
+    }
   }
 
   if (!res.ok) {
+    console.error("Stripe checkout creation failed", attempts);
     const text = await res.text().catch(() => "");
     throw new Error(`Failed to create checkout session (${res.status}) ${text}`);
   }
