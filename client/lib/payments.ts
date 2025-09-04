@@ -7,8 +7,8 @@ export async function startCheckout(params: {
 
   const body = {
     amount,
-    currency,
-    metadata: metadata || {},
+    currency: String(currency).toLowerCase(),
+    metadata: { ...(metadata || {}), source: 'web', mode: (import.meta as any)?.env?.MODE || 'production' },
     successUrl: `${window.location.origin}/dashboard?paid=1`,
     cancelUrl: `${window.location.origin}/dashboard`,
   };
