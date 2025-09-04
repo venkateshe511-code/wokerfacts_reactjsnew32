@@ -23,7 +23,7 @@ export async function startCheckout(params: {
     return `${u}/createCheckoutSession`;
   };
 
-  const baseEndpoint = externalUrl.replace(/\/$/, "");
+  const baseEndpoint = (externalUrl ? externalUrl.replace(/\/$/, "") : "/api/stripe/create-checkout-session");
 
   let res = await fetch(baseEndpoint, {
     method: "POST",
