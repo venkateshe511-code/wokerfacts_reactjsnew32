@@ -435,9 +435,9 @@ export default function Index() {
                 aria-hidden="true"
                 className="pointer-events-none select-none absolute opacity-10"
                 style={{
-                  width: "clamp(96px, 18vw, 240px)",
-                  right: "clamp(8px, 2vw, 40px)",
-                  bottom: "clamp(8px, 2vw, 40px)",
+                  width: "clamp(96px, 16vw, 220px)",
+                  right: "calc(-1 * clamp(8px, 2vw, 48px))",
+                  bottom: "clamp(8px, 2vw, 48px)",
                 }}
               />
               <OfflineImage
