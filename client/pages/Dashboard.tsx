@@ -28,6 +28,8 @@ import {
   LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useDemoMode } from "@/hooks/use-demo-mode";
+import { startCheckout } from "@/lib/payments";
 
 interface EvaluatorData {
   name: string;
@@ -54,6 +56,7 @@ interface WorkflowStep {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const isDemoMode = useDemoMode();
   const [evaluatorData, setEvaluatorData] = useState<EvaluatorData | null>(
     null,
   );
@@ -146,36 +149,49 @@ export default function Dashboard() {
 
     // Load completed steps
     const savedCompletedSteps = localStorage.getItem("completedSteps");
+    let completedStepsArray: number[] = [];
     if (savedCompletedSteps) {
-      const completedStepsArray = JSON.parse(savedCompletedSteps);
-      setCompletedSteps(completedStepsArray);
+      completedStepsArray = JSON.parse(savedCompletedSteps);
+    }
 
-      // Auto-scroll to next available step
-      const nextStep = completedStepsArray.length + 1;
-      if (nextStep <= workflowSteps.length) {
-        setTimeout(() => {
-          const nextStepElement = document.getElementById(`step-${nextStep}`);
-          if (nextStepElement) {
-            nextStepElement.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
-            // Add a subtle highlight effect
-            nextStepElement.classList.add(
+    // If returned from Stripe success, mark payment step as completed
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("paid") === "1" && !completedStepsArray.includes(8)) {
+      completedStepsArray.push(8);
+      localStorage.setItem("completedSteps", JSON.stringify(completedStepsArray));
+      // Clean URL param
+      const url = new URL(window.location.href);
+      url.searchParams.delete("paid");
+      window.history.replaceState({}, "", url.toString());
+    }
+
+    setCompletedSteps(completedStepsArray);
+
+    // Auto-scroll to next available step
+    const nextStep = completedStepsArray.length + 1;
+    if (nextStep <= workflowSteps.length) {
+      setTimeout(() => {
+        const nextStepElement = document.getElementById(`step-${nextStep}`);
+        if (nextStepElement) {
+          nextStepElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          // Add a subtle highlight effect
+          nextStepElement.classList.add(
+            "ring-2",
+            "ring-blue-400",
+            "ring-opacity-75",
+          );
+          setTimeout(() => {
+            nextStepElement.classList.remove(
               "ring-2",
               "ring-blue-400",
               "ring-opacity-75",
             );
-            setTimeout(() => {
-              nextStepElement.classList.remove(
-                "ring-2",
-                "ring-blue-400",
-                "ring-opacity-75",
-              );
-            }, 2000);
-          }
-        }, 300);
-      }
+          }, 2000);
+        }
+      }, 300);
     }
   }, [navigate]);
 
@@ -225,7 +241,17 @@ export default function Dashboard() {
         navigate("/upload-digital-library");
         break;
       case 8:
-        navigate("/payment");
+        {
+          const forceReal = (import.meta as any)?.env?.VITE_FORCE_REAL_PAYMENT === "true";
+          if (isDemoMode && !forceReal) {
+            navigate("/payment");
+          } else {
+            startCheckout({ amount: 25, currency: "USD" }).catch((e) => {
+              console.error(e);
+              navigate("/payment");
+            });
+          }
+        }
         break;
       case 9:
         navigate("/review-report");
@@ -234,7 +260,6 @@ export default function Dashboard() {
         navigate("/download-report");
         break;
       default:
-        // Navigation will be implemented later for other steps
         console.log(`Navigating to step ${stepId}`);
         break;
     }
