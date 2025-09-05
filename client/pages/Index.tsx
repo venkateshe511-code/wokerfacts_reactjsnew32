@@ -141,7 +141,7 @@ export default function Index() {
   }, [slideImages.length]);
 
   return (
-    <div className="min-h-screen bg-white justify-paragraphs">
+    <div className="min-h-screen bg-white">
       {/* Offline Indicator */}
       <OfflineIndicator />
 
@@ -1714,7 +1714,7 @@ export default function Index() {
               Privacy Policy
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-6 text-sm leading-relaxed">
+          <div className="space-y-6 text-sm leading-relaxed justify-paragraphs">
             <div className="text-gray-600">
               <p>
                 <strong>Effective Date:</strong> September 1, 2025
