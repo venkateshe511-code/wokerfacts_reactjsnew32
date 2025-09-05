@@ -15,12 +15,12 @@ const {
   BorderStyle,
   ImageRun,
   WidthType,
+  HeadingLevel,
 } = require("docx");
 
 const router = express.Router();
 
-
-// Helper to create a truly borderless cell
+// Helpers
 const borderlessCell = (text, bold = false) =>
   new TableCell({
     children: [
@@ -36,67 +36,80 @@ const borderlessCell = (text, bold = false) =>
     },
   });
 
+const headerText = (text) =>
+  new Paragraph({
+    heading: HeadingLevel.HEADING_2,
+    children: [new TextRun({ text, bold: true, color: "4472C4" })],
+    spacing: { before: 200, after: 150 },
+  });
 
-// Helper to load logo from data URL, HTTP(S) URL, or local path
-const getLogoBuffer = async (src) => {
+const subHeaderText = (text) =>
+  new Paragraph({
+    heading: HeadingLevel.HEADING_3,
+    children: [new TextRun({ text, bold: true })],
+    spacing: { before: 150, after: 100 },
+  });
+
+const labelValueRow = (label, value) =>
+  new Paragraph({
+    children: [
+      new TextRun({ text: `${label}: `, bold: true }),
+      new TextRun({ text: value ?? "" }),
+    ],
+    spacing: { after: 60 },
+  });
+
+const calcAverage = (measurements = {}) => {
+  const vals = [
+    measurements.trial1,
+    measurements.trial2,
+    measurements.trial3,
+    measurements.trial4,
+    measurements.trial5,
+    measurements.trial6,
+  ].filter((v) => typeof v === "number" && !isNaN(v) && v > 0);
+  if (!vals.length) return 0;
+  const avg = vals.reduce((s, v) => s + v, 0) / vals.length;
+  return Math.round(avg * 100) / 100;
+};
+
+const getImageBuffer = async (src) => {
   if (!src || typeof src !== "string") return null;
   try {
-    console.log("🔎 Logo source received:", src.slice(0, 100));
-    // log only first 100 chars to avoid dumping entire base64
-
     let buffer = null;
-
-    // Data URL
     if (/^data:image\//i.test(src)) {
-      const mime = src.substring(5, src.indexOf(";"));
-      if (!/image\/(png|jpeg|jpg)/i.test(mime)) return null;
       const base64 = (src.split(",")[1] || "").replace(/\s/g, "");
-      if (!base64) return null;
-      buffer = Buffer.from(base64, "base64");
-    }
-
-    // HTTP(S) URL
-    else if (/^https?:\/\//i.test(src)) {
+      if (base64) buffer = Buffer.from(base64, "base64");
+    } else if (/^https?:\/\//i.test(src)) {
       const resp = await fetch(src);
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const ct = resp.headers.get("content-type") || "";
-      if (!/image\/(png|jpeg|jpg)/i.test(ct)) return null;
       const arr = await resp.arrayBuffer();
       buffer = Buffer.from(arr);
-    }
-
-    // Local path
-    else {
+    } else {
       const abs = path.isAbsolute(src) ? src : path.resolve(src);
-      if (fs.existsSync(abs)) {
-        if (!/(\.png|\.jpg|\.jpeg)$/i.test(abs)) return null;
-        buffer = fs.readFileSync(abs);
-      }
+      if (fs.existsSync(abs)) buffer = fs.readFileSync(abs);
     }
 
     if (buffer) {
-      console.log("✅ Logo buffer loaded, size:", buffer.length, "bytes");
-
-      // 🔽 Write a copy to tmp folder for inspection
-      const tmpPath = path.join(os.tmpdir(), "debug_logo.png");
-      fs.writeFileSync(tmpPath, buffer);
-      console.log("🖼️ Debug logo written to:", tmpPath);
+      try {
+        const tmpPath = path.join(os.tmpdir(), `docx_img_${Date.now()}.bin`);
+        fs.writeFileSync(tmpPath, buffer);
+      } catch {}
     }
 
     return buffer;
   } catch (e) {
-    console.error("Logo load error:", e.message);
+    return null;
   }
-  return null;
 };
-
 
 router.post("/", async (req, res) => {
   try {
-    // Allow payload inspection if needed
     if (req.query.dryRun === "1") {
       return res.status(200).json({ ok: true, body: req.body || {} });
     }
+
+    const body = req.body || {};
 
     const {
       claimantName = "",
@@ -108,38 +121,35 @@ router.post("/", async (req, res) => {
       clinicPhone = "",
       clinicFax = "",
       claimantData = {},
-    } = req.body || {};
+      painIllustrationData = {},
+      activityRatingData = {},
+      referralQuestionsData = {},
+      protocolTestsData = {},
+      occupationalTasksData = {},
+      testData = {},
+      mtmTestData = {},
+      digitalLibraryData = {},
+      reportSummary = {},
+    } = body;
 
     const nameDisplay =
       claimantName || `${claimantData?.lastName || ""}, ${claimantData?.firstName || ""}`.trim() || "Unknown";
 
     const children = [];
 
-    // Logo or clinic name
-    const logoSrc =
-      logoPath ||
-      req.body?.evaluatorData?.clinicLogo;
-    const imageBuffer = await getLogoBuffer(logoSrc);
+    // COVER PAGE
+    const logoBuffer = await getImageBuffer(logoPath || body?.evaluatorData?.clinicLogo);
 
     children.push(
-      new Paragraph({
-        children: [],
-        spacing: { after: 2000 },
-      })
-    );
-    children.push(
-      new Paragraph({
-        children: [],
-        spacing: { after: 2000 }, 
-      })
+      new Paragraph({ children: [], spacing: { after: 1200 } })
     );
 
-    if (imageBuffer) {
+    if (logoBuffer) {
       children.push(
         new Paragraph({
           alignment: AlignmentType.CENTER,
           children: [
-            new ImageRun({ data: imageBuffer, transformation: { width: 120, height: 60 } }),
+            new ImageRun({ data: logoBuffer, transformation: { width: 150, height: 70 } }),
           ],
           spacing: { after: 200 },
         })
@@ -154,24 +164,17 @@ router.post("/", async (req, res) => {
       );
     }
 
-    // Title (left-aligned block as per reference)
     children.push(
       new Paragraph({
         alignment: AlignmentType.LEFT,
         indent: { left: 2880 },
         children: [
-          new TextRun({
-            text: "Functional Abilities Determination",
-            bold: true,
-            color: "4472C4",
-            size: 28,
-          }),
+          new TextRun({ text: "Functional Abilities Determination", bold: true, color: "4472C4", size: 28 }),
         ],
         spacing: { after: 200 },
       })
     );
 
-    // Cover info table (completely borderless)
     const coverInfoTable = new Table({
       width: { size: 60, type: WidthType.PERCENTAGE },
       alignment: AlignmentType.CENTER,
@@ -184,83 +187,302 @@ router.post("/", async (req, res) => {
         insideV: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
       },
       rows: [
-        new TableRow({
-          children: [borderlessCell("Claimant Name:", true), borderlessCell(nameDisplay)],
-        }),
-        new TableRow({
-          children: [borderlessCell("Claimant #:", true), borderlessCell(claimNumber || "N/A")],
-        }),
-        new TableRow({
-          children: [borderlessCell("Date of Evaluation(s):", true), borderlessCell(evaluationDate || "")],
-        }),
+        new TableRow({ children: [borderlessCell("Claimant Name:", true), borderlessCell(nameDisplay)] }),
+        new TableRow({ children: [borderlessCell("Claimant #:", true), borderlessCell(claimNumber || "N/A")] }),
+        new TableRow({ children: [borderlessCell("Date of Evaluation(s):", true), borderlessCell(evaluationDate || "")] }),
       ],
     });
 
-
     children.push(coverInfoTable);
 
-    // Footer (push toward bottom, centered)
     if (clinicName || clinicAddress || clinicPhone || clinicFax) {
       children.push(
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          spacing: { before: 2400, after: 120 },
-          children: [
-            new TextRun({ text: "CONFIDENTIAL INFORMATION ENCLOSED", bold: true, size: 18 }),
-          ],
-        })
+        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 1200, after: 120 }, children: [
+          new TextRun({ text: "CONFIDENTIAL INFORMATION ENCLOSED", bold: true, size: 18 }),
+        ]})
       );
-      if (clinicName) {
-        children.push(
-          new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: clinicName, bold: true, size: 16 })] })
-        );
-      }
-      if (clinicAddress) {
-        children.push(
-          new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: clinicAddress, size: 16 })] })
-        );
-      }
+      if (clinicName) children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: clinicName, bold: true, size: 16 })] }));
+      if (clinicAddress) children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: clinicAddress, size: 16 })] }));
       const phoneFax = `Phone: ${clinicPhone || ""}${clinicPhone && clinicFax ? "    " : ""}${clinicFax ? `Fax: ${clinicFax}` : ""}`.trim();
-      if (phoneFax) {
+      if (phoneFax) children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: phoneFax, size: 16 })] }));
+    }
+
+    // TABLE OF CONTENTS (simple static list)
+    children.push(new Paragraph({ pageBreakBefore: true }));
+    children.push(headerText("Contents of Report:"));
+    [
+      "Client Information",
+      "Pain & Symptom Illustration",
+      "Referral Questions",
+      "Conclusions",
+      "Functional Abilities Determination and Job Match Results",
+      "Test Data (Activity Overview, Extremity Strength, Occupational Tasks, Range of Motion, Whole Body Strength)",
+      "Appendix One: Reference Charts",
+      "Appendix Two: Digital Library",
+    ].forEach((item) => children.push(new Paragraph({ children: [new TextRun({ text: `• ${item}` })], spacing: { after: 80 } })));
+
+    // CLIENT INFORMATION
+    children.push(new Paragraph({ pageBreakBefore: true }));
+    children.push(headerText("Client Information"));
+
+    // Optional claimant photo
+    if (claimantData.profilePhoto) {
+      const claimantImg = await getImageBuffer(claimantData.profilePhoto);
+      if (claimantImg) {
         children.push(
-          new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: phoneFax, size: 16 })] })
+          new Paragraph({
+            children: [
+              new ImageRun({ data: claimantImg, transformation: { width: 120, height: 150 } }),
+            ],
+            spacing: { after: 200 },
+          })
         );
       }
     }
 
-    // Build and send DOCX
+    const infoRowsLeft = [
+      ["Name", `${claimantData.firstName || ""} ${claimantData.lastName || ""}`.trim()],
+      ["Address", claimantData.address || "N/A"],
+      ["Home Phone", claimantData.phone || claimantData.phoneNumber || "N/A"],
+      ["Work Phone", claimantData.workPhone || "N/A"],
+      ["Occupation", claimantData.occupation || claimantData.currentOccupation || "N/A"],
+      ["Employer(SIC)", claimantData.employer || "N/A"],
+      ["Insurance", claimantData.insurance || "N/A"],
+      ["Physician", claimantData.referredBy || "N/A"],
+    ];
+
+    const infoRowsRight = [
+      ["ID", claimNumber || claimantData.claimantId || reportSummary.reportId || "N/A"],
+      ["DOB (Age)", `${claimantData.dateOfBirth || "N/A"}`],
+      ["Gender", claimantData.gender || "N/A"],
+      ["Height", claimantData.heightValue ? `${claimantData.heightValue} ${claimantData.heightUnit || ""}` : claimantData.height || "N/A"],
+      ["Weight", claimantData.weightValue ? `${claimantData.weightValue} ${claimantData.weightUnit || ""}` : claimantData.weight || "N/A"],
+      ["Dominant Hand", claimantData.dominantHand || claimantData.handDominance || "N/A"],
+      ["Referred By", claimantData.referredBy || "N/A"],
+      ["Tested By", (body?.evaluatorData?.name) || reportSummary.evaluatorName || "Evaluator"],
+    ];
+
+    const infoTable = new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      rows: [
+        ...infoRowsLeft.map((row, i) => (
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: row[0] + ":", bold: true })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: row[1] })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: infoRowsRight[i]?.[0] + ":", bold: true })] })] }),
+              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: infoRowsRight[i]?.[1] || "" })] })] }),
+            ],
+          })
+        )),
+      ],
+    });
+    children.push(infoTable);
+
+    // Mechanism and History of Injury
+    children.push(subHeaderText("Mechanism and History of Injury"));
+    const hist = claimantData.claimantHistory || claimantData.injuryDescription || "";
+    children.push(new Paragraph({ children: [new TextRun({ text: hist })] }));
+
+    // PAIN / SYMPTOM ILLUSTRATION
+    children.push(new Paragraph({ pageBreakBefore: true }));
+    children.push(headerText("Pain/Symptom Illustration"));
+
+    if (painIllustrationData?.description) {
+      children.push(new Paragraph({ children: [new TextRun({ text: painIllustrationData.description })], spacing: { after: 120 } }));
+    }
+    if (painIllustrationData?.savedImage) {
+      const painImg = await getImageBuffer(painIllustrationData.savedImage);
+      if (painImg) {
+        children.push(new Paragraph({ children: [new ImageRun({ data: painImg, transformation: { width: 300, height: 220 } })], spacing: { after: 160 } }));
+      }
+    }
+
+    // ACTIVITY OVERVIEW
+    children.push(headerText("Activity Overview"));
+    const activities = activityRatingData?.activities || [];
+    if (activities.length) {
+      const activityHeader = new TableRow({
+        children: [
+          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Activity", bold: true })] })] }),
+          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Rating", bold: true })] })] }),
+          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Demonstrated", bold: true })] })] }),
+          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Perceived", bold: true })] })] }),
+          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Comments", bold: true })] })] }),
+        ],
+      });
+      const activityRows = activities.map((a) => new TableRow({
+        children: [
+          new TableCell({ children: [new Paragraph(a.name || "")] }),
+          new TableCell({ children: [new Paragraph(String(a.rating ?? ""))] }),
+          new TableCell({ children: [new Paragraph(a.demonstrated ? "Yes" : "No")] }),
+          new TableCell({ children: [new Paragraph(a.perceived ? "Yes" : "No")] }),
+          new TableCell({ children: [new Paragraph(a.comments || "")] }),
+        ],
+      }));
+      children.push(new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [activityHeader, ...activityRows] }));
+    } else {
+      children.push(new Paragraph({ children: [new TextRun({ text: "No activity ratings provided." })] }));
+    }
+
+    // REFERRAL QUESTIONS
+    children.push(new Paragraph({ pageBreakBefore: true }));
+    children.push(headerText("Referral Questions"));
+    const questions = referralQuestionsData?.questions || [];
+    if (questions.length) {
+      let idx = 0;
+      for (const q of questions) {
+        idx += 1;
+        children.push(subHeaderText(`Q${idx}. ${q.question || ""}`));
+        children.push(new Paragraph({ children: [new TextRun({ text: q.answer || "" })], spacing: { after: 80 } }));
+        if (Array.isArray(q.savedImageData)) {
+          for (const img of q.savedImageData) {
+            const buf = await getImageBuffer(img.dataUrl || img.data);
+            if (buf) children.push(new Paragraph({ children: [new ImageRun({ data: buf, transformation: { width: 300, height: 200 } })], spacing: { after: 60 } }));
+          }
+        }
+      }
+    } else {
+      children.push(new Paragraph({ children: [new TextRun({ text: "No referral questions provided." })] }));
+    }
+
+    // PROTOCOL & SELECTED TESTS
+    children.push(headerText("Protocol & Selected Tests"));
+    const protoName = protocolTestsData?.selectedProtocol || "Standard FCE Protocol";
+    children.push(labelValueRow("Protocol", protoName));
+    const selectedTests = protocolTestsData?.selectedTests || [];
+    if (selectedTests.length) {
+      selectedTests.forEach((t) => children.push(new Paragraph({ children: [new TextRun({ text: `• ${t}` })] })));
+    }
+
+    // OCCUPATIONAL TASKS (MTM)
+    const mtm = mtmTestData && typeof mtmTestData === "object" ? mtmTestData : {};
+    if (Object.keys(mtm).length) {
+      children.push(new Paragraph({ pageBreakBefore: true }));
+      children.push(headerText("Occupational Tasks - MTM Analysis"));
+      for (const [testKey, data] of Object.entries(mtm)) {
+        const trials = Array.isArray(data.trials) ? data.trials : [];
+        children.push(subHeaderText(`${data.testName || testKey}`));
+        const header = new TableRow({
+          children: [
+            new TableCell({ children: [new Paragraph(new TextRun({ text: "Trial", bold: true }))] }),
+            new TableCell({ children: [new Paragraph(new TextRun({ text: "Side", bold: true }))] }),
+            new TableCell({ children: [new Paragraph(new TextRun({ text: "Weight/Plane", bold: true }))] }),
+            new TableCell({ children: [new Paragraph(new TextRun({ text: "Distance/Posture", bold: true }))] }),
+            new TableCell({ children: [new Paragraph(new TextRun({ text: "Reps", bold: true }))] }),
+            new TableCell({ children: [new Paragraph(new TextRun({ text: "Time (sec)", bold: true }))] }),
+            new TableCell({ children: [new Paragraph(new TextRun({ text: "%IS", bold: true }))] }),
+            new TableCell({ children: [new Paragraph(new TextRun({ text: "CV%", bold: true }))] }),
+            new TableCell({ children: [new Paragraph(new TextRun({ text: "Time Set Completed", bold: true }))] }),
+          ],
+        });
+        const rows = trials.length
+          ? trials.map((t, i) => new TableRow({
+              children: [
+                new TableCell({ children: [new Paragraph(String(t.trial || i + 1))] }),
+                new TableCell({ children: [new Paragraph(t.side || "Both")] }),
+                new TableCell({ children: [new Paragraph(String(t.weight || t.plane || "Immediate"))] }),
+                new TableCell({ children: [new Paragraph(String(t.distance || t.position || "Standing"))] }),
+                new TableCell({ children: [new Paragraph(String(t.reps ?? 1))] }),
+                new TableCell({ children: [new Paragraph(String((t.testTime || 0).toFixed ? t.testTime.toFixed(1) : t.testTime || 0))] }),
+                new TableCell({ children: [new Paragraph(String((t.percentIS || 0).toFixed ? t.percentIS.toFixed(1) : t.percentIS || 0))] }),
+                new TableCell({ children: [new Paragraph(String(t.cv || 0))] }),
+                new TableCell({ children: [new Paragraph(String((t.totalCompleted || t.testTime || 0).toFixed ? (t.totalCompleted || t.testTime || 0).toFixed(1) : (t.totalCompleted || t.testTime || 0))) ] }),
+              ],
+            }))
+          : [new TableRow({ children: [new TableCell({ columnSpan: 9, children: [new Paragraph("No trial data")], }),] })];
+        children.push(new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [header, ...rows] }));
+
+        if (Array.isArray(data.savedImageData) && data.savedImageData.length) {
+          for (const img of data.savedImageData) {
+            const b = await getImageBuffer(img.dataUrl || img.data);
+            if (b) children.push(new Paragraph({ children: [new ImageRun({ data: b, transformation: { width: 250, height: 160 } })], spacing: { after: 60 } }));
+          }
+        }
+      }
+    }
+
+    // FUNCTIONAL TESTS DATA
+    children.push(new Paragraph({ pageBreakBefore: true }));
+    children.push(headerText("Functional Tests"));
+    const tests = Array.isArray(testData?.tests) ? testData.tests : [];
+    if (tests.length) {
+      for (const t of tests) {
+        children.push(subHeaderText(t.testName || "Test"));
+        if (t.result) children.push(labelValueRow("Result", t.result));
+        if (t.effort) children.push(labelValueRow("Effort", t.effort));
+        if (t.consistency) children.push(labelValueRow("Consistency", t.consistency));
+
+        if (t.measurements && Object.keys(t.measurements).length) {
+          const measHeader = new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph(new TextRun({ text: "Trial", bold: true }))] }),
+              new TableCell({ children: [new Paragraph(new TextRun({ text: "Value", bold: true }))] }),
+            ],
+          });
+          const measRows = Object.entries(t.measurements)
+            .filter(([k]) => /^trial\d+$/i.test(k))
+            .map(([k, v]) => new TableRow({ children: [
+              new TableCell({ children: [new Paragraph(k)] }),
+              new TableCell({ children: [new Paragraph(String(v))] }),
+            ] }));
+          const avg = calcAverage(t.measurements);
+          children.push(new Table({ width: { size: 60, type: WidthType.PERCENTAGE }, rows: [measHeader, ...measRows] }));
+          children.push(labelValueRow("Average", String(avg)));
+          if (t.unit) children.push(labelValueRow("Unit", t.unit));
+        }
+
+        if (t.limitations) children.push(labelValueRow("Limitations", t.limitations));
+        if (t.jobRequirements) children.push(labelValueRow("Job Requirements", t.jobRequirements));
+        if (t.comments) children.push(new Paragraph({ children: [new TextRun({ text: `Comments: ${t.comments}` })], spacing: { after: 120 } }));
+      }
+    } else {
+      children.push(new Paragraph({ children: [new TextRun({ text: "No test data provided." })] }));
+    }
+
+    // DIGITAL LIBRARY (Appendix Two)
+    children.push(new Paragraph({ pageBreakBefore: true }));
+    children.push(headerText("Appendix Two: Digital Library"));
+    const files = digitalLibraryData?.savedFileData || [];
+    if (files.length) {
+      files.forEach((f, i) => {
+        const line = `${i + 1}. ${f.name || "File"}   (${f.type || ""}${f.size ? `, ${Math.round(f.size / 1024)} KB` : ""})`;
+        children.push(new Paragraph({ children: [new TextRun({ text: line })] }));
+      });
+    } else {
+      children.push(new Paragraph({ children: [new TextRun({ text: "No files in digital library." })] }));
+    }
+
+    // APPENDIX ONE: REFERENCE CHARTS (placeholder descriptive text)
+    children.push(new Paragraph({ pageBreakBefore: true }));
+    children.push(headerText("Appendix One: Reference Charts"));
+    children.push(new Paragraph({ children: [new TextRun({ text: "Reference charts and norms used during evaluation are available upon request and were consulted to interpret the client performance across tests." })] }));
+
     const doc = new Document({
-      sections: [{
-        properties: {
-          page: {
-            margin: {
-              top: 1480,
-              right: 720,
-              bottom: 720,
-              left: 720,
+      sections: [
+        {
+          properties: {
+            page: {
+              margin: { top: 1480, right: 720, bottom: 720, left: 720 },
             },
           },
-        }, children
-      }]
+          children,
+        },
+      ],
     });
+
     const buffer = await Packer.toBuffer(doc);
 
     return res
       .status(200)
-      .set(
-        "Content-Type",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      )
+      .set("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
       .set(
         "Content-Disposition",
-        `attachment; filename=FCE_Report_${nameDisplay.replace(/[^a-zA-Z0-9]/g, "_")}_${new Date()
-          .toISOString()
-          .split("T")[0]}.docx`
+        `attachment; filename=FCE_Report_${nameDisplay.replace(/[^a-zA-Z0-9]/g, "_")}_${new Date().toISOString().split("T")[0]}.docx`
       )
       .send(buffer);
   } catch (err) {
-    console.error("DOCX generation failed:", err);
-    return res.status(500).json({ error: "Internal Server Error generating DOCX", details: err.message });
+    return res.status(500).json({ error: "Internal Server Error generating DOCX", details: err?.message || String(err) });
   }
 });
 

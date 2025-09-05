@@ -4,11 +4,12 @@ const cors = require("cors");
 
 const generateDocxRoute = require("./routes/generateClaimantReport");
 const createCheckoutSessionRoute = require("./routes/createCheckoutSession");
+const generateDocumentRoute = require("./routes/generate_document");
 
 // Create separate apps
 const app1 = express();
 const app2 = express();
-
+const app3 = express();
 const corsOptions = {
   origin: true,
   methods: ["GET", "POST", "OPTIONS"],
@@ -26,6 +27,13 @@ app2.use(express.json({ limit: "20mb" }));
 app2.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app2.use("/", createCheckoutSessionRoute);
 
+app2.use(cors(corsOptions));
+app2.use(express.json({ limit: "20mb" }));
+app2.use(express.urlencoded({ extended: true, limit: "20mb" }));
+app2.use("/", generateDocumentRoute);
+
+
 // Export multiple functions
 exports.generateClaimantReportApi = functions.https.onRequest(app1);
 exports.createCheckoutSessionApi = functions.https.onRequest(app2);
+exports.generateDocumentRouteApi = functions.https.onRequest(app3);

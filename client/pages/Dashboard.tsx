@@ -262,7 +262,7 @@ export default function Dashboard() {
           } else {
             try {
               setCheckoutRedirecting(true);
-              await startCheckout({ amount: 1, currency: "USD" });
+              await startCheckout({ amount: 25, currency: "USD" });
             } catch (e: any) {
               console.error(e);
               toast({
