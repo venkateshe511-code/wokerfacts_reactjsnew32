@@ -1163,7 +1163,9 @@ export default function Index() {
                   className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 hover:border-blue-400 transition-colors duration-300"
                 />
                 <div>
-                  <p className="font-semibold text-gray-900">Occupational Therapist</p>
+                  <p className="font-semibold text-gray-900">
+                    Occupational Therapist
+                  </p>
                 </div>
               </div>
             </Card>
@@ -1185,7 +1187,9 @@ export default function Index() {
                   alt="Occupational Health Physician"
                   className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 hover:border-blue-400 transition-colors duration-300"
                 />
-                <p className="font-semibold text-gray-900">Occupational Health Physician</p>
+                <p className="font-semibold text-gray-900">
+                  Occupational Health Physician
+                </p>
               </div>
             </Card>
           </div>
