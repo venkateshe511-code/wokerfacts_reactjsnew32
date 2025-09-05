@@ -260,7 +260,10 @@ export default function Dashboard() {
           if (isDemoMode && !forceReal) {
             navigate("/payment");
           } else {
-            startCheckout({ amount: 1, currency: "USD" }).catch((e: any) => {
+            try {
+              setCheckoutRedirecting(true);
+              await startCheckout({ amount: 1, currency: "USD" });
+            } catch (e: any) {
               console.error(e);
               toast({
                 title: "Payment error",
@@ -270,7 +273,10 @@ export default function Dashboard() {
                     : "Unable to start checkout. Please try again.",
                 variant: "destructive",
               });
-            });
+            } finally {
+              // If redirect succeeds, page will navigate away; this only runs when an error occurs
+              setCheckoutRedirecting(false);
+            }
           }
         }
         break;
