@@ -226,7 +226,7 @@ export default function Dashboard() {
     };
   }, []);
 
-  const handleStepClick = (stepId: number) => {
+  const handleStepClick = async (stepId: number) => {
     if (checkoutRedirecting) return;
     setCurrentStep(stepId);
 
