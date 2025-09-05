@@ -820,6 +820,17 @@ export default function Dashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {checkoutRedirecting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 max-w-sm w-full mx-4 text-center border">
+            <div className="flex items-center justify-center mb-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-brand-500 border-t-transparent" />
+            </div>
+            <h3 className="text-lg font-semibold mb-1">Redirecting to secure checkout…</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Please wait. Do not close this window or navigate away.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
