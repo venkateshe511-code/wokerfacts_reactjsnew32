@@ -56,6 +56,7 @@ interface WorkflowStep {
 }
 
 export default function Dashboard() {
+  const [checkoutRedirecting, setCheckoutRedirecting] = useState(false);
   const navigate = useNavigate();
   const isDemoMode = useDemoMode();
   const [evaluatorData, setEvaluatorData] = useState<EvaluatorData | null>(
@@ -225,7 +226,8 @@ export default function Dashboard() {
     };
   }, []);
 
-  const handleStepClick = (stepId: number) => {
+  const handleStepClick = async (stepId: number) => {
+    if (checkoutRedirecting) return;
     setCurrentStep(stepId);
 
     // Navigate to specific step pages
@@ -258,7 +260,10 @@ export default function Dashboard() {
           if (isDemoMode && !forceReal) {
             navigate("/payment");
           } else {
-            startCheckout({ amount: 1, currency: "USD" }).catch((e: any) => {
+            try {
+              setCheckoutRedirecting(true);
+              await startCheckout({ amount: 1, currency: "USD" });
+            } catch (e: any) {
               console.error(e);
               toast({
                 title: "Payment error",
@@ -268,7 +273,10 @@ export default function Dashboard() {
                     : "Unable to start checkout. Please try again.",
                 variant: "destructive",
               });
-            });
+            } finally {
+              // If redirect succeeds, page will navigate away; this only runs when an error occurs
+              setCheckoutRedirecting(false);
+            }
           }
         }
         break;
@@ -296,6 +304,7 @@ export default function Dashboard() {
   };
 
   const handleLogout = () => {
+    if (checkoutRedirecting) return;
     setShowLogoutDialog(true);
   };
 
@@ -334,6 +343,7 @@ export default function Dashboard() {
   };
 
   const handleBackNavigation = () => {
+    if (checkoutRedirecting) return;
     setShowBackDialog(true);
   };
 
@@ -812,6 +822,21 @@ export default function Dashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {checkoutRedirecting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 max-w-sm w-full mx-4 text-center border">
+            <div className="flex items-center justify-center mb-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-brand-500 border-t-transparent" />
+            </div>
+            <h3 className="text-lg font-semibold mb-1">
+              Redirecting to secure checkout…
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Please wait. Do not close this window or navigate away.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
