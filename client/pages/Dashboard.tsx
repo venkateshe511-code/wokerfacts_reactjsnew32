@@ -304,6 +304,7 @@ export default function Dashboard() {
   };
 
   const handleLogout = () => {
+    if (checkoutRedirecting) return;
     setShowLogoutDialog(true);
   };
 
@@ -342,6 +343,7 @@ export default function Dashboard() {
   };
 
   const handleBackNavigation = () => {
+    if (checkoutRedirecting) return;
     setShowBackDialog(true);
   };
 
