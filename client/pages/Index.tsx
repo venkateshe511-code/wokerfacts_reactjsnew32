@@ -1087,8 +1087,8 @@ export default function Index() {
                   className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 hover:border-blue-400 transition-colors duration-300"
                 />
                 <div>
-                  <p className="font-semibold text-gray-900">
-                    Employer health and Safety Professional
+                  <p className="font-semibold text-gray-900 text-left whitespace-nowrap">
+                    Employer health & Safety Professional
                   </p>
                 </div>
               </div>
