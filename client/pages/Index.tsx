@@ -141,7 +141,7 @@ export default function Index() {
   }, [slideImages.length]);
 
   return (
-    <div className="min-h-screen bg-white justify-paragraphs">
+    <div className="min-h-screen bg-white">
       {/* Offline Indicator */}
       <OfflineIndicator />
 
@@ -1075,9 +1075,10 @@ export default function Index() {
                 <Quote className="h-8 w-8 text-blue-500" />
               </div>
               <p className="text-gray-600 mb-4 italic">
-                "The Functional Abilities and Capacity Evaluations provide me
-                with the client's abilities determination and the agreement
-                application associated with issues of evaluation."
+                "The reports clearly demonstrated the fit for the duties of the
+                employees post injury and we were able to utilize the
+                information in the development of RTW goals and modified work
+                structure."
               </p>
               <div className="flex items-center space-x-3">
                 <img
@@ -1087,7 +1088,7 @@ export default function Index() {
                 />
                 <div>
                   <p className="font-semibold text-gray-900">
-                    Employee health and Safety Professional
+                    Employer health and Safety Professional
                   </p>
                 </div>
               </div>
@@ -1112,7 +1113,7 @@ export default function Index() {
                 />
                 <div>
                   <p className="font-semibold text-gray-900">
-                    Physical Therapist
+                    Owner, PT Clinic
                   </p>
                 </div>
               </div>
@@ -1141,6 +1142,54 @@ export default function Index() {
                 <div>
                   <p className="font-semibold text-gray-900">Case Manager</p>
                 </div>
+              </div>
+            </Card>
+
+            {/* Added from provided images */}
+            <Card className="border-0 shadow-lg p-6">
+              <div className="mb-4">
+                <Quote className="h-8 w-8 text-blue-500" />
+              </div>
+              <p className="text-gray-600 mb-4 italic">
+                "I use the rehab baseline and progress checks to document
+                rationale for increased visits, and the payors appreciate the
+                way it clearly shows the treatment effectiveness and positive
+                outcomes."
+              </p>
+              <div className="flex items-center space-x-3">
+                <img
+                  src="/testimonials/occupational-therapist.jpg"
+                  alt="Occupational Therapist"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 hover:border-blue-400 transition-colors duration-300"
+                />
+                <div>
+                  <p className="font-semibold text-gray-900">
+                    Occupational Therapist
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="border-0 shadow-lg p-6">
+              <div className="mb-4">
+                <Quote className="h-8 w-8 text-blue-500" />
+              </div>
+              <p className="text-gray-600 mb-4 italic">
+                "The Functional Abilities and Capacity Evaluations provide me
+                with the client’s abilities determination and the symptom
+                magnification crosschecks which assist me in making an informed
+                RTW decision. The report is also the foundation for my
+                Independent Medical Examinations."
+              </p>
+              <div className="flex items-center space-x-3">
+                <img
+                  src="/testimonials/occupational-health-physician.jpg"
+                  alt="Occupational Health Physician"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 hover:border-blue-400 transition-colors duration-300"
+                />
+                <p className="font-semibold text-gray-900">
+                  Occupational Health Physician
+                </p>
               </div>
             </Card>
           </div>
@@ -1296,7 +1345,7 @@ export default function Index() {
 
               <div>
                 <h3 className="text-lg font-semibold mb-3">
-                  Job Demands Analysis
+                  Job Demands Analysis (Coming soon)
                 </h3>
                 <p className="text-gray-700 text-sm leading-relaxed">
                   A detailed software program that allows you to quickly
@@ -1315,7 +1364,7 @@ export default function Index() {
 
               <div>
                 <h3 className="text-lg font-semibold mb-3">
-                  Post-Offer Pre-Employment Screening
+                  Post-Offer Pre-Employment Screening (Coming soon)
                 </h3>
                 <p className="text-gray-700 text-sm leading-relaxed">
                   This is an evaluation that is conducted following an offer of
@@ -1348,7 +1397,7 @@ export default function Index() {
 
               <div>
                 <h3 className="text-lg font-semibold mb-3">
-                  Rehab Baseline / Progress Checks
+                  Rehab Baseline / Progress Checks (Coming soon)
                 </h3>
                 <p className="text-gray-700 text-sm leading-relaxed">
                   Baseline Evaluation: A general overview of patients' ability
@@ -1674,7 +1723,7 @@ export default function Index() {
               Privacy Policy
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-6 text-sm leading-relaxed">
+          <div className="space-y-6 text-sm leading-relaxed justify-paragraphs">
             <div className="text-gray-600">
               <p>
                 <strong>Effective Date:</strong> September 1, 2025
