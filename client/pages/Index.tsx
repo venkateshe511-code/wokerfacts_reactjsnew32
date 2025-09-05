@@ -1158,7 +1158,7 @@ export default function Index() {
               </p>
               <div className="flex items-center space-x-3">
                 <img
-                  src="/testimonials/physical-therapist.jpg"
+                  src="/testimonials/occupational-therapist.jpg"
                   alt="Occupational Therapist"
                   className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 hover:border-blue-400 transition-colors duration-300"
                 />
@@ -1179,7 +1179,12 @@ export default function Index() {
                 RTW decision. The report is also the foundation for my
                 Independent Medical Examinations."
               </p>
-              <div>
+              <div className="flex items-center space-x-3">
+                <img
+                  src="/testimonials/occupational-health-physician.jpg"
+                  alt="Occupational Health Physician"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 hover:border-blue-400 transition-colors duration-300"
+                />
                 <p className="font-semibold text-gray-900">Occupational Health Physician</p>
               </div>
             </Card>
