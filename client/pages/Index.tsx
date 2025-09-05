@@ -141,7 +141,7 @@ export default function Index() {
   }, [slideImages.length]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white justify-paragraphs">
       {/* Offline Indicator */}
       <OfflineIndicator />
 
