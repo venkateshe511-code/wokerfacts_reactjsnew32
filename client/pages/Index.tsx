@@ -1296,7 +1296,7 @@ export default function Index() {
 
               <div>
                 <h3 className="text-lg font-semibold mb-3">
-                  Job Demands Analysis
+                  Job Demands Analysis (Coming soon)
                 </h3>
                 <p className="text-gray-700 text-sm leading-relaxed">
                   A detailed software program that allows you to quickly
@@ -1315,7 +1315,7 @@ export default function Index() {
 
               <div>
                 <h3 className="text-lg font-semibold mb-3">
-                  Post-Offer Pre-Employment Screening
+                  Post-Offer Pre-Employment Screening (Coming soon)
                 </h3>
                 <p className="text-gray-700 text-sm leading-relaxed">
                   This is an evaluation that is conducted following an offer of
@@ -1348,7 +1348,7 @@ export default function Index() {
 
               <div>
                 <h3 className="text-lg font-semibold mb-3">
-                  Rehab Baseline / Progress Checks
+                  Rehab Baseline / Progress Checks (Coming soon)
                 </h3>
                 <p className="text-gray-700 text-sm leading-relaxed">
                   Baseline Evaluation: A general overview of patients' ability
