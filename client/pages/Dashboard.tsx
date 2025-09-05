@@ -227,6 +227,7 @@ export default function Dashboard() {
   }, []);
 
   const handleStepClick = (stepId: number) => {
+    if (checkoutRedirecting) return;
     setCurrentStep(stepId);
 
     // Navigate to specific step pages
