@@ -828,8 +828,12 @@ export default function Dashboard() {
             <div className="flex items-center justify-center mb-4">
               <div className="animate-spin rounded-full h-8 w-8 border-2 border-brand-500 border-t-transparent" />
             </div>
-            <h3 className="text-lg font-semibold mb-1">Redirecting to secure checkout…</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300">Please wait. Do not close this window or navigate away.</p>
+            <h3 className="text-lg font-semibold mb-1">
+              Redirecting to secure checkout…
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Please wait. Do not close this window or navigate away.
+            </p>
           </div>
         </div>
       )}
