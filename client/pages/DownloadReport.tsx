@@ -1376,7 +1376,6 @@ export default function DownloadReport() {
                             <p style="margin: 2px 0; font-family: Arial, sans-serif;">o&nbsp;&nbsp;&nbsp;Extremity Strength</p>
                             <p style="margin: 2px 0; font-family: Arial, sans-serif;">o&nbsp;&nbsp;&nbsp;Occupational Tasks</p>
                             <p style="margin: 2px 0; font-family: Arial, sans-serif;">o&nbsp;&nbsp;&nbsp;Range of Motion (Spine)</p>
-                            <p style="margin: 2px 0; font-family: Arial, sans-serif;">o&nbsp;&nbsp;&nbsp;Whole Body Strength</p>
                         </div>
                     </div>
                     <p style="margin: 8px 0; font-family: Arial, sans-serif;">Appendix One: Reference Charts</p>
@@ -5854,7 +5853,7 @@ export default function DownloadReport() {
                     PDF Format
                   </Label>
                 </div>
-               {/* <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2">
                   <RadioGroupItem value="docx" id="docx" />
                   <Label
                     htmlFor="docx"
@@ -5863,7 +5862,7 @@ export default function DownloadReport() {
                     <FileText className="mr-2 h-4 w-4 text-blue-600" />
                     DOCX Format
                   </Label>
-                </div> */}
+                </div>
               </RadioGroup>
             </div>
 
