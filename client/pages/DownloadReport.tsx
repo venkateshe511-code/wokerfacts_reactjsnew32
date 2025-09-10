@@ -1091,11 +1091,11 @@ export default function DownloadReport() {
         .header { text-align: center; border-bottom: 3px solid #4472C4; padding-bottom: 20px; margin-bottom: 30px; }
         .company-logo { max-width: 150px; max-height: 80px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
         .logo { color: #4472C4; font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-        .title { font-size: 18px; font-weight: bold; color: #4472C4; margin: 20px 0; font-family: 'Arial Narrow', Arial, sans-serif; }
+        .title { font-size: 18px; font-weight: bold; color: #4472C4; margin: 20px 0; font-family: Arial, sans-serif; }
         .info-box { background: #f3f4f6; border: 1px solid #d1d5db; padding: 15px; margin: 20px 0; page-break-inside: avoid; }
         .yellow-header { background: #FFF2CC; border: 1px solid #D4AA00; padding: 1px; font-weight: bold; margin-bottom: 15px; page-break-inside: avoid; color: #000; }
         .section { margin: 25px 0; page-break-inside: avoid; }
-        .section-title { font-size: 14px; font-weight: bold; color: #4472C4; border-bottom: 1px solid #4472C4; padding-bottom: 5px; margin-bottom: 15px; page-break-after: avoid; font-family: 'Arial Narrow', Arial, sans-serif; }
+        .section-title { font-size: 14px; font-weight: bold; color: #4472C4; border-bottom: 1px solid #4472C4; padding-bottom: 5px; margin-bottom: 15px; page-break-after: avoid; font-family: Arial, sans-serif; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0; }
         .grid-3 { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin: 15px 0; }
         .data-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10px; page-break-inside: avoid; font-family: Arial, sans-serif; }
@@ -1200,7 +1200,7 @@ export default function DownloadReport() {
                 color: #666 !important;
                 font-weight: normal !important;
                 margin-top: 5px;
-                font-family: 'Times New Roman', serif;
+                font-family: Arial, sans-serif;
             }
         }
 
@@ -1308,7 +1308,7 @@ export default function DownloadReport() {
 
             <!-- Title -->
             <div style="text-align: center; margin-bottom: 12px;">
-                <h1 style="font-size: 16px; font-weight: bold; color: #4472C4; margin: 0; font-family: 'Arial Narrow', Arial, sans-serif;">Functional Abilities Determination</h1>
+                <h1 style="font-size: 28px; font-weight: bold; color: #4472C4; margin: 0; font-family: Arial, sans-serif;">Functional Abilities Evaluation</h1>
             </div>
 
             <!-- client Information -->
@@ -1361,7 +1361,7 @@ export default function DownloadReport() {
             <div style="position: absolute; left: -15px; top: -30px; bottom: -30px; width: 2px; background-color: #ccc;"></div>
 
             <div style="padding-left: 25px;">
-                <h2 style="font-size: 14px; font-weight: bold; margin-bottom: 24px; color: #4472C4; font-family: 'Arial Narrow', Arial, sans-serif;">Contents of Report:</h2>
+                <h2 style="font-size: 14px; font-weight: bold; margin-bottom: 24px; color: #4472C4; font-family: Arial, sans-serif;">Contents of Report:</h2>
                 <div style="line-height: 1.6; font-size: 12px; font-family: Arial, sans-serif;">
                     <p style="margin: 4px 0; font-family: Arial, sans-serif;">Client Information</p>
                     <p style="margin: 4px 0; font-family: Arial, sans-serif;">Pain & Symptom Illustration</p>
@@ -1397,7 +1397,7 @@ export default function DownloadReport() {
                     evaluatorData.clinicName || "MedSource"
                   }</span></div>`
             }
-            <h1 style="font-size: 16px; font-weight: bold; color: #4472C4; margin: 8px 0; font-family: 'Arial Narrow', Arial, sans-serif;">Functional Abilities Determination</h1>
+            <h1 style="font-size: 28px; font-weight: bold; color: #4472C4; margin: 8px 0; font-family: Arial, sans-serif;">Functional Abilities Evaluation</h1>
             <p style="font-size: 12px; color: #666; margin: 4px 0; font-family: Arial, sans-serif;">${
               evaluatorData.address || "Address"
             }</p>
@@ -1431,7 +1431,7 @@ export default function DownloadReport() {
 
     <!-- Right: Claimant Info -->
     <div style="margin-left: 25px;">
-    <h3 style="font-weight: bold; margin-bottom: 8px; margin-top: 5px; margin-left: -15px; font-family: 'Arial Narrow', Arial, sans-serif;">Client Information</h3>
+    <h3 style="font-weight: bold; margin-bottom: 8px; margin-top: 5px; margin-left: -15px; font-family: Arial, sans-serif;">Client Information</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.2;">
             <div>
                 <div style="margin: 1px 0; display: flex;"><span style="font-weight: bold; width: 90px;">Name:</span><span>${claimantData.firstName || ""} ${claimantData.lastName || ""}</span></div>
@@ -1461,7 +1461,7 @@ export default function DownloadReport() {
 
         <!-- Mechanism and History of Injury (Below Client Information) -->
         <div style="margin-bottom: 15px; margin-left: 193px; margin-top: -5px;">
-            <h3 style="font-weight: bold; margin-bottom: 8px; margin-left: -15px; font-family: 'Arial Narrow', Arial, sans-serif;">Mechanism and History of Injury</h3>
+            <h3 style="font-weight: bold; margin-bottom: 8px; margin-left: -15px; font-family: Arial, sans-serif;">Mechanism and History of Injury</h3>
 
             <!-- Header row -->
             <div style="display: flex; margin-bottom: 4px; font-size: 11px; font-family: Arial, sans-serif;">
@@ -1483,7 +1483,7 @@ export default function DownloadReport() {
 
     <!-- Pain/Symptom Illustration Section -->
     <div style="margin-top: 5px; padding-left: 0;">
-    <h3 style="font-weight: bold; margin-bottom: 5px; margin-left: -15px; font-family: 'Arial Narrow', Arial, sans-serif; color: #4472C4; font-size: 13px;">Pain/Symptom Illustration</h3>
+    <h3 style="font-weight: bold; margin-bottom: 5px; margin-left: -15px; font-family: Arial, sans-serif; color: #4472C4; font-size: 13px;">Pain/Symptom Illustration</h3>
     <div style="display: flex; gap: 8px; align-items: start;">
         <div style="padding: 4px; width: 640px; margin-left: 0; float: left;">
             <div style="display: flex; gap: 2px; justify-content: center; align-items: flex-start;">
@@ -2089,7 +2089,7 @@ export default function DownloadReport() {
       testData.tests
         ? `
     <div class="test-details" style="page-break-before: always; padding: 40px 0;">
-        <h3 style="font-weight: bold; margin-bottom: 8px; font-size: 12px; font-family: 'Arial Narrow', Arial, sans-serif;">Functional Abilities Determination and Job Match Results</h3>
+        <h3 style="font-weight: bold; margin-bottom: 8px; font-size: 12px; font-family: Arial, sans-serif;">Functional Abilities Determination and Job Match Results</h3>
 
         <table style="width: 100%; border-collapse: collapse; font-size: 7px; font-family: Arial, sans-serif;">
             <thead>
@@ -3470,7 +3470,7 @@ export default function DownloadReport() {
       activityRatingData.activities
         ? `
     <div style="padding: 16px; margin-top: 12px;">
-        <h3 style="font-weight: bold; margin-bottom: 8px; font-family: 'Arial Narrow', Arial, sans-serif; text-align: left;">Client Perceived Activity Rating Chart</h3>
+        <h3 style="font-weight: bold; margin-bottom: 8px; font-family: Arial, sans-serif; text-align: left;">Client Perceived Activity Rating Chart</h3>
         <p style="font-size: 14px; font-style: italic; margin-bottom: 8px; font-family: Arial, sans-serif;">
             The Activity Rating Chart is a measure of the client's perceived ability level at the time of testing and is a representation of their subjective responses.
         </p>
@@ -4497,11 +4497,11 @@ export default function DownloadReport() {
 
     <!-- Appendix One - Reference Charts -->
     <div style="page-break-before: always; padding: 40px 0;">
-  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">Appendix One: Reference Charts</h3>
+  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Appendix One: Reference Charts</h3>
         <!-- Perceived Exertion and Pain Scales -->
         <div style="margin-bottom: 40px;">
           
-  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">Perceived Exertion and Pain Scales</h3>
+  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Perceived Exertion and Pain Scales</h3>
             <div style="border: 1px solid #333; margin-bottom: 20px;">
             <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
                 <thead>
@@ -4539,7 +4539,7 @@ export default function DownloadReport() {
         <!-- Physical Demand Characteristics of Work -->
         <div style="margin-bottom: 40px;">
       
-  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">Physical Demand Characteristics of Work</h3>
+  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Physical Demand Characteristics of Work</h3>
             <div style="border: 1px solid #333; margin-bottom: 20px;">
             <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
                 <thead>
@@ -4570,7 +4570,7 @@ export default function DownloadReport() {
         <!-- PDC Categories based on Sustainable Energy Level -->
         <div style="margin-bottom: 40px; page-break-inside: avoid;">
 
-            <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">PDC Categories based on Sustainable Energy Level</h3>
+            <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">PDC Categories based on Sustainable Energy Level</h3>
 
             <div style="border: 1px solid #333; margin-bottom: 20px;">
             <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
@@ -4597,7 +4597,7 @@ export default function DownloadReport() {
         <!-- General Patterns of Activity Descriptors -->
         <div style="margin-bottom: 40px; page-break-inside: avoid;">
 
-<h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">General Patterns of Activity Descriptors</h3>
+<h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">General Patterns of Activity Descriptors</h3>
             <div style="font-size: 11px; line-height: 1.5;">
                 <div style="margin-bottom: 12px;">
                     <p style="font-weight: bold; text-decoration: underline; margin-bottom: 4px;">(S) Sedentary Work</p>
@@ -4627,7 +4627,7 @@ export default function DownloadReport() {
 
         <!-- Dynamic Lift Test End Point Conditions -->
         <div style="margin-bottom: 20px; page-break-inside: avoid;">
-  <h3 style="font-weight: bold; margin-bottom: 10px; font-family: 'Arial Narrow', Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
+  <h3 style="font-weight: bold; margin-bottom: 10px; font-family: Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
             <div style="border: 1px solid #333;">
             <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
                 <thead>
@@ -4672,7 +4672,7 @@ export default function DownloadReport() {
         ? `
     <div style="page-break-before: always; padding: 40px 0;">
         <div class="section">
-             <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">Appendix Two: Digital Library</h3>
+             <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Appendix Two: Digital Library</h3>
 
             <div class="digital-library-grid">
                 ${digitalLibraryData.savedFileData
