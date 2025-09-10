@@ -3101,31 +3101,6 @@ export default function DownloadReport() {
                         applicable: pinchTests.length > 0,
                       });
 
-                      // Static horizontal validity check
-                      const horizontalTests = allTests.filter(
-                        (test) =>
-                          test.testName.toLowerCase().includes("horizontal") ||
-                          test.testName.toLowerCase().includes("static") ||
-                          test.testName.toLowerCase().includes("grip"),
-                      );
-                      const horizontalValid =
-                        horizontalTests.length > 0
-                          ? horizontalTests.every((test) => {
-                              const leftCV = calculateCV(test.leftMeasurements);
-                              const rightCV = calculateCV(
-                                test.rightMeasurements,
-                              );
-                              return leftCV <= 12 && rightCV <= 12;
-                            })
-                          : null;
-
-                      crosschecks.push({
-                        name: "Static horizontal validity",
-                        description:
-                          "After static leg lift, the client was backed up 6 inches and displayed 33% less strength.",
-                        pass: horizontalValid,
-                        applicable: horizontalTests.length > 0,
-                      });
 
                       // Dynamic lift HR fluctuation check
                       const hrConsistent =
