@@ -278,7 +278,7 @@ export default function Dashboard() {
           //     // If redirect succeeds, page will navigate away; this only runs when an error occurs
           //     setCheckoutRedirecting(false);
           //   }
-          }
+          // }
         }
         break;
         
