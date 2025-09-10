@@ -2904,8 +2904,8 @@ export default function DownloadReport() {
             <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 6px; line-height: 1;">
                 <thead>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: left; width: 40%;">Consistent crosschecks</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: left; width: 40%;">Description</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: left; width: 30%;">Consistent crosschecks</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: left; width: 50%;">Description</th>
                         <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center; width: 10%;">Pass</th>
                         <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center; width: 10%;">Fail</th>
                     </tr>
