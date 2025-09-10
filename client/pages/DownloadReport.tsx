@@ -1474,7 +1474,7 @@ export default function DownloadReport() {
                 <div style="width: 70px;">04/2011</div>
                 <div style="flex: 1; margin-left: 10px;">${
                   claimantData.claimantHistory ||
-                  "While working in Cartons assembly area, client noted groin pain and subsequently was diagnosed with a hernia – PT ��� 4-5 wks – back to work – continued to have pain – lumbar area – cortisone injection (had three injections total) – Sept 10th out of work again – to date no return to duties – last injection was Oct 4th2011."
+                  "While working in Cartons assembly area, client noted groin pain and subsequently was diagnosed with a hernia – PT ��� 4-5 wks – back to work �� continued to have pain – lumbar area – cortisone injection (had three injections total) – Sept 10th out of work again – to date no return to duties – last injection was Oct 4th2011."
                 }</div>
             </div>
         </div>
@@ -3101,55 +3101,38 @@ export default function DownloadReport() {
                         applicable: pinchTests.length > 0,
                       });
 
-                      // Static horizontal validity check
-                      const horizontalTests = allTests.filter(
-                        (test) =>
-                          test.testName.toLowerCase().includes("horizontal") ||
-                          test.testName.toLowerCase().includes("static") ||
-                          test.testName.toLowerCase().includes("grip"),
-                      );
-                      const horizontalValid =
-                        horizontalTests.length > 0
-                          ? horizontalTests.every((test) => {
-                              const leftCV = calculateCV(test.leftMeasurements);
-                              const rightCV = calculateCV(
-                                test.rightMeasurements,
-                              );
-                              return leftCV <= 12 && rightCV <= 12;
-                            })
-                          : null;
-
-                      crosschecks.push({
-                        name: "Static horizontal validity",
-                        description:
-                          "After static leg lift, the client was backed up 6 inches and displayed 33% less strength.",
-                        pass: horizontalValid,
-                        applicable: horizontalTests.length > 0,
+                      // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high) shows postHR > preHR
+                      const dynamicLifts = liftTests.filter((test) => {
+                        const n = (test.testName || "").toLowerCase();
+                        return (
+                          n.includes("low") ||
+                          n.includes("mid") ||
+                          n.includes("high") ||
+                          n.includes("dynamic")
+                        );
                       });
 
-                      // Dynamic lift HR fluctuation check
                       const hrConsistent =
-                        liftTests.length > 0
-                          ? liftTests.every((test) => {
+                        dynamicLifts.length > 0
+                          ? dynamicLifts.some((test) => {
                               const preHR =
-                                test.leftMeasurements?.preHeartRate ||
-                                test.rightMeasurements?.preHeartRate ||
+                                test.leftMeasurements?.preHeartRate ??
+                                test.rightMeasurements?.preHeartRate ??
                                 0;
                               const postHR =
-                                test.leftMeasurements?.postHeartRate ||
-                                test.rightMeasurements?.postHeartRate ||
+                                test.leftMeasurements?.postHeartRate ??
+                                test.rightMeasurements?.postHeartRate ??
                                 0;
-                              const hrIncrease = postHR - preHR;
-                              return hrIncrease >= 0 && hrIncrease <= 40; // Reasonable HR increase range
+                              return postHR > preHR;
                             })
-                          : null; // No lift tests available
+                          : null; // Not applicable if no dynamic lifts found
 
                       crosschecks.push({
                         name: "Dynamic lift HR fluctuation",
                         description:
-                          "Client displayed an increase in heart rate when weight and / or repetitions were increased.",
+                          "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid or high).",
                         pass: hrConsistent,
-                        applicable: liftTests.length > 0,
+                        applicable: dynamicLifts.length > 0,
                       });
 
                       // ROM consistency check
