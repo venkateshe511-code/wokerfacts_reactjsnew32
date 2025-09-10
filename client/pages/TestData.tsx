@@ -1555,42 +1555,51 @@ export default function TestData() {
                             : "Right"}
                     </div>
 
-                    {[1, 2, 3, 4, 5, 6].map((trialNum) => (
-                      <React.Fragment key={trialNum}>
-                        <Input
-                          type="number"
-                          value={
-                            currentTest.leftMeasurements[
-                              `trial${trialNum}` as keyof TestMeasurement
-                            ] || ""
-                          }
-                          onChange={(e) =>
-                            updateMeasurement(
-                              "left",
-                              `trial${trialNum}` as keyof TestMeasurement,
-                              parseFloat(e.target.value) || 0,
-                            )
-                          }
-                          className="text-center border-2 border-black focus:border-red-500 focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10"
-                        />
-                        <Input
-                          type="number"
-                          value={
-                            currentTest.rightMeasurements[
-                              `trial${trialNum}` as keyof TestMeasurement
-                            ] || ""
-                          }
-                          onChange={(e) =>
-                            updateMeasurement(
-                              "right",
-                              `trial${trialNum}` as keyof TestMeasurement,
-                              parseFloat(e.target.value) || 0,
-                            )
-                          }
-                          className="text-center border-2 border-black focus:border-red-500 focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10"
-                        />
-                      </React.Fragment>
-                    ))}
+                    {[1, 2, 3, 4, 5, 6].map((trialNum) => {
+                      const key = `trial${trialNum}` as keyof TestMeasurement;
+                      const leftVal = currentTest.leftMeasurements[key];
+                      const rightVal = currentTest.rightMeasurements[key];
+
+                      return (
+                        <React.Fragment key={trialNum}>
+                          <div className="flex flex-col">
+                            <Input
+                              type="number"
+                              value={leftVal || ""}
+                              onChange={(e) =>
+                                updateMeasurement(
+                                  "left",
+                                  key,
+                                  parseFloat(e.target.value) || 0,
+                                )
+                              }
+                              className={`text-center border-2 ${leftVal > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
+                            />
+                            {leftVal > 250 && (
+                              <div className="text-red-700 text-xs mt-1">Value exceeds maximum of 250</div>
+                            )}
+                          </div>
+
+                          <div className="flex flex-col">
+                            <Input
+                              type="number"
+                              value={rightVal || ""}
+                              onChange={(e) =>
+                                updateMeasurement(
+                                  "right",
+                                  key,
+                                  parseFloat(e.target.value) || 0,
+                                )
+                              }
+                              className={`text-center border-2 ${rightVal > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
+                            />
+                            {rightVal > 250 && (
+                              <div className="text-red-700 text-xs mt-1">Value exceeds maximum of 250</div>
+                            )}
+                          </div>
+                        </React.Fragment>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>
