@@ -2146,7 +2146,7 @@ export default function DownloadReport() {
                     ) {
                       return {
                         requirement:
-                          "Key pinch ≥4.3 kg (Light) / ≥7.0 kg (Medium work)",
+                          "Key pinch ≥4.3 kg (Light) / ���7.0 kg (Medium work)",
                         lightWork: 4.3, // kg
                         mediumWork: 7.0, // kg
                         unit: "kg",
@@ -5908,16 +5908,7 @@ export default function DownloadReport() {
                     PDF Format
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="docx" id="docx" />
-                  <Label
-                    htmlFor="docx"
-                    className="flex items-center cursor-pointer"
-                  >
-                    <FileText className="mr-2 h-4 w-4 text-blue-600" />
-                    DOCX Format
-                  </Label>
-                </div>
+                {/* DOCX Format option temporarily disabled */}
               </RadioGroup>
             </div>
 
