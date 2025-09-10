@@ -554,7 +554,6 @@ export default function Index() {
                 </CardDescription>
               </CardHeader>
             </Card>
-
           </div>
         </div>
       </section>
