@@ -521,6 +521,95 @@ export default function TestData() {
       ),
     );
 
+    // Add explicit sample grip tests to ensure rapid-exchange crosscheck is applicable
+    // Standard grip (Position 2) and Rapid Exchange Grip with non-zero trial values
+    const standardGrip = {
+      testId: "grip-standard-p2",
+      testName: "Hand Grip Position 2 (Std)",
+      leftMeasurements: {
+        trial1: 40,
+        trial2: 41,
+        trial3: 39,
+        trial4: 42,
+        trial5: 40,
+        trial6: 41,
+      },
+      rightMeasurements: {
+        trial1: 42,
+        trial2: 43,
+        trial3: 41,
+        trial4: 44,
+        trial5: 42,
+        trial6: 43,
+      },
+      comments: "Sample standard grip (position 2)",
+      demonstrated: true,
+      perceived: "",
+      effort: "Maximal",
+      observations: [],
+      jobRequirements: "",
+      jobMatch: "",
+      jobDemands: "",
+      jobDescription: "",
+      normLevel: "yes",
+      valueToBeTestedNumber: "",
+      valueToBeTestedUnit: "",
+      unitMeasure: "",
+    };
+
+    const rapidGrip = {
+      testId: "grip-rapid-exchange",
+      testName: "Rapid Exchange Grip",
+      leftMeasurements: {
+        trial1: 33,
+        trial2: 34,
+        trial3: 32,
+        trial4: 33,
+        trial5: 34,
+        trial6: 33,
+      },
+      rightMeasurements: {
+        trial1: 35,
+        trial2: 36,
+        trial3: 34,
+        trial4: 35,
+        trial5: 36,
+        trial6: 35,
+      },
+      comments: "Sample rapid exchange grip",
+      demonstrated: true,
+      perceived: "",
+      effort: "Maximal",
+      observations: [],
+      jobRequirements: "",
+      jobMatch: "",
+      jobDemands: "",
+      jobDescription: "",
+      normLevel: "yes",
+      valueToBeTestedNumber: "",
+      valueToBeTestedUnit: "",
+      unitMeasure: "",
+    };
+
+    // If not already present, push these sample grips so the crosscheck logic is applicable
+    const hasStd = sampleTests.some(
+      (t) =>
+        (t.testName || "").toLowerCase().includes("position 2") ||
+        (t.testId || "").toLowerCase().includes("p2") ||
+        (t.testName || "").toLowerCase().includes("std") ||
+        (t.testName || "").toLowerCase().includes("standard"),
+    );
+    const hasRapid = sampleTests.some(
+      (t) =>
+        (t.testName || "").toLowerCase().includes("rapid") ||
+        (t.testName || "").toLowerCase().includes("exchange"),
+    );
+
+    if (!hasStd) sampleTests.push(standardGrip as any);
+    if (!hasRapid) sampleTests.push(rapidGrip as any);
+
+    // Ensure we don't duplicate if already present
+
     // Generate sample MTM test data for occupational tests
     const sampleMtmData: Record<string, any> = {};
     selectedTests.forEach((testId: string) => {

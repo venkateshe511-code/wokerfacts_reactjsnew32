@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -533,7 +533,7 @@ export default function DownloadReport() {
               <!-- Men's Table -->
               <div style="margin-bottom: 16px;">
                 <h6 style="font-size: 9px; font-weight: bold; text-align: center; margin-bottom: 4px;">
-                  VO₂ Max Norms for Men as Measured in ml/kg/min
+                  VO�� Max Norms for Men as Measured in ml/kg/min
                 </h6>
                 <table style="width: 100%; border-collapse: collapse; border: 1px solid #333; font-size: 7px; table-layout: auto;">
                   <thead>
@@ -1091,11 +1091,11 @@ export default function DownloadReport() {
         .header { text-align: center; border-bottom: 3px solid #4472C4; padding-bottom: 20px; margin-bottom: 30px; }
         .company-logo { max-width: 150px; max-height: 80px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
         .logo { color: #4472C4; font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-        .title { font-size: 18px; font-weight: bold; color: #4472C4; margin: 20px 0; font-family: 'Arial Narrow', Arial, sans-serif; }
+        .title { font-size: 18px; font-weight: bold; color: #4472C4; margin: 20px 0; font-family: Arial, sans-serif; }
         .info-box { background: #f3f4f6; border: 1px solid #d1d5db; padding: 15px; margin: 20px 0; page-break-inside: avoid; }
-        .yellow-header { background: #FFF2CC; border: 1px solid #D4AA00; padding: 3px; font-weight: bold; margin-bottom: 15px; page-break-inside: avoid; color: #000; }
+        .yellow-header { background: #FFF2CC; border: 1px solid #D4AA00; padding: 1px; font-weight: bold; margin-bottom: 15px; page-break-inside: avoid; color: #000; }
         .section { margin: 25px 0; page-break-inside: avoid; }
-        .section-title { font-size: 14px; font-weight: bold; color: #4472C4; border-bottom: 1px solid #4472C4; padding-bottom: 5px; margin-bottom: 15px; page-break-after: avoid; font-family: 'Arial Narrow', Arial, sans-serif; }
+        .section-title { font-size: 14px; font-weight: bold; color: #4472C4; border-bottom: 1px solid #4472C4; padding-bottom: 5px; margin-bottom: 15px; page-break-after: avoid; font-family: Arial, sans-serif; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0; }
         .grid-3 { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin: 15px 0; }
         .data-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10px; page-break-inside: avoid; font-family: Arial, sans-serif; }
@@ -1200,7 +1200,7 @@ export default function DownloadReport() {
                 color: #666 !important;
                 font-weight: normal !important;
                 margin-top: 5px;
-                font-family: 'Times New Roman', serif;
+                font-family: Arial, sans-serif;
             }
         }
 
@@ -1308,7 +1308,7 @@ export default function DownloadReport() {
 
             <!-- Title -->
             <div style="text-align: center; margin-bottom: 12px;">
-                <h1 style="font-size: 16px; font-weight: bold; color: #4472C4; margin: 0; font-family: 'Arial Narrow', Arial, sans-serif;">Functional Abilities Determination</h1>
+                <h1 style="font-size: 22px; font-weight: bold; color: #4472C4; margin: 0; font-family: Arial, sans-serif;">Functional Abilities Evaluation</h1>
             </div>
 
             <!-- client Information -->
@@ -1361,7 +1361,7 @@ export default function DownloadReport() {
             <div style="position: absolute; left: -15px; top: -30px; bottom: -30px; width: 2px; background-color: #ccc;"></div>
 
             <div style="padding-left: 25px;">
-                <h2 style="font-size: 14px; font-weight: bold; margin-bottom: 24px; color: #4472C4; font-family: 'Arial Narrow', Arial, sans-serif;">Contents of Report:</h2>
+                <h2 style="font-size: 14px; font-weight: bold; margin-bottom: 24px; color: #4472C4; font-family: Arial, sans-serif;">Contents of Report:</h2>
                 <div style="line-height: 1.6; font-size: 12px; font-family: Arial, sans-serif;">
                     <p style="margin: 4px 0; font-family: Arial, sans-serif;">Client Information</p>
                     <p style="margin: 4px 0; font-family: Arial, sans-serif;">Pain & Symptom Illustration</p>
@@ -1397,7 +1397,7 @@ export default function DownloadReport() {
                     evaluatorData.clinicName || "MedSource"
                   }</span></div>`
             }
-            <h1 style="font-size: 16px; font-weight: bold; color: #4472C4; margin: 8px 0; font-family: 'Arial Narrow', Arial, sans-serif;">Functional Abilities Determination</h1>
+            <h1 style="font-size: 22px; font-weight: bold; color: #4472C4; margin: 8px 0; font-family: Arial, sans-serif;">Functional Abilities Evaluation</h1>
             <p style="font-size: 12px; color: #666; margin: 4px 0; font-family: Arial, sans-serif;">${
               evaluatorData.address || "Address"
             }</p>
@@ -1431,7 +1431,7 @@ export default function DownloadReport() {
 
     <!-- Right: Claimant Info -->
     <div style="margin-left: 25px;">
-    <h3 style="font-weight: bold; margin-bottom: 8px; margin-top: 5px; margin-left: -15px; font-family: 'Arial Narrow', Arial, sans-serif;">Client Information</h3>
+    <h3 style="font-weight: bold; margin-bottom: 8px; margin-top: 5px; margin-left: -15px; font-family: Arial, sans-serif;">Client Information</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.2;">
             <div>
                 <div style="margin: 1px 0; display: flex;"><span style="font-weight: bold; width: 90px;">Name:</span><span>${claimantData.firstName || ""} ${claimantData.lastName || ""}</span></div>
@@ -1461,7 +1461,7 @@ export default function DownloadReport() {
 
         <!-- Mechanism and History of Injury (Below Client Information) -->
         <div style="margin-bottom: 15px; margin-left: 193px; margin-top: -5px;">
-            <h3 style="font-weight: bold; margin-bottom: 8px; margin-left: -15px; font-family: 'Arial Narrow', Arial, sans-serif;">Mechanism and History of Injury</h3>
+            <h3 style="font-weight: bold; margin-bottom: 8px; margin-left: -15px; font-family: Arial, sans-serif;">Mechanism and History of Injury</h3>
 
             <!-- Header row -->
             <div style="display: flex; margin-bottom: 4px; font-size: 11px; font-family: Arial, sans-serif;">
@@ -1483,7 +1483,7 @@ export default function DownloadReport() {
 
     <!-- Pain/Symptom Illustration Section -->
     <div style="margin-top: 5px; padding-left: 0;">
-    <h3 style="font-weight: bold; margin-bottom: 5px; margin-left: -15px; font-family: 'Arial Narrow', Arial, sans-serif; color: #4472C4; font-size: 13px;">Pain/Symptom Illustration</h3>
+    <h3 style="font-weight: bold; margin-bottom: 5px; margin-left: -15px; font-family: Arial, sans-serif; color: #4472C4; font-size: 13px;">Pain/Symptom Illustration</h3>
     <div style="display: flex; gap: 8px; align-items: start;">
         <div style="padding: 4px; width: 640px; margin-left: 0; float: left;">
             <div style="display: flex; gap: 2px; justify-content: center; align-items: flex-start;">
@@ -2089,38 +2089,38 @@ export default function DownloadReport() {
       testData.tests
         ? `
     <div class="test-details" style="page-break-before: always; padding: 40px 0;">
-        <h3 style="font-weight: bold; margin-bottom: 8px; font-size: 12px; font-family: 'Arial Narrow', Arial, sans-serif;">Functional Abilities Determination and Job Match Results</h3>
+        <h3 style="font-weight: bold; margin-bottom: 8px; font-size: 12px; font-family: Arial, sans-serif;">Functional Abilities Determination and Job Match Results</h3>
 
         <table style="width: 100%; border-collapse: collapse; font-size: 7px; font-family: Arial, sans-serif;">
             <thead>
                 <tr style="background: #fef3c7;">
-                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Activity Tested</th>
-                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Sit Time</th>
-                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Stand Time</th>
-                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Test Results</th>
-                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Job Description</th>
-                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Job Requirements</th>
-                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Job Match (Yes/No)</th>
+                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Activity Tested</th>
+                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Sit Time</th>
+                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Stand Time</th>
+                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Test Results</th>
+                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Job Description</th>
+                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Job Requirements</th>
+                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Job Match (Yes/No)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Client Interview Test</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">45 min</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;"></td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">N/A</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Initial assessment and history gathering</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Basic interview requirements</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Yes</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Client Interview Test</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">45 min</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;"></td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">N/A</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Initial assessment and history gathering</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Basic interview requirements</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Yes</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Activity Overview</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;"></td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">5 min</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">//</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">General activity overview and preparation</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Basic standing and mobility</td>
-                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Yes</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Activity Overview</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;"></td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">5 min</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">//</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">General activity overview and preparation</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Basic standing and mobility</td>
+                    <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Yes</td>
                 </tr>
                 ${(() => {
                   // Define comprehensive normative standards for job match evaluation
@@ -2146,7 +2146,7 @@ export default function DownloadReport() {
                     ) {
                       return {
                         requirement:
-                          "Key pinch ≥4.3 kg (Light) / ≥7.0 kg (Medium work)",
+                          "Key pinch ≥4.3 kg (Light) / ���7.0 kg (Medium work)",
                         lightWork: 4.3, // kg
                         mediumWork: 7.0, // kg
                         unit: "kg",
@@ -2675,13 +2675,13 @@ export default function DownloadReport() {
 
                           rows.push(`
                                     <tr>
-                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">${test.testName}</td>
-                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">${sitTime}</td>
-                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">${standTime}</td>
-                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">${testResults}</td>
-                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">${test.jobRequirements || "Functional capacity assessment"}</td>
-                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">${jobRequirements}</td>
-                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">${jobMatch}</td>
+                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">${test.testName}</td>
+                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">${sitTime}</td>
+                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">${standTime}</td>
+                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">${testResults}</td>
+                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">${test.jobRequirements || "Functional capacity assessment"}</td>
+                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">${jobRequirements}</td>
+                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">${jobMatch}</td>
                                     </tr>
                                 `);
                         });
@@ -2782,29 +2782,29 @@ export default function DownloadReport() {
               });
 
               return `
-                    <table style="width: 100%; border-collapse: collapse; font-size: 7px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 6px; line-height: 1;">
                         <thead>
                             <tr style="background: #fef3c7;">
-                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Observed Effort During Testing</th>
-                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Total Noted for all Tested Activities</th>
+                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Observed Effort During Testing</th>
+                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Total Noted for all Tested Activities</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Poor effort</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">${
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Poor effort</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${
                                   effortCounts.poor
                                 } out of ${testData.tests.length} Tests</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Fair to Average effort</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">${
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Fair to Average effort</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${
                                   effortCounts.fair
                                 } out of ${testData.tests.length} Tests</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Good effort</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">${
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Good effort</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${
                                   effortCounts.good
                                 } out of ${testData.tests.length} Tests</td>
                             </tr>
@@ -2816,26 +2816,26 @@ export default function DownloadReport() {
                     <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 16px;">
                         <thead>
                             <tr style="background: #fef3c7;">
-                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Test Demonstration Status</th>
-                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Total Count</th>
+                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Test Demonstration Status</th>
+                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Total Count</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Tests Successfully Demonstrated</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">${
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Tests Successfully Demonstrated</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${
                                   effortCounts.demonstrated
                                 } out of ${testData.tests.length} Tests</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Tests Not Demonstrated</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">${
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Tests Not Demonstrated</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${
                                   effortCounts.notDemonstrated
                                 } out of ${testData.tests.length} Tests</td>
                             </tr>
                             <tr style="background: #e6f3ff;">
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Overall Consistency Rate</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold; color: #1e40af;">
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Overall Consistency Rate</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold; color: #1e40af;">
                                     ${
                                       testData.tests.length > 0
                                         ? Math.round(
@@ -2901,13 +2901,13 @@ export default function DownloadReport() {
             })()}
 
             <!-- Consistent crosschecks Table -->
-            <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 7px;">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 6px; line-height: 1;">
                 <thead>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: left; width: 40%;">Consistent crosschecks</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: left; width: 40%;">Description</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center; width: 10%;">Pass</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center; width: 10%;">Fail</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: left; width: 20%;">Consistent crosschecks</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: left; width: 60%;">Description</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center; width: 10%;">Pass</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center; width: 10%;">Fail</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -2941,9 +2941,10 @@ export default function DownloadReport() {
 
                       // Find relevant tests for crosschecks
                       const gripTests =
-                        testData.tests?.filter((test) =>
-                          test.testName.toLowerCase().includes("grip"),
-                        ) || [];
+                        testData.tests?.filter((test) => {
+                          const n = (test.testName || "").toLowerCase();
+                          return n.includes("grip") || n.includes("hand");
+                        }) || [];
 
                       const pinchTests =
                         testData.tests?.filter((test) =>
@@ -2966,24 +2967,94 @@ export default function DownloadReport() {
 
                       const allTests = testData.tests || [];
 
-                      // Hand grip rapid exchange check
-                      const gripValid =
-                        gripTests.length > 0
-                          ? gripTests.every((test) => {
-                              const leftCV = calculateCV(test.leftMeasurements);
-                              const rightCV = calculateCV(
-                                test.rightMeasurements,
-                              );
-                              return leftCV <= 15 && rightCV <= 15;
+                      // Hand grip rapid exchange check - compare rapid/exchange tests to the standard position (position 2) grip. Pass when rapid <= 85% of standard (i.e. 15% less or equal)
+                      const rapidExchangeValid = (() => {
+                        if (gripTests.length === 0) return null; // no grip tests at all
+
+                        const normalize = (s) => (s ? s.toLowerCase() : "");
+
+                        // Identify rapid/exchange tests
+                        const rapidTests = allTests.filter((t) => {
+                          const n = normalize(t.testName);
+                          return (
+                            n.includes("rapid") ||
+                            n.includes("exchange") ||
+                            n.includes("rapid-exchange") ||
+                            n.includes("rapid exchange")
+                          );
+                        });
+
+                        // Find a standard grip test (prefer position 2 / pos 2 / standard); fallback to the grip test with highest average
+                        let standardTest = gripTests.find((t) => {
+                          const n = normalize(t.testName);
+                          return (
+                            n.includes("position 2") ||
+                            n.includes("pos 2") ||
+                            n.includes("position2") ||
+                            n.includes("std position") ||
+                            n.includes("standard") ||
+                            n.includes("p2")
+                          );
+                        });
+
+                        if (!standardTest) {
+                          standardTest = gripTests.reduce((best, cur) => {
+                            const bestAvg =
+                              (calculateAverage(best.leftMeasurements) +
+                                calculateAverage(best.rightMeasurements)) /
+                              2;
+                            const curAvg =
+                              (calculateAverage(cur.leftMeasurements) +
+                                calculateAverage(cur.rightMeasurements)) /
+                              2;
+                            return curAvg > bestAvg ? cur : best;
+                          }, gripTests[0]);
+                        }
+
+                        if (!standardTest || rapidTests.length === 0)
+                          return null; // not applicable if either missing
+
+                        const avgAcross = (tests, side) => {
+                          const vals = tests
+                            .map((t) => {
+                              const m =
+                                side === "left"
+                                  ? t.leftMeasurements
+                                  : t.rightMeasurements;
+                              return calculateAverage(m);
                             })
-                          : null; // No grip tests available
+                            .filter((v) => v > 0);
+                          if (vals.length === 0) return 0;
+                          return vals.reduce((s, v) => s + v, 0) / vals.length;
+                        };
+
+                        const rapidLeftAvg = avgAcross(rapidTests, "left");
+                        const rapidRightAvg = avgAcross(rapidTests, "right");
+
+                        const stdLeftAvg = calculateAverage(
+                          standardTest.leftMeasurements,
+                        );
+                        const stdRightAvg = calculateAverage(
+                          standardTest.rightMeasurements,
+                        );
+
+                        const comparisons = [];
+                        if (stdLeftAvg > 0 && rapidLeftAvg > 0)
+                          comparisons.push(rapidLeftAvg <= stdLeftAvg * 0.85);
+                        if (stdRightAvg > 0 && rapidRightAvg > 0)
+                          comparisons.push(rapidRightAvg <= stdRightAvg * 0.85);
+
+                        if (comparisons.length === 0) return null; // insufficient data
+
+                        return comparisons.every(Boolean);
+                      })();
 
                       crosschecks.push({
                         name: "Hand grip rapid exchange",
                         description:
                           "Rapid Exchange Grip was 15% less to equal that of the Std position 2 Hand Grip measure.",
-                        pass: gripValid,
-                        applicable: gripTests.length > 0,
+                        pass: rapidExchangeValid,
+                        applicable: rapidExchangeValid !== null,
                       });
 
                       // Hand grip MVE check
@@ -3333,10 +3404,10 @@ export default function DownloadReport() {
                         .map(
                           (check, index) => `
                             <tr>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">${check.name}</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">${check.description}</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">${!check.applicable ? "N/A" : check.pass ? "✓" : ""}</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">${!check.applicable ? "N/A" : !check.pass ? "✓" : ""}</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${check.name}</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${check.description}</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : check.pass ? "✓" : ""}</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : !check.pass ? "✓" : ""}</td>
                             </tr>
                         `,
                         )
@@ -3355,10 +3426,10 @@ export default function DownloadReport() {
             <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
                 <thead>
                     <tr style="background: #cce7ff;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Test</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Job Match</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Job Demands</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Job Description</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Test</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Job Match</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Job Demands</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Job Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -3375,10 +3446,10 @@ export default function DownloadReport() {
 
                         return `
                             <tr>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">${
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">${
                                   test.testName
                                 }</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">
                                     ${
                                       test.jobMatch === "matched"
                                         ? '<span style="background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold;">✓</span>'
@@ -3387,7 +3458,7 @@ export default function DownloadReport() {
                                           : '<span style="color: #6c757d;">-</span>'
                                     }
                                 </td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">
                                     ${
                                       test.jobDemands === "normal"
                                         ? '<span style="background: #e1f5fe; color: #01579b; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold;">Normal</span>'
@@ -3396,7 +3467,7 @@ export default function DownloadReport() {
                                           : '<span style="color: #6c757d;">-</span>'
                                     }
                                 </td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">
                                     <div style="font-size: 10px;">
                                         ${
                                           test.jobDescription
@@ -3470,7 +3541,7 @@ export default function DownloadReport() {
       activityRatingData.activities
         ? `
     <div style="padding: 16px; margin-top: 12px;">
-        <h3 style="font-weight: bold; margin-bottom: 8px; font-family: 'Arial Narrow', Arial, sans-serif; text-align: left;">Client Perceived Activity Rating Chart</h3>
+        <h3 style="font-weight: bold; margin-bottom: 8px; font-family: Arial, sans-serif; text-align: left;">Client Perceived Activity Rating Chart</h3>
         <p style="font-size: 14px; font-style: italic; margin-bottom: 8px; font-family: Arial, sans-serif;">
             The Activity Rating Chart is a measure of the client's perceived ability level at the time of testing and is a representation of their subjective responses.
         </p>
@@ -3926,7 +3997,7 @@ export default function DownloadReport() {
                                                       : 25)) *
                                                     100,
                                                 )}%</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">${currentDate}</td>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">${currentDate}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -4124,7 +4195,7 @@ export default function DownloadReport() {
                                     <div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0;">
                                         <!-- Left Side Chart -->
                                         <div style="background: #ffffff; border: 2px solid #3b82f6; border-radius: 8px; padding: 12px; page-break-inside: avoid; flex: 1; min-width: 250px;">
-                                            <div style="background: #3b82f6; color: white; padding: 3px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">Left Side</div>
+                                            <div style="background: #3b82f6; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">Left Side</div>
                                             <div style="display: flex; align-items: end; justify-content: space-between; height: 120px; padding: 3px 0; position: relative; background: #f8fafc; border-radius: 4px;">
                                                 ${(() => {
                                                   const maxValue = Math.max(
@@ -4233,7 +4304,7 @@ export default function DownloadReport() {
 
                                         <!-- Right Side Chart -->
                                         <div style="background: #ffffff; border: 2px solid #10b981; border-radius: 8px; padding: 12px; page-break-inside: avoid; flex: 1; min-width: 250px;">
-                                            <div style="background: #10b981; color: white; padding: 3px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">Right Side</div>
+                                            <div style="background: #10b981; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">Right Side</div>
                                             <div style="display: flex; align-items: end; justify-content: space-between; height: 120px; padding: 3px 0; position: relative; background: #f8fafc; border-radius: 4px;">
                                                 ${(() => {
                                                   const maxValue = Math.max(
@@ -4497,38 +4568,38 @@ export default function DownloadReport() {
 
     <!-- Appendix One - Reference Charts -->
     <div style="page-break-before: always; padding: 40px 0;">
-  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">Appendix One: Reference Charts</h3>
+  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Appendix One: Reference Charts</h3>
         <!-- Perceived Exertion and Pain Scales -->
         <div style="margin-bottom: 40px;">
           
-  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">Perceived Exertion and Pain Scales</h3>
+  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Perceived Exertion and Pain Scales</h3>
             <div style="border: 1px solid #333; margin-bottom: 20px;">
             <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
                 <thead>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">Perceived Exertion</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">Rating (RPE)</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">Minimal Heart Rate</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">Mean Heart Rate</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">Maximal Heart Rate</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">Perceived Exertion</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">Rating (RPE)</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">Minimal Heart Rate</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">Mean Heart Rate</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">Maximal Heart Rate</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">no exertion at all</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">6</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">69</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">77</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">91</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">extremely light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">7</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">76</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">85</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">101</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">8</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">83</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">93</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">111</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">very light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">9</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">89</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">101</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">122</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">10</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">96</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">110</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">132</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">11</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">103</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">118</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">142</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">12</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">110</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">126</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">153</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">somewhat hard</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">13</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">116</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">135</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">163</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">14</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">123</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">143</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">173</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">hard (heavy)</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">15</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">130</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">151</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">184</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">16</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">137</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">159</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">194</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">very hard</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">17</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">143</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">168</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">204</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">18</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">150</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">176</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">215</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">extremely hard</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">19</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">157</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">184</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">225</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">maximal exertion</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">20</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">164</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">193</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">235</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">no exertion at all</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">6</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">69</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">77</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">91</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">extremely light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">7</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">76</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">85</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">101</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">8</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">83</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">93</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">111</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">very light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">9</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">89</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">101</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">122</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">10</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">96</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">110</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">132</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">11</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">103</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">118</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">142</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">12</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">110</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">126</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">153</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">somewhat hard</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">13</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">116</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">135</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">163</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">14</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">123</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">143</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">173</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">hard (heavy)</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">15</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">130</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">151</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">184</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">16</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">137</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">159</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">194</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">very hard</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">17</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">143</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">168</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">204</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;"></td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">18</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">150</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">176</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">215</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">extremely hard</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">19</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">157</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">184</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">225</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">maximal exertion</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">20</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">164</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">193</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">235</td></tr>
                 </tbody>
             </table>
             </div>
@@ -4539,29 +4610,29 @@ export default function DownloadReport() {
         <!-- Physical Demand Characteristics of Work -->
         <div style="margin-bottom: 40px;">
       
-  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">Physical Demand Characteristics of Work</h3>
+  <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Physical Demand Characteristics of Work</h3>
             <div style="border: 1px solid #333; margin-bottom: 20px;">
             <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
                 <thead>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;" colspan="4">Physical Demand Characteristics of Work</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;" colspan="4">Physical Demand Characteristics of Work</th>
                     </tr>
                     <tr style="background: #fef3c7;">
-                        <th style="border-left: 1px solid #333; border-right: 1px solid #333; border-bottom: 1px solid #333; border-top: none; padding: 3px; text-align: center;" colspan="4">(Dictionary of Occupational Titles - Volume II, Fourth Edition, Revised 1991)</th>
+                        <th style="border-left: 1px solid #333; border-right: 1px solid #333; border-bottom: 1px solid #333; border-top: none; padding: 1px; text-align: center;" colspan="4">(Dictionary of Occupational Titles - Volume II, Fourth Edition, Revised 1991)</th>
                     </tr>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">Physical Demand Level</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">OCCASIONAL<br/>0-33% of the workday</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">FREQUENT<br/>34-66% of the workday</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">CONSTANT<br/>67-100% of the workday</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">Physical Demand Level</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">OCCASIONAL<br/>0-33% of the workday</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">FREQUENT<br/>34-66% of the workday</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">CONSTANT<br/>67-100% of the workday</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Sedentary</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">1 - 10 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Negligible</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Negligible</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">11 - 20 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">1 - 10 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Negligible</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Medium</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">21 - 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">11 - 25 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">1 - 10 lbs.</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">51 - 100 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">26 - 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">11 - 20 lbs.</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Very Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Over 100 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Over 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">Over 20 lbs.</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Sedentary</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">1 - 10 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Negligible</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Negligible</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">11 - 20 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">1 - 10 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Negligible</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Medium</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">21 - 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">11 - 25 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">1 - 10 lbs.</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">51 - 100 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">26 - 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">11 - 20 lbs.</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Very Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Over 100 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Over 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Over 20 lbs.</td></tr>
                 </tbody>
             </table>
             </div>
@@ -4570,25 +4641,25 @@ export default function DownloadReport() {
         <!-- PDC Categories based on Sustainable Energy Level -->
         <div style="margin-bottom: 40px; page-break-inside: avoid;">
 
-            <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">PDC Categories based on Sustainable Energy Level</h3>
+            <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">PDC Categories based on Sustainable Energy Level</h3>
 
             <div style="border: 1px solid #333; margin-bottom: 20px;">
             <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
                 <thead>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;" colspan="2">PDC Categories based on Sustainable Energy Level (Energy Cost) over an 8-hour workday</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;" colspan="2">PDC Categories based on Sustainable Energy Level (Energy Cost) over an 8-hour workday</th>
                     </tr>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">PDC Category</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">Sustainable Energy Level</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">PDC Category</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">Sustainable Energy Level</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Sedentary</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">&lt; 1.7 Kcal/min</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">1.7 to 3.2 Kcal/min</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Medium</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">3.3 to 5.7 Kcal/min</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">5.8 to 8.2 Kcal/min</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Very Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px;">8.3 or more Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Sedentary</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">&lt; 1.7 Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">1.7 to 3.2 Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Medium</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">3.3 to 5.7 Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">5.8 to 8.2 Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Very Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">8.3 or more Kcal/min</td></tr>
                 </tbody>
             </table>
             </div>
@@ -4597,7 +4668,7 @@ export default function DownloadReport() {
         <!-- General Patterns of Activity Descriptors -->
         <div style="margin-bottom: 40px; page-break-inside: avoid;">
 
-<h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">General Patterns of Activity Descriptors</h3>
+<h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">General Patterns of Activity Descriptors</h3>
             <div style="font-size: 11px; line-height: 1.5;">
                 <div style="margin-bottom: 12px;">
                     <p style="font-weight: bold; text-decoration: underline; margin-bottom: 4px;">(S) Sedentary Work</p>
@@ -4627,30 +4698,30 @@ export default function DownloadReport() {
 
         <!-- Dynamic Lift Test End Point Conditions -->
         <div style="margin-bottom: 20px; page-break-inside: avoid;">
-  <h3 style="font-weight: bold; margin-bottom: 10px; font-family: 'Arial Narrow', Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
+  <h3 style="font-weight: bold; margin-bottom: 10px; font-family: Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
             <div style="border: 1px solid #333;">
             <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
                 <thead>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;" colspan="2">Test End Point Conditions</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;" colspan="2">Test End Point Conditions</th>
                     </tr>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">CONDITION</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; text-align: center;">DESCRIPTION</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">CONDITION</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">DESCRIPTION</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Psychophysical</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Voluntary test termination by the claimant based on complaints of fatigue, excessive discomfort, or inability to complete the required number of movements during the testing interval (cycle).</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Psychophysical</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Voluntary test termination by the claimant based on complaints of fatigue, excessive discomfort, or inability to complete the required number of movements during the testing interval (cycle).</td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Physiological</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Achievement of an age-determined target heart rate (based on a percent of claimant's maximal heart rate - normally 85%, or in excess of 75% continuously for one minute).</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Physiological</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Achievement of an age-determined target heart rate (based on a percent of claimant's maximal heart rate - normally 85%, or in excess of 75% continuously for one minute).</td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-weight: bold;">Safety</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 3px; font-family: Arial, sans-serif;">Achievement of a predetermined anthropometric safe lifting limit based on the claimant's adjusted body weight; or intervention by the FACTS evaluator based upon an evaluation of the claimant's signs & symptoms.</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Safety</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Achievement of a predetermined anthropometric safe lifting limit based on the claimant's adjusted body weight; or intervention by the FACTS evaluator based upon an evaluation of the claimant's signs & symptoms.</td>
                     </tr>
                 </tbody>
             </table>
@@ -4672,7 +4743,7 @@ export default function DownloadReport() {
         ? `
     <div style="page-break-before: always; padding: 40px 0;">
         <div class="section">
-             <h3 style="font-weight: bold; margin-bottom: 15px; font-family: 'Arial Narrow', Arial, sans-serif;">Appendix Two: Digital Library</h3>
+             <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Appendix Two: Digital Library</h3>
 
             <div class="digital-library-grid">
                 ${digitalLibraryData.savedFileData
@@ -5455,9 +5526,21 @@ export default function DownloadReport() {
                     size: f.size,
                   }))
                 : [
-                    { name: "FCE Evaluation Photos", type: "image/jpeg", size: 250000 },
-                    { name: "Test Documentation", type: "application/pdf", size: 150000 },
-                    { name: "Assessment Forms", type: "application/pdf", size: 100000 },
+                    {
+                      name: "FCE Evaluation Photos",
+                      type: "image/jpeg",
+                      size: 250000,
+                    },
+                    {
+                      name: "Test Documentation",
+                      type: "application/pdf",
+                      size: 150000,
+                    },
+                    {
+                      name: "Assessment Forms",
+                      type: "application/pdf",
+                      size: 100000,
+                    },
                   ],
           },
 
@@ -5560,17 +5643,15 @@ export default function DownloadReport() {
         const requestStartTime = Date.now();
 
         const isLocal = process.env.NODE_ENV === "development";
-        const apiUrl =  "https://generateclaimantreportapi-e355r2gb5q-uc.a.run.app/";
-        const response = await fetch(
-          apiUrl,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestData),
+        const apiUrl =
+          "https://generateclaimantreportapi-e355r2gb5q-uc.a.run.app/";
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify(requestData),
+        });
 
         const requestDuration = Date.now() - requestStartTime;
         console.log(
@@ -5607,7 +5688,9 @@ export default function DownloadReport() {
 
         // Force correct MIME type to help some viewers
         const arrayBuf = await response.arrayBuffer();
-        const blob = new Blob([arrayBuf], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+        const blob = new Blob([arrayBuf], {
+          type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
         console.log("Received DOCX blob size:", blob.size, "bytes");
         console.log("Blob type:", blob.type);
 
@@ -5853,16 +5936,7 @@ export default function DownloadReport() {
                     PDF Format
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="docx" id="docx" />
-                  <Label
-                    htmlFor="docx"
-                    className="flex items-center cursor-pointer"
-                  >
-                    <FileText className="mr-2 h-4 w-4 text-blue-600" />
-                    DOCX Format
-                  </Label>
-                </div>
+                {/* DOCX Format option temporarily disabled */}
               </RadioGroup>
             </div>
 
