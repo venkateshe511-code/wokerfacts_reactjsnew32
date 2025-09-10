@@ -2966,24 +2966,78 @@ export default function DownloadReport() {
 
                       const allTests = testData.tests || [];
 
-                      // Hand grip rapid exchange check
-                      const gripValid =
-                        gripTests.length > 0
-                          ? gripTests.every((test) => {
-                              const leftCV = calculateCV(test.leftMeasurements);
-                              const rightCV = calculateCV(
-                                test.rightMeasurements,
-                              );
-                              return leftCV <= 15 && rightCV <= 15;
+                      // Hand grip rapid exchange check - compare rapid/exchange tests to the standard position (position 2) grip. Pass when rapid <= 85% of standard (i.e. 15% less or equal)
+                      const rapidExchangeValid = (() => {
+                        if (gripTests.length === 0) return null; // no grip tests at all
+
+                        const normalize = (s) => (s ? s.toLowerCase() : "");
+
+                        // Identify rapid/exchange tests
+                        const rapidTests = gripTests.filter((t) => {
+                          const n = normalize(t.testName);
+                          return (
+                            n.includes("rapid") ||
+                            n.includes("exchange") ||
+                            n.includes("rapid-exchange") ||
+                            n.includes("rapid exchange")
+                          );
+                        });
+
+                        // Find a standard grip test (prefer position 2 / pos 2 / standard); fallback to the grip test with highest average
+                        let standardTest = gripTests.find((t) => {
+                          const n = normalize(t.testName);
+                          return (
+                            n.includes("position 2") ||
+                            n.includes("pos 2") ||
+                            n.includes("position2") ||
+                            n.includes("std position") ||
+                            n.includes("standard") ||
+                            n.includes("p2")
+                          );
+                        });
+
+                        if (!standardTest) {
+                          standardTest = gripTests.reduce((best, cur) => {
+                            const bestAvg = (calculateAverage(best.leftMeasurements) + calculateAverage(best.rightMeasurements)) / 2;
+                            const curAvg = (calculateAverage(cur.leftMeasurements) + calculateAverage(cur.rightMeasurements)) / 2;
+                            return curAvg > bestAvg ? cur : best;
+                          }, gripTests[0]);
+                        }
+
+                        if (!standardTest || rapidTests.length === 0) return null; // not applicable if either missing
+
+                        const avgAcross = (tests, side) => {
+                          const vals = tests
+                            .map((t) => {
+                              const m = side === "left" ? t.leftMeasurements : t.rightMeasurements;
+                              return calculateAverage(m);
                             })
-                          : null; // No grip tests available
+                            .filter((v) => v > 0);
+                          if (vals.length === 0) return 0;
+                          return vals.reduce((s, v) => s + v, 0) / vals.length;
+                        };
+
+                        const rapidLeftAvg = avgAcross(rapidTests, "left");
+                        const rapidRightAvg = avgAcross(rapidTests, "right");
+
+                        const stdLeftAvg = calculateAverage(standardTest.leftMeasurements);
+                        const stdRightAvg = calculateAverage(standardTest.rightMeasurements);
+
+                        const comparisons = [];
+                        if (stdLeftAvg > 0 && rapidLeftAvg > 0) comparisons.push(rapidLeftAvg <= stdLeftAvg * 0.85);
+                        if (stdRightAvg > 0 && rapidRightAvg > 0) comparisons.push(rapidRightAvg <= stdRightAvg * 0.85);
+
+                        if (comparisons.length === 0) return null; // insufficient data
+
+                        return comparisons.every(Boolean);
+                      })();
 
                       crosschecks.push({
                         name: "Hand grip rapid exchange",
                         description:
-                          "Rapid Exchange Grip was 15% less to equal that of the Std position 2 Hand Grip measure.",
-                        pass: gripValid,
-                        applicable: gripTests.length > 0,
+                          "Rapid Exchange Grip average is compared to the standard (position 2) hand grip. Pass when Rapid <= 85% of Standard.",
+                        pass: rapidExchangeValid,
+                        applicable: rapidExchangeValid !== null,
                       });
 
                       // Hand grip MVE check
