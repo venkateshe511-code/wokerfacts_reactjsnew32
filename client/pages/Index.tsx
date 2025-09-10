@@ -554,6 +554,24 @@ export default function Index() {
                 </CardDescription>
               </CardHeader>
             </Card>
+
+            {/* Card 5 */}
+            <Card className="border-0 shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 group overflow-hidden rounded-xl">
+              <div className="aspect-video relative overflow-hidden rounded-t-xl">
+                <OfflineImage
+                  src="/lift-overhead.webp"
+                  alt="Dynamic Lift (Low, Mid, High, Overhead)"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  fallbackText="Dynamic Lift"
+                />
+              </div>
+              <CardHeader className="pt-4">
+                <CardTitle className="text-lg">Dynamic Lift</CardTitle>
+                <CardDescription>
+                  Progressive lifting evaluations across Low, Mid, High, and Overhead positions with heart-rate and performance tracking.
+                </CardDescription>
+              </CardHeader>
+            </Card>
           </div>
         </div>
       </section>
