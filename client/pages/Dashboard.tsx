@@ -255,31 +255,33 @@ export default function Dashboard() {
         break;
       case 8:
         {
-          const forceReal =
-            (import.meta as any)?.env?.VITE_FORCE_REAL_PAYMENT === "true";
-          if (isDemoMode && !forceReal) {
-            navigate("/payment");
-          } else {
-            try {
-              setCheckoutRedirecting(true);
-              await startCheckout({ amount: 25, currency: "USD" });
-            } catch (e: any) {
-              console.error(e);
-              toast({
-                title: "Payment error",
-                description:
-                  typeof e?.message === "string"
-                    ? e.message
-                    : "Unable to start checkout. Please try again.",
-                variant: "destructive",
-              });
-            } finally {
-              // If redirect succeeds, page will navigate away; this only runs when an error occurs
-              setCheckoutRedirecting(false);
-            }
-          }
+          // const forceReal =
+          //   (import.meta as any)?.env?.VITE_FORCE_REAL_PAYMENT === "true";
+          // if (isDemoMode && !forceReal) {
+          navigate("/payment");
+          // } else {
+          // try {
+
+          //     setCheckoutRedirecting(true);
+          //     await startCheckout({ amount: 25, currency: "USD" });
+          //   } catch (e: any) {
+          //     console.error(e);
+          //     toast({
+          //       title: "Payment error",
+          //       description:
+          //         typeof e?.message === "string"
+          //           ? e.message
+          //           : "Unable to start checkout. Please try again.",
+          //       variant: "destructive",
+          //     });
+          //   } finally {
+          //     // If redirect succeeds, page will navigate away; this only runs when an error occurs
+          //     setCheckoutRedirecting(false);
+          //   }
+          // }
         }
         break;
+
       case 9:
         navigate("/review-report");
         break;

@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import {
   Dialog,
   DialogContent,
@@ -294,6 +295,9 @@ export default function TestData() {
   const [cardioTestData, setCardioTestData] = useState<
     Record<string, CardioTestData>
   >({});
+
+  // Alert state for threshold violations
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const generateSampleTestData = (
     testId: string,
@@ -913,12 +917,54 @@ export default function TestData() {
   ) => {
     const measurementKey =
       side === "left" ? "leftMeasurements" : "rightMeasurements";
+
+    // Prepare updated measurements for the side being edited
+    const updatedMeasurements = {
+      ...currentTest[measurementKey],
+      [field]: value,
+    } as TestMeasurement;
+
+    // Update the test data with the new measurement
     updateCurrentTest({
-      [measurementKey]: {
-        ...currentTest[measurementKey],
-        [field]: value,
-      },
+      [measurementKey]: updatedMeasurements,
     });
+
+    // Threshold check: any trial value greater than 250 should trigger an alert
+    const threshold = 250;
+    const findExceeded = (m: TestMeasurement) =>
+      [m.trial1, m.trial2, m.trial3, m.trial4, m.trial5, m.trial6]
+        .map((val, idx) => ({ val, idx: idx + 1 }))
+        .filter((t) => t.val > threshold);
+
+    const leftMeasurements =
+      side === "left" ? updatedMeasurements : currentTest.leftMeasurements;
+    const rightMeasurements =
+      side === "right" ? updatedMeasurements : currentTest.rightMeasurements;
+
+    const leftExceeded = findExceeded(leftMeasurements);
+    const rightExceeded = findExceeded(rightMeasurements);
+
+    if (leftExceeded.length > 0 || rightExceeded.length > 0) {
+      const parts: string[] = [];
+      if (leftExceeded.length > 0) {
+        parts.push(
+          `Left trials exceeding ${threshold}: ${leftExceeded
+            .map((t) => `Trial ${t.idx} (${t.val})`)
+            .join(", ")}`,
+        );
+      }
+      if (rightExceeded.length > 0) {
+        parts.push(
+          `Right trials exceeding ${threshold}: ${rightExceeded
+            .map((t) => `Trial ${t.idx} (${t.val})`)
+            .join(", ")}`,
+        );
+      }
+      setAlertMessage(parts.join(" — "));
+    } else {
+      // Clear alert when nothing exceeds threshold
+      setAlertMessage(null);
+    }
   };
 
   const calculateAverage = (
@@ -1260,6 +1306,12 @@ export default function TestData() {
   return (
     <div className="min-h-screen bg-blue-100 py-4 sm:py-8 px-2 sm:px-4">
       <div className="container mx-auto max-w-7xl">
+        {alertMessage && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertTitle>Value exceeds allowed maximum</AlertTitle>
+            <AlertDescription>{alertMessage}</AlertDescription>
+          </Alert>
+        )}
         <div className="mb-8">
           <Button
             variant="outline"
@@ -1505,42 +1557,55 @@ export default function TestData() {
                             : "Right"}
                     </div>
 
-                    {[1, 2, 3, 4, 5, 6].map((trialNum) => (
-                      <React.Fragment key={trialNum}>
-                        <Input
-                          type="number"
-                          value={
-                            currentTest.leftMeasurements[
-                              `trial${trialNum}` as keyof TestMeasurement
-                            ] || ""
-                          }
-                          onChange={(e) =>
-                            updateMeasurement(
-                              "left",
-                              `trial${trialNum}` as keyof TestMeasurement,
-                              parseFloat(e.target.value) || 0,
-                            )
-                          }
-                          className="text-center border-2 border-black focus:border-red-500 focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10"
-                        />
-                        <Input
-                          type="number"
-                          value={
-                            currentTest.rightMeasurements[
-                              `trial${trialNum}` as keyof TestMeasurement
-                            ] || ""
-                          }
-                          onChange={(e) =>
-                            updateMeasurement(
-                              "right",
-                              `trial${trialNum}` as keyof TestMeasurement,
-                              parseFloat(e.target.value) || 0,
-                            )
-                          }
-                          className="text-center border-2 border-black focus:border-red-500 focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10"
-                        />
-                      </React.Fragment>
-                    ))}
+                    {[1, 2, 3, 4, 5, 6].map((trialNum) => {
+                      const key = `trial${trialNum}` as keyof TestMeasurement;
+                      const leftVal = currentTest.leftMeasurements[key];
+                      const rightVal = currentTest.rightMeasurements[key];
+
+                      return (
+                        <React.Fragment key={trialNum}>
+                          <div className="flex flex-col">
+                            <Input
+                              type="number"
+                              value={leftVal || ""}
+                              onChange={(e) =>
+                                updateMeasurement(
+                                  "left",
+                                  key,
+                                  parseFloat(e.target.value) || 0,
+                                )
+                              }
+                              className={`text-center border-2 ${leftVal > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
+                            />
+                            {leftVal > 250 && (
+                              <div className="text-red-700 text-xs mt-1">
+                                Value exceeds maximum of 250
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="flex flex-col">
+                            <Input
+                              type="number"
+                              value={rightVal || ""}
+                              onChange={(e) =>
+                                updateMeasurement(
+                                  "right",
+                                  key,
+                                  parseFloat(e.target.value) || 0,
+                                )
+                              }
+                              className={`text-center border-2 ${rightVal > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
+                            />
+                            {rightVal > 250 && (
+                              <div className="text-red-700 text-xs mt-1">
+                                Value exceeds maximum of 250
+                              </div>
+                            )}
+                          </div>
+                        </React.Fragment>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>
