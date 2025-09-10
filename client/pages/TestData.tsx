@@ -592,15 +592,17 @@ export default function TestData() {
     };
 
     // If not already present, push these sample grips so the crosscheck logic is applicable
-    const hasStd = sampleTests.some((t) =>
-      (t.testName || "").toLowerCase().includes("position 2") ||
-      (t.testId || "").toLowerCase().includes("p2") ||
-      (t.testName || "").toLowerCase().includes("std") ||
-      (t.testName || "").toLowerCase().includes("standard"),
+    const hasStd = sampleTests.some(
+      (t) =>
+        (t.testName || "").toLowerCase().includes("position 2") ||
+        (t.testId || "").toLowerCase().includes("p2") ||
+        (t.testName || "").toLowerCase().includes("std") ||
+        (t.testName || "").toLowerCase().includes("standard"),
     );
-    const hasRapid = sampleTests.some((t) =>
-      (t.testName || "").toLowerCase().includes("rapid") ||
-      (t.testName || "").toLowerCase().includes("exchange"),
+    const hasRapid = sampleTests.some(
+      (t) =>
+        (t.testName || "").toLowerCase().includes("rapid") ||
+        (t.testName || "").toLowerCase().includes("exchange"),
     );
 
     if (!hasStd) sampleTests.push(standardGrip as any);

@@ -2697,35 +2697,61 @@ export default function ReviewReport() {
                           });
 
                           if (!standardTest && gripOnlyTests.length > 0) {
-                            standardTest = gripOnlyTests.reduce((best: any, cur: any) => {
-                              const bestAvg = (calculateAverage(best.leftMeasurements) + calculateAverage(best.rightMeasurements)) / 2;
-                              const curAvg = (calculateAverage(cur.leftMeasurements) + calculateAverage(cur.rightMeasurements)) / 2;
-                              return curAvg > bestAvg ? cur : best;
-                            }, gripOnlyTests[0]);
+                            standardTest = gripOnlyTests.reduce(
+                              (best: any, cur: any) => {
+                                const bestAvg =
+                                  (calculateAverage(best.leftMeasurements) +
+                                    calculateAverage(best.rightMeasurements)) /
+                                  2;
+                                const curAvg =
+                                  (calculateAverage(cur.leftMeasurements) +
+                                    calculateAverage(cur.rightMeasurements)) /
+                                  2;
+                                return curAvg > bestAvg ? cur : best;
+                              },
+                              gripOnlyTests[0],
+                            );
                           }
 
-                          if (!standardTest || rapidTests.length === 0) return null; // not applicable if either missing
+                          if (!standardTest || rapidTests.length === 0)
+                            return null; // not applicable if either missing
 
-                          const avgAcross = (tests: any[], side: "left" | "right") => {
+                          const avgAcross = (
+                            tests: any[],
+                            side: "left" | "right",
+                          ) => {
                             const vals = tests
                               .map((t) => {
-                                const m = side === "left" ? t.leftMeasurements : t.rightMeasurements;
+                                const m =
+                                  side === "left"
+                                    ? t.leftMeasurements
+                                    : t.rightMeasurements;
                                 return calculateAverage(m);
                               })
                               .filter((v) => v > 0);
                             if (vals.length === 0) return 0;
-                            return vals.reduce((s, v) => s + v, 0) / vals.length;
+                            return (
+                              vals.reduce((s, v) => s + v, 0) / vals.length
+                            );
                           };
 
                           const rapidLeftAvg = avgAcross(rapidTests, "left");
                           const rapidRightAvg = avgAcross(rapidTests, "right");
 
-                          const stdLeftAvg = calculateAverage(standardTest.leftMeasurements);
-                          const stdRightAvg = calculateAverage(standardTest.rightMeasurements);
+                          const stdLeftAvg = calculateAverage(
+                            standardTest.leftMeasurements,
+                          );
+                          const stdRightAvg = calculateAverage(
+                            standardTest.rightMeasurements,
+                          );
 
                           const comparisons: boolean[] = [];
-                          if (stdLeftAvg > 0 && rapidLeftAvg > 0) comparisons.push(rapidLeftAvg <= stdLeftAvg * 0.85);
-                          if (stdRightAvg > 0 && rapidRightAvg > 0) comparisons.push(rapidRightAvg <= stdRightAvg * 0.85);
+                          if (stdLeftAvg > 0 && rapidLeftAvg > 0)
+                            comparisons.push(rapidLeftAvg <= stdLeftAvg * 0.85);
+                          if (stdRightAvg > 0 && rapidRightAvg > 0)
+                            comparisons.push(
+                              rapidRightAvg <= stdRightAvg * 0.85,
+                            );
 
                           if (comparisons.length === 0) return null; // insufficient data
 

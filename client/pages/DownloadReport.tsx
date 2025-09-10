@@ -2999,18 +2999,28 @@ export default function DownloadReport() {
 
                         if (!standardTest) {
                           standardTest = gripTests.reduce((best, cur) => {
-                            const bestAvg = (calculateAverage(best.leftMeasurements) + calculateAverage(best.rightMeasurements)) / 2;
-                            const curAvg = (calculateAverage(cur.leftMeasurements) + calculateAverage(cur.rightMeasurements)) / 2;
+                            const bestAvg =
+                              (calculateAverage(best.leftMeasurements) +
+                                calculateAverage(best.rightMeasurements)) /
+                              2;
+                            const curAvg =
+                              (calculateAverage(cur.leftMeasurements) +
+                                calculateAverage(cur.rightMeasurements)) /
+                              2;
                             return curAvg > bestAvg ? cur : best;
                           }, gripTests[0]);
                         }
 
-                        if (!standardTest || rapidTests.length === 0) return null; // not applicable if either missing
+                        if (!standardTest || rapidTests.length === 0)
+                          return null; // not applicable if either missing
 
                         const avgAcross = (tests, side) => {
                           const vals = tests
                             .map((t) => {
-                              const m = side === "left" ? t.leftMeasurements : t.rightMeasurements;
+                              const m =
+                                side === "left"
+                                  ? t.leftMeasurements
+                                  : t.rightMeasurements;
                               return calculateAverage(m);
                             })
                             .filter((v) => v > 0);
@@ -3021,12 +3031,18 @@ export default function DownloadReport() {
                         const rapidLeftAvg = avgAcross(rapidTests, "left");
                         const rapidRightAvg = avgAcross(rapidTests, "right");
 
-                        const stdLeftAvg = calculateAverage(standardTest.leftMeasurements);
-                        const stdRightAvg = calculateAverage(standardTest.rightMeasurements);
+                        const stdLeftAvg = calculateAverage(
+                          standardTest.leftMeasurements,
+                        );
+                        const stdRightAvg = calculateAverage(
+                          standardTest.rightMeasurements,
+                        );
 
                         const comparisons = [];
-                        if (stdLeftAvg > 0 && rapidLeftAvg > 0) comparisons.push(rapidLeftAvg <= stdLeftAvg * 0.85);
-                        if (stdRightAvg > 0 && rapidRightAvg > 0) comparisons.push(rapidRightAvg <= stdRightAvg * 0.85);
+                        if (stdLeftAvg > 0 && rapidLeftAvg > 0)
+                          comparisons.push(rapidLeftAvg <= stdLeftAvg * 0.85);
+                        if (stdRightAvg > 0 && rapidRightAvg > 0)
+                          comparisons.push(rapidRightAvg <= stdRightAvg * 0.85);
 
                         if (comparisons.length === 0) return null; // insufficient data
 
@@ -5510,9 +5526,21 @@ export default function DownloadReport() {
                     size: f.size,
                   }))
                 : [
-                    { name: "FCE Evaluation Photos", type: "image/jpeg", size: 250000 },
-                    { name: "Test Documentation", type: "application/pdf", size: 150000 },
-                    { name: "Assessment Forms", type: "application/pdf", size: 100000 },
+                    {
+                      name: "FCE Evaluation Photos",
+                      type: "image/jpeg",
+                      size: 250000,
+                    },
+                    {
+                      name: "Test Documentation",
+                      type: "application/pdf",
+                      size: 150000,
+                    },
+                    {
+                      name: "Assessment Forms",
+                      type: "application/pdf",
+                      size: 100000,
+                    },
                   ],
           },
 
@@ -5615,17 +5643,15 @@ export default function DownloadReport() {
         const requestStartTime = Date.now();
 
         const isLocal = process.env.NODE_ENV === "development";
-        const apiUrl =  "https://generateclaimantreportapi-e355r2gb5q-uc.a.run.app/";
-        const response = await fetch(
-          apiUrl,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestData),
+        const apiUrl =
+          "https://generateclaimantreportapi-e355r2gb5q-uc.a.run.app/";
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify(requestData),
+        });
 
         const requestDuration = Date.now() - requestStartTime;
         console.log(
@@ -5662,7 +5688,9 @@ export default function DownloadReport() {
 
         // Force correct MIME type to help some viewers
         const arrayBuf = await response.arrayBuffer();
-        const blob = new Blob([arrayBuf], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+        const blob = new Blob([arrayBuf], {
+          type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
         console.log("Received DOCX blob size:", blob.size, "bytes");
         console.log("Blob type:", blob.type);
 
