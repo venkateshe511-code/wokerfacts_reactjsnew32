@@ -2973,7 +2973,7 @@ export default function DownloadReport() {
                         const normalize = (s) => (s ? s.toLowerCase() : "");
 
                         // Identify rapid/exchange tests
-                        const rapidTests = gripTests.filter((t) => {
+                        const rapidTests = allTests.filter((t) => {
                           const n = normalize(t.testName);
                           return (
                             n.includes("rapid") ||
@@ -3390,7 +3390,7 @@ export default function DownloadReport() {
                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${check.name}</td>
                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${check.description}</td>
                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : check.pass ? "✓" : ""}</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : !check.pass ? "✓" : ""}</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : !check.pass ? "��" : ""}</td>
                             </tr>
                         `,
                         )
