@@ -258,27 +258,27 @@ export default function Dashboard() {
           // const forceReal =
           //   (import.meta as any)?.env?.VITE_FORCE_REAL_PAYMENT === "true";
           // if (isDemoMode && !forceReal) {
-          //   navigate("/payment");
+            navigate("/payment");
           // } else {
-          try {
+          // try {
               
-              setCheckoutRedirecting(true);
-              await startCheckout({ amount: 25, currency: "USD" });
-            } catch (e: any) {
-              console.error(e);
-              toast({
-                title: "Payment error",
-                description:
-                  typeof e?.message === "string"
-                    ? e.message
-                    : "Unable to start checkout. Please try again.",
-                variant: "destructive",
-              });
-            } finally {
-              // If redirect succeeds, page will navigate away; this only runs when an error occurs
-              setCheckoutRedirecting(false);
-            }
-          // }
+          //     setCheckoutRedirecting(true);
+          //     await startCheckout({ amount: 25, currency: "USD" });
+          //   } catch (e: any) {
+          //     console.error(e);
+          //     toast({
+          //       title: "Payment error",
+          //       description:
+          //         typeof e?.message === "string"
+          //           ? e.message
+          //           : "Unable to start checkout. Please try again.",
+          //       variant: "destructive",
+          //     });
+          //   } finally {
+          //     // If redirect succeeds, page will navigate away; this only runs when an error occurs
+          //     setCheckoutRedirecting(false);
+          //   }
+          }
         }
         break;
         
