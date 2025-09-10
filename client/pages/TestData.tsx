@@ -936,10 +936,8 @@ export default function TestData() {
         .map((val, idx) => ({ val, idx: idx + 1 }))
         .filter((t) => t.val > threshold);
 
-    const leftMeasurements =
-      measurementKey === "left" ? updatedMeasurements : currentTest.leftMeasurements;
-    const rightMeasurements =
-      measurementKey === "right" ? updatedMeasurements : currentTest.rightMeasurements;
+    const leftMeasurements = side === "left" ? updatedMeasurements : currentTest.leftMeasurements;
+    const rightMeasurements = side === "right" ? updatedMeasurements : currentTest.rightMeasurements;
 
     const leftExceeded = findExceeded(leftMeasurements);
     const rightExceeded = findExceeded(rightMeasurements);
