@@ -2815,7 +2815,6 @@ export default function ReviewReport() {
                           applicable: pinchTests.length > 0,
                         });
 
-
                         // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high) shows postHR > preHR
                         const dynamicLifts = liftTests.filter((test: any) => {
                           const n = (test.testName || "").toLowerCase();
@@ -2827,19 +2826,20 @@ export default function ReviewReport() {
                           );
                         });
 
-                        const hrConsistent = dynamicLifts.length > 0
-                          ? dynamicLifts.some((test: any) => {
-                              const preHR =
-                                test.leftMeasurements?.preHeartRate ??
-                                test.rightMeasurements?.preHeartRate ??
-                                0;
-                              const postHR =
-                                test.leftMeasurements?.postHeartRate ??
-                                test.rightMeasurements?.postHeartRate ??
-                                0;
-                              return postHR > preHR;
-                            })
-                          : null; // Not applicable if no dynamic lifts found
+                        const hrConsistent =
+                          dynamicLifts.length > 0
+                            ? dynamicLifts.some((test: any) => {
+                                const preHR =
+                                  test.leftMeasurements?.preHeartRate ??
+                                  test.rightMeasurements?.preHeartRate ??
+                                  0;
+                                const postHR =
+                                  test.leftMeasurements?.postHeartRate ??
+                                  test.rightMeasurements?.postHeartRate ??
+                                  0;
+                                return postHR > preHR;
+                              })
+                            : null; // Not applicable if no dynamic lifts found
 
                         crosschecks.push({
                           name: "Dynamic lift HR fluctuation",
