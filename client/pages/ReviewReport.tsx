@@ -2734,7 +2734,7 @@ export default function ReviewReport() {
                         crosschecks.push({
                           name: "Hand grip rapid exchange",
                           description:
-                            "Rapid Exchange Grip average is compared to the standard (position 2) hand grip. Pass when Rapid <= 85% of Standard.",
+                            "Rapid Exchange Grip was 15% less to equal that of the Std position 2 Hand Grip measure.",
                           pass: rapidExchangeValid,
                           applicable: rapidExchangeValid !== null,
                         });
