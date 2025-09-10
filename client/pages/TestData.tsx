@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import {
   Dialog,
   DialogContent,
@@ -294,6 +295,9 @@ export default function TestData() {
   const [cardioTestData, setCardioTestData] = useState<
     Record<string, CardioTestData>
   >({});
+
+  // Alert state for threshold violations
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const generateSampleTestData = (
     testId: string,
@@ -913,12 +917,54 @@ export default function TestData() {
   ) => {
     const measurementKey =
       side === "left" ? "leftMeasurements" : "rightMeasurements";
+
+    // Prepare updated measurements for the side being edited
+    const updatedMeasurements = {
+      ...currentTest[measurementKey],
+      [field]: value,
+    } as TestMeasurement;
+
+    // Update the test data with the new measurement
     updateCurrentTest({
-      [measurementKey]: {
-        ...currentTest[measurementKey],
-        [field]: value,
-      },
+      [measurementKey]: updatedMeasurements,
     });
+
+    // Threshold check: any trial value greater than 250 should trigger an alert
+    const threshold = 250;
+    const findExceeded = (m: TestMeasurement) =>
+      [m.trial1, m.trial2, m.trial3, m.trial4, m.trial5, m.trial6]
+        .map((val, idx) => ({ val, idx: idx + 1 }))
+        .filter((t) => t.val > threshold);
+
+    const leftMeasurements =
+      measurementKey === "left" ? updatedMeasurements : currentTest.leftMeasurements;
+    const rightMeasurements =
+      measurementKey === "right" ? updatedMeasurements : currentTest.rightMeasurements;
+
+    const leftExceeded = findExceeded(leftMeasurements);
+    const rightExceeded = findExceeded(rightMeasurements);
+
+    if (leftExceeded.length > 0 || rightExceeded.length > 0) {
+      const parts: string[] = [];
+      if (leftExceeded.length > 0) {
+        parts.push(
+          `Left trials exceeding ${threshold}: ${leftExceeded
+            .map((t) => `Trial ${t.idx} (${t.val})`)
+            .join(", ")}`,
+        );
+      }
+      if (rightExceeded.length > 0) {
+        parts.push(
+          `Right trials exceeding ${threshold}: ${rightExceeded
+            .map((t) => `Trial ${t.idx} (${t.val})`)
+            .join(", ")}`,
+        );
+      }
+      setAlertMessage(parts.join(" — "));
+    } else {
+      // Clear alert when nothing exceeds threshold
+      setAlertMessage(null);
+    }
   };
 
   const calculateAverage = (
@@ -1260,6 +1306,12 @@ export default function TestData() {
   return (
     <div className="min-h-screen bg-blue-100 py-4 sm:py-8 px-2 sm:px-4">
       <div className="container mx-auto max-w-7xl">
+        {alertMessage && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertTitle>Value exceeds allowed maximum</AlertTitle>
+            <AlertDescription>{alertMessage}</AlertDescription>
+          </Alert>
+        )}
         <div className="mb-8">
           <Button
             variant="outline"
