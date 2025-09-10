@@ -300,6 +300,7 @@ const testGroups = {
         { id: "dynamic-lift-low", name: "Low" },
         { id: "dynamic-lift-mid", name: "Mid" },
         { id: "dynamic-lift-high", name: "High" },
+        { id: "dynamic-lift-overhead", name: "Overhead" },
       ],
     },
   ],
