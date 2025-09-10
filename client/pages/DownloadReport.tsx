@@ -3035,7 +3035,7 @@ export default function DownloadReport() {
                       crosschecks.push({
                         name: "Hand grip rapid exchange",
                         description:
-                          "Rapid Exchange Grip average is compared to the standard (position 2) hand grip. Pass when Rapid <= 85% of Standard.",
+                          "Rapid Exchange Grip was 15% less to equal that of the Std position 2 Hand Grip measure.",
                         pass: rapidExchangeValid,
                         applicable: rapidExchangeValid !== null,
                       });
@@ -3390,7 +3390,7 @@ export default function DownloadReport() {
                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${check.name}</td>
                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${check.description}</td>
                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : check.pass ? "✓" : ""}</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : !check.pass ? "��" : ""}</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : !check.pass ? "✓" : ""}</td>
                             </tr>
                         `,
                         )
