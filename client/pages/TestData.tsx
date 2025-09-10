@@ -936,8 +936,10 @@ export default function TestData() {
         .map((val, idx) => ({ val, idx: idx + 1 }))
         .filter((t) => t.val > threshold);
 
-    const leftMeasurements = side === "left" ? updatedMeasurements : currentTest.leftMeasurements;
-    const rightMeasurements = side === "right" ? updatedMeasurements : currentTest.rightMeasurements;
+    const leftMeasurements =
+      side === "left" ? updatedMeasurements : currentTest.leftMeasurements;
+    const rightMeasurements =
+      side === "right" ? updatedMeasurements : currentTest.rightMeasurements;
 
     const leftExceeded = findExceeded(leftMeasurements);
     const rightExceeded = findExceeded(rightMeasurements);
@@ -1576,7 +1578,9 @@ export default function TestData() {
                               className={`text-center border-2 ${leftVal > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
                             />
                             {leftVal > 250 && (
-                              <div className="text-red-700 text-xs mt-1">Value exceeds maximum of 250</div>
+                              <div className="text-red-700 text-xs mt-1">
+                                Value exceeds maximum of 250
+                              </div>
                             )}
                           </div>
 
@@ -1594,7 +1598,9 @@ export default function TestData() {
                               className={`text-center border-2 ${rightVal > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
                             />
                             {rightVal > 250 && (
-                              <div className="text-red-700 text-xs mt-1">Value exceeds maximum of 250</div>
+                              <div className="text-red-700 text-xs mt-1">
+                                Value exceeds maximum of 250
+                              </div>
                             )}
                           </div>
                         </React.Fragment>
