@@ -257,9 +257,9 @@ export default function Dashboard() {
         {
           const forceReal =
             (import.meta as any)?.env?.VITE_FORCE_REAL_PAYMENT === "true";
-          if (isDemoMode && !forceReal) {
-            navigate("/payment");
-          } else {
+          // if (isDemoMode && !forceReal) {
+          //   navigate("/payment");
+          // } else {
             try {
               setCheckoutRedirecting(true);
               await startCheckout({ amount: 25, currency: "USD" });
@@ -277,7 +277,7 @@ export default function Dashboard() {
               // If redirect succeeds, page will navigate away; this only runs when an error occurs
               setCheckoutRedirecting(false);
             }
-          }
+          // }
         }
         break;
       case 9:
