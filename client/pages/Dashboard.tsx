@@ -260,7 +260,8 @@ export default function Dashboard() {
           // if (isDemoMode && !forceReal) {
           //   navigate("/payment");
           // } else {
-            try {
+          try {
+              
               setCheckoutRedirecting(true);
               await startCheckout({ amount: 25, currency: "USD" });
             } catch (e: any) {
