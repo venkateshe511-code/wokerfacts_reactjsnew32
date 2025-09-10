@@ -1308,7 +1308,7 @@ export default function DownloadReport() {
 
             <!-- Title -->
             <div style="text-align: center; margin-bottom: 12px;">
-                <h1 style="font-size: 28px; font-weight: bold; color: #4472C4; margin: 0; font-family: Arial, sans-serif;">Functional Abilities Evaluation</h1>
+                <h1 style="font-size: 22px; font-weight: bold; color: #4472C4; margin: 0; font-family: Arial, sans-serif;">Functional Abilities Evaluation</h1>
             </div>
 
             <!-- client Information -->
@@ -1397,7 +1397,7 @@ export default function DownloadReport() {
                     evaluatorData.clinicName || "MedSource"
                   }</span></div>`
             }
-            <h1 style="font-size: 28px; font-weight: bold; color: #4472C4; margin: 8px 0; font-family: Arial, sans-serif;">Functional Abilities Evaluation</h1>
+            <h1 style="font-size: 22px; font-weight: bold; color: #4472C4; margin: 8px 0; font-family: Arial, sans-serif;">Functional Abilities Evaluation</h1>
             <p style="font-size: 12px; color: #666; margin: 4px 0; font-family: Arial, sans-serif;">${
               evaluatorData.address || "Address"
             }</p>
