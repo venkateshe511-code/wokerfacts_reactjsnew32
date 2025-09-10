@@ -2941,9 +2941,10 @@ export default function DownloadReport() {
 
                       // Find relevant tests for crosschecks
                       const gripTests =
-                        testData.tests?.filter((test) =>
-                          test.testName.toLowerCase().includes("grip"),
-                        ) || [];
+                        testData.tests?.filter((test) => {
+                          const n = (test.testName || "").toLowerCase();
+                          return n.includes("grip") || n.includes("hand");
+                        }) || [];
 
                       const pinchTests =
                         testData.tests?.filter((test) =>
