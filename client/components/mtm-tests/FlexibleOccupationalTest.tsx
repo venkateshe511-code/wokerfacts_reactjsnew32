@@ -887,7 +887,7 @@ export default function FlexibleOccupationalTest({
               </span>
             </div>
             {mtmDescriptions[testType] && (
-              <div className="mt-3 text-sm text-gray-800 p-4 rounded-lg bg-gradient-to-r from-purple-50 via-blue-50 to-teal-50 border shadow-sm whitespace-pre-line">
+              <div className="mt-3 text-sm text-gray-800 p-4 rounded-lg bg-gradient-to-r from-purple-50 via-blue-50 to-teal-50 border shadow-sm whitespace-pre-line text-justify">
                 <p className="mt-1">{mtmDescriptions[testType]}</p>
               </div>
             )}
