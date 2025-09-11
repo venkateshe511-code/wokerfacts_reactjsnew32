@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { mtmDescriptions } from "./mtm-descriptions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -153,6 +154,12 @@ export default function StandardMTMInterface({
 
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold mb-2">MTM - {testName}</h1>
+          {mtmDescriptions[testType] && (
+            <div className="mt-3 text-sm text-gray-700 p-3 rounded bg-white whitespace-pre-line">
+              <strong>MTM Description:</strong>
+              <p className="mt-1">{mtmDescriptions[testType]}</p>
+            </div>
+          )}
         </div>
 
         {/* Trial Results Table */}
