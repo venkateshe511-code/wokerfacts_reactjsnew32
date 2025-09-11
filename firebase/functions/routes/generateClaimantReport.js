@@ -410,8 +410,7 @@ async function addMTMSection(children, body) {
         new TableCell({ children: [new Paragraph(new TextRun({ text: "Reps", bold: true }))] }),
         new TableCell({ children: [new Paragraph(new TextRun({ text: "Time (sec)", bold: true }))] }),
         new TableCell({ children: [new Paragraph(new TextRun({ text: "%IS", bold: true }))] }),
-        new TableCell({ children: [new Paragraph(new TextRun({ text: "CV%", bold: true }))] }),
-        new TableCell({ children: [new Paragraph(new TextRun({ text: "Time Set Completed", bold: true }))] }),
+                new TableCell({ children: [new Paragraph(new TextRun({ text: "Time Set Completed", bold: true }))] }),
       ],
     });
     const rows = trials.length
@@ -437,8 +436,7 @@ async function addMTMSection(children, body) {
                   ),
                 ],
               }),
-              new TableCell({ children: [new Paragraph(String(t.cv || 0))] }),
-              new TableCell({
+                            new TableCell({
                 children: [
                   new Paragraph(
                     String(
@@ -455,7 +453,7 @@ async function addMTMSection(children, body) {
       : [
           new TableRow({
             children: [
-              new TableCell({ columnSpan: 9, children: [new Paragraph("No trial data")] }),
+              new TableCell({ columnSpan: 8, children: [new Paragraph("No trial data")] }),
             ],
           }),
         ];
