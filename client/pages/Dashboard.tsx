@@ -437,6 +437,17 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+            <Button asChild variant="outline" size="sm" className="w-full sm:w-auto text-sm">
+              <a
+                href="https://cdn.builder.io/o/assets%2F70e65ed07755445e80eef8d6022d311d%2F3a543cc8e61443818c57b910a67dd3c4?alt=media&token=57318f22-b451-431b-a5b5-a0b0d04e863b&apiKey=70e65ed07755445e80eef8d6022d311d"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                Download Sample PDF
+              </a>
+            </Button>
             <Button
               variant="outline"
               size="sm"
