@@ -18,6 +18,7 @@ import {
   Mail,
   Globe,
   FileText,
+  Download,
   Play,
   CheckCircle,
   Clock,
