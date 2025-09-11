@@ -75,16 +75,16 @@ export default function Register() {
   const [enableDemoMode, setEnableDemoMode] = useState(false);
 
   const sampleProfileData = {
-    name: "Dr. Sarah Johnson",
+    name: "Sarah Sample, RPT",
     licenseNo: "FCE789456123",
     clinicName: "WorkerFacts Clinic",
-    address: "456 Medical Plaza, Suite 300\nProfessional Building",
+    address: "123 Sample Drive",
     country: "United States",
-    city: "Chicago",
-    zipcode: "60601",
-    email: "dr.johnson@advancedrehab.com",
-    phone: "+1 (312) 555-0123",
-    website: "https://www.advancedrehab.com",
+    city: "New York",
+    zipcode: "07008",
+    email: "sarahsample@workerfactsclinic.com",
+    phone: "212-111-2222",
+    website: "http://www.workerfactsclinic.com/",
     profilePhoto: null,
     clinicLogo: null,
   };
