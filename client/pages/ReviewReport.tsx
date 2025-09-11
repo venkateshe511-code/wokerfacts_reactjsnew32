@@ -99,6 +99,12 @@ interface ReportData {
 }
 
 export default function ReviewReport() {
+  const formatParam = (p: any) => {
+    if (p && typeof p === "object" && p.value !== undefined) {
+      return `${p.value}${p.unit ? " " + p.unit : ""}`;
+    }
+    return p ?? "";
+  };
   const navigate = useNavigate();
   const [reportData, setReportData] = useState<ReportData>({
     evaluatorData: null,
@@ -5841,14 +5847,10 @@ export default function ReviewReport() {
                                                   {trial.side || "Both"}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {trial.weight ||
-                                                    trial.plane ||
-                                                    "Immediate"}
+                                                  {formatParam(trial.weight) || trial.plane || "Immediate"}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {trial.distance ||
-                                                    trial.position ||
-                                                    "Standing"}
+                                                  {formatParam(trial.distance) || trial.position || "Standing"}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
                                                   {trial.reps || 1}
