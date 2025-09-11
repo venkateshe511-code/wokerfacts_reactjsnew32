@@ -108,16 +108,19 @@ export default function ReviewReport() {
 
   const computeTotalCompleted = (trial: any) => {
     if (!trial) return 0;
-    if (trial.totalCompleted !== undefined && trial.totalCompleted !== null) return Number(trial.totalCompleted);
+    if (trial.totalCompleted !== undefined && trial.totalCompleted !== null)
+      return Number(trial.totalCompleted);
     const testTime = Number(trial.testTime || 0);
     const percentIS = Number(trial.percentIS || 0);
-    if (testTime > 0 && percentIS > 0) return (testTime * (percentIS / 100));
+    if (testTime > 0 && percentIS > 0) return testTime * (percentIS / 100);
     return testTime;
   };
 
   const computeAverageTotalCompleted = (trials: any[]) => {
     if (!trials || trials.length === 0) return 0;
-    const vals = trials.map((t) => computeTotalCompleted(t)).filter((v) => v > 0);
+    const vals = trials
+      .map((t) => computeTotalCompleted(t))
+      .filter((v) => v > 0);
     if (vals.length === 0) return 0;
     return vals.reduce((s, v) => s + v, 0) / vals.length;
   };
@@ -4605,10 +4608,10 @@ export default function ReviewReport() {
                                               </h5>
                                               <div className="bg-gray-100 p-3 text-xs">
                                                 <p className="mb-2">
-                                                  VO₂ max (ml•kg⁻��•min⁻¹) = 17.2
-                                                  + (1.29 × O₂ cost of the last
-                                                  completed stage) - (0.09 ×
-                                                  mass in kg) - (0.18 × age in
+                                                  VO₂ max (ml•kg⁻��•min⁻¹) =
+                                                  17.2 + (1.29 × O₂ cost of the
+                                                  last completed stage) - (0.09
+                                                  × mass in kg) - (0.18 × age in
                                                   years)
                                                 </p>
                                                 <p className="mb-2">
@@ -5847,7 +5850,7 @@ export default function ReviewReport() {
                                           <th className="border border-gray-400 border-r-gray-400 p-2">
                                             %IS
                                           </th>
-                                                                                    <th className="border border-gray-400 border-r-gray-400 p-2">
+                                          <th className="border border-gray-400 border-r-gray-400 p-2">
                                             Time Set
                                             <br />
                                             Completed
@@ -5870,10 +5873,16 @@ export default function ReviewReport() {
                                                   {trial.side || "Both"}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {formatParam(trial.weight) || trial.plane || "Immediate"}
+                                                  {formatParam(trial.weight) ||
+                                                    trial.plane ||
+                                                    "Immediate"}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {formatParam(trial.distance) || trial.position || "Standing"}
+                                                  {formatParam(
+                                                    trial.distance,
+                                                  ) ||
+                                                    trial.position ||
+                                                    "Standing"}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
                                                   {trial.reps || 1}
@@ -5888,7 +5897,7 @@ export default function ReviewReport() {
                                                     trial.percentIS || 0
                                                   ).toFixed(1)}
                                                 </td>
-<td className="border border-gray-400 p-2 text-center"></td>
+                                                <td className="border border-gray-400 p-2 text-center"></td>
                                               </tr>
                                             ),
                                           )
@@ -5921,8 +5930,10 @@ export default function ReviewReport() {
                                             <td className="border border-gray-400 p-2 text-center">
                                               {avgPercentIS.toFixed(1)}
                                             </td>
-                                                                                        <td className="border border-gray-400 p-2 text-center">
-                                              {computeTotalSum(trials).toFixed(1)}
+                                            <td className="border border-gray-400 p-2 text-center">
+                                              {computeTotalSum(trials).toFixed(
+                                                1,
+                                              )}
                                             </td>
                                           </tr>
                                         )}
