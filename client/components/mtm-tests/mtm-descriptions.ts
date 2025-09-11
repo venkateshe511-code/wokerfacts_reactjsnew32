@@ -88,6 +88,8 @@ evaluee crosses the return line, before they place the container back to the she
   "climb-stairs": `Begin timing when the leading foot leaves the landing. Walk up a flight of stairs using the foot over
 foot method. Stop the timer when the trailing foot reaches the top landing.`,
 
+  "climb-ladder": `Begin timing when the leading foot leaves the landing. The evaluee ascends and/or descends a ladder using a safe, controlled foot‑over‑foot technique while maintaining three points of contact (two hands and one foot or two feet and one hand) where possible. Observe and record: body positioning (avoid overreaching), hand placement, use of rails, step clearance, and any loss of balance or compensatory movements. Time the ascent and descent as prescribed; stop the timer when the trailing foot reaches the top landing (or when the leading foot crosses the bottom landing on descent), and note any deviations from safe technique. Follow industry ladder safety guidance (OSHA) and ensure the ladder and landings are secure before testing.`,
+
   "push-pull-cart": `Instruct the evaluee to push and then pull the weighted container on a cart through the prescribed
 distance. As the start and stop time of this test can vary greatly, depending on floor surfaces, cart
 condition etc. At least 8 feet of full motion push or pull action should be sampled. Stop the timer
