@@ -121,6 +121,13 @@ export default function ReviewReport() {
     if (vals.length === 0) return 0;
     return vals.reduce((s, v) => s + v, 0) / vals.length;
   };
+
+  const computeTotalSum = (trials: any[]) => {
+    if (!trials || trials.length === 0) return 0;
+    return trials
+      .map((t) => computeTotalCompleted(t))
+      .reduce((s, v) => s + (Number(v) || 0), 0);
+  };
   const navigate = useNavigate();
   const [reportData, setReportData] = useState<ReportData>({
     evaluatorData: null,
@@ -2490,7 +2497,7 @@ export default function ReviewReport() {
                                             jobReq.functionalMin &&
                                             jobReq.norm
                                           ) {
-                                            return `≥${jobReq.functionalMin}�� (Min) / ≥${jobReq.norm}° (Normal)`;
+                                            return `≥${jobReq.functionalMin}° (Min) / ≥${jobReq.norm}° (Normal)`;
                                           } else if (jobReq.norm) {
                                             return `≥${jobReq.norm}°`;
                                           }
@@ -4598,7 +4605,7 @@ export default function ReviewReport() {
                                               </h5>
                                               <div className="bg-gray-100 p-3 text-xs">
                                                 <p className="mb-2">
-                                                  VO₂ max (ml•kg⁻¹•min⁻¹) = 17.2
+                                                  VO₂ max (ml•kg⁻��•min⁻¹) = 17.2
                                                   + (1.29 × O₂ cost of the last
                                                   completed stage) - (0.09 ×
                                                   mass in kg) - (0.18 × age in
@@ -5882,7 +5889,7 @@ export default function ReviewReport() {
                                                   ).toFixed(1)}
                                                 </td>
                                                                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {computeTotalCompleted(trial).toFixed(1)}
+                                                  ""
                                                 </td>
                                               </tr>
                                             ),
@@ -5917,7 +5924,7 @@ export default function ReviewReport() {
                                               {avgPercentIS.toFixed(1)}
                                             </td>
                                                                                         <td className="border border-gray-400 p-2 text-center">
-                                              {computeAverageTotalCompleted(trials).toFixed(1)}
+                                              {computeTotalSum(trials).toFixed(1)}
                                             </td>
                                           </tr>
                                         )}
