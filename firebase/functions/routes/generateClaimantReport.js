@@ -413,52 +413,70 @@ async function addMTMSection(children, body) {
                 new TableCell({ children: [new Paragraph(new TextRun({ text: "Time Set Completed", bold: true }))] }),
       ],
     });
-    const rows = trials.length
-      ? trials.map((t, i) =>
-          new TableRow({
-            children: [
-              new TableCell({ children: [new Paragraph(String(t.trial || i + 1))] }),
-              new TableCell({ children: [new Paragraph(t.side || "Both")] }),
-              new TableCell({ children: [new Paragraph(String(t.weight || t.plane || "Immediate"))] }),
-              new TableCell({ children: [new Paragraph(String(t.distance || t.position || "Standing"))] }),
-              new TableCell({ children: [new Paragraph(String(t.reps ?? 1))] }),
-              new TableCell({
-                children: [
-                  new Paragraph(
-                    String((t.testTime || 0).toFixed ? t.testTime.toFixed(1) : t.testTime || 0)
-                  ),
-                ],
-              }),
-              new TableCell({
-                children: [
-                  new Paragraph(
-                    String((t.percentIS || 0).toFixed ? t.percentIS.toFixed(1) : t.percentIS || 0)
-                  ),
-                ],
-              }),
-                            new TableCell({
-                children: [
-                  new Paragraph(
-                    String(
-                      (t.totalCompleted !== undefined && t.totalCompleted !== null)
-                        ? (Number(t.totalCompleted) || 0).toFixed(1)
-                        : (t.testTime && t.percentIS)
-                        ? (Number(t.testTime) * (Number(t.percentIS) / 100)).toFixed(1)
-                        : (Number(t.testTime || 0)).toFixed(1)
-                    )
-                  ),
-                ],
-              }),
-            ],
-          })
-        )
-      : [
-          new TableRow({
-            children: [
-              new TableCell({ columnSpan: 8, children: [new Paragraph("No trial data")] }),
-            ],
-          }),
-        ];
+    let rows;
+    if (trials.length) {
+      rows = trials.map((t, i) =>
+        new TableRow({
+          children: [
+            new TableCell({ children: [new Paragraph(String(t.trial || i + 1))] }),
+            new TableCell({ children: [new Paragraph(t.side || "Both")] }),
+            new TableCell({ children: [new Paragraph(String(t.weight || t.plane || "Immediate"))] }),
+            new TableCell({ children: [new Paragraph(String(t.distance || t.position || "Standing"))] }),
+            new TableCell({ children: [new Paragraph(String(t.reps ?? 1))] }),
+            new TableCell({
+              children: [
+                new Paragraph(
+                  String((t.testTime || 0).toFixed ? t.testTime.toFixed(1) : t.testTime || 0)
+                ),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph(
+                  String((t.percentIS || 0).toFixed ? t.percentIS.toFixed(1) : t.percentIS || 0)
+                ),
+              ],
+            }),
+            // Per-trial Time Set Completed left blank per request
+            new TableCell({ children: [new Paragraph("")] }),
+          ],
+        })
+      );
+
+      // compute total sum for Time Set Completed across trials
+      const totalSum = trials.reduce((sum, tt) => {
+        const val = (tt.totalCompleted !== undefined && tt.totalCompleted !== null)
+          ? Number(tt.totalCompleted)
+          : (tt.testTime && tt.percentIS)
+          ? Number(tt.testTime) * (Number(tt.percentIS) / 100)
+          : Number(tt.testTime || 0);
+        return sum + (isNaN(val) ? 0 : val);
+      }, 0);
+
+      // append totals row (last row showing total time)
+      rows.push(
+        new TableRow({
+          children: [
+            new TableCell({ children: [new Paragraph("")] }),
+            new TableCell({ children: [new Paragraph("")] }),
+            new TableCell({ children: [new Paragraph("")] }),
+            new TableCell({ children: [new Paragraph("")] }),
+            new TableCell({ children: [new Paragraph("")] }),
+            new TableCell({ children: [new Paragraph("")] }),
+            new TableCell({ children: [new Paragraph("")] }),
+            new TableCell({ children: [new Paragraph(String(totalSum.toFixed(1)), { bold: true })] }),
+          ],
+        })
+      );
+    } else {
+      rows = [
+        new TableRow({
+          children: [
+            new TableCell({ columnSpan: 8, children: [new Paragraph("No trial data")] }),
+          ],
+        }),
+      ];
+    }
     children.push(
       new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [header, ...rows] })
     );
