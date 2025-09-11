@@ -881,6 +881,15 @@ export default function DownloadReport() {
         return p ?? "";
       };
 
+      const computeTotalCompleted = (trial: any) => {
+        if (!trial) return '0.0';
+        if (trial.totalCompleted !== undefined && trial.totalCompleted !== null) return (Number(trial.totalCompleted) || 0).toFixed(1);
+        const tt = Number(trial.testTime || 0);
+        const p = Number(trial.percentIS || 0);
+        if (tt > 0 && p > 0) return (tt * (p / 100)).toFixed(1);
+        return (tt || 0).toFixed(1);
+      };
+
       return `
         <!-- MTM Test Table for ${testName} -->
         <div style="margin-bottom: 15px; border: 1px solid #333; padding: 8px; background-color: #ffffff;">
