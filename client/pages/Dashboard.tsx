@@ -371,63 +371,29 @@ export default function Dashboard() {
     }
   };
 
-  // New informed consent doc
-  // Use Firebase Cloud Function to generate informed consent docx with evaluator profile and images
-  const downloadSampleDoc = async () => {
+
+  const sampleDocxUrl = "/WF FCE Client Informed Consent.docx";
+
+  const downloadSampleDocx = async () => {
     try {
-      if (!evaluatorData) {
-        toast({
-          title: "Profile required",
-          description:
-            "Please complete your evaluator profile before generating the document.",
-        });
-        return;
-      }
-
-      const functionPath = "https://us-central1-workerfacts-60c02.cloudfunctions.net/generateInformedConsentRouteApi";
-      const payload = {
-        clientProfile: {
-          logo: evaluatorData.clinicLogo || evaluatorData.profilePhoto || null,
-          clinicName: evaluatorData.clinicName,
-          address: evaluatorData.address,
-          phone: evaluatorData.phone,
-          email: evaluatorData.email,
-          website: evaluatorData.website,
-          evaluatorName: evaluatorData.name,
-        },
-        images: [
-          "https://cdn.builder.io/api/v1/image/assets%2F70e65ed07755445e80eef8d6022d311d%2F579c63d30eba4d8fb68cdc65e4b280c4?format=webp&width=800",
-          "https://cdn.builder.io/api/v1/image/assets%2F70e65ed07755445e80eef8d6022d311d%2F0c39d5af8b534c0cbe7bf042d3a2d84f?format=webp&width=800",
-          "https://cdn.builder.io/api/v1/image/assets%2F70e65ed07755445e80eef8d6022d311d%2Fcf0d8733b97d47748398622cfbf9bf4d?format=webp&width=800",
-        ],
-      };
-
-      const res = await fetch(functionPath, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok)
-        throw new Error(`Failed to generate document: ${res.status}`);
-
+      const res = await fetch(sampleDocxUrl, { mode: "cors" });
+      if (!res.ok) throw new Error(`Failed to fetch DOCX: ${res.status}`);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "WF FCE Client Informed Consent.docx";
+      a.download = "WF FCE Client Informed Consent.docx"; // Set the desired filename
       document.body.appendChild(a);
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error(e);
-      toast({
-        title: "Generation failed",
-        description: "Could not create the informed consent document.",
-      });
+      // Fallback: Open the file in a new tab if download fails
+      window.open(sampleDocxUrl, "_blank", "noopener,noreferrer");
     }
   };
+
 
   const confirmBackNavigation = () => {
     // Complete data wipe - clear ALL stored data including profile
@@ -519,7 +485,7 @@ export default function Dashboard() {
           <div className="flex flex-col sm:flex-row md:flex-row items-center flex-wrap justify-end space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             <Button
               size="sm"
-              onClick={downloadSampleDoc}
+              onClick={downloadSampleDocx}
               className="w-full sm:w-auto md:w-auto text-sm min-w-[160px] bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 text-white hover:from-green-500 hover:via-emerald-500 hover:to-teal-600 shadow-md"
             >
               <Download className="mr-2 h-4 w-4 text-white" />
@@ -689,11 +655,10 @@ export default function Dashboard() {
                   <Card
                     key={step.id}
                     id={`step-${step.id}`}
-                    className={`border-2 transition-all duration-200 ${
-                      isAvailable
+                    className={`border-2 transition-all duration-200 ${isAvailable
                         ? `cursor-pointer ${getStatusColor(status)}`
                         : "cursor-not-allowed bg-gray-100 border-gray-200 opacity-50"
-                    }`}
+                      }`}
                     onClick={
                       isAvailable ? () => handleStepClick(step.id) : undefined
                     }
