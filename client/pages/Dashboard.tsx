@@ -371,6 +371,28 @@ export default function Dashboard() {
     }
   };
 
+  // New informed consent doc
+  const sampleDocUrl = "/WF FCE Client Informed Consent.docx";
+
+  const downloadSampleDoc = async () => {
+    try {
+      const res = await fetch(sampleDocUrl, { mode: "cors" });
+      if (!res.ok) throw new Error(`Failed to fetch doc: ${res.status}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "WF FCE Client Informed Consent.docx";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      window.open(sampleDocUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
   const confirmBackNavigation = () => {
     // Complete data wipe - clear ALL stored data including profile
     const keysToRemove = [
