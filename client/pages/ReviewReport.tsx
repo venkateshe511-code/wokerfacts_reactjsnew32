@@ -1896,7 +1896,7 @@ export default function ReviewReport() {
                           ) {
                             return {
                               requirement:
-                                "Key pinch ≥4.3 kg (Light) / ��7.0 kg (Medium work)",
+                                "Key pinch ≥4.3 kg (Light) / ���7.0 kg (Medium work)",
                               lightWork: 4.3, // kg
                               mediumWork: 7.0, // kg
                               unit: "kg",
@@ -5779,7 +5779,7 @@ export default function ReviewReport() {
                                         <tr>
                                           <th
                                             className="border border-gray-400 p-2 text-center bg-white"
-                                            colSpan={9}
+                                            colSpan={8}
                                           >
                                             {testName} -{" "}
                                             {new Date(
@@ -5818,10 +5818,7 @@ export default function ReviewReport() {
                                           <th className="border border-gray-400 border-r-gray-400 p-2">
                                             %IS
                                           </th>
-                                          <th className="border border-gray-400 border-r-gray-400 p-2">
-                                            CV%
-                                          </th>
-                                          <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                                                    <th className="border border-gray-400 border-r-gray-400 p-2">
                                             Time Set
                                             <br />
                                             Completed
@@ -5866,10 +5863,7 @@ export default function ReviewReport() {
                                                     trial.percentIS || 0
                                                   ).toFixed(1)}
                                                 </td>
-                                                <td className="border border-gray-400 p-2 text-center">
-                                                  {trial.cv || 0}
-                                                </td>
-                                                <td className="border border-gray-400 p-2 text-center">
+                                                                                                <td className="border border-gray-400 p-2 text-center">
                                                   {(
                                                     trial.totalCompleted ||
                                                     trial.testTime ||
@@ -5883,7 +5877,7 @@ export default function ReviewReport() {
                                           <tr>
                                             <td
                                               className="border border-gray-400 p-2 text-center"
-                                              colSpan={9}
+                                              colSpan={8}
                                             >
                                               No trial data available for{" "}
                                               {testName}
@@ -5908,10 +5902,7 @@ export default function ReviewReport() {
                                             <td className="border border-gray-400 p-2 text-center">
                                               {avgPercentIS.toFixed(1)}
                                             </td>
-                                            <td className="border border-gray-400 p-2 text-center">
-                                              {trials.length}
-                                            </td>
-                                            <td className="border border-gray-400 p-2 text-center">
+                                                                                        <td className="border border-gray-400 p-2 text-center">
                                               {avgTime.toFixed(1)}
                                             </td>
                                           </tr>
