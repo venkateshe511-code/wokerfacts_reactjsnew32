@@ -360,7 +360,7 @@ export default function Dashboard() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "WF-FCE-DATA-COLLECTION-FORM.pdf";
+      a.download = "WF FCE DATA COLLECTION FORM.pdf";
       document.body.appendChild(a);
       a.click();
       a.remove();
