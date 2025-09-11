@@ -492,7 +492,7 @@ export default function Dashboard() {
             <Button
               size="sm"
               onClick={downloadSamplePdf}
-              className="w-full sm:w-auto text-sm bg-gradient-to-r from-rose-500 via-pink-500 to-indigo-500 text-white hover:from-rose-600 hover:via-pink-600 hover:to-indigo-600 shadow-md"
+              className="w-full sm:w-auto md:w-auto text-sm min-w-[160px] bg-gradient-to-r from-rose-500 via-pink-500 to-indigo-500 text-white hover:from-rose-600 hover:via-pink-600 hover:to-indigo-600 shadow-md"
             >
               <Download className="mr-2 h-4 w-4 text-white" />
               WF FCE DATA COLLECTION FORM
