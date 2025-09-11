@@ -440,9 +440,11 @@ async function addMTMSection(children, body) {
                 children: [
                   new Paragraph(
                     String(
-                      (t.totalCompleted || t.testTime || 0).toFixed
-                        ? (t.totalCompleted || t.testTime || 0).toFixed(1)
-                        : t.totalCompleted || t.testTime || 0
+                      (t.totalCompleted !== undefined && t.totalCompleted !== null)
+                        ? (Number(t.totalCompleted) || 0).toFixed(1)
+                        : (t.testTime && t.percentIS)
+                        ? (Number(t.testTime) * (Number(t.percentIS) / 100)).toFixed(1)
+                        : (Number(t.testTime || 0)).toFixed(1)
                     )
                   ),
                 ],
