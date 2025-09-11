@@ -38,7 +38,6 @@ app3.use(express.json({ limit: "20mb" }));
 app3.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app3.use("/", generateInformedConsentRoute);
 
-
 // Export multiple functions
 exports.generateClaimantReportApi = functions.https.onRequest(app1);
 exports.createCheckoutSessionApi = functions.https.onRequest(app2);

@@ -376,7 +376,11 @@ export default function Dashboard() {
   const downloadSampleDoc = async () => {
     try {
       if (!evaluatorData) {
-        toast({ title: "Profile required", description: "Please complete your evaluator profile before generating the document." });
+        toast({
+          title: "Profile required",
+          description:
+            "Please complete your evaluator profile before generating the document.",
+        });
         return;
       }
 
@@ -404,7 +408,8 @@ export default function Dashboard() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error(`Failed to generate document: ${res.status}`);
+      if (!res.ok)
+        throw new Error(`Failed to generate document: ${res.status}`);
 
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -417,7 +422,10 @@ export default function Dashboard() {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error(e);
-      toast({ title: "Generation failed", description: "Could not create the informed consent document." });
+      toast({
+        title: "Generation failed",
+        description: "Could not create the informed consent document.",
+      });
     }
   };
 

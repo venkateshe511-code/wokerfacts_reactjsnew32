@@ -42,7 +42,10 @@ router.post("/informed-consent", async (req, res) => {
         children.push(
           new Paragraph({
             children: [
-              new ImageRun({ data: logoBuf, transformation: { width: 120, height: 60 } }),
+              new ImageRun({
+                data: logoBuf,
+                transformation: { width: 120, height: 60 },
+              }),
             ],
             alignment: AlignmentType.CENTER,
           }),
@@ -54,20 +57,32 @@ router.post("/informed-consent", async (req, res) => {
     children.push(
       new Paragraph({
         children: [
-          new TextRun({ text: "Functional Abilities Determination", bold: true, size: 28 }),
+          new TextRun({
+            text: "Functional Abilities Determination",
+            bold: true,
+            size: 28,
+          }),
         ],
         alignment: AlignmentType.CENTER,
       }),
     );
     children.push(
-      new Paragraph({ children: [new TextRun({ text: "Informed Consent", bold: true, size: 24 })], alignment: AlignmentType.CENTER }),
+      new Paragraph({
+        children: [
+          new TextRun({ text: "Informed Consent", bold: true, size: 24 }),
+        ],
+        alignment: AlignmentType.CENTER,
+      }),
     );
 
     // Body sample text (shortened) - you can expand as needed
     const bodyText = `You have been asked to participate in a Functional Abilities Determination. This is often called a Functional Capacity Evaluation (FCE), a Return-to-Work Evaluation (RTW) or a Fit for Work Exam. The evaluation includes tasks such as medical history, physical exam, cognitive assessment, range of motion and strength testing, and cardiorespiratory tasks. Each test is voluntary and you may refuse any test if you feel unable to perform it.`;
 
     children.push(
-      new Paragraph({ children: [new TextRun({ text: bodyText, size: 22 })], spacing: { after: 200 } }),
+      new Paragraph({
+        children: [new TextRun({ text: bodyText, size: 22 })],
+        spacing: { after: 200 },
+      }),
     );
 
     // Insert any supplemental images provided
@@ -75,7 +90,15 @@ router.post("/informed-consent", async (req, res) => {
       const buf = await fetchImageBuffer(imgUrl);
       if (buf) {
         children.push(
-          new Paragraph({ children: [new ImageRun({ data: buf, transformation: { width: 300, height: 180 } })], alignment: AlignmentType.CENTER }),
+          new Paragraph({
+            children: [
+              new ImageRun({
+                data: buf,
+                transformation: { width: 300, height: 180 },
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+          }),
         );
       }
     }
@@ -86,7 +109,10 @@ router.post("/informed-consent", async (req, res) => {
       new Paragraph({
         children: [
           new TextRun({ text: `${label}: `, bold: false, size: 22 }),
-          new TextRun({ text: "____________________________________", size: 22 }),
+          new TextRun({
+            text: "____________________________________",
+            size: 22,
+          }),
         ],
         spacing: { after: 200 },
       });
@@ -107,7 +133,14 @@ router.post("/informed-consent", async (req, res) => {
 
     if (clinicInfo.length) {
       children.push(new Paragraph({ children: [new PageBreak()] }));
-      clinicInfo.forEach((line) => children.push(new Paragraph({ children: [new TextRun({ text: line, size: 20 })], alignment: AlignmentType.CENTER })));
+      clinicInfo.forEach((line) =>
+        children.push(
+          new Paragraph({
+            children: [new TextRun({ text: line, size: 20 })],
+            alignment: AlignmentType.CENTER,
+          }),
+        ),
+      );
     }
 
     // Add section and compile
@@ -115,8 +148,14 @@ router.post("/informed-consent", async (req, res) => {
 
     const buffer = await Packer.toBuffer(doc);
 
-    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-    res.setHeader("Content-Disposition", `attachment; filename="WF FCE Client Informed Consent.docx"`);
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    );
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="WF FCE Client Informed Consent.docx"`,
+    );
     res.send(buffer);
   } catch (err) {
     console.error("Error generating informed consent doc:", err);
