@@ -99,6 +99,38 @@ interface ReportData {
 }
 
 export default function ReviewReport() {
+  const formatParam = (p: any) => {
+    if (p && typeof p === "object" && p.value !== undefined) {
+      return `${p.value}${p.unit ? " " + p.unit : ""}`;
+    }
+    return p ?? "";
+  };
+
+  const computeTotalCompleted = (trial: any) => {
+    if (!trial) return 0;
+    if (trial.totalCompleted !== undefined && trial.totalCompleted !== null)
+      return Number(trial.totalCompleted);
+    const testTime = Number(trial.testTime || 0);
+    const percentIS = Number(trial.percentIS || 0);
+    if (testTime > 0 && percentIS > 0) return testTime * (percentIS / 100);
+    return testTime;
+  };
+
+  const computeAverageTotalCompleted = (trials: any[]) => {
+    if (!trials || trials.length === 0) return 0;
+    const vals = trials
+      .map((t) => computeTotalCompleted(t))
+      .filter((v) => v > 0);
+    if (vals.length === 0) return 0;
+    return vals.reduce((s, v) => s + v, 0) / vals.length;
+  };
+
+  const computeTotalSum = (trials: any[]) => {
+    if (!trials || trials.length === 0) return 0;
+    return trials
+      .map((t) => computeTotalCompleted(t))
+      .reduce((s, v) => s + (Number(v) || 0), 0);
+  };
   const navigate = useNavigate();
   const [reportData, setReportData] = useState<ReportData>({
     evaluatorData: null,
@@ -1896,7 +1928,7 @@ export default function ReviewReport() {
                           ) {
                             return {
                               requirement:
-                                "Key pinch ≥4.3 kg (Light) / ��7.0 kg (Medium work)",
+                                "Key pinch ≥4.3 kg (Light) / ���7.0 kg (Medium work)",
                               lightWork: 4.3, // kg
                               mediumWork: 7.0, // kg
                               unit: "kg",
@@ -4576,10 +4608,10 @@ export default function ReviewReport() {
                                               </h5>
                                               <div className="bg-gray-100 p-3 text-xs">
                                                 <p className="mb-2">
-                                                  VO₂ max (ml•kg⁻¹•min⁻¹) = 17.2
-                                                  + (1.29 × O₂ cost of the last
-                                                  completed stage) - (0.09 ×
-                                                  mass in kg) - (0.18 × age in
+                                                  VO₂ max (ml•kg⁻��•min⁻¹) =
+                                                  17.2 + (1.29 × O₂ cost of the
+                                                  last completed stage) - (0.09
+                                                  × mass in kg) - (0.18 × age in
                                                   years)
                                                 </p>
                                                 <p className="mb-2">
@@ -5779,7 +5811,7 @@ export default function ReviewReport() {
                                         <tr>
                                           <th
                                             className="border border-gray-400 p-2 text-center bg-white"
-                                            colSpan={9}
+                                            colSpan={8}
                                           >
                                             {testName} -{" "}
                                             {new Date(
@@ -5819,9 +5851,6 @@ export default function ReviewReport() {
                                             %IS
                                           </th>
                                           <th className="border border-gray-400 border-r-gray-400 p-2">
-                                            CV%
-                                          </th>
-                                          <th className="border border-gray-400 border-r-gray-400 p-2">
                                             Time Set
                                             <br />
                                             Completed
@@ -5844,12 +5873,14 @@ export default function ReviewReport() {
                                                   {trial.side || "Both"}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {trial.weight ||
+                                                  {formatParam(trial.weight) ||
                                                     trial.plane ||
                                                     "Immediate"}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {trial.distance ||
+                                                  {formatParam(
+                                                    trial.distance,
+                                                  ) ||
                                                     trial.position ||
                                                     "Standing"}
                                                 </td>
@@ -5866,16 +5897,7 @@ export default function ReviewReport() {
                                                     trial.percentIS || 0
                                                   ).toFixed(1)}
                                                 </td>
-                                                <td className="border border-gray-400 p-2 text-center">
-                                                  {trial.cv || 0}
-                                                </td>
-                                                <td className="border border-gray-400 p-2 text-center">
-                                                  {(
-                                                    trial.totalCompleted ||
-                                                    trial.testTime ||
-                                                    0
-                                                  ).toFixed(1)}
-                                                </td>
+                                                <td className="border border-gray-400 p-2 text-center"></td>
                                               </tr>
                                             ),
                                           )
@@ -5883,7 +5905,7 @@ export default function ReviewReport() {
                                           <tr>
                                             <td
                                               className="border border-gray-400 p-2 text-center"
-                                              colSpan={9}
+                                              colSpan={8}
                                             >
                                               No trial data available for{" "}
                                               {testName}
@@ -5909,10 +5931,9 @@ export default function ReviewReport() {
                                               {avgPercentIS.toFixed(1)}
                                             </td>
                                             <td className="border border-gray-400 p-2 text-center">
-                                              {trials.length}
-                                            </td>
-                                            <td className="border border-gray-400 p-2 text-center">
-                                              {avgTime.toFixed(1)}
+                                              {computeTotalSum(trials).toFixed(
+                                                1,
+                                              )}
                                             </td>
                                           </tr>
                                         )}
