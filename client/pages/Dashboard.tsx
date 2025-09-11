@@ -372,12 +372,40 @@ export default function Dashboard() {
   };
 
   // New informed consent doc
-  const sampleDocUrl = "/WF FCE Client Informed Consent.docx";
-
+  // Use Firebase Cloud Function to generate informed consent docx with evaluator profile and images
   const downloadSampleDoc = async () => {
     try {
-      const res = await fetch(sampleDocUrl, { mode: "cors" });
-      if (!res.ok) throw new Error(`Failed to fetch doc: ${res.status}`);
+      if (!evaluatorData) {
+        toast({ title: "Profile required", description: "Please complete your evaluator profile before generating the document." });
+        return;
+      }
+
+      const functionPath = "/generateDocumentRouteApi/informed-consent";
+      const payload = {
+        clientProfile: {
+          logo: evaluatorData.clinicLogo || evaluatorData.profilePhoto || null,
+          clinicName: evaluatorData.clinicName,
+          address: evaluatorData.address,
+          phone: evaluatorData.phone,
+          email: evaluatorData.email,
+          website: evaluatorData.website,
+          evaluatorName: evaluatorData.name,
+        },
+        images: [
+          "https://cdn.builder.io/api/v1/image/assets%2F70e65ed07755445e80eef8d6022d311d%2F579c63d30eba4d8fb68cdc65e4b280c4?format=webp&width=800",
+          "https://cdn.builder.io/api/v1/image/assets%2F70e65ed07755445e80eef8d6022d311d%2F0c39d5af8b534c0cbe7bf042d3a2d84f?format=webp&width=800",
+          "https://cdn.builder.io/api/v1/image/assets%2F70e65ed07755445e80eef8d6022d311d%2Fcf0d8733b97d47748398622cfbf9bf4d?format=webp&width=800",
+        ],
+      };
+
+      const res = await fetch(functionPath, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error(`Failed to generate document: ${res.status}`);
+
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -389,7 +417,7 @@ export default function Dashboard() {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error(e);
-      window.open(sampleDocUrl, "_blank", "noopener,noreferrer");
+      toast({ title: "Generation failed", description: "Could not create the informed consent document." });
     }
   };
 
