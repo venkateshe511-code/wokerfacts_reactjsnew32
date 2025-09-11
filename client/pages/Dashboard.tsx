@@ -350,8 +350,7 @@ export default function Dashboard() {
     setShowBackDialog(true);
   };
 
-  const samplePdfUrl =
-    "https://cdn.builder.io/o/assets%2F70e65ed07755445e80eef8d6022d311d%2F3a543cc8e61443818c57b910a67dd3c4?alt=media&token=57318f22-b451-431b-a5b5-a0b0d04e863b&apiKey=70e65ed07755445e80eef8d6022d311d";
+  const samplePdfUrl = "/WF FCE DATA COLLECTION FORM.pdf";
 
   const downloadSamplePdf = async () => {
     try {
