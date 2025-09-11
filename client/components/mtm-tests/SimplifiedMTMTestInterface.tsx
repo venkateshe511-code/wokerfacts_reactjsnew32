@@ -199,7 +199,7 @@ export default function SimplifiedMTMTestInterface({
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      if (trials.length < 6) {
+                      if (trials.length < 8) {
                         setTrials((prev) => [
                           ...prev,
                           {
@@ -215,12 +215,12 @@ export default function SimplifiedMTMTestInterface({
                         ]);
                       }
                     }}
-                    disabled={trials.length >= 6}
+                    disabled={trials.length >= 8}
                     className="bg-white text-gray-800"
                   >
                     +
                   </Button>
-                  <span className="text-white text-sm ml-2">(3-6 trials)</span>
+                  <span className="text-white text-sm ml-2">(3-8 trials)</span>
                 </div>
               </div>
             </div>
