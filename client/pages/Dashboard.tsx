@@ -480,7 +480,7 @@ export default function Dashboard() {
               </h1>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row md:flex-row items-center flex-wrap justify-end space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             <Button
               size="sm"
               onClick={downloadSampleDoc}
