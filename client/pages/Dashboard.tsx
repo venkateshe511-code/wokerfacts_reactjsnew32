@@ -484,7 +484,7 @@ export default function Dashboard() {
             <Button
               size="sm"
               onClick={downloadSampleDoc}
-              className="w-full sm:w-auto text-sm bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 text-white hover:from-green-500 hover:via-emerald-500 hover:to-teal-600 shadow-md"
+              className="w-full sm:w-auto md:w-auto text-sm min-w-[160px] bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 text-white hover:from-green-500 hover:via-emerald-500 hover:to-teal-600 shadow-md"
             >
               <Download className="mr-2 h-4 w-4 text-white" />
               WF FCE Client Informed Consent
