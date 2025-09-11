@@ -5,6 +5,7 @@ const cors = require("cors");
 const generateDocxRoute = require("./routes/generateClaimantReport");
 const createCheckoutSessionRoute = require("./routes/createCheckoutSession");
 const generateDocumentRoute = require("./routes/generate_document");
+const generateInformedConsentRoute = require("./routes/generate_informed_consent");
 
 // Create separate apps
 const app1 = express();
