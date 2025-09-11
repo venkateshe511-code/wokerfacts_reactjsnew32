@@ -6,8 +6,8 @@ export async function startCheckout(params: {
   const { amount, currency, metadata } = params;
 
   const body = {
-    amount,
-    currency: String(currency).toLowerCase(),
+    // amount,
+    // currency: String(currency).toLowerCase(),
     metadata: {
       ...(metadata || {}),
       source: "web",
