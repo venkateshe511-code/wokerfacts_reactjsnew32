@@ -18,6 +18,7 @@ import {
   Mail,
   Globe,
   FileText,
+  Download,
   Play,
   CheckCircle,
   Clock,
@@ -349,6 +350,85 @@ export default function Dashboard() {
     setShowBackDialog(true);
   };
 
+  const samplePdfUrl = "/WF FCE DATA COLLECTION FORM.pdf";
+
+  const downloadSamplePdf = async () => {
+    try {
+      const res = await fetch(samplePdfUrl, { mode: "cors" });
+      if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "WF FCE DATA COLLECTION FORM.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      window.open(samplePdfUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  // New informed consent doc
+  // Use Firebase Cloud Function to generate informed consent docx with evaluator profile and images
+  const downloadSampleDoc = async () => {
+    try {
+      if (!evaluatorData) {
+        toast({
+          title: "Profile required",
+          description:
+            "Please complete your evaluator profile before generating the document.",
+        });
+        return;
+      }
+
+      const functionPath = "/generateDocumentRouteApi/informed-consent";
+      const payload = {
+        clientProfile: {
+          logo: evaluatorData.clinicLogo || evaluatorData.profilePhoto || null,
+          clinicName: evaluatorData.clinicName,
+          address: evaluatorData.address,
+          phone: evaluatorData.phone,
+          email: evaluatorData.email,
+          website: evaluatorData.website,
+          evaluatorName: evaluatorData.name,
+        },
+        images: [
+          "https://cdn.builder.io/api/v1/image/assets%2F70e65ed07755445e80eef8d6022d311d%2F579c63d30eba4d8fb68cdc65e4b280c4?format=webp&width=800",
+          "https://cdn.builder.io/api/v1/image/assets%2F70e65ed07755445e80eef8d6022d311d%2F0c39d5af8b534c0cbe7bf042d3a2d84f?format=webp&width=800",
+          "https://cdn.builder.io/api/v1/image/assets%2F70e65ed07755445e80eef8d6022d311d%2Fcf0d8733b97d47748398622cfbf9bf4d?format=webp&width=800",
+        ],
+      };
+
+      const res = await fetch(functionPath, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok)
+        throw new Error(`Failed to generate document: ${res.status}`);
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "WF FCE Client Informed Consent.docx";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      toast({
+        title: "Generation failed",
+        description: "Could not create the informed consent document.",
+      });
+    }
+  };
+
   const confirmBackNavigation = () => {
     // Complete data wipe - clear ALL stored data including profile
     const keysToRemove = [
@@ -436,12 +516,28 @@ export default function Dashboard() {
               </h1>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row md:flex-row items-center flex-wrap justify-end space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+            <Button
+              size="sm"
+              onClick={downloadSampleDoc}
+              className="w-full sm:w-auto md:w-auto text-sm min-w-[160px] bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 text-white hover:from-green-500 hover:via-emerald-500 hover:to-teal-600 shadow-md"
+            >
+              <Download className="mr-2 h-4 w-4 text-white" />
+              WF FCE Client Informed Consent
+            </Button>
+            <Button
+              size="sm"
+              onClick={downloadSamplePdf}
+              className="w-full sm:w-auto md:w-auto text-sm min-w-[160px] bg-gradient-to-r from-rose-500 via-pink-500 to-indigo-500 text-white hover:from-rose-600 hover:via-pink-600 hover:to-indigo-600 shadow-md"
+            >
+              <Download className="mr-2 h-4 w-4 text-white" />
+              WF FCE DATA COLLECTION FORM
+            </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => navigate("/edit-profile")}
-              className="w-full sm:w-auto text-sm"
+              className="w-full sm:w-auto md:w-auto text-sm min-w-[140px]"
             >
               <Edit className="mr-2 h-4 w-4" />
               Edit Profile
@@ -450,7 +546,7 @@ export default function Dashboard() {
               variant="outline"
               size="sm"
               onClick={handleLogout}
-              className="w-full sm:w-auto text-sm"
+              className="w-full sm:w-auto md:w-auto text-sm min-w-[140px]"
             >
               <LogOut className="mr-2 h-4 w-4" />
               Logout
