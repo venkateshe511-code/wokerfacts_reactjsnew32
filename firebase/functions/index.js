@@ -4,7 +4,6 @@ const cors = require("cors");
 
 const generateDocxRoute = require("./routes/generateClaimantReport");
 const createCheckoutSessionRoute = require("./routes/createCheckoutSession");
-const generateDocumentRoute = require("./routes/generate_document");
 const generateInformedConsentRoute = require("./routes/generate_informed_consent");
 
 // Create separate apps
@@ -28,10 +27,6 @@ app2.use(express.json({ limit: "20mb" }));
 app2.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app2.use("/", createCheckoutSessionRoute);
 
-app2.use(cors(corsOptions));
-app2.use(express.json({ limit: "20mb" }));
-app2.use(express.urlencoded({ extended: true, limit: "20mb" }));
-app2.use("/", generateDocumentRoute);
 
 app3.use(cors(corsOptions));
 app3.use(express.json({ limit: "20mb" }));
@@ -41,4 +36,4 @@ app3.use("/", generateInformedConsentRoute);
 // Export multiple functions
 exports.generateClaimantReportApi = functions.https.onRequest(app1);
 exports.createCheckoutSessionApi = functions.https.onRequest(app2);
-exports.generateDocumentRouteApi = functions.https.onRequest(app3);
+exports.generateInformedConsentRouteApi = functions.https.onRequest(app3);
