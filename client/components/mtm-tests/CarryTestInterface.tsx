@@ -160,10 +160,9 @@ export default function CarryTestInterface({
             {mtmDescriptions["carry"] && (
               <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
                 <div className="md:col-span-1">
-                  <h3 className="text-left font-semibold text-lg">CARRYING</h3>
+                  <h3 className="text-left font-semibold text-lg text-purple-700">CARRYING</h3>
                 </div>
-                <div className="md:col-span-2 text-sm text-gray-700 border p-3 rounded bg-white whitespace-pre-line">
-                  <strong className="sr-only">MTM Description:</strong>
+                <div className="md:col-span-2 text-sm text-gray-800 p-4 rounded-lg bg-gradient-to-r from-purple-50 via-blue-50 to-teal-50 border shadow-sm whitespace-pre-line">
                   <p className="mt-1">{mtmDescriptions["carry"]}</p>
                 </div>
               </div>
