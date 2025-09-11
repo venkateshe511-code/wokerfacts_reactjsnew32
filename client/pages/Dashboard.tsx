@@ -349,6 +349,28 @@ export default function Dashboard() {
     setShowBackDialog(true);
   };
 
+  const samplePdfUrl =
+    "https://cdn.builder.io/o/assets%2F70e65ed07755445e80eef8d6022d311d%2F3a543cc8e61443818c57b910a67dd3c4?alt=media&token=57318f22-b451-431b-a5b5-a0b0d04e863b&apiKey=70e65ed07755445e80eef8d6022d311d";
+
+  const downloadSamplePdf = async () => {
+    try {
+      const res = await fetch(samplePdfUrl, { mode: "cors" });
+      if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "WF-FCE-DATA-COLLECTION-FORM.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      window.open(samplePdfUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
   const confirmBackNavigation = () => {
     // Complete data wipe - clear ALL stored data including profile
     const keysToRemove = [
