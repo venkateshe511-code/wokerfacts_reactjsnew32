@@ -64,7 +64,7 @@ export default function FlexibleOccupationalTest({
   testType,
   parameters,
   minTrials = 3,
-  maxTrials = 8,
+  maxTrials = 10,
   defaultTrials = 6,
   onSave,
   onBack,
