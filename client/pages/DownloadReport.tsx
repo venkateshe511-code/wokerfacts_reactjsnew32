@@ -874,6 +874,13 @@ export default function DownloadReport() {
       trials: any[],
       correspondingTest: any,
     ) => {
+      const formatParam = (p: any) => {
+        if (p && typeof p === "object" && p.value !== undefined) {
+          return `${p.value}${p.unit ? ' ' + p.unit : ''}`;
+        }
+        return p ?? "";
+      };
+
       return `
         <!-- MTM Test Table for ${testName} -->
         <div style="margin-bottom: 15px; border: 1px solid #333; padding: 8px; background-color: #ffffff;">
@@ -905,8 +912,8 @@ export default function DownloadReport() {
                         <tr>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.trial || trialIndex + 1}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.side || "Both"}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.weight || trial.plane || "Immediate"}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.distance || trial.position || "Standing"}</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${formatParam(trial.weight) || trial.plane || "Immediate"}</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${formatParam(trial.distance) || trial.position || "Standing"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.reps || 1}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.testTime || 0).toFixed(1)}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.percentIS || 0).toFixed(1)}</td>
