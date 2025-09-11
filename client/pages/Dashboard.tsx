@@ -350,11 +350,14 @@ export default function Dashboard() {
     setShowBackDialog(true);
   };
 
-  const downloadFCEDATACOLLECTIONFORMPdfUrl = "/WF FCE DATA COLLECTION FORM.pdf";
+  const downloadFCEDATACOLLECTIONFORMPdfUrl =
+    "/WF FCE DATA COLLECTION FORM.pdf";
 
   const downloadFCEDATACOLLECTIONFORMPdf = async () => {
     try {
-      const res = await fetch(downloadFCEDATACOLLECTIONFORMPdfUrl, { mode: "cors" });
+      const res = await fetch(downloadFCEDATACOLLECTIONFORMPdfUrl, {
+        mode: "cors",
+      });
       if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -367,15 +370,22 @@ export default function Dashboard() {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error(e);
-      window.open(downloadFCEDATACOLLECTIONFORMPdfUrl, "_blank", "noopener,noreferrer");
+      window.open(
+        downloadFCEDATACOLLECTIONFORMPdfUrl,
+        "_blank",
+        "noopener,noreferrer",
+      );
     }
   };
 
-  const downloadWFFCEProcessFlowOverviewRGPdfUrl = "/WF FCE Process Flow Overview RG.pdf";
+  const downloadWFFCEProcessFlowOverviewRGPdfUrl =
+    "/WF FCE Process Flow Overview RG.pdf";
 
   const downloadWFFCEProcessFlowOverviewRGPdf = async () => {
     try {
-      const res = await fetch(downloadWFFCEProcessFlowOverviewRGPdfUrl, { mode: "cors" });
+      const res = await fetch(downloadWFFCEProcessFlowOverviewRGPdfUrl, {
+        mode: "cors",
+      });
       if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -388,16 +398,22 @@ export default function Dashboard() {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error(e);
-      window.open(downloadWFFCEProcessFlowOverviewRGPdfUrl, "_blank", "noopener,noreferrer");
+      window.open(
+        downloadWFFCEProcessFlowOverviewRGPdfUrl,
+        "_blank",
+        "noopener,noreferrer",
+      );
     }
   };
 
-  const downloadmCAFTDataCollectionSheetPdfUrl = "/mCAFT-Data-Collection-Sheet.pdf";
+  const downloadmCAFTDataCollectionSheetPdfUrl =
+    "/mCAFT-Data-Collection-Sheet.pdf";
 
-  
   const downloadmCAFTDataCollectionSheetPdf = async () => {
     try {
-      const res = await fetch(downloadmCAFTDataCollectionSheetPdfUrl, { mode: "cors" });
+      const res = await fetch(downloadmCAFTDataCollectionSheetPdfUrl, {
+        mode: "cors",
+      });
       if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -410,11 +426,13 @@ export default function Dashboard() {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error(e);
-      window.open(downloadmCAFTDataCollectionSheetPdfUrl, "_blank", "noopener,noreferrer");
+      window.open(
+        downloadmCAFTDataCollectionSheetPdfUrl,
+        "_blank",
+        "noopener,noreferrer",
+      );
     }
   };
-
-
 
   const sampleDocxUrl = "/WF FCE Client Informed Consent.docx";
 
@@ -437,7 +455,6 @@ export default function Dashboard() {
       window.open(sampleDocxUrl, "_blank", "noopener,noreferrer");
     }
   };
-
 
   const confirmBackNavigation = () => {
     // Complete data wipe - clear ALL stored data including profile
@@ -531,7 +548,9 @@ export default function Dashboard() {
           <div className="flex items-center w-full sm:w-auto space-x-4">
             {/* Left side: Grid of 4 buttons */}
             <div className="w-full">
-              <p className="text-sm font-medium text-gray-800 mb-2 italic">*Downloadable forms for FCE preparation.</p>
+              <p className="text-sm font-medium text-gray-800 mb-2 italic">
+                *Downloadable forms for FCE preparation.
+              </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Button
                   size="sm"
@@ -592,7 +611,6 @@ export default function Dashboard() {
           </div>
         </div>
       </header>
-
 
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-8">
@@ -728,10 +746,11 @@ export default function Dashboard() {
                   <Card
                     key={step.id}
                     id={`step-${step.id}`}
-                    className={`border-2 transition-all duration-200 ${isAvailable
-                      ? `cursor-pointer ${getStatusColor(status)}`
-                      : "cursor-not-allowed bg-gray-100 border-gray-200 opacity-50"
-                      }`}
+                    className={`border-2 transition-all duration-200 ${
+                      isAvailable
+                        ? `cursor-pointer ${getStatusColor(status)}`
+                        : "cursor-not-allowed bg-gray-100 border-gray-200 opacity-50"
+                    }`}
                     onClick={
                       isAvailable ? () => handleStepClick(step.id) : undefined
                     }

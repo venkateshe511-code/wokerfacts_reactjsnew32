@@ -315,8 +315,6 @@ export default function FlexibleOccupationalTest({
     ).toFixed(2);
   };
 
-
-
   const calculateTotalTimeSetCompleted = () => {
     if (trials.length === 0) return 0;
     // Calculate total time set completed - sum of all trial times or similar logic
