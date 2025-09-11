@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { mtmDescriptions } from "./mtm-descriptions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -156,6 +157,12 @@ export default function CarryTestInterface({
               <span className="font-bold">TEST TYPE: </span>
               <span className="font-bold text-blue-800">CARRYING</span>
             </div>
+            {mtmDescriptions["carry"] && (
+              <div className="mt-3 text-sm text-gray-700 border p-3 rounded bg-white whitespace-pre-line">
+                <strong>MTM Description:</strong>
+                <p className="mt-1">{mtmDescriptions["carry"]}</p>
+              </div>
+            )}
           </div>
         </div>
 
