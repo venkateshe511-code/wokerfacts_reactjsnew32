@@ -33,6 +33,11 @@ app2.use(express.json({ limit: "20mb" }));
 app2.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app2.use("/", generateDocumentRoute);
 
+app3.use(cors(corsOptions));
+app3.use(express.json({ limit: "20mb" }));
+app3.use(express.urlencoded({ extended: true, limit: "20mb" }));
+app3.use("/", generateInformedConsentRoute);
+
 
 // Export multiple functions
 exports.generateClaimantReportApi = functions.https.onRequest(app1);
