@@ -89,7 +89,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -140,7 +140,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -190,7 +190,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -241,7 +241,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -286,7 +286,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -332,7 +332,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -376,7 +376,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -427,7 +427,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -478,7 +478,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -529,7 +529,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -581,7 +581,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -619,7 +619,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -665,7 +665,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -703,7 +703,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -749,7 +749,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -788,7 +788,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -827,7 +827,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 
@@ -872,7 +872,7 @@ const testConfigurations: Record<string, OccupationalTestConfig> = {
       },
     ],
     minTrials: 3,
-    maxTrials: 6,
+    maxTrials: 10,
     defaultTrials: 3,
   },
 };

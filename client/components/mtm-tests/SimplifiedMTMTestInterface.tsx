@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { mtmDescriptions } from "./mtm-descriptions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -163,6 +164,11 @@ export default function SimplifiedMTMTestInterface({
                 <span className="font-medium">TEST TYPE: </span>
                 <span className="font-bold">{testName.toUpperCase()}</span>
               </div>
+              {mtmDescriptions[testType] && (
+                <div className="mt-3 text-sm text-gray-800 p-4 rounded-lg bg-gradient-to-r from-purple-50 via-blue-50 to-teal-50 border shadow-sm whitespace-pre-line text-justify">
+                  <p className="mt-1">{mtmDescriptions[testType]}</p>
+                </div>
+              )}
             </div>
           </CardHeader>
 
@@ -199,7 +205,7 @@ export default function SimplifiedMTMTestInterface({
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      if (trials.length < 6) {
+                      if (trials.length < 10) {
                         setTrials((prev) => [
                           ...prev,
                           {
@@ -215,12 +221,12 @@ export default function SimplifiedMTMTestInterface({
                         ]);
                       }
                     }}
-                    disabled={trials.length >= 6}
+                    disabled={trials.length >= 10}
                     className="bg-white text-gray-800"
                   >
                     +
                   </Button>
-                  <span className="text-white text-sm ml-2">(3-6 trials)</span>
+                  <span className="text-white text-sm ml-2">(3-10 trials)</span>
                 </div>
               </div>
             </div>
@@ -239,7 +245,6 @@ export default function SimplifiedMTMTestInterface({
                     <th className="border border-gray-400 p-2">Reps</th>
                     <th className="border border-gray-400 p-2">Time (sec)</th>
                     <th className="border border-gray-400 p-2">%IS</th>
-                    <th className="border border-gray-400 p-2">CV%</th>
                     <th className="border border-gray-400 p-2">
                       Time Set Completed
                     </th>
@@ -273,9 +278,6 @@ export default function SimplifiedMTMTestInterface({
                       </td>
                       <td className="border border-gray-400 p-2 text-center">
                         {trial.percentIS > 0 ? trial.percentIS.toFixed(1) : ""}
-                      </td>
-                      <td className="border border-gray-400 p-2 text-center">
-                        {index + 1}
                       </td>
                       <td className="border border-gray-400 p-2 text-center">
                         {trial.totalCompleted > 0

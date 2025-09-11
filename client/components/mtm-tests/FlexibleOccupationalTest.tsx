@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { mtmDescriptions } from "./mtm-descriptions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -63,7 +64,7 @@ export default function FlexibleOccupationalTest({
   testType,
   parameters,
   minTrials = 3,
-  maxTrials = 6,
+  maxTrials = 10,
   defaultTrials = 6,
   onSave,
   onBack,
@@ -312,21 +313,6 @@ export default function FlexibleOccupationalTest({
     return (
       validValues.reduce((sum, val) => sum + val, 0) / validValues.length
     ).toFixed(2);
-  };
-
-  const calculateCV = (trialIndex: number) => {
-    // CV% calculation - you can implement based on your requirements
-    // For now, returning the trial index as placeholder
-    return trialIndex.toString();
-  };
-
-  const calculateOverallCV = () => {
-    if (trials.length === 0) return 0;
-    // Calculate overall CV% - placeholder implementation
-    const avgCV =
-      trials.reduce((sum, _, index) => sum + parseInt(calculateCV(index)), 0) /
-      trials.length;
-    return avgCV.toFixed(0);
   };
 
   const calculateTotalTimeSetCompleted = () => {
@@ -885,6 +871,11 @@ export default function FlexibleOccupationalTest({
                 {testName.toUpperCase()}
               </span>
             </div>
+            {mtmDescriptions[testType] && (
+              <div className="mt-3 text-sm text-gray-800 p-4 rounded-lg bg-gradient-to-r from-purple-50 via-blue-50 to-teal-50 border shadow-sm whitespace-pre-line text-justify">
+                <p className="mt-1">{mtmDescriptions[testType]}</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -971,9 +962,6 @@ export default function FlexibleOccupationalTest({
                           %IS
                         </th>
                         <th className="border border-black px-3 py-2 text-center font-bold">
-                          CV%
-                        </th>
-                        <th className="border border-black px-3 py-2 text-center font-bold">
                           Time Set
                           <br />
                           Completed
@@ -1032,9 +1020,6 @@ export default function FlexibleOccupationalTest({
                                 : ""}
                             </td>
                             <td className="border border-black px-3 py-2 text-center">
-                              {trial ? calculateCV(index) : ""}
-                            </td>
-                            <td className="border border-black px-3 py-2 text-center">
                               {/* Time Set Completed - can be calculated or entered */}
                             </td>
                           </tr>
@@ -1063,9 +1048,6 @@ export default function FlexibleOccupationalTest({
                             : ""}
                         </td>
                         <td className="border border-black px-3 py-2 text-center font-bold">
-                          {trials.length > 0 ? calculateOverallCV() : ""}
-                        </td>
-                        <td className="border border-black px-3 py-2 text-center font-bold">
                           {trials.length > 0
                             ? calculateTotalTimeSetCompleted()
                             : ""}
@@ -1084,7 +1066,6 @@ export default function FlexibleOccupationalTest({
                         <td className="border border-black px-3 py-2 text-center font-bold text-blue-800 text-lg">
                           {trials.length > 0 ? calculateTotalIS() + "%" : ""}
                         </td>
-                        <td className="border border-black px-3 py-2 text-center"></td>
                         <td className="border border-black px-3 py-2 text-center"></td>
                       </tr>
                     </tbody>

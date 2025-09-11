@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { mtmDescriptions } from "./mtm-descriptions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -799,7 +800,7 @@ export default function MTMTestInterface({
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    if (trials.length < 6) {
+                    if (trials.length < 10) {
                       setTrials((prev) => [
                         ...prev,
                         {
@@ -815,12 +816,12 @@ export default function MTMTestInterface({
                       ]);
                     }
                   }}
-                  disabled={trials.length >= 6}
+                  disabled={trials.length >= 10}
                   className="bg-white text-gray-800"
                 >
                   +
                 </Button>
-                <span className="text-white text-sm ml-2">(3-6 trials)</span>
+                <span className="text-white text-sm ml-2">(3-10 trials)</span>
               </div>
             </div>
           </div>
@@ -838,6 +839,11 @@ export default function MTMTestInterface({
           <h1 className="text-3xl font-bold text-center text-gray-900">
             MTM - {testName}
           </h1>
+          {mtmDescriptions[testType] && (
+            <div className="mt-3 text-sm text-gray-800 p-4 rounded-lg bg-gradient-to-r from-purple-50 via-blue-50 to-teal-50 border shadow-sm whitespace-pre-line text-justify">
+              <p className="mt-1">{mtmDescriptions[testType]}</p>
+            </div>
+          )}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
