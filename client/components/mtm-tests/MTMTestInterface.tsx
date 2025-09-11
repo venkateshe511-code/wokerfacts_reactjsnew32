@@ -840,9 +840,14 @@ export default function MTMTestInterface({
             MTM - {testName}
           </h1>
           {mtmDescriptions[testType] && (
-            <div className="mt-3 text-sm text-gray-700 p-3 rounded bg-white whitespace-pre-line">
-              <strong>MTM Description:</strong>
-              <p className="mt-1">{mtmDescriptions[testType]}</p>
+            <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+              <div className="md:col-span-1">
+                <h3 className="text-left font-semibold text-lg">{testName}</h3>
+              </div>
+              <div className="md:col-span-2 text-sm text-gray-700 p-3 rounded bg-white whitespace-pre-line border">
+                <strong className="sr-only">MTM Description:</strong>
+                <p className="mt-1">{mtmDescriptions[testType]}</p>
+              </div>
             </div>
           )}
         </div>
