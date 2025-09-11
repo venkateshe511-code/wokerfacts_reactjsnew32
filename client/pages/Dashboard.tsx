@@ -350,11 +350,11 @@ export default function Dashboard() {
     setShowBackDialog(true);
   };
 
-  const samplePdfUrl = "/WF FCE DATA COLLECTION FORM.pdf";
+  const downloadFCEDATACOLLECTIONFORMPdfUrl = "/WF FCE DATA COLLECTION FORM.pdf";
 
-  const downloadSamplePdf = async () => {
+  const downloadFCEDATACOLLECTIONFORMPdf = async () => {
     try {
-      const res = await fetch(samplePdfUrl, { mode: "cors" });
+      const res = await fetch(downloadFCEDATACOLLECTIONFORMPdfUrl, { mode: "cors" });
       if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -367,14 +367,58 @@ export default function Dashboard() {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error(e);
-      window.open(samplePdfUrl, "_blank", "noopener,noreferrer");
+      window.open(downloadFCEDATACOLLECTIONFORMPdfUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const downloadWFFCEProcessFlowOverviewRGPdfUrl = "/WF FCE Process Flow Overview RG.pdf";
+
+  const downloadWFFCEProcessFlowOverviewRGPdf = async () => {
+    try {
+      const res = await fetch(downloadWFFCEProcessFlowOverviewRGPdfUrl, { mode: "cors" });
+      if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "WF FCE Process Flow Overview RG.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      window.open(downloadWFFCEProcessFlowOverviewRGPdfUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const downloadmCAFTDataCollectionSheetPdfUrl = "/mCAFT-Data-Collection-Sheet.pdf";
+
+  
+  const downloadmCAFTDataCollectionSheetPdf = async () => {
+    try {
+      const res = await fetch(downloadmCAFTDataCollectionSheetPdfUrl, { mode: "cors" });
+      if (!res.ok) throw new Error(`Failed to fetch PDF: ${res.status}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "mCAFT-Data-Collection-Sheet.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      window.open(downloadmCAFTDataCollectionSheetPdfUrl, "_blank", "noopener,noreferrer");
     }
   };
 
 
+
   const sampleDocxUrl = "/WF FCE Client Informed Consent.docx";
 
-  const downloadSampleDocx = async () => {
+  const downloadWFFCEClientInformedConsentDocx = async () => {
     try {
       const res = await fetch(sampleDocxUrl, { mode: "cors" });
       if (!res.ok) throw new Error(`Failed to fetch DOCX: ${res.status}`);
@@ -482,44 +526,70 @@ export default function Dashboard() {
               </h1>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row md:flex-row items-center flex-wrap justify-end space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-            <Button
-              size="sm"
-              onClick={downloadSampleDocx}
-              className="w-full sm:w-auto md:w-auto text-sm min-w-[160px] bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 text-white hover:from-green-500 hover:via-emerald-500 hover:to-teal-600 shadow-md"
-            >
-              <Download className="mr-2 h-4 w-4 text-white" />
-              WF FCE Client Informed Consent
-            </Button>
-            <Button
-              size="sm"
-              onClick={downloadSamplePdf}
-              className="w-full sm:w-auto md:w-auto text-sm min-w-[160px] bg-gradient-to-r from-rose-500 via-pink-500 to-indigo-500 text-white hover:from-rose-600 hover:via-pink-600 hover:to-indigo-600 shadow-md"
-            >
-              <Download className="mr-2 h-4 w-4 text-white" />
-              WF FCE DATA COLLECTION FORM
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate("/edit-profile")}
-              className="w-full sm:w-auto md:w-auto text-sm min-w-[140px]"
-            >
-              <Edit className="mr-2 h-4 w-4" />
-              Edit Profile
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleLogout}
-              className="w-full sm:w-auto md:w-auto text-sm min-w-[140px]"
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Logout
-            </Button>
+
+          {/* Buttons container */}
+          <div className="flex items-center w-full sm:w-auto space-x-4">
+            {/* Left side: Grid of 4 buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Button
+                size="sm"
+                onClick={downloadWFFCEProcessFlowOverviewRGPdf}
+                className="w-full text-sm min-w-[160px] bg-gradient-to-r from-rose-500 via-pink-500 to-indigo-500 text-white hover:from-rose-600 hover:via-pink-600 hover:to-indigo-600 shadow-md"
+              >
+                <Download className="mr-2 h-4 w-4 text-white" />
+                WF FCE Process Flow Overview RG
+              </Button>
+              <Button
+                size="sm"
+                onClick={downloadWFFCEClientInformedConsentDocx}
+                className="w-full text-sm min-w-[160px] bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 text-white hover:from-green-500 hover:via-emerald-500 hover:to-teal-600 shadow-md"
+              >
+                <Download className="mr-2 h-4 w-4 text-white" />
+                WF FCE Client Informed Consent
+              </Button>
+              <Button
+                size="sm"
+                onClick={downloadmCAFTDataCollectionSheetPdf}
+                className="w-full text-sm min-w-[160px] bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 text-white hover:from-green-500 hover:via-emerald-500 hover:to-teal-600 shadow-md"
+              >
+                <Download className="mr-2 h-4 w-4 text-white" />
+                mCAFT Data Collection Sheet
+              </Button>
+              <Button
+                size="sm"
+                onClick={downloadFCEDATACOLLECTIONFORMPdf}
+                className="w-full text-sm min-w-[160px] bg-gradient-to-r from-rose-500 via-pink-500 to-indigo-500 text-white hover:from-rose-600 hover:via-pink-600 hover:to-indigo-600 shadow-md"
+              >
+                <Download className="mr-2 h-4 w-4 text-white" />
+                WF FCE DATA COLLECTION FORM
+              </Button>
+            </div>
+
+            {/* Right side: Edit Profile and Logout buttons */}
+            <div className="ml-auto flex items-center space-x-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/edit-profile")}
+                className="w-full sm:w-auto text-sm min-w-[140px]"
+              >
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Profile
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="w-full sm:w-auto text-sm min-w-[140px]"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </header>
+
 
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-8">
@@ -656,8 +726,8 @@ export default function Dashboard() {
                     key={step.id}
                     id={`step-${step.id}`}
                     className={`border-2 transition-all duration-200 ${isAvailable
-                        ? `cursor-pointer ${getStatusColor(status)}`
-                        : "cursor-not-allowed bg-gray-100 border-gray-200 opacity-50"
+                      ? `cursor-pointer ${getStatusColor(status)}`
+                      : "cursor-not-allowed bg-gray-100 border-gray-200 opacity-50"
                       }`}
                     onClick={
                       isAvailable ? () => handleStepClick(step.id) : undefined
