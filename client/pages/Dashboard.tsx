@@ -466,8 +466,8 @@ export default function Dashboard() {
               onClick={downloadSamplePdf}
               className="w-full sm:w-auto text-sm"
             >
-              <FileText className="mr-2 h-4 w-4" />
-              WF FCE DATA COLLECTION FORM.pdf
+              <Download className="mr-2 h-4 w-4" />
+              WF FCE DATA COLLECTION FORM
             </Button>
             <Button
               variant="outline"
