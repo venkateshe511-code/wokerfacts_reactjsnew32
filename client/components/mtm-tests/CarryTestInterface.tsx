@@ -214,7 +214,7 @@ export default function CarryTestInterface({
                       {/* Row for trial options/reference */}
                       <tr className="bg-gray-100 text-xs">
                         <td className="border-2 border-gray-400 px-2 py-1 text-center">
-                          1-8
+                          1-10
                         </td>
                         <td className="border-2 border-gray-400 px-2 py-1">
                           <div className="text-center">
@@ -262,7 +262,7 @@ export default function CarryTestInterface({
                       </tr>
 
                       {/* Actual trial data rows */}
-                      {[1, 2, 3, 4, 5, 6, 7, 8].map((trialNum) => {
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((trialNum) => {
                         const existingTrial = trials.find(
                           (t) => t.trial === trialNum,
                         );
@@ -531,7 +531,7 @@ export default function CarryTestInterface({
                       <Button
                         onClick={startTest}
                         className="w-full bg-green-600 hover:bg-green-700"
-                        disabled={currentTrial > 8}
+                        disabled={currentTrial > 10}
                       >
                         <Play className="mr-2 h-4 w-4" />
                         Start Trial {currentTrial}
@@ -557,7 +557,7 @@ export default function CarryTestInterface({
                   </div>
 
                   <div className="text-sm text-gray-600">
-                    Trial {currentTrial} of 8
+                    Trial {currentTrial} of 10
                   </div>
                 </div>
               </CardContent>
