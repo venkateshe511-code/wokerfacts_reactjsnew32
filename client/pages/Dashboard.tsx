@@ -460,12 +460,11 @@ export default function Dashboard() {
           </div>
           <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
             <Button
-              variant="outline"
               size="sm"
               onClick={downloadSamplePdf}
-              className="w-full sm:w-auto text-sm"
+              className="w-full sm:w-auto text-sm bg-gradient-to-r from-rose-500 via-pink-500 to-indigo-500 text-white hover:from-rose-600 hover:via-pink-600 hover:to-indigo-600 shadow-md"
             >
-              <Download className="mr-2 h-4 w-4" />
+              <Download className="mr-2 h-4 w-4 text-white" />
               WF FCE DATA COLLECTION FORM
             </Button>
             <Button
