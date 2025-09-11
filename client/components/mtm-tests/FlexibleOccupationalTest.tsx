@@ -315,20 +315,7 @@ export default function FlexibleOccupationalTest({
     ).toFixed(2);
   };
 
-  const calculateCV = (trialIndex: number) => {
-    // CV% calculation - you can implement based on your requirements
-    // For now, returning the trial index as placeholder
-    return trialIndex.toString();
-  };
 
-  const calculateOverallCV = () => {
-    if (trials.length === 0) return 0;
-    // Calculate overall CV% - placeholder implementation
-    const avgCV =
-      trials.reduce((sum, _, index) => sum + parseInt(calculateCV(index)), 0) /
-      trials.length;
-    return avgCV.toFixed(0);
-  };
 
   const calculateTotalTimeSetCompleted = () => {
     if (trials.length === 0) return 0;
@@ -977,9 +964,6 @@ export default function FlexibleOccupationalTest({
                           %IS
                         </th>
                         <th className="border border-black px-3 py-2 text-center font-bold">
-                          CV%
-                        </th>
-                        <th className="border border-black px-3 py-2 text-center font-bold">
                           Time Set
                           <br />
                           Completed
@@ -1038,9 +1022,6 @@ export default function FlexibleOccupationalTest({
                                 : ""}
                             </td>
                             <td className="border border-black px-3 py-2 text-center">
-                              {trial ? calculateCV(index) : ""}
-                            </td>
-                            <td className="border border-black px-3 py-2 text-center">
                               {/* Time Set Completed - can be calculated or entered */}
                             </td>
                           </tr>
@@ -1069,9 +1050,6 @@ export default function FlexibleOccupationalTest({
                             : ""}
                         </td>
                         <td className="border border-black px-3 py-2 text-center font-bold">
-                          {trials.length > 0 ? calculateOverallCV() : ""}
-                        </td>
-                        <td className="border border-black px-3 py-2 text-center font-bold">
                           {trials.length > 0
                             ? calculateTotalTimeSetCompleted()
                             : ""}
@@ -1090,7 +1068,6 @@ export default function FlexibleOccupationalTest({
                         <td className="border border-black px-3 py-2 text-center font-bold text-blue-800 text-lg">
                           {trials.length > 0 ? calculateTotalIS() + "%" : ""}
                         </td>
-                        <td className="border border-black px-3 py-2 text-center"></td>
                         <td className="border border-black px-3 py-2 text-center"></td>
                       </tr>
                     </tbody>

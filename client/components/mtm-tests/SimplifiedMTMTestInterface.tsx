@@ -245,7 +245,6 @@ export default function SimplifiedMTMTestInterface({
                     <th className="border border-gray-400 p-2">Reps</th>
                     <th className="border border-gray-400 p-2">Time (sec)</th>
                     <th className="border border-gray-400 p-2">%IS</th>
-                    <th className="border border-gray-400 p-2">CV%</th>
                     <th className="border border-gray-400 p-2">
                       Time Set Completed
                     </th>
@@ -279,9 +278,6 @@ export default function SimplifiedMTMTestInterface({
                       </td>
                       <td className="border border-gray-400 p-2 text-center">
                         {trial.percentIS > 0 ? trial.percentIS.toFixed(1) : ""}
-                      </td>
-                      <td className="border border-gray-400 p-2 text-center">
-                        {index + 1}
                       </td>
                       <td className="border border-gray-400 p-2 text-center">
                         {trial.totalCompleted > 0
