@@ -881,7 +881,7 @@ export default function DownloadReport() {
                 <!-- Header row with test name and date -->
                 <thead>
                     <tr>
-                        <th colspan="9" style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; text-align: center; background: white; font-weight: bold;">
+                        <th colspan="8" style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; text-align: center; background: white; font-weight: bold;">
                             ${testName} - ${new Date(testData.completedAt || Date.now()).toLocaleDateString()} ${new Date(testData.completedAt || Date.now()).toLocaleTimeString()}
                         </th>
                     </tr>
@@ -893,7 +893,6 @@ export default function DownloadReport() {
                         <th style="border: 1px solid #333; padding: 4px; font-size: 8px;">Reps:</th>
                         <th style="border: 1px solid #333; padding: 4px; font-size: 8px;">Time (sec)</th>
                         <th style="border: 1px solid #333; padding: 4px; font-size: 8px;">%IS</th>
-                        <th style="border: 1px solid #333; padding: 4px; font-size: 8px;">CV%</th>
                         <th style="border: 1px solid #333; padding: 4px; font-size: 8px;">Time Set Completed</th>
                     </tr>
                 </thead>
@@ -911,15 +910,14 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.reps || 1}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.testTime || 0).toFixed(1)}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.percentIS || 0).toFixed(1)}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.cv || 0}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.totalCompleted || trial.testTime || 0).toFixed(1)}</td>
+                                                        <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.totalCompleted || trial.testTime || 0).toFixed(1)}</td>
                         </tr>
                       `;
                             })
                             .join("")
                         : `
                         <tr>
-                            <td colspan="9" style="border: 1px solid #333; padding: 8px; text-align: center; font-size: 8px;">
+                            <td colspan="8" style="border: 1px solid #333; padding: 8px; text-align: center; font-size: 8px;">
                                 No trial data available for ${testName}
                             </td>
                         </tr>
@@ -937,8 +935,7 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.reps || 0), 0) / trials.length).toFixed(0) : "0"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.testTime || 0), 0) / trials.length).toFixed(2) : "0.00"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.percentIS || 0), 0) / trials.length).toFixed(1) : "0.0"}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.testTime || 0), 0) / trials.length).toFixed(1) : "0.0"}</td>
+                                                        <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.testTime || 0), 0) / trials.length).toFixed(1) : "0.0"}</td>
                         </tr>
                     `
                         : ""
