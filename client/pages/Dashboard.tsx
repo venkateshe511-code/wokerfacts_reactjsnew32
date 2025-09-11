@@ -530,39 +530,42 @@ export default function Dashboard() {
           {/* Buttons container */}
           <div className="flex items-center w-full sm:w-auto space-x-4">
             {/* Left side: Grid of 4 buttons */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Button
-                size="sm"
-                onClick={downloadWFFCEProcessFlowOverviewRGPdf}
-                className="w-full text-sm min-w-[160px] bg-gradient-to-r from-rose-500 via-pink-500 to-indigo-500 text-white hover:from-rose-600 hover:via-pink-600 hover:to-indigo-600 shadow-md"
-              >
-                <Download className="mr-2 h-4 w-4 text-white" />
-                WF FCE Process Flow Overview RG
-              </Button>
-              <Button
-                size="sm"
-                onClick={downloadWFFCEClientInformedConsentDocx}
-                className="w-full text-sm min-w-[160px] bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 text-white hover:from-green-500 hover:via-emerald-500 hover:to-teal-600 shadow-md"
-              >
-                <Download className="mr-2 h-4 w-4 text-white" />
-                WF FCE Client Informed Consent
-              </Button>
-              <Button
-                size="sm"
-                onClick={downloadmCAFTDataCollectionSheetPdf}
-                className="w-full text-sm min-w-[160px] bg-gradient-to-r from-green-400 via-emerald-400 to-teal-500 text-white hover:from-green-500 hover:via-emerald-500 hover:to-teal-600 shadow-md"
-              >
-                <Download className="mr-2 h-4 w-4 text-white" />
-                mCAFT Data Collection Sheet
-              </Button>
-              <Button
-                size="sm"
-                onClick={downloadFCEDATACOLLECTIONFORMPdf}
-                className="w-full text-sm min-w-[160px] bg-gradient-to-r from-rose-500 via-pink-500 to-indigo-500 text-white hover:from-rose-600 hover:via-pink-600 hover:to-indigo-600 shadow-md"
-              >
-                <Download className="mr-2 h-4 w-4 text-white" />
-                WF FCE DATA COLLECTION FORM
-              </Button>
+            <div className="w-full">
+              <p className="text-sm font-medium text-gray-800 mb-2 italic">*Downloadable forms for FCE preparation.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Button
+                  size="sm"
+                  onClick={downloadWFFCEProcessFlowOverviewRGPdf}
+                  className="w-full text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md"
+                >
+                  <Download className="mr-2 h-4 w-4 text-white" />
+                  WF FCE Process Flow Overview RG
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={downloadWFFCEClientInformedConsentDocx}
+                  className="w-full text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md"
+                >
+                  <Download className="mr-2 h-4 w-4 text-white" />
+                  WF FCE Client Informed Consent
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={downloadmCAFTDataCollectionSheetPdf}
+                  className="w-full text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md"
+                >
+                  <Download className="mr-2 h-4 w-4 text-white" />
+                  mCAFT Data Collection Sheet
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={downloadFCEDATACOLLECTIONFORMPdf}
+                  className="w-full text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md"
+                >
+                  <Download className="mr-2 h-4 w-4 text-white" />
+                  WF FCE DATA COLLECTION FORM
+                </Button>
+              </div>
             </div>
 
             {/* Right side: Edit Profile and Logout buttons */}
