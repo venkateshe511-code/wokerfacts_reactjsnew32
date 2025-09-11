@@ -445,7 +445,7 @@ export default function Dashboard() {
                 download
               >
                 <FileText className="mr-2 h-4 w-4" />
-                Download Sample PDF
+                Download Sample Attachment
               </a>
             </Button>
             <Button
