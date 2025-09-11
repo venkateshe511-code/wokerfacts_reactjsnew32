@@ -680,7 +680,7 @@ export default function DownloadReport() {
                   VO₂ max (ml•kg⁻¹•min⁻¹) = 17.2 + (1.29 × O₂ cost of the last completed stage) - (0.09 × mass in kg) - (0.18 × age in years)
                 </p>
                 <p style="margin-bottom: 8px;">
-                  VO₂ max (ml•kg⁻¹•min⁻¹) = 17.2 + (1.29 × _____) - (0.09 × _____ kg) - (0.18 × _____ )
+                  VO₂ max (ml•kg���¹•min⁻¹) = 17.2 + (1.29 × _____) - (0.09 × _____ kg) - (0.18 × _____ )
                 </p>
                 <p style="font-size: 9px; font-style: italic;">
                   Note: O₂ cost is provided in Table 2 on the back of this worksheet.
@@ -926,7 +926,7 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.reps || 1}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.testTime || 0).toFixed(1)}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.percentIS || 0).toFixed(1)}</td>
-                                                        <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.totalCompleted || trial.testTime || 0).toFixed(1)}</td>
+                                                        <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${computeTotalCompleted(trial)}</td>
                         </tr>
                       `;
                             })
