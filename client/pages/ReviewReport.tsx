@@ -105,6 +105,22 @@ export default function ReviewReport() {
     }
     return p ?? "";
   };
+
+  const computeTotalCompleted = (trial: any) => {
+    if (!trial) return 0;
+    if (trial.totalCompleted !== undefined && trial.totalCompleted !== null) return Number(trial.totalCompleted);
+    const testTime = Number(trial.testTime || 0);
+    const percentIS = Number(trial.percentIS || 0);
+    if (testTime > 0 && percentIS > 0) return (testTime * (percentIS / 100));
+    return testTime;
+  };
+
+  const computeAverageTotalCompleted = (trials: any[]) => {
+    if (!trials || trials.length === 0) return 0;
+    const vals = trials.map((t) => computeTotalCompleted(t)).filter((v) => v > 0);
+    if (vals.length === 0) return 0;
+    return vals.reduce((s, v) => s + v, 0) / vals.length;
+  };
   const navigate = useNavigate();
   const [reportData, setReportData] = useState<ReportData>({
     evaluatorData: null,
@@ -2474,7 +2490,7 @@ export default function ReviewReport() {
                                             jobReq.functionalMin &&
                                             jobReq.norm
                                           ) {
-                                            return `≥${jobReq.functionalMin}° (Min) / ≥${jobReq.norm}° (Normal)`;
+                                            return `≥${jobReq.functionalMin}�� (Min) / ≥${jobReq.norm}° (Normal)`;
                                           } else if (jobReq.norm) {
                                             return `≥${jobReq.norm}°`;
                                           }
@@ -5866,11 +5882,7 @@ export default function ReviewReport() {
                                                   ).toFixed(1)}
                                                 </td>
                                                                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {(
-                                                    trial.totalCompleted ||
-                                                    trial.testTime ||
-                                                    0
-                                                  ).toFixed(1)}
+                                                  {computeTotalCompleted(trial).toFixed(1)}
                                                 </td>
                                               </tr>
                                             ),
@@ -5905,7 +5917,7 @@ export default function ReviewReport() {
                                               {avgPercentIS.toFixed(1)}
                                             </td>
                                                                                         <td className="border border-gray-400 p-2 text-center">
-                                              {avgTime.toFixed(1)}
+                                              {computeAverageTotalCompleted(trials).toFixed(1)}
                                             </td>
                                           </tr>
                                         )}
