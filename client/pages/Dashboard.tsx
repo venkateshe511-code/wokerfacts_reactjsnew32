@@ -501,7 +501,7 @@ export default function Dashboard() {
               variant="outline"
               size="sm"
               onClick={() => navigate("/edit-profile")}
-              className="w-full sm:w-auto text-sm"
+              className="w-full sm:w-auto md:w-auto text-sm min-w-[140px]"
             >
               <Edit className="mr-2 h-4 w-4" />
               Edit Profile
@@ -510,7 +510,7 @@ export default function Dashboard() {
               variant="outline"
               size="sm"
               onClick={handleLogout}
-              className="w-full sm:w-auto text-sm"
+              className="w-full sm:w-auto md:w-auto text-sm min-w-[140px]"
             >
               <LogOut className="mr-2 h-4 w-4" />
               Logout
