@@ -384,7 +384,7 @@ export default function Dashboard() {
         return;
       }
 
-      const functionPath = "/generateDocumentRouteApi/informed-consent";
+      const functionPath = "https://generateinformedconsentrouteapi-e355r2gb5q-uc.a.run.app";
       const payload = {
         clientProfile: {
           logo: evaluatorData.clinicLogo || evaluatorData.profilePhoto || null,
