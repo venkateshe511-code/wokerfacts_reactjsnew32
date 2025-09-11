@@ -76,7 +76,7 @@ export default function Register() {
 
   const sampleProfileData = {
     name: "Sarah Sample, RPT",
-    licenseNo: "FCE789456123",
+    licenseNo: "FCE123456789",
     clinicName: "WorkerFacts Clinic",
     address: "123 Sample Drive",
     country: "United States",
