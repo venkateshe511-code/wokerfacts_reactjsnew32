@@ -80,7 +80,7 @@ export default function Register() {
     clinicName: "WorkerFacts Clinic",
     address: "123 Sample Drive",
     country: "United States",
-    city: "New York",
+    city: "New York,Ny",
     zipcode: "07008",
     email: "sarahsample@workerfactsclinic.com",
     phone: "212-111-2222",
