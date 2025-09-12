@@ -194,6 +194,11 @@ export default function FlexibleOccupationalTest({
         ...prev,
         percentIS: calculatedPercentIS,
       }));
+    } else {
+      setCurrentTrialInput((prev) => ({
+        ...prev,
+        percentIS: 0,
+      }));
     }
   }, [currentTrialInput.time, testType, currentTrialInput.steps, currentTrialInput.rungs, currentTrialInput.weight, currentTrialInput.position]);
 
