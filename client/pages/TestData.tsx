@@ -34,6 +34,7 @@ import MetricPieChart from "@/components/charts/SimpleHeartRatePieChart";
 import CardioTestRouter, {
   CardioTestData,
 } from "@/components/cardio-tests/CardioTestRouter";
+import { calculatePercentISByTest } from "@shared/mtm-standards";
 
 interface TestMeasurement {
   trial1: number;
@@ -626,22 +627,28 @@ export default function TestData() {
           const numberOfTrials = config.numberOfTrials || 3;
 
           for (let i = 1; i <= numberOfTrials; i++) {
+            const timeSec = Math.round((Math.random() * 12 + 6) * 10) / 10; // 6–18s typical
+            const percentIS = calculatePercentISByTest(testId, timeSec, {
+              position: config.position,
+              weight: config.weight,
+              steps: testId === "climb-stairs" ? config.distance : undefined,
+              rungs: testId === "climb-ladder" ? config.distance : undefined,
+            });
             trials.push({
               trial: i,
               side: config.bodySide || "Both",
               plane: config.plane || "",
               position: config.position || "Standing",
               reps: config.numberOfReps || 6,
-              testTime: Math.round((Math.random() * 20 + 15) * 100) / 100, // 15-35 seconds
-              percentIS: Math.round((Math.random() * 30 + 70) * 100) / 100, // 70-100%
-              totalCompleted: Math.round((Math.random() * 25 + 20) * 100) / 100, // 20-45
+              time: { value: timeSec, unit: "sec" },
+              percentIS,
             });
           }
 
           sampleMtmData[testId] = {
             testName: testNames[testId] || testId,
             testType: testId,
-            trials: trials,
+            trials,
             hrPre: Math.floor(Math.random() * 20 + 65), // 65-85 bpm
             hrPost: Math.floor(Math.random() * 35 + 85), // 85-120 bpm
             completedAt: new Date().toISOString(),
