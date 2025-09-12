@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   calculateStandardTime,
-  calculatePercentIS,
+  calculatePercentISByTest,
 } from "@shared/mtm-standards";
 import {
   Select,
@@ -96,11 +96,14 @@ export default function MTMTestInterface({
 
   // Auto-calculate %IS when test time changes
   useEffect(() => {
-    if (testTime > 0 && standardTime > 0) {
-      const calculatedPercentIS = calculatePercentIS(testTime, standardTime);
+    if (testTime > 0) {
+      const calculatedPercentIS = calculatePercentISByTest(testType, testTime, {
+        weight: selectedWeight,
+        position: selectedPosition,
+      });
       setPercentIS(calculatedPercentIS);
     }
-  }, [testTime, standardTime]);
+  }, [testTime, testType, selectedWeight, selectedPosition]);
 
   const startTest = () => {
     setIsRunning(true);
@@ -123,9 +126,17 @@ export default function MTMTestInterface({
       position: selectedPosition,
       reps: parameters.numberOfReps,
       testTime: duration,
-      percentIS: calculatePercentIS(duration, standardTime),
+      percentIS: calculatePercentISByTest(testType, duration, {
+        weight: selectedWeight,
+        position: selectedPosition,
+      }),
       totalCompleted:
-        duration * (calculatePercentIS(duration, standardTime) / 100),
+        duration *
+        (calculatePercentISByTest(testType, duration, {
+          weight: selectedWeight,
+          position: selectedPosition,
+        }) /
+          100),
     };
 
     setTrials((prev) => [...prev, newTrial]);
