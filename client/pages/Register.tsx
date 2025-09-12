@@ -80,7 +80,7 @@ export default function Register() {
     clinicName: "WorkerFacts Clinic",
     address: "123 Sample Drive",
     country: "United States",
-    city: "New York",
+    city: "New York,Ny",
     zipcode: "07008",
     email: "sarahsample@workerfactsclinic.com",
     phone: "212-111-2222",
@@ -90,6 +90,12 @@ export default function Register() {
   };
 
   const fillSampleProfile = async () => {
+    // Use assets from public folder for the demo/sample mode
+    const defaultLogoPath = "/workerfacts-logo.png";
+    const defaultProfilePath = "/sample-avatar.svg";
+    setLogoPreview(defaultLogoPath);
+    setProfilePreview(defaultProfilePath);
+
     setFormData(sampleProfileData);
     setEnableDemoMode(true); // Automatically enable demo mode for sample
     setIsSubmitting(true);
@@ -102,8 +108,8 @@ export default function Register() {
       "evaluatorData",
       JSON.stringify({
         ...sampleProfileData,
-        clinicLogo: logoPreview, // Store base64 for demo
-        profilePhoto: profilePreview, // Store base64 for demo
+        clinicLogo: defaultLogoPath,
+        profilePhoto: defaultProfilePath,
       }),
     );
 
