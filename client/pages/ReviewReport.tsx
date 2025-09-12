@@ -1776,14 +1776,15 @@ export default function ReviewReport() {
 
                 <div className="space-y-4 text-sm">
                   {/* Static Conclusion */}
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    Based on the comprehensive functional capacity evaluation,
-                    this client demonstrates light duty work capacity.
-                    Recommendations include occasional lifting up to 20lbs,
-                    frequent lifting up to 10lbs, with restrictions on prolonged
-                    static positioning. Return to work feasible with appropriate
-                    workplace accommodations and gradual progression.
-                  </p>
+                  {(() => {
+                    const conclusion = reportData.referralQuestionsData?.questions?.find(
+                      (qa: any) => qa?.question && qa.question.toLowerCase().includes("conclusion"),
+                    )?.answer;
+                    if (!conclusion) return null;
+                    return (
+                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{conclusion}</p>
+                    );
+                  })()}
 
                   {/* Display uploaded images from Conclusions question if available */}
                   {(() => {
