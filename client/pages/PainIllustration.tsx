@@ -121,6 +121,36 @@ export default function PainIllustration() {
   const [selectedMarker, setSelectedMarker] = useState<PainMarker | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const SAMPLE_LUMBAR_LOCAL = "/sample-lumbar.webp";
+  const SAMPLE_LUMBAR_CDN =
+    "https://cdn.builder.io/api/v1/image/assets%2Fcb60f2e6005c4d2f99ca832ef3db7ad6%2Fd8d53c07bd064e228f6ee8442321f279?format=webp&width=800";
+  const SAMPLE_KNEES_LOCAL = "/sample-knees.webp";
+  const SAMPLE_KNEES_CDN =
+    "https://cdn.builder.io/api/v1/image/assets%2Fcb60f2e6005c4d2f99ca832ef3db7ad6%2Fd01a4cdad30f4195b304aace884abcaf?format=webp&width=800";
+
+  const resolveLocalOrCdn = async (localUrl: string, cdnUrl: string) => {
+    return new Promise<string>((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(localUrl);
+      img.onerror = () => resolve(cdnUrl);
+      img.src = localUrl;
+    });
+  };
+
+  const urlToFile = async (url: string, filename: string): Promise<File> => {
+    const res = await fetch(url, { cache: "no-store" });
+    const blob = await res.blob();
+    const type = blob.type || "image/webp";
+    return new File([blob], filename, { type });
+  };
+
+  const fileToDataUrl = (file: File) =>
+    new Promise<string>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.readAsDataURL(file);
+    });
+
   const samplePainData = {
     markers: [
       {
@@ -157,16 +187,50 @@ export default function PainIllustration() {
   };
 
   const fillSamplePainData = async () => {
-    setPainData(samplePainData);
     setIsSubmitting(true);
+
+    const lumbarUrl = await resolveLocalOrCdn(
+      SAMPLE_LUMBAR_LOCAL,
+      SAMPLE_LUMBAR_CDN,
+    );
+    const kneesUrl = await resolveLocalOrCdn(
+      SAMPLE_KNEES_LOCAL,
+      SAMPLE_KNEES_CDN,
+    );
+
+    const lumbarFile = await urlToFile(lumbarUrl, "lumbar-area.webp");
+    const kneesFile = await urlToFile(kneesUrl, "knees.webp");
+
+    const uploadedImages = [lumbarFile, kneesFile];
+    const imageTitles = ["Lumbar Area", "Knees"];
+
+    setPainData({
+      ...samplePainData,
+      uploadedImages,
+      imageTitles,
+    });
+
+    const savedImageData = await Promise.all(
+      uploadedImages.map(async (f, i) => ({
+        name: f.name,
+        type: f.type,
+        dataUrl: await fileToDataUrl(f),
+        title: imageTitles[i],
+      })),
+    );
 
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    // Store sample data in localStorage
+    // Store sample data in localStorage (including images)
     localStorage.setItem(
       "painIllustrationData",
-      JSON.stringify(samplePainData),
+      JSON.stringify({
+        ...samplePainData,
+        uploadedImages: [],
+        imageTitles,
+        savedImageData,
+      }),
     );
 
     // Update completed steps

@@ -106,11 +106,22 @@ export default function ReviewReport() {
     return p ?? "";
   };
 
+  const getTrialTime = (trial: any): number => {
+    if (!trial) return 0;
+    if (typeof trial.testTime === "number") return Number(trial.testTime) || 0;
+    if (typeof trial.time === "number") return Number(trial.time) || 0;
+    if (trial.time && typeof trial.time === "object") {
+      const v = (trial.time as any).value;
+      return typeof v === "number" ? v : Number(v) || 0;
+    }
+    return 0;
+  };
+
   const computeTotalCompleted = (trial: any) => {
     if (!trial) return 0;
     if (trial.totalCompleted !== undefined && trial.totalCompleted !== null)
-      return Number(trial.totalCompleted);
-    const testTime = Number(trial.testTime || 0);
+      return Number(trial.totalCompleted) || 0;
+    const testTime = getTrialTime(trial);
     const percentIS = Number(trial.percentIS || 0);
     if (testTime > 0 && percentIS > 0) return testTime * (percentIS / 100);
     return testTime;
@@ -125,10 +136,10 @@ export default function ReviewReport() {
     return vals.reduce((s, v) => s + v, 0) / vals.length;
   };
 
-  const computeTotalSum = (trials: any[]) => {
+  const computeTimeSum = (trials: any[]) => {
     if (!trials || trials.length === 0) return 0;
     return trials
-      .map((t) => computeTotalCompleted(t))
+      .map((t) => getTrialTime(t))
       .reduce((s, v) => s + (Number(v) || 0), 0);
   };
   const navigate = useNavigate();
@@ -5782,7 +5793,7 @@ export default function ReviewReport() {
                                   trials.length > 0
                                     ? trials.reduce(
                                         (sum: number, t: any) =>
-                                          sum + (t.testTime || 0),
+                                          sum + getTrialTime(t),
                                         0,
                                       ) / trials.length
                                     : 0;
@@ -5888,9 +5899,9 @@ export default function ReviewReport() {
                                                   {trial.reps || 1}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {(
-                                                    trial.testTime || 0
-                                                  ).toFixed(1)}
+                                                  {getTrialTime(trial).toFixed(
+                                                    1,
+                                                  )}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
                                                   {(
@@ -5928,13 +5939,30 @@ export default function ReviewReport() {
                                               {avgTime.toFixed(2)}
                                             </td>
                                             <td className="border border-gray-400 p-2 text-center">
-                                              {avgPercentIS.toFixed(1)}
+                                              {avgPercentIS.toFixed(2)}
                                             </td>
                                             <td className="border border-gray-400 p-2 text-center">
-                                              {computeTotalSum(trials).toFixed(
+                                              {computeTimeSum(trials).toFixed(
                                                 1,
                                               )}
                                             </td>
+                                          </tr>
+                                        )}
+                                        {/* Total IS% row */}
+                                        {trials.length > 0 && (
+                                          <tr className="bg-blue-100 border-t-2 border-blue-500">
+                                            <td className="border border-gray-400 p-2 text-left font-semibold text-blue-800">
+                                              Total IS%
+                                            </td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2 text-center font-bold text-blue-800">
+                                              {avgPercentIS.toFixed(1)}%
+                                            </td>
+                                            <td className="border border-gray-400 p-2"></td>
                                           </tr>
                                         )}
                                       </tbody>
