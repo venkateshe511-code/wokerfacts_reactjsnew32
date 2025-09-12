@@ -2060,9 +2060,26 @@ export default function DownloadReport() {
         <!-- Enhanced Conclusions Text -->
         <div style="margin-top: 30px;">
             <div style="margin-bottom: 20px;">
-                <p style="font-size: 12px; color: #374151; line-height: 1.6; font-family: Arial, sans-serif;">
-                    Based on the comprehensive functional capacity evaluation, this client demonstrates light duty work capacity. Recommendations include occasional lifting up to 20lbs, frequent lifting up to 10lbs, with restrictions on prolonged static positioning. Return to work feasible with appropriate workplace accommodations and gradual progression.
-                </p>
+              ${(() => {
+                const conclusionQuestion =
+                  referralQuestionsData?.questions?.find(
+                    (qa) =>
+                      qa &&
+                      qa.question &&
+                      qa.question.toLowerCase().includes("conclusion"),
+                  );
+                if (conclusionQuestion?.answer) {
+                  const safe = String(conclusionQuestion.answer)
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/\n/g, "<br/>");
+                  return `
+                <p style="font-size: 12px; color: #374151; line-height: 1.6; font-family: Arial, sans-serif;">${safe}</p>
+              `;
+                }
+                return "";
+              })()}
             </div>
 
             <!-- Supporting Documentation and Images Section from Conclusions Question -->
