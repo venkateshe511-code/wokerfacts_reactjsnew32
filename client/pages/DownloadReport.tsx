@@ -938,7 +938,7 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.reps || 1}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${getTrialTime(trial).toFixed(1)}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.percentIS || 0).toFixed(1)}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${computeTotalCompleted(trial)}</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
                         </tr>
                       `;
                             })
