@@ -131,10 +131,12 @@ export default function MTMTestInterface({
         position: selectedPosition,
       }),
       totalCompleted:
-        duration * (calculatePercentISByTest(testType, duration, {
+        duration *
+        (calculatePercentISByTest(testType, duration, {
           weight: selectedWeight,
           position: selectedPosition,
-        }) / 100),
+        }) /
+          100),
     };
 
     setTrials((prev) => [...prev, newTrial]);

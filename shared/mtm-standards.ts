@@ -116,9 +116,10 @@ export function calculatePercentISByTest(
 
   if (testId === "reach-with-weight") {
     const pos = (context.position || "").toLowerCase();
-    key = pos.includes("stoop") || pos.includes("kneel")
-      ? "reach-with-weight-stoop"
-      : "reach-with-weight-immediate";
+    key =
+      pos.includes("stoop") || pos.includes("kneel")
+        ? "reach-with-weight-stoop"
+        : "reach-with-weight-immediate";
   }
 
   if (testId === "climb-stairs") {
@@ -138,7 +139,10 @@ export function calculatePercentISByTest(
   const table = MTM_IS_TABLES[key];
   if (!table) {
     // Fallback to legacy ratio if table is missing
-    return calculatePercentIS(actualTime, MTM_STANDARDS[testId]?.standardTime || 1);
+    return calculatePercentIS(
+      actualTime,
+      MTM_STANDARDS[testId]?.standardTime || 1,
+    );
   }
   return interpolatePercent(actualTime, table);
 }

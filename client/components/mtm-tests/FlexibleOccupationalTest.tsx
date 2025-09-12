@@ -184,12 +184,16 @@ export default function FlexibleOccupationalTest({
   useEffect(() => {
     const timeValue = currentTrialInput.time?.value || 0;
     if (timeValue > 0) {
-      const calculatedPercentIS = calculatePercentISByTest(testType, timeValue, {
-        steps: (currentTrialInput as any).steps || undefined,
-        rungs: (currentTrialInput as any).rungs || undefined,
-        weight: (currentTrialInput as any).weight?.value || undefined,
-        position: (currentTrialInput as any).position || undefined,
-      });
+      const calculatedPercentIS = calculatePercentISByTest(
+        testType,
+        timeValue,
+        {
+          steps: (currentTrialInput as any).steps || undefined,
+          rungs: (currentTrialInput as any).rungs || undefined,
+          weight: (currentTrialInput as any).weight?.value || undefined,
+          position: (currentTrialInput as any).position || undefined,
+        },
+      );
       setCurrentTrialInput((prev) => ({
         ...prev,
         percentIS: calculatedPercentIS,
@@ -200,7 +204,14 @@ export default function FlexibleOccupationalTest({
         percentIS: 0,
       }));
     }
-  }, [currentTrialInput.time, testType, currentTrialInput.steps, currentTrialInput.rungs, currentTrialInput.weight, currentTrialInput.position]);
+  }, [
+    currentTrialInput.time,
+    testType,
+    currentTrialInput.steps,
+    currentTrialInput.rungs,
+    currentTrialInput.weight,
+    currentTrialInput.position,
+  ]);
 
   // Initialize trial data structure
   const initializeTrialData = (): TrialData => {
