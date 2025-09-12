@@ -5905,9 +5905,7 @@ export default function ReviewReport() {
                                                     trial.percentIS || 0
                                                   ).toFixed(1)}
                                                 </td>
-                                                <td className="border border-gray-400 p-2 text-center">
-                                                  {computeTotalCompleted(trial).toFixed(1)}
-                                                </td>
+                                                <td className="border border-gray-400 p-2 text-center"></td>
                                               </tr>
                                             ),
                                           )
