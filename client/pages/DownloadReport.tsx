@@ -951,9 +951,20 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.reps || 0), 0) / trials.length).toFixed(0) : "0"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.testTime || 0), 0) / trials.length).toFixed(2) : "0.00"}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.percentIS || 0), 0) / trials.length).toFixed(1) : "0.0"}</td>
-                                                        <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? trials.reduce((sum: number, t: any) => sum + (t.totalCompleted !== undefined && t.totalCompleted !== null ? Number(t.totalCompleted) : t.testTime && t.percentIS ? t.testTime * (t.percentIS / 100) : Number(t.testTime || 0)), 0).toFixed(1) : "0.0"}</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.percentIS || 0), 0) / trials.length).toFixed(2) : "0.00"}</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? trials.reduce((sum: number, t: any) => sum + (t.totalCompleted !== undefined && t.totalCompleted !== null ? Number(t.totalCompleted) : t.testTime && t.percentIS ? t.testTime * (t.percentIS / 100) : Number(t.testTime || 0)), 0).toFixed(1) : "0.0"}</td>
                         </tr>
+                        ${trials.length > 0 ? `
+                        <tr style="background: #dbeafe; border-top: 2px solid #3b82f6;">
+                            <td style="border: 1px solid #333; padding: 4px; text-align: left; font-weight: 600; color: #1e40af; font-size: 8px;">Total IS%</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-weight: bold; color: #1e40af; font-size: 8px;">${(trials.reduce((sum: number, t: any) => sum + (t.percentIS || 0), 0) / trials.length).toFixed(1)}%</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
+                        </tr>` : ``}
                     `
                         : ""
                     }
