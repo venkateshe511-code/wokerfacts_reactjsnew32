@@ -1024,6 +1024,12 @@ export default function TestData() {
     return Math.max(0, Math.round(deficiency * 100) / 100); // Only show positive deficiencies
   };
 
+  const calculatePercentOfNorm = (average: number, normValue: number): number => {
+    if (!normValue || normValue <= 0) return 0;
+    const pct = (average / normValue) * 100;
+    return Math.round(pct * 100) / 100;
+  };
+
   const getMaxValue = (measurements: TestMeasurement): number => {
     const values = [
       measurements.trial1,
@@ -1481,6 +1487,21 @@ export default function TestData() {
                         </div>
                       </div>
                     )}
+                    {currentTest.normLevel === "yes" &&
+                      parseFloat(currentTest.valueToBeTestedNumber || "") > 0 && (
+                        <div className="bg-blue-500 text-white p-3 rounded text-center">
+                          <div className="text-sm">
+                            {isRangeOfMotionTest ? "Primary % of Norm" : "Left % of Norm"}
+                          </div>
+                          <div className="text-xl font-bold">
+                            {calculatePercentOfNorm(
+                              calculateAverage(currentTest.leftMeasurements),
+                              parseFloat(currentTest.valueToBeTestedNumber || "0"),
+                            )}
+                            %
+                          </div>
+                        </div>
+                      )}
                   </div>
                 </CardContent>
               </Card>
@@ -1675,6 +1696,21 @@ export default function TestData() {
                         </div>
                       </div>
                     )}
+                    {currentTest.normLevel === "yes" &&
+                      parseFloat(currentTest.valueToBeTestedNumber || "") > 0 && (
+                        <div className="bg-blue-500 text-white p-3 rounded text-center">
+                          <div className="text-sm">
+                            {isRangeOfMotionTest ? "Secondary % of Norm" : "Right % of Norm"}
+                          </div>
+                          <div className="text-xl font-bold">
+                            {calculatePercentOfNorm(
+                              calculateAverage(currentTest.rightMeasurements),
+                              parseFloat(currentTest.valueToBeTestedNumber || "0"),
+                            )}
+                            %
+                          </div>
+                        </div>
+                      )}
                   </div>
                 </CardContent>
               </Card>
