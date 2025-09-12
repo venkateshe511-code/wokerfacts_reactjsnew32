@@ -963,7 +963,7 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.reps || 0), 0) / trials.length).toFixed(0) : "0"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + getTrialTime(t), 0) / trials.length).toFixed(2) : "0.00"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.percentIS || 0), 0) / trials.length).toFixed(2) : "0.00"}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? trials.reduce((sum: number, t: any) => sum + (t.totalCompleted !== undefined && t.totalCompleted !== null ? Number(t.totalCompleted) : getTrialTime(t) && t.percentIS ? getTrialTime(t) * (t.percentIS / 100) : Number(getTrialTime(t) || 0)), 0).toFixed(1) : "0.0"}</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? trials.reduce((sum: number, t: any) => sum + getTrialTime(t), 0).toFixed(1) : "0.0"}</td>
                         </tr>
                         ${trials.length > 0 ? `
                         <tr style="background: #dbeafe; border-top: 2px solid #3b82f6;">
@@ -5613,7 +5613,7 @@ export default function DownloadReport() {
           console.log("✅ Test data available - will generate test sections");
           console.log("Sample test:", requestData.testData.tests[0]);
         } else {
-          console.error("��� No test data - sections will be missing!");
+          console.error("����� No test data - sections will be missing!");
         }
 
         console.log(
