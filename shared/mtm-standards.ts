@@ -50,14 +50,32 @@ function interpolatePercent(actualTime: number, table: ISLookupTable): number {
     .sort((a, b) => a - b);
   if (times.length === 0 || actualTime <= 0) return 0;
 
-  // Exact match
-  if (table[actualTime]) return table[actualTime];
+  // Exact match (allowing numeric-string key lookup)
+  if (table[Number(actualTime)]) return table[Number(actualTime)];
 
-  // Below range -> clamp to highest % at fastest time
-  if (actualTime < times[0]) return table[times[0]];
+  // Below range -> linear extrapolation using first two points
+  if (actualTime < times[0]) {
+    const t1 = times[0];
+    const t2 = times[1] ?? times[0];
+    const y1 = table[t1];
+    const y2 = table[t2];
+    if (t2 === t1) return y1;
+    const slope = (y2 - y1) / (t2 - t1);
+    const y = y1 + slope * (actualTime - t1);
+    return Math.round(y * 10) / 10;
+  }
 
-  // Above range -> clamp to lowest % at slowest time
-  if (actualTime > times[times.length - 1]) return table[times[times.length - 1]];
+  // Above range -> linear extrapolation using last two points
+  if (actualTime > times[times.length - 1]) {
+    const t1 = times[times.length - 2] ?? times[times.length - 1];
+    const t2 = times[times.length - 1];
+    const y1 = table[t1];
+    const y2 = table[t2];
+    if (t2 === t1) return y2;
+    const slope = (y2 - y1) / (t2 - t1);
+    const y = y2 + slope * (actualTime - t2);
+    return Math.round(y * 10) / 10;
+  }
 
   // Linear interpolation between nearest lower and upper breakpoints
   let lower = times[0];
