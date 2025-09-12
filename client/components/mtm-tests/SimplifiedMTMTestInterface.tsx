@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   calculateStandardTime,
-  calculatePercentIS,
+  calculatePercentISByTest,
 } from "@shared/mtm-standards";
 import {
   Select,
@@ -93,11 +93,11 @@ export default function SimplifiedMTMTestInterface({
 
   // Auto-calculate %IS when test time changes
   useEffect(() => {
-    if (testTime > 0 && standardTime > 0) {
-      const calculatedPercentIS = calculatePercentIS(testTime, standardTime);
+    if (testTime > 0) {
+      const calculatedPercentIS = calculatePercentISByTest(testType, testTime);
       setPercentIS(calculatedPercentIS);
     }
-  }, [testTime, standardTime]);
+  }, [testTime, testType]);
 
   const startTest = () => {
     setIsRunning(true);
@@ -125,7 +125,7 @@ export default function SimplifiedMTMTestInterface({
       updatedTrials[currentTrial - 1] = {
         ...updatedTrials[currentTrial - 1],
         testTime: testTime,
-        percentIS: calculatePercentIS(testTime, standardTime),
+        percentIS: calculatePercentISByTest(testType, testTime),
         totalCompleted: testTime,
       };
       setTrials(updatedTrials);
