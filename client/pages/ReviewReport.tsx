@@ -5930,13 +5930,30 @@ export default function ReviewReport() {
                                               {avgTime.toFixed(2)}
                                             </td>
                                             <td className="border border-gray-400 p-2 text-center">
-                                              {avgPercentIS.toFixed(1)}
+                                              {avgPercentIS.toFixed(2)}
                                             </td>
                                             <td className="border border-gray-400 p-2 text-center">
                                               {computeTotalSum(trials).toFixed(
                                                 1,
                                               )}
                                             </td>
+                                          </tr>
+                                        )}
+                                        {/* Total IS% row */}
+                                        {trials.length > 0 && (
+                                          <tr className="bg-blue-100 border-t-2 border-blue-500">
+                                            <td className="border border-gray-400 p-2 text-left font-semibold text-blue-800">
+                                              Total IS%
+                                            </td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2"></td>
+                                            <td className="border border-gray-400 p-2 text-center font-bold text-blue-800">
+                                              {avgPercentIS.toFixed(1)}%
+                                            </td>
+                                            <td className="border border-gray-400 p-2"></td>
                                           </tr>
                                         )}
                                       </tbody>
