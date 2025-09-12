@@ -122,9 +122,11 @@ export default function PainIllustration() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const SAMPLE_LUMBAR_LOCAL = "/sample-lumbar.webp";
-  const SAMPLE_LUMBAR_CDN = "https://cdn.builder.io/api/v1/image/assets%2Fcb60f2e6005c4d2f99ca832ef3db7ad6%2Fd8d53c07bd064e228f6ee8442321f279?format=webp&width=800";
+  const SAMPLE_LUMBAR_CDN =
+    "https://cdn.builder.io/api/v1/image/assets%2Fcb60f2e6005c4d2f99ca832ef3db7ad6%2Fd8d53c07bd064e228f6ee8442321f279?format=webp&width=800";
   const SAMPLE_KNEES_LOCAL = "/sample-knees.webp";
-  const SAMPLE_KNEES_CDN = "https://cdn.builder.io/api/v1/image/assets%2Fcb60f2e6005c4d2f99ca832ef3db7ad6%2Fd01a4cdad30f4195b304aace884abcaf?format=webp&width=800";
+  const SAMPLE_KNEES_CDN =
+    "https://cdn.builder.io/api/v1/image/assets%2Fcb60f2e6005c4d2f99ca832ef3db7ad6%2Fd01a4cdad30f4195b304aace884abcaf?format=webp&width=800";
 
   const resolveLocalOrCdn = async (localUrl: string, cdnUrl: string) => {
     return new Promise<string>((resolve) => {

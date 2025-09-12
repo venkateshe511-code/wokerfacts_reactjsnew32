@@ -138,7 +138,9 @@ export default function ReviewReport() {
 
   const computeTimeSum = (trials: any[]) => {
     if (!trials || trials.length === 0) return 0;
-    return trials.map((t) => getTrialTime(t)).reduce((s, v) => s + (Number(v) || 0), 0);
+    return trials
+      .map((t) => getTrialTime(t))
+      .reduce((s, v) => s + (Number(v) || 0), 0);
   };
   const navigate = useNavigate();
   const [reportData, setReportData] = useState<ReportData>({
@@ -5790,7 +5792,8 @@ export default function ReviewReport() {
                                 const avgTime =
                                   trials.length > 0
                                     ? trials.reduce(
-                                        (sum: number, t: any) => sum + getTrialTime(t),
+                                        (sum: number, t: any) =>
+                                          sum + getTrialTime(t),
                                         0,
                                       ) / trials.length
                                     : 0;
@@ -5896,7 +5899,9 @@ export default function ReviewReport() {
                                                   {trial.reps || 1}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {getTrialTime(trial).toFixed(1)}
+                                                  {getTrialTime(trial).toFixed(
+                                                    1,
+                                                  )}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
                                                   {(
@@ -5937,7 +5942,9 @@ export default function ReviewReport() {
                                               {avgPercentIS.toFixed(2)}
                                             </td>
                                             <td className="border border-gray-400 p-2 text-center">
-                                              {computeTimeSum(trials).toFixed(1)}
+                                              {computeTimeSum(trials).toFixed(
+                                                1,
+                                              )}
                                             </td>
                                           </tr>
                                         )}

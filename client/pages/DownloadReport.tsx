@@ -883,11 +883,12 @@ export default function DownloadReport() {
 
       const getTrialTime = (trial: any): number => {
         if (!trial) return 0;
-        if (typeof trial.testTime === 'number') return Number(trial.testTime) || 0;
-        if (typeof trial.time === 'number') return Number(trial.time) || 0;
-        if (trial.time && typeof trial.time === 'object') {
+        if (typeof trial.testTime === "number")
+          return Number(trial.testTime) || 0;
+        if (typeof trial.time === "number") return Number(trial.time) || 0;
+        if (trial.time && typeof trial.time === "object") {
           const v = trial.time.value;
-          return typeof v === 'number' ? v : Number(v) || 0;
+          return typeof v === "number" ? v : Number(v) || 0;
         }
         return 0;
       };
@@ -965,7 +966,9 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.percentIS || 0), 0) / trials.length).toFixed(2) : "0.00"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? trials.reduce((sum: number, t: any) => sum + getTrialTime(t), 0).toFixed(1) : "0.0"}</td>
                         </tr>
-                        ${trials.length > 0 ? `
+                        ${
+                          trials.length > 0
+                            ? `
                         <tr style="background: #dbeafe; border-top: 2px solid #3b82f6;">
                             <td style="border: 1px solid #333; padding: 4px; text-align: left; font-weight: 600; color: #1e40af; font-size: 8px;">Total IS%</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
@@ -975,7 +978,9 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-weight: bold; color: #1e40af; font-size: 8px;">${(trials.reduce((sum: number, t: any) => sum + (t.percentIS || 0), 0) / trials.length).toFixed(1)}%</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
-                        </tr>` : ``}
+                        </tr>`
+                            : ``
+                        }
                     `
                         : ""
                     }
