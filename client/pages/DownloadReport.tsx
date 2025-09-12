@@ -881,11 +881,22 @@ export default function DownloadReport() {
         return p ?? "";
       };
 
+      const getTrialTime = (trial: any): number => {
+        if (!trial) return 0;
+        if (typeof trial.testTime === 'number') return Number(trial.testTime) || 0;
+        if (typeof trial.time === 'number') return Number(trial.time) || 0;
+        if (trial.time && typeof trial.time === 'object') {
+          const v = trial.time.value;
+          return typeof v === 'number' ? v : Number(v) || 0;
+        }
+        return 0;
+      };
+
       const computeTotalCompleted = (trial: any) => {
         if (!trial) return "0.0";
         if (trial.totalCompleted !== undefined && trial.totalCompleted !== null)
           return (Number(trial.totalCompleted) || 0).toFixed(1);
-        const tt = Number(trial.testTime || 0);
+        const tt = getTrialTime(trial);
         const p = Number(trial.percentIS || 0);
         if (tt > 0 && p > 0) return (tt * (p / 100)).toFixed(1);
         return (tt || 0).toFixed(1);
@@ -925,7 +936,7 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${formatParam(trial.weight) || trial.plane || "Immediate"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${formatParam(trial.distance) || trial.position || "Standing"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trial.reps || 1}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.testTime || 0).toFixed(1)}</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${getTrialTime(trial).toFixed(1)}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${(trial.percentIS || 0).toFixed(1)}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${computeTotalCompleted(trial)}</td>
                         </tr>
@@ -950,9 +961,9 @@ export default function DownloadReport() {
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;"></td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.reps || 0), 0) / trials.length).toFixed(0) : "0"}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.testTime || 0), 0) / trials.length).toFixed(2) : "0.00"}</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + getTrialTime(t), 0) / trials.length).toFixed(2) : "0.00"}</td>
                             <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? (trials.reduce((sum: number, t: any) => sum + (t.percentIS || 0), 0) / trials.length).toFixed(2) : "0.00"}</td>
-                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? trials.reduce((sum: number, t: any) => sum + (t.totalCompleted !== undefined && t.totalCompleted !== null ? Number(t.totalCompleted) : t.testTime && t.percentIS ? t.testTime * (t.percentIS / 100) : Number(t.testTime || 0)), 0).toFixed(1) : "0.0"}</td>
+                            <td style="border: 1px solid #333; padding: 4px; text-align: center; font-size: 8px;">${trials.length > 0 ? trials.reduce((sum: number, t: any) => sum + (t.totalCompleted !== undefined && t.totalCompleted !== null ? Number(t.totalCompleted) : getTrialTime(t) && t.percentIS ? getTrialTime(t) * (t.percentIS / 100) : Number(getTrialTime(t) || 0)), 0).toFixed(1) : "0.0"}</td>
                         </tr>
                         ${trials.length > 0 ? `
                         <tr style="background: #dbeafe; border-top: 2px solid #3b82f6;">
