@@ -134,7 +134,7 @@ export default function ClaimantForm() {
     city: "Smithtown",
     zipcode: "M8X 2X5",
     claimantHistory:
-      "12/13/20 Client was reportedly injured while working as a laborer in the area of asphalt repair. Client reportedly had his foot on a shovel and the bottom of his shoe melted to the shovel blade and stuck on it which caused him to lose his balance and fall backwards landing on his back, neck and head – he indicated that his head was bleeding at the time of impact but a head injury had been ruled out – client did get medical assistance – pain meds and muscle relaxants – extensive PT and work hardening – has completed very little Light duties and was recently terminated from his position – he is not at this time participating in PT or work. Client has had previous back and bilateral knee surgery.",
+      "Lower back injury sustained during construction work on March 10, 2024. Initial treatment included physical therapy and pain management. Patient reports persistent pain and limited mobility affecting daily activities and work capacity.",
   };
 
   const resolveSamplePhoto = async (): Promise<string> => {
