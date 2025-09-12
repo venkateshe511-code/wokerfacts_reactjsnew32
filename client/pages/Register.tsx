@@ -90,9 +90,11 @@ export default function Register() {
   };
 
   const fillSampleProfile = async () => {
-    // Use the WorkerFacts logo from public folder for the clinic logo in demo/sample mode
+    // Use assets from public folder for the demo/sample mode
     const defaultLogoPath = "/workerfacts-logo.png";
+    const defaultProfilePath = "/sample-avatar.svg";
     setLogoPreview(defaultLogoPath);
+    setProfilePreview(defaultProfilePath);
 
     setFormData(sampleProfileData);
     setEnableDemoMode(true); // Automatically enable demo mode for sample
@@ -107,7 +109,7 @@ export default function Register() {
       JSON.stringify({
         ...sampleProfileData,
         clinicLogo: defaultLogoPath,
-        profilePhoto: profilePreview, // Store base64 for demo
+        profilePhoto: defaultProfilePath,
       }),
     );
 
