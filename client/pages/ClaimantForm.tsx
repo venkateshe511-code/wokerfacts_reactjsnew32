@@ -86,6 +86,9 @@ export default function ClaimantForm() {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
+  const SAMPLE_PHOTO_LOCAL = "/sample-claimant.webp";
+  const SAMPLE_PHOTO_CDN = "https://cdn.builder.io/api/v1/image/assets%2Fcb60f2e6005c4d2f99ca832ef3db7ad6%2F1c17d8a00db849b39f1b9cb344b785f0?format=webp&width=800";
+
   const sampleClaimantData = {
     profilePhoto: null,
     claimantId: 'CLM789456',
@@ -114,8 +117,21 @@ export default function ClaimantForm() {
     claimantHistory: 'Lower back injury sustained during construction work on March 10, 2024. Initial treatment included physical therapy and pain management. Patient reports persistent pain and limited mobility affecting daily activities and work capacity.'
   };
 
+  const resolveSamplePhoto = async (): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(SAMPLE_PHOTO_LOCAL);
+      img.onerror = () => resolve(SAMPLE_PHOTO_CDN);
+      img.src = SAMPLE_PHOTO_LOCAL;
+    });
+  };
+
   const fillSampleClaimant = async () => {
     setFormData(sampleClaimantData);
+
+    const samplePhoto = await resolveSamplePhoto();
+    setPhotoPreview(samplePhoto);
+
     setIsSubmitting(true);
 
     // Simulate API call
@@ -124,7 +140,7 @@ export default function ClaimantForm() {
     // Store sample data in localStorage
     localStorage.setItem('claimantData', JSON.stringify({
       ...sampleClaimantData,
-      profilePhoto: photoPreview // Store base64 for demo
+      profilePhoto: samplePhoto
     }));
 
     // Update completed steps
