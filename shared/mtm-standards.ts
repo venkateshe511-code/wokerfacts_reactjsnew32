@@ -15,6 +15,116 @@ export interface MTMStandard {
   description: string;
 }
 
+// Lookup tables for %IS based on test time (seconds)
+// Values are taken from the MTM Norm Schedule the user provided
+export type ISLookupTable = Record<number, number>;
+
+export const MTM_IS_TABLES: Record<string, ISLookupTable> = {
+  fingering: { 10: 142, 15: 106, 17: 93, 20: 80, 25: 63 },
+  "bi-manual-fingering": { 15: 142, 20: 102, 25: 85, 30: 71, 35: 61 },
+  handling: { 10: 164, 15: 109, 17: 95, 20: 82, 25: 65 },
+  "bi-manual-handling": { 8: 133, 10: 106, 13: 82, 15: 71, 17: 63 },
+  "reach-immediate": { 5: 125, 6: 102, 8: 77, 10: 61, 12: 51 },
+  "reach-overhead": { 4: 153, 5: 120, 6: 102, 7: 88, 8: 76 },
+  // For reach-with-weight we distinguish two variants using context in the helper
+  "reach-with-weight-immediate": { 10: 137, 15: 91, 17: 81, 20: 69, 25: 55 },
+  "reach-with-weight-stoop": { 10: 160, 15: 107, 17: 94, 20: 80, 25: 64 },
+  balance: { 4: 145, 5: 120 },
+  stoop: { 10: 132, 15: 88, 17: 77, 20: 65, 25: 53 },
+  crouch: { 5: 146, 7: 106, 10: 72, 13: 55, 15: 49 },
+  crawl: { 5: 203, 7: 148, 10: 104, 13: 80, 15: 68 },
+  walk: { 3: 182, 5: 109, 6: 89, 7: 77, 10: 55 },
+  carry: { 5: 195, 7: 142, 10: 100, 12: 84, 15: 67 },
+  // Stairs and ladder have variants by step/rung count
+  "climb-stairs-3": { 1: 188, 2: 111, 3: 79, 4: 61 },
+  "climb-stairs-5": { 3: 122, 4: 94, 5: 72, 6: 62 },
+  "climb-ladder-4": { 7: 199, 10: 139, 12: 114, 15: 91, 20: 69 },
+  "climb-ladder-8": { 10: 137, 12: 113, 15: 90, 17: 80, 20: 69 },
+  // Push / pull cart for 40/60/100 lbs share the same mapping in the provided table
+  "push-pull-cart": { 2: 128, 3: 84, 5: 50, 6: 40 },
+};
+
+function interpolatePercent(actualTime: number, table: ISLookupTable): number {
+  const times = Object.keys(table)
+    .map((t) => Number(t))
+    .sort((a, b) => a - b);
+  if (times.length === 0 || actualTime <= 0) return 0;
+
+  // Exact match
+  if (table[actualTime]) return table[actualTime];
+
+  // Below range -> clamp to highest % at fastest time
+  if (actualTime < times[0]) return table[times[0]];
+
+  // Above range -> clamp to lowest % at slowest time
+  if (actualTime > times[times.length - 1]) return table[times[times.length - 1]];
+
+  // Linear interpolation between nearest lower and upper breakpoints
+  let lower = times[0];
+  let upper = times[times.length - 1];
+  for (let i = 0; i < times.length - 1; i++) {
+    if (actualTime >= times[i] && actualTime <= times[i + 1]) {
+      lower = times[i];
+      upper = times[i + 1];
+      break;
+    }
+  }
+  const y1 = table[lower];
+  const y2 = table[upper];
+  const t = (actualTime - lower) / (upper - lower);
+  return Math.round(((y1 + (y2 - y1) * t) as number) * 10) / 10;
+}
+
+export interface ISContext {
+  steps?: number;
+  rungs?: number;
+  weight?: number;
+  position?: string; // e.g., STOOP/KNEEL etc.
+}
+
+/**
+ * Calculate %IS based on MTM tables provided by the user.
+ * Selects the appropriate table for the test and performs linear interpolation
+ * for times between listed breakpoints, clamping outside the range.
+ */
+export function calculatePercentISByTest(
+  testId: string,
+  actualTime: number,
+  context: ISContext = {},
+): number {
+  if (actualTime <= 0) return 0;
+
+  let key = testId;
+
+  if (testId === "reach-with-weight") {
+    const pos = (context.position || "").toLowerCase();
+    key = pos.includes("stoop") || pos.includes("kneel")
+      ? "reach-with-weight-stoop"
+      : "reach-with-weight-immediate";
+  }
+
+  if (testId === "climb-stairs") {
+    const steps = context.steps ?? 0;
+    key = steps <= 3 ? "climb-stairs-3" : "climb-stairs-5";
+  }
+
+  if (testId === "climb-ladder") {
+    const rungs = context.rungs ?? 0;
+    key = rungs <= 4 ? "climb-ladder-4" : "climb-ladder-8";
+  }
+
+  if (testId === "push-pull-cart") {
+    key = "push-pull-cart"; // same mapping for 40/60/100 lbs per table
+  }
+
+  const table = MTM_IS_TABLES[key];
+  if (!table) {
+    // Fallback to legacy ratio if table is missing
+    return calculatePercentIS(actualTime, MTM_STANDARDS[testId]?.standardTime || 1);
+  }
+  return interpolatePercent(actualTime, table);
+}
+
 export interface MTMCalculationParams {
   weight?: number;
   distance?: number;
@@ -243,7 +353,7 @@ export function calculatePercentIS(
 ): number {
   if (actualTime <= 0) return 0;
   const percentIS = (standardTime / actualTime) * 100;
-  return Math.round(percentIS * 10) / 10; // Round to 1 decimal place
+  return Math.round(percentIS * 10) / 10; // kept for backward compatibility
 }
 
 /**
