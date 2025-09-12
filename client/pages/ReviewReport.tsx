@@ -136,11 +136,9 @@ export default function ReviewReport() {
     return vals.reduce((s, v) => s + v, 0) / vals.length;
   };
 
-  const computeTotalSum = (trials: any[]) => {
+  const computeTimeSum = (trials: any[]) => {
     if (!trials || trials.length === 0) return 0;
-    return trials
-      .map((t) => computeTotalCompleted(t))
-      .reduce((s, v) => s + (Number(v) || 0), 0);
+    return trials.map((t) => getTrialTime(t)).reduce((s, v) => s + (Number(v) || 0), 0);
   };
   const navigate = useNavigate();
   const [reportData, setReportData] = useState<ReportData>({
