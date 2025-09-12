@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   calculateStandardTime,
-  calculatePercentIS,
+  calculatePercentISByTest,
 } from "@shared/mtm-standards";
 import {
   Select,
@@ -61,11 +61,11 @@ export default function BalanceTestInterface({
 
   // Auto-calculate %IS when test time changes
   useEffect(() => {
-    if (testTime > 0 && standardTime > 0) {
-      const calculatedPercentIS = calculatePercentIS(testTime, standardTime);
+    if (testTime > 0) {
+      const calculatedPercentIS = calculatePercentISByTest("balance", testTime);
       setPercentIS(calculatedPercentIS);
     }
-  }, [testTime, standardTime]);
+  }, [testTime]);
 
   // HR tracking
   const [hrPre, setHrPre] = useState<number>(0);
@@ -85,7 +85,7 @@ export default function BalanceTestInterface({
     setTestTime(duration);
 
     // Add trial data
-    const calculatedPercentIS = calculatePercentIS(duration, standardTime);
+    const calculatedPercentIS = calculatePercentISByTest("balance", duration);
     const newTrial: BalanceTrialData = {
       trial: currentTrial,
       side: "Both",
