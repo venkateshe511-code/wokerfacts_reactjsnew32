@@ -1487,6 +1487,22 @@ export default function TestData() {
                         %
                       </div>
                     </div>
+                    {(isForceTest || isRangeOfMotionTest) && (
+                      <div className="bg-blue-400 text-white p-3 rounded text-center">
+                        <div className="text-sm">
+                          {isRangeOfMotionTest
+                            ? "Primary to Secondary Difference"
+                            : "Left to Right Deficiency"}
+                        </div>
+                        <div className="text-xl font-bold">
+                          {calculateBilateralDeficiency(
+                            currentTest.leftMeasurements,
+                            currentTest.rightMeasurements,
+                          )}
+                          %
+                        </div>
+                      </div>
+                    )}
                     {currentTest.normLevel === "yes" && getNormForSide("left") > 0 && (
                       <>
                         <div className="bg-blue-400 text-white p-3 rounded text-center">
@@ -1506,22 +1522,6 @@ export default function TestData() {
                           </div>
                         </div>
                       </>
-                    )}
-                    {(isForceTest || isRangeOfMotionTest) && (
-                      <div className="bg-blue-400 text-white p-3 rounded text-center">
-                        <div className="text-sm">
-                          {isRangeOfMotionTest
-                            ? "Primary to Secondary Difference"
-                            : "Left to Right Deficiency"}
-                        </div>
-                        <div className="text-xl font-bold">
-                          {calculateBilateralDeficiency(
-                            currentTest.leftMeasurements,
-                            currentTest.rightMeasurements,
-                          )}
-                          %
-                        </div>
-                      </div>
                     )}
                   </div>
                 </CardContent>
@@ -1701,6 +1701,22 @@ export default function TestData() {
                         %
                       </div>
                     </div>
+                    {(isForceTest || isRangeOfMotionTest) && (
+                      <div className="bg-blue-400 text-white p-3 rounded text-center">
+                        <div className="text-sm">
+                          {isRangeOfMotionTest
+                            ? "Secondary to Primary Difference"
+                            : "Right to Left Deficiency"}
+                        </div>
+                        <div className="text-xl font-bold">
+                          {calculateBilateralDeficiency(
+                            currentTest.rightMeasurements,
+                            currentTest.leftMeasurements,
+                          )}
+                          %
+                        </div>
+                      </div>
+                    )}
                     {currentTest.normLevel === "yes" && getNormForSide("right") > 0 && (
                       <>
                         <div className="bg-blue-400 text-white p-3 rounded text-center">
@@ -1721,37 +1737,6 @@ export default function TestData() {
                         </div>
                       </>
                     )}
-                    {(isForceTest || isRangeOfMotionTest) && (
-                      <div className="bg-blue-400 text-white p-3 rounded text-center">
-                        <div className="text-sm">
-                          {isRangeOfMotionTest
-                            ? "Secondary to Primary Difference"
-                            : "Right to Left Deficiency"}
-                        </div>
-                        <div className="text-xl font-bold">
-                          {calculateBilateralDeficiency(
-                            currentTest.rightMeasurements,
-                            currentTest.leftMeasurements,
-                          )}
-                          %
-                        </div>
-                      </div>
-                    )}
-                    {currentTest.normLevel === "yes" &&
-                      parseFloat(currentTest.valueToBeTestedNumber || "") > 0 && (
-                        <div className="bg-blue-500 text-white p-3 rounded text-center">
-                          <div className="text-sm">
-                            {isRangeOfMotionTest ? "Secondary % of Norm" : "Right % of Norm"}
-                          </div>
-                          <div className="text-xl font-bold">
-                            {calculatePercentOfNorm(
-                              calculateAverage(currentTest.rightMeasurements),
-                              parseFloat(currentTest.valueToBeTestedNumber || "0"),
-                            )}
-                            %
-                          </div>
-                        </div>
-                      )}
                   </div>
                 </CardContent>
               </Card>
