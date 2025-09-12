@@ -1777,12 +1777,17 @@ export default function ReviewReport() {
                 <div className="space-y-4 text-sm">
                   {/* Static Conclusion */}
                   {(() => {
-                    const conclusion = reportData.referralQuestionsData?.questions?.find(
-                      (qa: any) => qa?.question && qa.question.toLowerCase().includes("conclusion"),
-                    )?.answer;
+                    const conclusion =
+                      reportData.referralQuestionsData?.questions?.find(
+                        (qa: any) =>
+                          qa?.question &&
+                          qa.question.toLowerCase().includes("conclusion"),
+                      )?.answer;
                     if (!conclusion) return null;
                     return (
-                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{conclusion}</p>
+                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+                        {conclusion}
+                      </p>
                     );
                   })()}
 

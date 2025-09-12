@@ -2061,9 +2061,13 @@ export default function DownloadReport() {
         <div style="margin-top: 30px;">
             <div style="margin-bottom: 20px;">
               ${(() => {
-                const conclusionQuestion = referralQuestionsData?.questions?.find(
-                  (qa) => qa && qa.question && qa.question.toLowerCase().includes("conclusion"),
-                );
+                const conclusionQuestion =
+                  referralQuestionsData?.questions?.find(
+                    (qa) =>
+                      qa &&
+                      qa.question &&
+                      qa.question.toLowerCase().includes("conclusion"),
+                  );
                 if (conclusionQuestion?.answer) {
                   const safe = String(conclusionQuestion.answer)
                     .replace(/&/g, "&amp;")
