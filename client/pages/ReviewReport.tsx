@@ -106,11 +106,22 @@ export default function ReviewReport() {
     return p ?? "";
   };
 
+  const getTrialTime = (trial: any): number => {
+    if (!trial) return 0;
+    if (typeof trial.testTime === "number") return Number(trial.testTime) || 0;
+    if (typeof trial.time === "number") return Number(trial.time) || 0;
+    if (trial.time && typeof trial.time === "object") {
+      const v = (trial.time as any).value;
+      return typeof v === "number" ? v : Number(v) || 0;
+    }
+    return 0;
+  };
+
   const computeTotalCompleted = (trial: any) => {
     if (!trial) return 0;
     if (trial.totalCompleted !== undefined && trial.totalCompleted !== null)
-      return Number(trial.totalCompleted);
-    const testTime = Number(trial.testTime || 0);
+      return Number(trial.totalCompleted) || 0;
+    const testTime = getTrialTime(trial);
     const percentIS = Number(trial.percentIS || 0);
     if (testTime > 0 && percentIS > 0) return testTime * (percentIS / 100);
     return testTime;
@@ -5781,8 +5792,7 @@ export default function ReviewReport() {
                                 const avgTime =
                                   trials.length > 0
                                     ? trials.reduce(
-                                        (sum: number, t: any) =>
-                                          sum + (t.testTime || 0),
+                                        (sum: number, t: any) => sum + getTrialTime(t),
                                         0,
                                       ) / trials.length
                                     : 0;
@@ -5888,9 +5898,7 @@ export default function ReviewReport() {
                                                   {trial.reps || 1}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
-                                                  {(
-                                                    trial.testTime || 0
-                                                  ).toFixed(1)}
+                                                  {getTrialTime(trial).toFixed(1)}
                                                 </td>
                                                 <td className="border border-gray-400 p-2 text-center">
                                                   {(
