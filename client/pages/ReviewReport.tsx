@@ -5937,9 +5937,7 @@ export default function ReviewReport() {
                                               {avgPercentIS.toFixed(2)}
                                             </td>
                                             <td className="border border-gray-400 p-2 text-center">
-                                              {computeTotalSum(trials).toFixed(
-                                                1,
-                                              )}
+                                              {computeTimeSum(trials).toFixed(1)}
                                             </td>
                                           </tr>
                                         )}
