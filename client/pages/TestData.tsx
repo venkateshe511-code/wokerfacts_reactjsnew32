@@ -64,6 +64,8 @@ interface TestData {
   valueToBeTestedNumber: string;
   valueToBeTestedUnit: string;
   unitMeasure: string;
+  valueToBeTestedNumberLeft?: string;
+  valueToBeTestedNumberRight?: string;
 }
 
 interface TestDataState {
@@ -1030,6 +1032,20 @@ export default function TestData() {
     return Math.round(pct * 100) / 100;
   };
 
+  const getNormForSide = (side: "left" | "right"): number => {
+    const base = currentTest?.valueToBeTestedNumber || "";
+    const left = currentTest?.valueToBeTestedNumberLeft || base;
+    const right = currentTest?.valueToBeTestedNumberRight || base;
+    const raw = side === "left" ? left : right;
+    const n = parseFloat(raw || "");
+    return isNaN(n) ? 0 : n;
+  };
+
+  const getUnitSuffix = (): string => {
+    // Prefer the specific unitMeasure when available (e.g., lbs, kg, °, sec)
+    return currentTest?.unitMeasure ? `${currentTest.unitMeasure}` : "";
+  };
+
   const getMaxValue = (measurements: TestMeasurement): number => {
     const values = [
       measurements.trial1,
@@ -1471,6 +1487,26 @@ export default function TestData() {
                         %
                       </div>
                     </div>
+                    {currentTest.normLevel === "yes" && getNormForSide("left") > 0 && (
+                      <>
+                        <div className="bg-blue-400 text-white p-3 rounded text-center">
+                          <div className="text-sm">{isRangeOfMotionTest ? "Primary Norm" : "Left Norm"}</div>
+                          <div className="text-xl font-bold">
+                            {getNormForSide("left")} {getUnitSuffix()}
+                          </div>
+                        </div>
+                        <div className="bg-blue-400 text-white p-3 rounded text-center">
+                          <div className="text-sm">{isRangeOfMotionTest ? "Primary % of Norm" : "Left % of Norm"}</div>
+                          <div className="text-xl font-bold">
+                            {calculatePercentOfNorm(
+                              calculateAverage(currentTest.leftMeasurements),
+                              getNormForSide("left"),
+                            )}
+                            %
+                          </div>
+                        </div>
+                      </>
+                    )}
                     {(isForceTest || isRangeOfMotionTest) && (
                       <div className="bg-blue-400 text-white p-3 rounded text-center">
                         <div className="text-sm">
@@ -1487,21 +1523,6 @@ export default function TestData() {
                         </div>
                       </div>
                     )}
-                    {currentTest.normLevel === "yes" &&
-                      parseFloat(currentTest.valueToBeTestedNumber || "") > 0 && (
-                        <div className="bg-blue-500 text-white p-3 rounded text-center">
-                          <div className="text-sm">
-                            {isRangeOfMotionTest ? "Primary % of Norm" : "Left % of Norm"}
-                          </div>
-                          <div className="text-xl font-bold">
-                            {calculatePercentOfNorm(
-                              calculateAverage(currentTest.leftMeasurements),
-                              parseFloat(currentTest.valueToBeTestedNumber || "0"),
-                            )}
-                            %
-                          </div>
-                        </div>
-                      )}
                   </div>
                 </CardContent>
               </Card>
@@ -1680,6 +1701,26 @@ export default function TestData() {
                         %
                       </div>
                     </div>
+                    {currentTest.normLevel === "yes" && getNormForSide("right") > 0 && (
+                      <>
+                        <div className="bg-blue-400 text-white p-3 rounded text-center">
+                          <div className="text-sm">{isRangeOfMotionTest ? "Secondary Norm" : "Right Norm"}</div>
+                          <div className="text-xl font-bold">
+                            {getNormForSide("right")} {getUnitSuffix()}
+                          </div>
+                        </div>
+                        <div className="bg-blue-400 text-white p-3 rounded text-center">
+                          <div className="text-sm">{isRangeOfMotionTest ? "Secondary % of Norm" : "Right % of Norm"}</div>
+                          <div className="text-xl font-bold">
+                            {calculatePercentOfNorm(
+                              calculateAverage(currentTest.rightMeasurements),
+                              getNormForSide("right"),
+                            )}
+                            %
+                          </div>
+                        </div>
+                      </>
+                    )}
                     {(isForceTest || isRangeOfMotionTest) && (
                       <div className="bg-blue-400 text-white p-3 rounded text-center">
                         <div className="text-sm">
