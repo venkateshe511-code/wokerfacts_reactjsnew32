@@ -1382,7 +1382,7 @@ export default function DownloadReport() {
               evaluatorData.clinicLogo
                 ? `<img src="${evaluatorData.clinicLogo}" alt="${
                     evaluatorData.clinicName || "Company Logo"
-                  }" style="width: auto; height: auto; max-width: 120px; max-height: 50px; margin: 0 auto; display: block;" />`
+                  }" style="width: auto; height: auto; max-width: 240px; max-height: 100px; margin: 0 auto; display: block;" />`
                 : `<div style="color: #4472C4; font-size: 16px; font-weight: bold; font-style: italic;">${
                     evaluatorData.clinicName || "MedSource"
                   }</div>`
@@ -1478,7 +1478,7 @@ export default function DownloadReport() {
               evaluatorData.clinicLogo
                 ? `<img src="${evaluatorData.clinicLogo}" alt="${
                     evaluatorData.clinicName || "Company Logo"
-                  }" style="width: auto; height: auto; max-width: 120px; max-height: 50px; margin: 0 auto 8px auto; display: block; text-align: center;" />`
+                  }" style="width: auto; height: auto; max-width: 240px; max-height: 100px; margin: 0 auto 8px auto; display: block; text-align: center;" />`
                 : `<div style="height: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px auto;"><span style="font-size: 12px; font-weight: bold; color: #4472C4;">${
                     evaluatorData.clinicName || "MedSource"
                   }</span></div>`
