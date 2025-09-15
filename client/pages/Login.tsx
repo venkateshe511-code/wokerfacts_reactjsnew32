@@ -59,7 +59,10 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingEmail, setLoadingEmail] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
+  const [loadingApple, setLoadingApple] = useState(false);
+  const isLoading = loadingEmail || loadingGoogle || loadingApple;
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
 
@@ -94,10 +97,12 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await withLoading(() =>
-      mode === "signin"
-        ? signInWithEmail(email, password)
-        : signUpWithEmail(email, password),
+    await withLoading(
+      setLoadingEmail,
+      () =>
+        mode === "signin"
+          ? signInWithEmail(email, password)
+          : signUpWithEmail(email, password),
     );
   };
 
@@ -132,9 +137,12 @@ export default function Login() {
     }
   };
 
-  const withLoading = async (fn: () => Promise<void>) => {
+  const withLoading = async (
+    setSpecificLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    fn: () => Promise<void>,
+  ) => {
     setError(null);
-    setLoading(true);
+    setSpecificLoading(true);
     try {
       await fn();
       await postLoginRedirect();
@@ -147,7 +155,7 @@ export default function Login() {
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setSpecificLoading(false);
     }
   };
 
@@ -168,11 +176,11 @@ export default function Login() {
 
           <Button
             type="button"
-            disabled={loading}
-            onClick={() => withLoading(loginWithGoogle)}
+            disabled={isLoading}
+            onClick={() => withLoading(setLoadingGoogle, loginWithGoogle)}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
-            {loading ? (
+            {loadingGoogle ? (
               <Loader2 className="animate-spin" />
             ) : (
               <GoogleIcon className="h-4 w-4" />
@@ -182,11 +190,11 @@ export default function Login() {
 
           <Button
             type="button"
-            disabled={loading}
-            onClick={() => withLoading(loginWithApple)}
+            disabled={isLoading}
+            onClick={() => withLoading(setLoadingApple, loginWithApple)}
             className="w-full bg-black hover:bg-black/90 text-white"
           >
-            {loading ? <Loader2 className="animate-spin" /> : <Apple />}{" "}
+            {loadingApple ? <Loader2 className="animate-spin" /> : <Apple />}{" "}
             Continue with Apple
           </Button>
 
@@ -209,8 +217,8 @@ export default function Login() {
               required
               autoComplete="current-password"
             />
-            <Button type="submit" disabled={loading} className="w-full">
-              {loading ? (
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {loadingEmail ? (
                 <Loader2 className="animate-spin" />
               ) : mode === "signin" ? (
                 <LogIn />
