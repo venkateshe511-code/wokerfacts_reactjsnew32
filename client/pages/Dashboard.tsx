@@ -574,61 +574,18 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Buttons container */}
-          <div className="flex items-center w-full sm:w-auto space-x-4">
-            {/* Left side: Grid of 4 buttons */}
-            <div className="w-full">
-              <p className="text-sm font-medium text-gray-800 mb-2 italic">
-                *Downloadable forms for FCE preparation.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Button
-                  size="sm"
-                  onClick={downloadWFFCEProcessFlowOverviewRGPdf}
-                  className="w-full text-xs sm:text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md whitespace-normal text-wrap break-words text-left leading-snug px-3 py-2"
-                >
-                  <Download className="mr-2 h-4 w-4 text-white" />
-                  WF FCE Process Flow Overview RG
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={downloadWFFCEClientInformedConsentDocx}
-                  className="w-full text-xs sm:text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md whitespace-normal text-wrap break-words text-left leading-snug px-3 py-2"
-                >
-                  <Download className="mr-2 h-4 w-4 text-white" />
-                  WF FCE Client Informed Consent
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={downloadmCAFTDataCollectionSheetPdf}
-                  className="w-full text-xs sm:text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md whitespace-normal text-wrap break-words text-left leading-snug px-3 py-2"
-                >
-                  <Download className="mr-2 h-4 w-4 text-white" />
-                  mCAFT Data Collection Sheet
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={downloadFCEDATACOLLECTIONFORMPdf}
-                  className="w-full text-xs sm:text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md whitespace-normal text-wrap break-words text-left leading-snug px-3 py-2"
-                >
-                  <Download className="mr-2 h-4 w-4 text-white" />
-                  WF FCE DATA COLLECTION FORM
-                </Button>
-              </div>
-            </div>
-
-            {/* Right side: Edit Profile and Logout buttons */}
-            <div className="ml-auto flex items-center space-x-4">
-              {user && (
-                <span className="hidden sm:inline text-gray-700 text-sm">
-                  Signed in as {user.displayName || user.email}
-                </span>
-              )}
+          {/* User controls */}
+          <div className="ml-auto flex flex-col items-end space-y-2 text-right">
+            <span className="flex items-center gap-2 text-gray-700 text-sm break-all">
+              {user?.email || user?.displayName}
+              <User className="h-4 w-4 text-gray-500" />
+            </span>
+            <div className="flex items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => navigate("/profiles")}
-                className="w-full sm:w-auto text-xs sm:text-sm min-w-[140px]"
+                className="text-xs sm:text-sm min-w-[120px]"
               >
                 Switch Profile
               </Button>
@@ -636,7 +593,7 @@ export default function Dashboard() {
                 variant="outline"
                 size="sm"
                 onClick={() => navigate("/edit-profile")}
-                className="w-full sm:w-auto text-xs sm:text-sm min-w-[140px]"
+                className="text-xs sm:text-sm min-w-[120px]"
               >
                 <Edit className="mr-2 h-4 w-4" />
                 Edit Profile
@@ -645,7 +602,7 @@ export default function Dashboard() {
                 variant="outline"
                 size="sm"
                 onClick={handleLogout}
-                className="w-full sm:w-auto text-xs sm:text-sm min-w-[140px]"
+                className="text-xs sm:text-sm min-w-[120px]"
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
@@ -656,6 +613,45 @@ export default function Dashboard() {
       </header>
 
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <div className="mb-4 sm:mb-6">
+          <p className="text-sm font-medium text-gray-800 mb-2 italic">
+            *Downloadable forms for FCE preparation.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <Button
+              size="sm"
+              onClick={downloadWFFCEProcessFlowOverviewRGPdf}
+              className="w-full text-xs sm:text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md whitespace-normal text-wrap break-words text-left leading-snug px-3 py-2"
+            >
+              <Download className="mr-2 h-4 w-4 text-white" />
+              WF FCE Process Flow Overview RG
+            </Button>
+            <Button
+              size="sm"
+              onClick={downloadWFFCEClientInformedConsentDocx}
+              className="w-full text-xs sm:text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md whitespace-normal text-wrap break-words text-left leading-snug px-3 py-2"
+            >
+              <Download className="mr-2 h-4 w-4 text-white" />
+              WF FCE Client Informed Consent
+            </Button>
+            <Button
+              size="sm"
+              onClick={downloadmCAFTDataCollectionSheetPdf}
+              className="w-full text-xs sm:text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md whitespace-normal text-wrap break-words text-left leading-snug px-3 py-2"
+            >
+              <Download className="mr-2 h-4 w-4 text-white" />
+              mCAFT Data Collection Sheet
+            </Button>
+            <Button
+              size="sm"
+              onClick={downloadFCEDATACOLLECTIONFORMPdf}
+              className="w-full text-xs sm:text-sm min-w-[160px] bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 text-white hover:from-blue-800 hover:via-blue-700 hover:to-blue-900 shadow-md whitespace-normal text-wrap break-words text-left leading-snug px-3 py-2"
+            >
+              <Download className="mr-2 h-4 w-4 text-white" />
+              WF FCE DATA COLLECTION FORM
+            </Button>
+          </div>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-8">
           {/* Profile Sidebar */}
           <div className="lg:col-span-1 order-2 lg:order-1">

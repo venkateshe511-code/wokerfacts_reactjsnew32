@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
-import { db } from "../firebase";
+import { FirebaseError } from "firebase/app";
+import { toast } from "@/hooks/use-toast";
+import { db, auth } from "../firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import {
   Loader2,
@@ -15,9 +17,31 @@ import {
   LogIn,
   LogOut,
   ShieldCheck,
-  UserCircle,
   ArrowRight,
 } from "lucide-react";
+
+function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false" {...props}>
+      <path
+        d="M17.64 9.2045c0-.638-.0571-1.251-.1636-1.836H9v3.472h4.844c-.2091 1.127-.844 2.081-1.797 2.72v2.256h2.904c1.7009-1.566 2.688-3.874 2.688-6.612z"
+        fill="#4285F4"
+      />
+      <path
+        d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.904-2.256C11.2 14.19 10.2 14.6 9 14.6c-2.31 0-4.268-1.56-4.971-3.654H1.028v2.3C2.508 16.44 5.522 18 9 18z"
+        fill="#34A853"
+      />
+      <path
+        d="M4.029 10.946C3.85 10.413 3.75 9.842 3.75 9.25c0-.592.1-1.163.279-1.696V5.254H1.028C.372 6.506 0 7.944 0 9.5s.372 2.994 1.028 4.246l3.001-2.8z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M9 3.6c1.318 0 2.506.454 3.438 1.345l2.578-2.579C13.465.892 11.43 0 9 0 5.522 0 2.508 1.56 1.028 4.254l3.001 2.3C4.732 5.16 6.69 3.6 9 3.6z"
+        fill="#EA4335"
+      />
+    </svg>
+  );
+}
 
 export default function Login() {
   const {
@@ -26,6 +50,8 @@ export default function Login() {
     signInWithEmail,
     signUpWithEmail,
     user,
+    selectedProfileId,
+    setSelectedProfileId,
   } = useAuth();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get("redirect");
@@ -37,13 +63,51 @@ export default function Login() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
 
+  const mapAuthError = (err: unknown): string => {
+    const code = (err as FirebaseError)?.code || "unknown";
+    switch (code) {
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/missing-password":
+        return "Please enter your password.";
+      case "auth/weak-password":
+        return "Password is too weak. Use at least 6 characters.";
+      case "auth/user-disabled":
+        return "This account has been disabled. Contact support.";
+      case "auth/user-not-found":
+      case "auth/invalid-credential":
+      case "auth/wrong-password":
+        return "Invalid email or password. Please try again.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Please wait a moment and try again.";
+      case "auth/popup-closed-by-user":
+        return "The sign-in popup was closed before completing. Try again.";
+      case "auth/cancelled-popup-request":
+      case "auth/popup-blocked":
+        return "Unable to open sign-in popup. Check your browser settings.";
+      case "auth/network-request-failed":
+        return "Network error. Check your connection and try again.";
+      default:
+        return "Authentication failed. Please try again.";
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await withLoading(() =>
+      mode === "signin"
+        ? signInWithEmail(email, password)
+        : signUpWithEmail(email, password),
+    );
+  };
+
   const postLoginRedirect = async () => {
     try {
-      if (redirect) {
+      if (redirect && !redirect.startsWith("/register")) {
         navigate(redirect);
         return;
       }
-      const uid = user?.uid;
+      const uid = auth.currentUser?.uid || user?.uid;
       if (!uid) {
         navigate("/profiles");
         return;
@@ -53,8 +117,16 @@ export default function Login() {
         where("ownerId", "==", uid),
       );
       const snap = await getDocs(q);
-      if (snap.size > 0) navigate("/profiles");
-      else navigate("/register");
+      const ids: string[] = [];
+      snap.forEach((d) => ids.push(d.id));
+
+      if (ids.length === 0) {
+        navigate("/register");
+        return;
+      }
+
+      // At least one profile exists: take user to selector
+      navigate("/profiles");
     } catch {
       navigate("/profiles");
     }
@@ -67,7 +139,13 @@ export default function Login() {
       await fn();
       await postLoginRedirect();
     } catch (e: any) {
-      setError(e?.message || "Authentication failed");
+      const msg = mapAuthError(e);
+      setError(msg);
+      toast({
+        title: "Sign-in error",
+        description: msg,
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -89,15 +167,21 @@ export default function Login() {
           )}
 
           <Button
+            type="button"
             disabled={loading}
             onClick={() => withLoading(loginWithGoogle)}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
-            {loading ? <Loader2 className="animate-spin" /> : <UserCircle />}{" "}
+            {loading ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <GoogleIcon className="h-4 w-4" />
+            )}{" "}
             Continue with Google
           </Button>
 
           <Button
+            type="button"
             disabled={loading}
             onClick={() => withLoading(loginWithApple)}
             className="w-full bg-black hover:bg-black/90 text-white"
@@ -106,13 +190,15 @@ export default function Login() {
             Continue with Apple
           </Button>
 
-          <div className="grid gap-2 pt-2">
+          <form className="grid gap-2 pt-2" onSubmit={handleSubmit}>
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
             />
             <Label htmlFor="password">Password</Label>
             <Input
@@ -120,18 +206,10 @@ export default function Login() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
             />
-            <Button
-              disabled={loading}
-              onClick={() =>
-                withLoading(() =>
-                  mode === "signin"
-                    ? signInWithEmail(email, password)
-                    : signUpWithEmail(email, password),
-                )
-              }
-              className="w-full"
-            >
+            <Button type="submit" disabled={loading} className="w-full">
               {loading ? (
                 <Loader2 className="animate-spin" />
               ) : mode === "signin" ? (
@@ -149,7 +227,7 @@ export default function Login() {
                 ? "Need an account? Sign up"
                 : "Have an account? Sign in"}
             </button>
-          </div>
+          </form>
         </CardContent>
       </Card>
     </div>

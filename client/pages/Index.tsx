@@ -43,6 +43,7 @@ import {
   ThumbsUp,
   Calendar,
   Download,
+  UserCircle,
 } from "lucide-react";
 import { collection, addDoc } from "firebase/firestore"; // ✅ Import this
 import { db } from "../firebase";
@@ -200,11 +201,6 @@ export default function Index() {
               Download Sample Report
             </a>
 
-            {displayName && (
-              <span className="text-white/90 text-sm">
-                Signed in as {displayName}
-              </span>
-            )}
             <Link to={user ? "/profiles" : "/login?redirect=/register"}>
               <Button
                 size="sm"
@@ -365,6 +361,27 @@ export default function Index() {
           fallbackColor="bg-gradient-to-br from-blue-600 to-blue-800"
           className="absolute inset-0"
         />
+        {displayName && (
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20">
+            <div
+              className="rounded-full bg-white/90 text-slate-900 border border-slate-200 shadow-sm backdrop-blur px-4 py-2 flex items-center"
+              aria-label="Signed in user"
+            >
+              <UserCircle className="mr-2 h-5 w-5" />
+              <span className="flex flex-col items-start leading-tight text-left">
+                <span className="text-xs uppercase tracking-wide opacity-90">
+                  Signed in as
+                </span>
+                <span
+                  className="text-sm font-medium truncate max-w-[240px]"
+                  title={displayName || undefined}
+                >
+                  {displayName}
+                </span>
+              </span>
+            </div>
+          </div>
+        )}
         {/* Slideshow Background */}
         {/* <div className="absolute inset-0">
           {slideImages.map((image, index) => (
@@ -1859,7 +1876,7 @@ export default function Index() {
               </h3>
               <div className="text-gray-700 space-y-2">
                 <p>
-                  • <strong>Encryption:</strong> All data is encrypted in
+                  �� <strong>Encryption:</strong> All data is encrypted in
                   transit and at rest using industry-standard protocols
                 </p>
                 <p>
