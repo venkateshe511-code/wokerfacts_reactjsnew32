@@ -381,7 +381,7 @@ export default function DownloadReport() {
             <h4 class="test-header" style="font-weight: bold; margin-bottom: 16px;">Occupational Tasks Methods Time Measurement Analysis</h4>
 
             <!-- Full height vertical line starting below the heading (fixed to match regular tests) -->
-            <div style="position: absolute; left: 160px; top: 60px; bottom: 0; width: 1px; background-color: #333;"></div>
+            <div style="position: absolute; left: 150px; top: 60px; bottom: 0; width: 1px; background-color: #333;"></div>
 
             <div style="display: grid; grid-template-columns: 160px 1fr; gap: 16px;">
                 <!-- Left Column - Illustrations -->
@@ -1495,7 +1495,7 @@ export default function DownloadReport() {
        <div style="display: grid; grid-template-columns: 128px 1fr; gap: 40px; margin-bottom: 5px; position: relative;">
 
     <!-- Extended Vertical line -->
-    <div style="position: absolute; left: 155px; top: 0; height: 360px; width: 0.5px; background-color: #666; z-index: 1;"></div>
+    <div style="position: absolute; left: 145px; top: 0; height: 360px; width: 0.5px; background-color: #666; z-index: 1;"></div>
 
     <!-- Left: Profile Photo + Name -->
     <div style="text-align: center;">
@@ -3807,7 +3807,7 @@ export default function DownloadReport() {
                     }</h4>
 
                     <!-- Full height vertical line starting below the heading (moved left to match occupational test) -->
-                    <div style="position: absolute; left: 160px; top: 60px; bottom: 0; width: 1px; background-color: #333;"></div>
+                    <div style="position: absolute; left: 150px; top: 60px; bottom: 0; width: 1px; background-color: #333;"></div>
 
                     <div style="display: grid; grid-template-columns: 160px 1fr; gap: 16px;">
                         <!-- Left Column - Illustrations -->
@@ -3841,23 +3841,23 @@ export default function DownloadReport() {
                                       !testName.includes("pinch")
                                         ? `
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-1.webp" alt="Grip Test Position 1" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-1.webp" alt="Grip Test Position 1" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 1</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-2.webp" alt="Grip Test Position 2" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-2.webp" alt="Grip Test Position 2" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 2</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-3.webp" alt="Grip Test Position 3" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-3.webp" alt="Grip Test Position 3" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 3</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-4.webp" alt="Grip Test Position 4" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-4.webp" alt="Grip Test Position 4" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 4</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-5.webp" alt="Grip Test Position 5" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-5.webp" alt="Grip Test Position 5" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 5</p>
                                     </div>
                                     `
@@ -3868,19 +3868,19 @@ export default function DownloadReport() {
                                       testName.includes("pinch")
                                         ? `
                                     <div style="text-align: left;">
-                                        <img src="/pinch-key-test.webp" alt="Key Pinch Test" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/pinch-key-test.webp" alt="Key Pinch Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Key Pinch</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/pinch-tip-test.webp" alt="Tip Pinch Test" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/pinch-tip-test.webp" alt="Tip Pinch Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Tip Pinch</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/pinch-palmer-test.webp" alt="Palmer Pinch Test" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/pinch-palmer-test.webp" alt="Palmer Pinch Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Palmer Pinch</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/pinch-grasp-test.webp" alt="Pinch Grasp Test" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/pinch-grasp-test.webp" alt="Pinch Grasp Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Pinch Grasp</p>
                                     </div>
                                     `
@@ -3952,27 +3952,27 @@ export default function DownloadReport() {
           testName.includes("bruce") || testName.includes("treadmill")
             ? `
         <div style="text-align: left;">
-            <img src="/mcaft-step-illustration.jpg" alt="Bruce treadmill test illustration" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+            <img src="/mcaft-step-illustration.jpg" alt="Bruce treadmill test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
             <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Bruce Protocol</p>
         </div>
         `
             : testName.includes("mcaft")
               ? `
         <div style="text-align: left;">
-            <img src="/bruce-treadmill-illustration.jpg" alt="mCAFT step test illustration" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+            <img src="/bruce-treadmill-illustration.jpg" alt="mCAFT step test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
             <p style="font-size: 7px; color: #555; margin: 1px 0 0;">mCAFT Step Test</p>
         </div>
         `
               : testName.includes("kasch")
                 ? `
         <div style="text-align: left;">
-            <img src="/kasch-step-illustration.jpg" alt="KASCH step test illustration" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+            <img src="/kasch-step-illustration.jpg" alt="KASCH step test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
             <p style="font-size: 7px; color: #555; margin: 1px 0 0;">KASCH Step Test</p>
         </div>
         `
                 : `
         <div style="text-align: left;">
-            <img src="/cardio-test-illustration.jpg" alt="Cardio test illustration" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+            <img src="/cardio-test-illustration.jpg" alt="Cardio test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
             <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Cardio Test</p>
         </div>
         `
