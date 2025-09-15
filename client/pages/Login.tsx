@@ -63,20 +63,7 @@ export default function Login() {
         return;
       }
 
-      // Use previously selected profile if still valid
-      if (selectedProfileId && ids.includes(selectedProfileId)) {
-        navigate("/dashboard");
-        return;
-      }
-
-      // Auto-select when exactly one profile exists
-      if (ids.length === 1) {
-        setSelectedProfileId(ids[0]);
-        navigate("/dashboard");
-        return;
-      }
-
-      // Multiple profiles and none selected: go to selector
+      // At least one profile exists: take user to selector
       navigate("/profiles");
     } catch {
       navigate("/profiles");
