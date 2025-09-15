@@ -677,7 +677,7 @@ export default function DownloadReport() {
               <h5 style="font-weight: bold; margin-bottom: 8px; font-size: 12px;">mCAFT (Modified Canadian Aerobic Fitness Test) EQUATIONS TO PREDICT VO₂MAX</h5>
               <div style="background: #f0f0f0; padding: 12px; font-size: 10px;">
                 <p style="margin-bottom: 8px;">
-                  VO₂ max (ml•kg⁻¹•min⁻¹) = 17.2 + (1.29 × O₂ cost of the last completed stage) - (0.09 × mass in kg) - (0.18 × age in years)
+                  VO₂ max (ml•kg��¹•min⁻¹) = 17.2 + (1.29 × O₂ cost of the last completed stage) - (0.09 × mass in kg) - (0.18 × age in years)
                 </p>
                 <p style="margin-bottom: 8px;">
                   VO₂ max (ml•kg⁻¹•min⁻¹) = 17.2 + (1.29 × _____) - (0.09 × _____ kg) - (0.18 × _____ )
@@ -1450,7 +1450,7 @@ export default function DownloadReport() {
        <div style="display: grid; grid-template-columns: 128px 1fr; gap: 40px; margin-bottom: 5px; position: relative;">
 
     <!-- Extended Vertical line -->
-    <div style="position: absolute; left: 155px; top: 0; height: 280px; width: 0.5px; background-color: #666; z-index: 1;"></div>
+    <div style="position: absolute; left: 155px; top: 0; height: 360px; width: 0.5px; background-color: #666; z-index: 1;"></div>
 
     <!-- Left: Profile Photo + Name -->
     <div style="text-align: center;">
@@ -1501,7 +1501,7 @@ export default function DownloadReport() {
 </div>
 
         <!-- Mechanism and History of Injury (Below Client Information) -->
-        <div style="margin-bottom: 15px; margin-left: 193px; margin-top: -5px;">
+        <div style="margin-bottom: 8px; margin-left: 193px; margin-top: -15px;">
             <h3 style="font-weight: bold; margin-bottom: 8px; margin-left: -15px; font-family: Arial, sans-serif;">Mechanism and History of Injury</h3>
 
             <!-- Header row -->
@@ -6116,7 +6116,7 @@ export default function DownloadReport() {
                   including:
                 </p>
                 <ul className="text-sm text-gray-600 text-left space-y-1">
-                  <li>• Evaluator profile information</li>
+                  <li>�� Evaluator profile information</li>
                   <li>• Claimant data</li>
                   <li>• Test results and measurements</li>
                   <li>• Uploaded images</li>
