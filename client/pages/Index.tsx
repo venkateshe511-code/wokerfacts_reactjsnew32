@@ -82,7 +82,13 @@ export default function Index() {
   const handleSignOut = async () => {
     try {
       await signOut();
-      toast({ title: "Signed out" });
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+        duration: 5000,
+        className:
+          "border-0 text-white bg-gradient-to-r from-indigo-600 to-blue-600 shadow-xl",
+      });
     } catch (err) {
       console.error("Sign out failed", err);
       toast({ title: "Sign out failed", variant: "destructive" });
@@ -1783,7 +1789,7 @@ export default function Index() {
                 <p>• Complete FCE evaluation report</p>
                 <p>• Downloadable PDF and DOC formats</p>
                 <p>• Professional medical documentation</p>
-                <p>• No hidden fees or charges</p>
+                <p>�� No hidden fees or charges</p>
               </div>
             </div>
           </div>
