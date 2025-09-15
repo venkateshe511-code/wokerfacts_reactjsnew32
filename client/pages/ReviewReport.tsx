@@ -747,8 +747,8 @@ export default function ReviewReport() {
                 </div>
 
                 {/* Mechanism and History of Injury */}
-                <div className="mt-8">
-                  <h3 className="font-bold mb-4">
+                <div className="mt-2 border-l-4 border-gray-300 pl-4">
+                  <h3 className="font-bold mb-2">
                     Mechanism and History of Injury
                   </h3>
                   <table className="w-full border border-gray-300 text-sm">
