@@ -87,6 +87,7 @@ router.post("/createCheckoutSession", async (req, res) => {
       success_url: successUrl || `${req.headers.origin || ""}/download-report`,
       cancel_url: cancelUrl || `${req.headers.origin || ""}/dashboard`,
       metadata: metadata || {},
+      allow_promotion_codes: true,
     });
 
     return res.json({ url: session.url });
