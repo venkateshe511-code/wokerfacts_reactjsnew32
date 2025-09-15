@@ -619,7 +619,7 @@ export default function TestData() {
       );
     });
 
-    if (selectedHasGrip) {
+    if (false) {
       if (!hasStd) sampleTests.push(standardGrip as any);
       if (!hasRapid) sampleTests.push(rapidGrip as any);
     }
