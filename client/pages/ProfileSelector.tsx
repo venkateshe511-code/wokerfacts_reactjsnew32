@@ -53,8 +53,21 @@ export default function ProfileSelector() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
-      <div className="container mx-auto max-w-3xl">
+    <div className="relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4 overflow-hidden">
+      {/* Watermark background */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: "url('/workerfacts-logo.png')",
+          backgroundRepeat: "repeat",
+          backgroundSize: "160px 160px",
+          backgroundPosition: "top left",
+          filter: "grayscale(100%)",
+        }}
+      />
+
+      <div className="relative container mx-auto max-w-3xl">
         <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-2xl bg-gradient-to-r from-indigo-700 via-blue-600 to-indigo-700 bg-clip-text text-transparent">
