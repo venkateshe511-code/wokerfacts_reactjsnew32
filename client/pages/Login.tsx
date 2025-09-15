@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
+import { FirebaseError } from "firebase/app";
+import { toast } from "@/hooks/use-toast";
 import { db, auth } from "../firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import {
@@ -38,6 +40,35 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
+
+  const mapAuthError = (err: unknown): string => {
+    const code = (err as FirebaseError)?.code || "unknown";
+    switch (code) {
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/missing-password":
+        return "Please enter your password.";
+      case "auth/weak-password":
+        return "Password is too weak. Use at least 6 characters.";
+      case "auth/user-disabled":
+        return "This account has been disabled. Contact support.";
+      case "auth/user-not-found":
+      case "auth/invalid-credential":
+      case "auth/wrong-password":
+        return "Invalid email or password. Please try again.";
+      case "auth/too-many-requests":
+        return "Too many attempts. Please wait a moment and try again.";
+      case "auth/popup-closed-by-user":
+        return "The sign-in popup was closed before completing. Try again.";
+      case "auth/cancelled-popup-request":
+      case "auth/popup-blocked":
+        return "Unable to open sign-in popup. Check your browser settings.";
+      case "auth/network-request-failed":
+        return "Network error. Check your connection and try again.";
+      default:
+        return "Authentication failed. Please try again.";
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +117,9 @@ export default function Login() {
       await fn();
       await postLoginRedirect();
     } catch (e: any) {
-      setError(e?.message || "Authentication failed");
+      const msg = mapAuthError(e);
+      setError(msg);
+      toast({ title: "Sign-in error", description: msg, variant: "destructive" });
     } finally {
       setLoading(false);
     }
