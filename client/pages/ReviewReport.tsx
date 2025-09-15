@@ -453,7 +453,10 @@ export default function ReviewReport() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div
+      className="min-h-screen bg-gray-50 py-8 px-4"
+      style={{ fontFamily: "Arial, sans-serif" }}
+    >
       <div className="container mx-auto max-w-6xl">
         <div className="mb-8">
           <Button
@@ -513,18 +516,18 @@ export default function ReviewReport() {
 
                 <h1
                   className="text-3xl font-bold text-blue-800 mb-8"
-                  style={{ fontFamily: "Times New Roman, Times, serif" }}
+                  style={{ fontFamily: "Arial, sans-serif" }}
                 >
                   Functional Abilities Determination
                 </h1>
 
                 <div
                   className="bg-gray-50 border border-gray-300 rounded-lg p-6 max-w-md mx-auto"
-                  style={{ fontFamily: "Times New Roman, Times, serif" }}
+                  style={{ fontFamily: "Arial, sans-serif" }}
                 >
                   <table
                     className="w-full text-left text-sm"
-                    style={{ fontFamily: "Times New Roman, Times, serif" }}
+                    style={{ fontFamily: "Arial, sans-serif" }}
                   >
                     <tbody>
                       <tr className="border-b">
@@ -573,13 +576,13 @@ export default function ReviewReport() {
               <div className="p-8 border-b">
                 <h2
                   className="text-xl font-bold mb-6"
-                  style={{ fontFamily: "Times New Roman, Times, serif" }}
+                  style={{ fontFamily: "Arial, sans-serif" }}
                 >
                   Contents of Report:
                 </h2>
                 <div
                   className="space-y-2 text-sm"
-                  style={{ fontFamily: "Times New Roman, Times, serif" }}
+                  style={{ fontFamily: "Arial, sans-serif" }}
                 >
                   <p>Client Information</p>
                   <p>Pain & Symptom Illustration</p>
@@ -607,7 +610,7 @@ export default function ReviewReport() {
                   <div>
                     <h1
                       className="text-2xl font-bold text-blue-800"
-                      style={{ fontFamily: "Times New Roman, Times, serif" }}
+                      style={{ fontFamily: "Arial, sans-serif" }}
                     >
                       Functional Abilities Determination
                     </h1>
@@ -656,13 +659,13 @@ export default function ReviewReport() {
                   <div className="md:col-span-2">
                     <h3
                       className="font-bold mb-4"
-                      style={{ fontFamily: "Times New Roman, Times, serif" }}
+                      style={{ fontFamily: "Arial, sans-serif" }}
                     >
                       Client Information
                     </h3>
                     <div
                       className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm"
-                      style={{ fontFamily: "Times New Roman, Times, serif" }}
+                      style={{ fontFamily: "Arial, sans-serif" }}
                     >
                       <div>
                         <p>
@@ -784,7 +787,7 @@ export default function ReviewReport() {
                 <div className="p-8 border-b">
                   <h3
                     className="font-bold mb-6"
-                    style={{ fontFamily: "Times New Roman, Times, serif" }}
+                    style={{ fontFamily: "Arial, sans-serif" }}
                   >
                     Pain/Symptom Illustration
                   </h3>
@@ -794,7 +797,7 @@ export default function ReviewReport() {
                     <div className="mb-8">
                       <h4
                         className="font-semibold mb-4"
-                        style={{ fontFamily: "Times New Roman, Times, serif" }}
+                        style={{ fontFamily: "Arial, sans-serif" }}
                       >
                         Client's Pain Illustration
                       </h4>
@@ -808,7 +811,7 @@ export default function ReviewReport() {
                         <p
                           className="text-sm text-gray-600 mt-3 italic"
                           style={{
-                            fontFamily: "Times New Roman, Times, serif",
+                            fontFamily: "Arial, sans-serif",
                           }}
                         >
                           Client's self-reported pain and symptom locations
@@ -817,7 +820,7 @@ export default function ReviewReport() {
                           <p
                             className="text-sm font-medium mt-2 text-blue-800"
                             style={{
-                              fontFamily: "Times New Roman, Times, serif",
+                              fontFamily: "Arial, sans-serif",
                             }}
                           >
                             Assessment:{" "}
@@ -862,7 +865,7 @@ export default function ReviewReport() {
                           <h5
                             className="font-semibold mb-3 text-blue-800"
                             style={{
-                              fontFamily: "Times New Roman, Times, serif",
+                              fontFamily: "Arial, sans-serif",
                             }}
                           >
                             {label}
@@ -1095,7 +1098,7 @@ export default function ReviewReport() {
                         <h4
                           className="font-semibold mb-3"
                           style={{
-                            fontFamily: "Times New Roman, Times, serif",
+                            fontFamily: "Arial, sans-serif",
                           }}
                         >
                           Reference Images
@@ -1110,8 +1113,7 @@ export default function ReviewReport() {
                                     <p
                                       className="font-bold text-sm text-gray-800 text-center"
                                       style={{
-                                        fontFamily:
-                                          "Times New Roman, Times, serif",
+                                        fontFamily: "Arial, sans-serif",
                                       }}
                                     >
                                       {image.title}
