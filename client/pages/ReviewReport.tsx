@@ -597,7 +597,6 @@ export default function ReviewReport() {
                     <p>• Extremity Strength</p>
                     <p>• Occupational Tasks</p>
                     <p>• Range of Motion (Spine)</p>
-                    <p>• Whole Body Strength</p>
                   </div>
                   <p className="mt-4">Appendix One: Reference Charts</p>
                   <p>Appendix Two: Digital Library</p>
@@ -4691,7 +4690,7 @@ export default function ReviewReport() {
                                                 </span>
                                                 <span className="text-sm">
                                                   {" "}
-                                                  (ml•kg⁻¹•min⁻¹)
+                                                  (ml•kg⁻¹•min⁻��)
                                                 </span>
                                               </div>
                                               <div>
