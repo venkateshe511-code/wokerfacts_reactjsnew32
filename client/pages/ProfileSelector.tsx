@@ -57,11 +57,11 @@ export default function ProfileSelector() {
       {/* Watermark background */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-10"
+        className="pointer-events-none absolute inset-0 opacity-5"
         style={{
           backgroundImage: "url('/workerfacts-logo.png')",
           backgroundRepeat: "repeat",
-          backgroundSize: "160px 160px",
+          backgroundSize: "260px 260px",
           backgroundPosition: "top left",
           filter: "grayscale(100%)",
         }}
