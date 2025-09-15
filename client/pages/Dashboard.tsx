@@ -616,6 +616,9 @@ export default function Dashboard() {
 
             {/* Right side: Edit Profile and Logout buttons */}
             <div className="ml-auto flex items-center space-x-4">
+              {user && (
+                <span className="hidden sm:inline text-gray-700 text-sm">Signed in as {user.displayName || user.email}</span>
+              )}
               <Button
                 variant="outline"
                 size="sm"
