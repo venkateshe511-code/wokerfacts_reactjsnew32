@@ -19,6 +19,9 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { getReferencesForTest, formatReference } from "@shared/references";
 
 // IndexedDB utilities for loading digital library images
@@ -93,6 +96,7 @@ interface ReportSummary {
 
 export default function DownloadReport() {
   const navigate = useNavigate();
+  const { selectedProfileId } = useAuth();
   const [reportSummary, setReportSummary] = useState<ReportSummary>({
     evaluatorName: "",
     claimantName: "",
@@ -108,13 +112,56 @@ export default function DownloadReport() {
   const [showClearDialog, setShowClearDialog] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState("pdf");
 
+  // Helper to get evaluator data with Firestore fallback to ensure logo and branding are present
+  const getEvaluatorData = async (): Promise<any> => {
+    try {
+      const local = localStorage.getItem("evaluatorData");
+      let parsed: any = local ? JSON.parse(local) : {};
+
+      const needsFetch =
+        (!parsed || Object.keys(parsed).length === 0 || !parsed.clinicLogo) &&
+        !!selectedProfileId;
+
+      if (needsFetch) {
+        try {
+          const ref = doc(db, "evaluatorProfiles", selectedProfileId as string);
+          const snap = await getDoc(ref);
+          if (snap.exists()) {
+            const d: any = snap.data();
+            const fromServer = {
+              name: d.name || "",
+              licenseNo: d.licenseNo || "",
+              clinicName: d.clinicName || "",
+              address: d.address || "",
+              country: d.country || "",
+              city: d.city || "",
+              zipcode: d.zipcode || "",
+              email: d.email || "",
+              phone: d.phone || "",
+              fax: d.fax || "",
+              website: d.website || "",
+              profilePhoto: d.profilePhoto || null,
+              clinicLogo: d.clinicLogo || null,
+            };
+            parsed = { ...fromServer, ...parsed };
+          }
+        } catch (e) {
+          console.error("Failed to load evaluator profile for report:", e);
+        }
+      }
+
+      return parsed || {};
+    } catch (e) {
+      console.error("Error reading evaluator data:", e);
+      return {};
+    }
+  };
+
   useEffect(() => {
     // Load summary data from all steps
     const loadSummaryData = async () => {
       try {
-        const evaluatorData = JSON.parse(
-          localStorage.getItem("evaluatorData") || "{}",
-        );
+        const evaluatorData = await getEvaluatorData();
         const claimantData = JSON.parse(
           localStorage.getItem("claimantData") || "{}",
         );
@@ -237,9 +284,7 @@ export default function DownloadReport() {
 
   const generateReportContent = async () => {
     // Load all evaluation data
-    const evaluatorData = JSON.parse(
-      localStorage.getItem("evaluatorData") || "{}",
-    );
+    const evaluatorData = await getEvaluatorData();
     const claimantData = JSON.parse(
       localStorage.getItem("claimantData") || "{}",
     );
@@ -5057,9 +5102,7 @@ export default function DownloadReport() {
     } else {
       try {
         // Load all evaluation data for DOCX generation
-        const evaluatorData = JSON.parse(
-          localStorage.getItem("evaluatorData") || "{}",
-        );
+        const evaluatorData = await getEvaluatorData();
         const claimantData = JSON.parse(
           localStorage.getItem("claimantData") || "{}",
         );
