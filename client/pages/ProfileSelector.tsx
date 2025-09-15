@@ -29,6 +29,8 @@ export default function ProfileSelector() {
   useEffect(() => {
     const load = async () => {
       if (!user) return;
+      // Ensure no cached selection carries over (especially from demo flows)
+      setSelectedProfileId(null);
       const q = query(
         collection(db, "evaluatorProfiles"),
         where("ownerId", "==", user.uid),
@@ -48,7 +50,7 @@ export default function ProfileSelector() {
       setLoading(false);
     };
     load();
-  }, [user]);
+  }, [user, setSelectedProfileId]);
 
   if (!user) return null;
 
