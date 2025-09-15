@@ -1495,7 +1495,7 @@ export default function DownloadReport() {
        <div style="display: grid; grid-template-columns: 128px 1fr; gap: 40px; margin-bottom: 5px; position: relative;">
 
     <!-- Extended Vertical line -->
-    <div style="position: absolute; left: 145px; top: 0; height: 360px; width: 0.5px; background-color: #666; z-index: 1;"></div>
+    <div style="position: absolute; left: 155px; top: 0; height: 360px; width: 0.5px; background-color: #666; z-index: 1;"></div>
 
     <!-- Left: Profile Photo + Name -->
     <div style="text-align: center;">
