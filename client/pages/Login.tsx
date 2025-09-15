@@ -39,6 +39,15 @@ export default function Login() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await withLoading(() =>
+      mode === "signin"
+        ? signInWithEmail(email, password)
+        : signUpWithEmail(email, password),
+    );
+  };
+
   const postLoginRedirect = async () => {
     try {
       if (redirect && !redirect.startsWith("/register")) {
@@ -99,6 +108,7 @@ export default function Login() {
           )}
 
           <Button
+            type="button"
             disabled={loading}
             onClick={() => withLoading(loginWithGoogle)}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white"
@@ -108,6 +118,7 @@ export default function Login() {
           </Button>
 
           <Button
+            type="button"
             disabled={loading}
             onClick={() => withLoading(loginWithApple)}
             className="w-full bg-black hover:bg-black/90 text-white"
@@ -116,13 +127,15 @@ export default function Login() {
             Continue with Apple
           </Button>
 
-          <div className="grid gap-2 pt-2">
+          <form className="grid gap-2 pt-2" onSubmit={handleSubmit}>
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
             />
             <Label htmlFor="password">Password</Label>
             <Input
@@ -130,16 +143,12 @@ export default function Login() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
             />
             <Button
+              type="submit"
               disabled={loading}
-              onClick={() =>
-                withLoading(() =>
-                  mode === "signin"
-                    ? signInWithEmail(email, password)
-                    : signUpWithEmail(email, password),
-                )
-              }
               className="w-full"
             >
               {loading ? (
@@ -159,7 +168,7 @@ export default function Login() {
                 ? "Need an account? Sign up"
                 : "Have an account? Sign in"}
             </button>
-          </div>
+          </form>
         </CardContent>
       </Card>
     </div>
