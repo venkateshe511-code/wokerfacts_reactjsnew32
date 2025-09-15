@@ -27,7 +27,14 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "../firebase";
-import { addDoc, collection, serverTimestamp, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { useDemoMode } from "@/hooks/use-demo-mode";
 import {
   countryData,
@@ -122,8 +129,10 @@ export default function Register() {
       existingSnap.forEach((d) => {
         const data = d.data() as any;
         if (
-          (data.name || "").trim().toLowerCase() === sampleProfileData.name.trim().toLowerCase() &&
-          (data.clinicName || "").trim().toLowerCase() === sampleProfileData.clinicName.trim().toLowerCase()
+          (data.name || "").trim().toLowerCase() ===
+            sampleProfileData.name.trim().toLowerCase() &&
+          (data.clinicName || "").trim().toLowerCase() ===
+            sampleProfileData.clinicName.trim().toLowerCase()
         ) {
           existingId = d.id;
         }
@@ -270,14 +279,19 @@ export default function Register() {
 
     // Prevent duplicate profiles: reuse an existing one with same name + clinic for this user
     try {
-      const qExisting = query(collection(db, "evaluatorProfiles"), where("ownerId", "==", user.uid));
+      const qExisting = query(
+        collection(db, "evaluatorProfiles"),
+        where("ownerId", "==", user.uid),
+      );
       const existingSnap = await getDocs(qExisting);
       let existingId: string | null = null;
       existingSnap.forEach((d) => {
         const data = d.data() as any;
         if (
-          (data.name || "").trim().toLowerCase() === formData.name.trim().toLowerCase() &&
-          (data.clinicName || "").trim().toLowerCase() === formData.clinicName.trim().toLowerCase()
+          (data.name || "").trim().toLowerCase() ===
+            formData.name.trim().toLowerCase() &&
+          (data.clinicName || "").trim().toLowerCase() ===
+            formData.clinicName.trim().toLowerCase()
         ) {
           existingId = d.id;
         }

@@ -7,6 +7,7 @@ export const useDemoMode = (): boolean => {
   const { user } = useAuth();
   const email = user?.email?.toLowerCase() || "";
   const sampleFlag =
-    typeof window !== "undefined" && localStorage.getItem("sampleAccess") === "1";
+    typeof window !== "undefined" &&
+    localStorage.getItem("sampleAccess") === "1";
   return email === "workerfacts@gmail.com" && sampleFlag;
 };

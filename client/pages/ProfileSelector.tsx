@@ -14,7 +14,16 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, CheckCircle2, Trash } from "lucide-react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
 
 interface EvaluatorProfile {
@@ -163,7 +172,8 @@ export default function ProfileSelector() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete evaluator profile?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the selected evaluator profile from the server. This action cannot be undone.
+              This will permanently delete the selected evaluator profile from
+              the server. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -174,16 +184,24 @@ export default function ProfileSelector() {
                 if (!deletingId) return;
                 try {
                   await deleteDoc(doc(db, "evaluatorProfiles", deletingId));
-                  setProfiles((prev) => prev.filter((x) => x.id !== deletingId));
+                  setProfiles((prev) =>
+                    prev.filter((x) => x.id !== deletingId),
+                  );
                   setDeleteOpen(false);
-                  if ((localStorage.getItem("selectedEvaluatorProfileId") || "") === deletingId) {
+                  if (
+                    (localStorage.getItem("selectedEvaluatorProfileId") ||
+                      "") === deletingId
+                  ) {
                     setSelectedProfileId(null);
                   }
                   // Clear local cached evaluator data if any
                   localStorage.removeItem("evaluatorData");
                   toast({ title: "Profile deleted" });
                 } catch (e) {
-                  toast({ title: "Failed to delete profile", variant: "destructive" });
+                  toast({
+                    title: "Failed to delete profile",
+                    variant: "destructive",
+                  });
                 } finally {
                   setDeletingId(null);
                 }

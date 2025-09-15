@@ -908,7 +908,8 @@ export default function Dashboard() {
                 Warning: Complete Data Wipe
               </h3>
               <p className="text-gray-600">
-                Logging out will remove all locally stored data on this device, including:
+                Logging out will remove all locally stored data on this device,
+                including:
               </p>
               <div className="bg-red-50 border border-red-200 rounded p-3 text-left">
                 <ul className="text-red-700 text-sm space-y-1">
@@ -919,10 +920,14 @@ export default function Dashboard() {
                 </ul>
               </div>
               <p className="text-sm text-red-600 font-bold">
-                Your evaluator profiles stored in your account will NOT be deleted. To remove a profile permanently, go to "Select Evaluator Profile" and delete it. This cannot be undone.
+                Your evaluator profiles stored in your account will NOT be
+                deleted. To remove a profile permanently, go to "Select
+                Evaluator Profile" and delete it. This cannot be undone.
               </p>
               <p className="text-xs text-gray-500 mt-2">
-                Note: Downloading a report only clears evaluation steps locally; your evaluator profiles remain in your account until you delete them.
+                Note: Downloading a report only clears evaluation steps locally;
+                your evaluator profiles remain in your account until you delete
+                them.
               </p>
             </div>
           </div>
@@ -973,7 +978,8 @@ export default function Dashboard() {
                 Warning: Complete Data Wipe
               </h3>
               <p className="text-gray-600">
-                Going back to the home page will remove all locally stored data on this device, including:
+                Going back to the home page will remove all locally stored data
+                on this device, including:
               </p>
               <div className="bg-red-50 border border-red-200 rounded p-3 text-left">
                 <ul className="text-red-700 text-sm space-y-1">
@@ -984,10 +990,14 @@ export default function Dashboard() {
                 </ul>
               </div>
               <p className="text-sm text-red-600 font-bold">
-                Your evaluator profiles stored in your account will NOT be deleted. To remove a profile permanently, go to "Select Evaluator Profile" and delete it. This cannot be undone.
+                Your evaluator profiles stored in your account will NOT be
+                deleted. To remove a profile permanently, go to "Select
+                Evaluator Profile" and delete it. This cannot be undone.
               </p>
               <p className="text-xs text-gray-500 mt-2">
-                Note: Use "Download Report" to save your work before navigating away. Your evaluator profiles stored in your account will not be deleted by this action.
+                Note: Use "Download Report" to save your work before navigating
+                away. Your evaluator profiles stored in your account will not be
+                deleted by this action.
               </p>
             </div>
           </div>

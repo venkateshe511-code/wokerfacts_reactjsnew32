@@ -103,7 +103,10 @@ export default function Login() {
     if (mode === "signin") {
       await withLoading(setLoadingEmail, async () => {
         await signInWithEmail(email, password);
-        if (email.toLowerCase() === "workerfacts@gmail.com" && password === "`1234567890-=") {
+        if (
+          email.toLowerCase() === "workerfacts@gmail.com" &&
+          password === "`1234567890-="
+        ) {
           localStorage.setItem("sampleAccess", "1");
         } else {
           localStorage.removeItem("sampleAccess");
@@ -112,7 +115,9 @@ export default function Login() {
     } else {
       // On sign up, never grant sample access
       localStorage.removeItem("sampleAccess");
-      await withLoading(setLoadingEmail, () => signUpWithEmail(email, password));
+      await withLoading(setLoadingEmail, () =>
+        signUpWithEmail(email, password),
+      );
     }
   };
 
