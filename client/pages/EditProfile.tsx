@@ -46,6 +46,9 @@ export default function EditProfile() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchParams] = useSearchParams();
+  const { selectedProfileId, user } = useAuth();
+  const targetProfileId = searchParams.get('profileId') || selectedProfileId || '';
 
   // Comprehensive country-city-zipcode mapping
   const countryData: { [key: string]: { [key: string]: string } } = {
