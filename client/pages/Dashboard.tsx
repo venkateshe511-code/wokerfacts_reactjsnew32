@@ -206,38 +206,37 @@ export default function Dashboard() {
     }
 
     setCompletedSteps(completedStepsArray);
-
-    // Auto-scroll to next available step
-    const nextStep = completedStepsArray.length + 1;
-    if (nextStep <= workflowSteps.length) {
-      setTimeout(() => {
-        const nextStepElement = document.getElementById(`step-${nextStep}`) as HTMLElement | null;
-        if (nextStepElement) {
-          nextStepElement.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-          // Programmatically focus the next step for accessibility and fast action
-          setTimeout(() => {
-            nextStepElement.focus({ preventScroll: true });
-          }, 250);
-          // Add a subtle highlight effect
-          nextStepElement.classList.add(
-            "ring-2",
-            "ring-blue-400",
-            "ring-opacity-75",
-          );
-          setTimeout(() => {
-            nextStepElement.classList.remove(
-              "ring-2",
-              "ring-blue-400",
-              "ring-opacity-75",
-            );
-          }, 2000);
-        }
-      }, 300);
-    }
   }, [navigate, selectedProfileId, user]);
+
+  // Determine the next available step (skips disabled/paid steps)
+  const getNextAvailableStep = (completed: number[]): number | null => {
+    for (let i = 1; i <= workflowSteps.length; i++) {
+      if (completed.includes(i)) continue;
+      if (i === 8 && stripePaid) continue; // skip Pay if already paid
+      if (i === 1 || completed.includes(i - 1)) return i;
+    }
+    return null;
+  };
+
+  // After data loads or progress changes, scroll and focus next step
+  useEffect(() => {
+    if (!evaluatorData) return;
+    const nextStep = getNextAvailableStep(completedSteps);
+    if (!nextStep) return;
+    // Delay to ensure DOM is fully painted
+    setTimeout(() => {
+      const el = document.getElementById(`step-${nextStep}`) as HTMLElement | null;
+      if (!el) return;
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => {
+        el.focus({ preventScroll: true });
+      }, 250);
+      el.classList.add("ring-2", "ring-blue-400", "ring-opacity-75");
+      setTimeout(() => {
+        el.classList.remove("ring-2", "ring-blue-400", "ring-opacity-75");
+      }, 2000);
+    }, 300);
+  }, [evaluatorData, completedSteps, stripePaid]);
 
   // Handle browser back button
   useEffect(() => {
