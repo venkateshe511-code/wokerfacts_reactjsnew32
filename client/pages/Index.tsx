@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -62,6 +63,8 @@ export default function Index() {
     comments: "",
   });
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { user } = useAuth();
+  const displayName = user?.displayName || user?.email || null;
 
   // Slideshow images (local assets)
   const slideImages = [
@@ -197,12 +200,15 @@ export default function Index() {
               Download Sample Report
             </a>
 
-            <Link to="/register">
+            {displayName && (
+              <span className="text-white/90 text-sm">Signed in as {displayName}</span>
+            )}
+            <Link to={user ? "/dashboard" : "/login?redirect=/register"}>
               <Button
                 size="sm"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 font-semibold"
               >
-                Start Evaluation
+                {user ? "Open Dashboard" : "Get Started"}
               </Button>
             </Link>
           </nav>
@@ -244,12 +250,12 @@ export default function Index() {
               Sample
             </a>
 
-            <Link to="/register">
+            <Link to={user ? "/dashboard" : "/login?redirect=/register"}>
               <Button
                 size="sm"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 font-semibold text-sm"
               >
-                Start
+                {user ? "Open" : "Get Started"}
               </Button>
             </Link>
           </nav>
@@ -265,12 +271,12 @@ export default function Index() {
               Sample
             </a>
 
-            <Link to="/register">
+            <Link to={user ? "/dashboard" : "/login?redirect=/register"}>
               <Button
                 size="sm"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 font-semibold text-sm"
               >
-                Start Evaluation
+                {user ? "Open Dashboard" : "Get Started"}
               </Button>
             </Link>
           </nav>
@@ -328,12 +334,15 @@ export default function Index() {
                   Download Sample Report
                 </a>
 
-                <Link to="/register" className="w-full">
+                {displayName && (
+                  <div className="text-white/90 text-sm text-center">Signed in as {displayName}</div>
+                )}
+                <Link to={user ? "/dashboard" : "/login?redirect=/register"} className="w-full">
                   <Button
                     size="sm"
                     className="bg-blue-500 hover:bg-blue-600 text-white w-full font-semibold text-center"
                   >
-                    Start Evaluation
+                    {user ? "Open Dashboard" : "Get Started"}
                   </Button>
                 </Link>
               </div>
