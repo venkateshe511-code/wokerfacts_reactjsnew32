@@ -11,7 +11,9 @@ import {
 } from "firebase/firestore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, CheckCircle2 } from "lucide-react";
+import { PlusCircle, CheckCircle2, Trash } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { toast } from "@/hooks/use-toast";
 
 interface EvaluatorProfile {
   id: string;
