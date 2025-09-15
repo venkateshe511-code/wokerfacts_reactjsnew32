@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import {
@@ -64,8 +65,18 @@ export default function Index() {
     comments: "",
   });
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const displayName = user?.displayName || user?.email || null;
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({ title: "Signed out" });
+    } catch (err) {
+      console.error("Sign out failed", err);
+      toast({ title: "Sign out failed", variant: "destructive" });
+    }
+  };
 
   // Slideshow images (local assets)
   const slideImages = [
@@ -363,8 +374,11 @@ export default function Index() {
         />
         {displayName && (
           <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20">
-            <div
-              className="rounded-full bg-white/90 text-slate-900 border border-slate-200 shadow-sm backdrop-blur px-4 py-2 flex items-center"
+            <button
+              type="button"
+              onClick={handleSignOut}
+              title="Click to sign out"
+              className="rounded-full bg-white/90 text-slate-900 border border-slate-200 shadow-sm backdrop-blur px-4 py-2 flex items-center cursor-pointer hover:shadow-md hover:bg-white transition"
               aria-label="Signed in user"
             >
               <UserCircle className="mr-2 h-5 w-5" />
@@ -379,7 +393,7 @@ export default function Index() {
                   {displayName}
                 </span>
               </span>
-            </div>
+            </button>
           </div>
         )}
         {/* Slideshow Background */}
