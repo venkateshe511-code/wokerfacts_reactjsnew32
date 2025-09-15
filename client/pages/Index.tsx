@@ -355,15 +355,18 @@ export default function Index() {
       </header>
 
       {displayName && (
-        <div className="bg-slate-800/90">
+        <div className="bg-transparent">
           <div className="container mx-auto px-4 py-2 flex justify-end">
             <Link to="/profiles">
               <Button
                 size="sm"
                 className="bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 hover:from-indigo-700 hover:via-blue-700 hover:to-indigo-800 text-white shadow-lg ring-1 ring-white/10"
               >
-                <UserCircle className="mr-2 h-4 w-4" />
-                Signed in as {displayName}
+                <UserCircle className="mr-2 h-5 w-5" />
+                <span className="flex flex-col items-start leading-tight text-left">
+                  <span className="text-xs uppercase tracking-wide opacity-90">Signed in</span>
+                  <span className="text-sm font-medium truncate max-w-[240px]" title={displayName || undefined}>{displayName}</span>
+                </span>
               </Button>
             </Link>
           </div>
