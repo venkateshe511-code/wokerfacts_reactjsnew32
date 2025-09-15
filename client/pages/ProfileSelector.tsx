@@ -28,6 +28,8 @@ export default function ProfileSelector() {
   const { user, setSelectedProfileId } = useAuth();
   const [profiles, setProfiles] = useState<EvaluatorProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
