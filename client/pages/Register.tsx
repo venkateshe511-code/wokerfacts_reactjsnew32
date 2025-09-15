@@ -58,6 +58,7 @@ export default function Register() {
   const isDemoMode = useDemoMode();
   const [searchParams] = useSearchParams();
   const isAdmin = searchParams.get("admin") === "raygagne@12!%&A";
+  const sampleAccess = isAdmin || isDemoMode;
   const [formData, setFormData] = useState<EvaluatorData>({
     name: "",
     licenseNo: "",
@@ -258,8 +259,8 @@ export default function Register() {
             Create your professional assessment account
           </p>
 
-          {/* Sample Profile Button - Only show for admin */}
-          {isAdmin && (
+          {/* Sample Profile Button - Only show for sample/demo access */}
+          {sampleAccess && (
             <div className="mt-6">
               <Button
                 type="button"

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,6 +51,16 @@ import { db } from "../firebase";
 import { OfflineImage, OfflineIndicator } from "@/components/ui/offline-image";
 import { OfflineBackground } from "@/components/ui/offline-background";
 import { CacheStatus } from "@/components/ui/cache-status";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 export default function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -64,8 +75,25 @@ export default function Index() {
     comments: "",
   });
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const displayName = user?.displayName || user?.email || null;
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+        duration: 5000,
+        className:
+          "border-0 text-white bg-gradient-to-r from-indigo-600 to-blue-600 shadow-xl",
+      });
+    } catch (err) {
+      console.error("Sign out failed", err);
+      toast({ title: "Sign out failed", variant: "destructive" });
+    }
+  };
 
   // Slideshow images (local assets)
   const slideImages = [
@@ -362,25 +390,54 @@ export default function Index() {
           className="absolute inset-0"
         />
         {displayName && (
-          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20">
-            <div
-              className="rounded-full bg-white/90 text-slate-900 border border-slate-200 shadow-sm backdrop-blur px-4 py-2 flex items-center"
-              aria-label="Signed in user"
-            >
-              <UserCircle className="mr-2 h-5 w-5" />
-              <span className="flex flex-col items-start leading-tight text-left">
-                <span className="text-xs uppercase tracking-wide opacity-90">
-                  Signed in as
+          <>
+            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20">
+              <button
+                type="button"
+                onClick={() => setConfirmOpen(true)}
+                title="Click to sign out"
+                className="rounded-full bg-white/90 text-slate-900 border border-slate-200 shadow-sm backdrop-blur px-4 py-2 flex items-center cursor-pointer hover:shadow-md hover:bg-white transition"
+                aria-label="Signed in user"
+              >
+                <UserCircle className="mr-2 h-5 w-5" />
+                <span className="flex flex-col items-start leading-tight text-left">
+                  <span className="text-xs uppercase tracking-wide opacity-90">
+                    Signed in as
+                  </span>
+                  <span
+                    className="text-sm font-medium truncate max-w-[240px]"
+                    title={displayName || undefined}
+                  >
+                    {displayName}
+                  </span>
                 </span>
-                <span
-                  className="text-sm font-medium truncate max-w-[240px]"
-                  title={displayName || undefined}
-                >
-                  {displayName}
-                </span>
-              </span>
+              </button>
             </div>
-          </div>
+
+            <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Sign out?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    You will be signed out of your account and returned to the
+                    home page.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={async () => {
+                      await handleSignOut();
+                      setConfirmOpen(false);
+                    }}
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    Sign out
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </>
         )}
         {/* Slideshow Background */}
         {/* <div className="absolute inset-0">
@@ -1733,7 +1790,7 @@ export default function Index() {
                 <p>• Complete FCE evaluation report</p>
                 <p>• Downloadable PDF and DOC formats</p>
                 <p>• Professional medical documentation</p>
-                <p>• No hidden fees or charges</p>
+                <p>�� No hidden fees or charges</p>
               </div>
             </div>
           </div>
