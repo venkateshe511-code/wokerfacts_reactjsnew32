@@ -43,6 +43,7 @@ import {
   ThumbsUp,
   Calendar,
   Download,
+  UserCircle,
 } from "lucide-react";
 import { collection, addDoc } from "firebase/firestore"; // ✅ Import this
 import { db } from "../firebase";
@@ -200,11 +201,6 @@ export default function Index() {
               Download Sample Report
             </a>
 
-            {displayName && (
-              <span className="text-white/90 text-sm">
-                Signed in as {displayName}
-              </span>
-            )}
             <Link to={user ? "/profiles" : "/login?redirect=/register"}>
               <Button
                 size="sm"
@@ -357,6 +353,22 @@ export default function Index() {
           </div>
         )}
       </header>
+
+      {displayName && (
+        <div className="bg-slate-800/90">
+          <div className="container mx-auto px-4 py-2 flex justify-end">
+            <Link to="/profiles">
+              <Button
+                size="sm"
+                className="bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 hover:from-indigo-700 hover:via-blue-700 hover:to-indigo-800 text-white shadow-lg ring-1 ring-white/10"
+              >
+                <UserCircle className="mr-2 h-4 w-4" />
+                Signed in as {displayName}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden">
