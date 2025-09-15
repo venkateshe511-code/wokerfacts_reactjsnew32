@@ -61,9 +61,12 @@ export default function ProfileSelector() {
                       <div className="font-semibold">{p.name}</div>
                       {p.clinicName && <div className="text-sm text-gray-600">{p.clinicName}</div>}
                     </div>
-                    <Button onClick={() => { setSelectedProfileId(p.id); navigate("/dashboard"); }} className="bg-green-600 hover:bg-green-700 text-white">
-                      <CheckCircle2 className="mr-2" /> Use this profile
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button onClick={() => navigate(`/edit-profile?profileId=${p.id}`)} variant="outline">Edit</Button>
+                      <Button onClick={() => { setSelectedProfileId(p.id); navigate("/dashboard"); }} className="bg-green-600 hover:bg-green-700 text-white">
+                        <CheckCircle2 className="mr-2" /> Use this profile
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
