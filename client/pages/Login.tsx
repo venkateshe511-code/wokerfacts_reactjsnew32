@@ -113,7 +113,7 @@ export default function Login() {
         }
       });
     } else {
-      // On sign up, never grant sample access
+      // Never grant sample access on sign up
       localStorage.removeItem("sampleAccess");
       await withLoading(setLoadingEmail, () =>
         signUpWithEmail(email, password),

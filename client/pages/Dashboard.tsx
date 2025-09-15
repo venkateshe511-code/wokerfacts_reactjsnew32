@@ -206,34 +206,39 @@ export default function Dashboard() {
     }
 
     setCompletedSteps(completedStepsArray);
-
-    // Auto-scroll to next available step
-    const nextStep = completedStepsArray.length + 1;
-    if (nextStep <= workflowSteps.length) {
-      setTimeout(() => {
-        const nextStepElement = document.getElementById(`step-${nextStep}`);
-        if (nextStepElement) {
-          nextStepElement.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-          // Add a subtle highlight effect
-          nextStepElement.classList.add(
-            "ring-2",
-            "ring-blue-400",
-            "ring-opacity-75",
-          );
-          setTimeout(() => {
-            nextStepElement.classList.remove(
-              "ring-2",
-              "ring-blue-400",
-              "ring-opacity-75",
-            );
-          }, 2000);
-        }
-      }, 300);
-    }
   }, [navigate, selectedProfileId, user]);
+
+  // Determine the next available step (skips disabled/paid steps)
+  const getNextAvailableStep = (completed: number[]): number | null => {
+    for (let i = 1; i <= workflowSteps.length; i++) {
+      if (completed.includes(i)) continue;
+      if (i === 8 && stripePaid) continue; // skip Pay if already paid
+      if (i === 1 || completed.includes(i - 1)) return i;
+    }
+    return null;
+  };
+
+  // After data loads or progress changes, scroll and focus next step
+  useEffect(() => {
+    if (!evaluatorData) return;
+    const nextStep = getNextAvailableStep(completedSteps);
+    if (!nextStep) return;
+    // Delay to ensure DOM is fully painted
+    setTimeout(() => {
+      const el = document.getElementById(
+        `step-${nextStep}`,
+      ) as HTMLElement | null;
+      if (!el) return;
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => {
+        el.focus({ preventScroll: true });
+      }, 250);
+      el.classList.add("ring-2", "ring-blue-400", "ring-opacity-75");
+      setTimeout(() => {
+        el.classList.remove("ring-2", "ring-blue-400", "ring-opacity-75");
+      }, 2000);
+    }, 300);
+  }, [evaluatorData, completedSteps, stripePaid]);
 
   // Handle browser back button
   useEffect(() => {
@@ -785,7 +790,10 @@ export default function Dashboard() {
                   <Card
                     key={step.id}
                     id={`step-${step.id}`}
-                    className={`border-2 transition-all duration-200 ${
+                    role="button"
+                    aria-disabled={!isAvailable}
+                    tabIndex={isAvailable ? 0 : -1}
+                    className={`border-2 transition-all duration-200 outline-none focus:ring-2 focus:ring-blue-400 ${
                       isAvailable
                         ? `cursor-pointer ${getStatusColor(status)}`
                         : "cursor-not-allowed bg-gray-100 border-gray-200 opacity-50"
@@ -793,6 +801,13 @@ export default function Dashboard() {
                     onClick={
                       isAvailable ? () => handleStepClick(step.id) : undefined
                     }
+                    onKeyDown={(e) => {
+                      if (!isAvailable) return;
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleStepClick(step.id);
+                      }
+                    }}
                   >
                     <CardContent className="p-4 sm:p-6">
                       <div className="flex items-center justify-between">

@@ -24,7 +24,7 @@ import {
   Camera,
   RotateCcw,
 } from "lucide-react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "../firebase";
 import {
@@ -63,9 +63,7 @@ export default function Register() {
   const navigate = useNavigate();
   const { user, setSelectedProfileId } = useAuth();
   const isDemoMode = useDemoMode();
-  const [searchParams] = useSearchParams();
-  const isAdmin = searchParams.get("admin") === "raygagne@12!%&A";
-  const sampleAccess = isAdmin || isDemoMode;
+  const sampleAccess = isDemoMode;
   const [formData, setFormData] = useState<EvaluatorData>({
     name: "",
     licenseNo: "",

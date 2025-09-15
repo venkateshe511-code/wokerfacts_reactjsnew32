@@ -23,6 +23,9 @@ import {
   Mail,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 // IndexedDB utilities for loading digital library images
 const DB_NAME = "DigitalLibraryDB";
@@ -143,6 +146,7 @@ export default function ReviewReport() {
       .reduce((s, v) => s + (Number(v) || 0), 0);
   };
   const navigate = useNavigate();
+  const { selectedProfileId } = useAuth();
   const [reportData, setReportData] = useState<ReportData>({
     evaluatorData: null,
     claimantData: null,
@@ -253,8 +257,38 @@ export default function ReviewReport() {
         });
       }
 
+      const evaluatorDataStr = evaluatorData;
+      let parsedEvaluator = evaluatorDataStr
+        ? JSON.parse(evaluatorDataStr)
+        : null;
+      if (!parsedEvaluator && selectedProfileId) {
+        try {
+          const ref = doc(db, "evaluatorProfiles", selectedProfileId);
+          const snap = await getDoc(ref);
+          if (snap.exists()) {
+            const d: any = snap.data();
+            parsedEvaluator = {
+              name: d.name || "",
+              licenseNo: d.licenseNo || "",
+              clinicName: d.clinicName || "",
+              address: d.address || "",
+              country: d.country || "",
+              city: d.city || "",
+              zipcode: d.zipcode || "",
+              email: d.email || "",
+              phone: d.phone || "",
+              website: d.website || "",
+              profilePhoto: d.profilePhoto || null,
+              clinicLogo: d.clinicLogo || null,
+            };
+          }
+        } catch (e) {
+          console.error("Failed to load evaluator profile for review:", e);
+        }
+      }
+
       setReportData({
-        evaluatorData: evaluatorData ? JSON.parse(evaluatorData) : null,
+        evaluatorData: parsedEvaluator,
         claimantData: claimantData ? JSON.parse(claimantData) : null,
         painIllustrationData: painIllustrationData
           ? JSON.parse(painIllustrationData)
@@ -279,7 +313,7 @@ export default function ReviewReport() {
     };
 
     loadAllData();
-  }, []);
+  }, [selectedProfileId]);
 
   const calculateBilateralDeficiency = (
     leftAvg: number,
@@ -715,8 +749,8 @@ export default function ReviewReport() {
                 </div>
 
                 {/* Mechanism and History of Injury */}
-                <div className="mt-8">
-                  <h3 className="font-bold mb-4">
+                <div className="mt-2 border-l-4 border-gray-300 pl-4">
+                  <h3 className="font-bold mb-2">
                     Mechanism and History of Injury
                   </h3>
                   <table className="w-full border border-gray-300 text-sm">
