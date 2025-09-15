@@ -242,23 +242,32 @@ export default function EditProfile() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
+    if (!user || !targetProfileId) { navigate('/profiles'); return; }
+
     setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Update data in localStorage for demo
-    localStorage.setItem('evaluatorData', JSON.stringify({
-      ...formData,
-      clinicLogo: logoPreview,
-      profilePhoto: profilePreview
-    }));
-    
+
+    const ref = doc(db, 'evaluatorProfiles', targetProfileId);
+    await updateDoc(ref, {
+      name: formData.name,
+      licenseNo: formData.licenseNo,
+      clinicName: formData.clinicName,
+      address: formData.address,
+      country: formData.country,
+      city: formData.city,
+      zipcode: formData.zipcode,
+      email: formData.email,
+      phone: formData.phone,
+      website: formData.website,
+      profilePhoto: profilePreview || null,
+      clinicLogo: logoPreview || null,
+      updatedAt: serverTimestamp(),
+    });
+
     setIsSubmitting(false);
     navigate('/dashboard');
   };
