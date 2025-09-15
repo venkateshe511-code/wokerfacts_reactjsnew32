@@ -49,6 +49,7 @@ export default function Login() {
     loginWithApple,
     signInWithEmail,
     signUpWithEmail,
+    resetPassword,
     user,
     selectedProfileId,
     setSelectedProfileId,
@@ -62,7 +63,8 @@ export default function Login() {
   const [loadingEmail, setLoadingEmail] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingApple, setLoadingApple] = useState(false);
-  const isLoading = loadingEmail || loadingGoogle || loadingApple;
+  const [loadingReset, setLoadingReset] = useState(false);
+  const isLoading = loadingEmail || loadingGoogle || loadingApple || loadingReset;
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
 
@@ -159,6 +161,31 @@ export default function Login() {
     }
   };
 
+  const withLoadingNoRedirect = async (
+    setSpecificLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    fn: () => Promise<void>,
+    successMessage?: string,
+  ) => {
+    setError(null);
+    setSpecificLoading(true);
+    try {
+      await fn();
+      if (successMessage) {
+        toast({ title: successMessage });
+      }
+    } catch (e: any) {
+      const msg = mapAuthError(e);
+      setError(msg);
+      toast({
+        title: "Request error",
+        description: msg,
+        variant: "destructive",
+      });
+    } finally {
+      setSpecificLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md shadow-lg">
@@ -217,6 +244,37 @@ export default function Login() {
               required
               autoComplete="current-password"
             />
+            <div className="flex items-center justify-between py-1">
+              <span className="text-xs text-gray-500"></span>
+              <button
+                type="button"
+                className="text-sm text-blue-600 hover:underline"
+                disabled={isLoading}
+                onClick={async () => {
+                  if (!email) {
+                    toast({
+                      title: "Enter your email",
+                      description: "Add your account email to get a reset link.",
+                      variant: "destructive",
+                    });
+                    return;
+                  }
+                  await withLoadingNoRedirect(
+                    setLoadingReset,
+                    () => resetPassword(email),
+                    "Password reset email sent",
+                  );
+                }}
+              >
+                {loadingReset ? (
+                  <span className="inline-flex items-center">
+                    <Loader2 className="animate-spin h-4 w-4 mr-1" /> Sending...
+                  </span>
+                ) : (
+                  "Forgot password?"
+                )}
+              </button>
+            </div>
             <Button type="submit" disabled={isLoading} className="w-full">
               {loadingEmail ? (
                 <Loader2 className="animate-spin" />
@@ -228,6 +286,7 @@ export default function Login() {
               {mode === "signin" ? "Sign in" : "Create account"}
             </Button>
             <button
+              type="button"
               className="text-sm text-blue-600 hover:underline"
               onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
             >
