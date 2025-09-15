@@ -224,6 +224,30 @@ export default function Register() {
 
     setIsSubmitting(true);
 
+    // Prevent duplicate profiles: reuse an existing one with same name + clinic for this user
+    try {
+      const { getDocs, collection, query, where } = await import("firebase/firestore");
+      const q = query(collection(db, "evaluatorProfiles"), where("ownerId", "==", user.uid));
+      const existingSnap = await getDocs(q);
+      let existingId: string | null = null;
+      existingSnap.forEach((d) => {
+        const data = d.data() as any;
+        if (
+          (data.name || "").trim().toLowerCase() === formData.name.trim().toLowerCase() &&
+          (data.clinicName || "").trim().toLowerCase() === formData.clinicName.trim().toLowerCase()
+        ) {
+          existingId = d.id;
+        }
+      });
+
+      if (existingId) {
+        setSelectedProfileId(existingId);
+        setIsSubmitting(false);
+        navigate("/dashboard");
+        return;
+      }
+    } catch {}
+
     const docRef = await addDoc(collection(db, "evaluatorProfiles"), {
       ownerId: user.uid,
       name: formData.name,
