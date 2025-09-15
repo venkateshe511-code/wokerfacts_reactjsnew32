@@ -157,6 +157,43 @@ export default function ProfileSelector() {
           </CardContent>
         </Card>
       </div>
+
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete evaluator profile?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the selected evaluator profile from the server. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={async () => {
+                if (!deletingId) return;
+                try {
+                  await deleteDoc(doc(db, "evaluatorProfiles", deletingId));
+                  setProfiles((prev) => prev.filter((x) => x.id !== deletingId));
+                  setDeleteOpen(false);
+                  if ((localStorage.getItem("selectedEvaluatorProfileId") || "") === deletingId) {
+                    setSelectedProfileId(null);
+                  }
+                  // Clear local cached evaluator data if any
+                  localStorage.removeItem("evaluatorData");
+                  toast({ title: "Profile deleted" });
+                } catch (e) {
+                  toast({ title: "Failed to delete profile", variant: "destructive" });
+                } finally {
+                  setDeletingId(null);
+                }
+              }}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
