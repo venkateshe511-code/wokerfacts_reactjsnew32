@@ -364,18 +364,16 @@ export default function Index() {
         />
         {displayName && (
           <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20">
-            <Link to="/profiles">
-              <Button
-                size="sm"
-                className="rounded-full bg-white/90 text-slate-900 border border-slate-200 hover:bg-white shadow-sm backdrop-blur px-4 py-2"
-              >
-                <UserCircle className="mr-2 h-5 w-5" />
-                <span className="flex flex-col items-start leading-tight text-left">
-                  <span className="text-xs uppercase tracking-wide opacity-90">Signed in</span>
-                  <span className="text-sm font-medium truncate max-w-[240px]" title={displayName || undefined}>{displayName}</span>
-                </span>
-              </Button>
-            </Link>
+            <div
+              className="rounded-full bg-white/90 text-slate-900 border border-slate-200 shadow-sm backdrop-blur px-4 py-2 flex items-center"
+              aria-label="Signed in user"
+            >
+              <UserCircle className="mr-2 h-5 w-5" />
+              <span className="flex flex-col items-start leading-tight text-left">
+                <span className="text-xs uppercase tracking-wide opacity-90">Signed in</span>
+                <span className="text-sm font-medium truncate max-w-[240px]" title={displayName || undefined}>{displayName}</span>
+              </span>
+            </div>
           </div>
         )}
         {/* Slideshow Background */}
@@ -1851,7 +1849,7 @@ export default function Index() {
               </p>
               <div className="text-gray-700 space-y-1">
                 <p>
-                  ��� Implement comprehensive safeguards for Protected Health
+                  • Implement comprehensive safeguards for Protected Health
                   Information (PHI)
                 </p>
                 <p>
