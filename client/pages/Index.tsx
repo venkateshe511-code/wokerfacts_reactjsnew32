@@ -82,9 +82,30 @@ export default function Index() {
   const handleSignOut = async () => {
     try {
       await signOut();
+
+      // Mirror dashboard: wipe all locally stored evaluation and profile data
+      const keysToRemove = [
+        "evaluatorData",
+        "completedSteps",
+        "claimantData",
+        "painIllustrationData",
+        "activityRatingData",
+        "referralQuestionsData",
+        "protocolTestsData",
+        "occupationalTasksData",
+        "testData",
+        "mtmTestData",
+        "digitalLibraryData",
+        "paymentData",
+        "reviewReportData",
+      ];
+
+      keysToRemove.forEach((key) => localStorage.removeItem(key));
+      localStorage.clear();
+
       toast({
         title: "Signed out",
-        description: "You have been signed out successfully.",
+        description: "All local data cleared and you have been signed out.",
         duration: 5000,
         className:
           "border-0 text-white bg-gradient-to-r from-indigo-600 to-blue-600 shadow-xl",
