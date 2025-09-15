@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -60,6 +60,10 @@ export default function ReferralQuestions() {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingImages, setUploadingImages] = useState<string | null>(null);
+
+  const questionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const textareaRefs = useRef<Record<string, HTMLTextAreaElement | null>>({});
+  const [lastAddedId, setLastAddedId] = useState<string | null>(null);
 
   const sampleReferralData = {
     questions: [
@@ -434,8 +438,9 @@ export default function ReferralQuestions() {
   };
 
   const addNewQuestion = () => {
+    const newId = `custom-${Date.now()}`;
     const newQuestion: ReferralQuestion = {
-      id: `custom-${Date.now()}`,
+      id: newId,
       question: "",
       answer: "",
       images: [],
@@ -445,6 +450,7 @@ export default function ReferralQuestions() {
       ...prev,
       questions: [...prev.questions, newQuestion],
     }));
+    setLastAddedId(newId);
   };
 
   const updateQuestion = (questionId: string, questionText: string) => {
@@ -490,6 +496,20 @@ export default function ReferralQuestions() {
     setIsSubmitting(false);
     setShowSuccessDialog(true);
   };
+
+  useEffect(() => {
+    if (lastAddedId) {
+      const el = questionRefs.current[lastAddedId];
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      const ta = textareaRefs.current[lastAddedId];
+      if (ta) {
+        ta.focus();
+      }
+      setLastAddedId(null);
+    }
+  }, [lastAddedId, referralData.questions.length]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -569,7 +589,7 @@ export default function ReferralQuestions() {
           <CardContent className="p-8">
             <div className="space-y-8">
               {referralData.questions.map((question, index) => (
-                <div key={question.id} className="space-y-4">
+                <div key={question.id} ref={(el) => (questionRefs.current[question.id] = el)} className="space-y-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       {question.id.startsWith("custom-") ? (
@@ -592,6 +612,7 @@ export default function ReferralQuestions() {
                               })()}
                             </span>
                             <Textarea
+                              ref={(el) => (textareaRefs.current[question.id] = el)}
                               value={question.question}
                               onChange={(e) =>
                                 updateQuestion(question.id, e.target.value)
