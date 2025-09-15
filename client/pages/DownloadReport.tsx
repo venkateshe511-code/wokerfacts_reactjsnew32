@@ -19,6 +19,9 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { getReferencesForTest, formatReference } from "@shared/references";
 
 // IndexedDB utilities for loading digital library images
@@ -93,6 +96,7 @@ interface ReportSummary {
 
 export default function DownloadReport() {
   const navigate = useNavigate();
+  const { selectedProfileId } = useAuth();
   const [reportSummary, setReportSummary] = useState<ReportSummary>({
     evaluatorName: "",
     claimantName: "",
@@ -108,13 +112,56 @@ export default function DownloadReport() {
   const [showClearDialog, setShowClearDialog] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState("pdf");
 
+  // Helper to get evaluator data with Firestore fallback to ensure logo and branding are present
+  const getEvaluatorData = async (): Promise<any> => {
+    try {
+      const local = localStorage.getItem("evaluatorData");
+      let parsed: any = local ? JSON.parse(local) : {};
+
+      const needsFetch =
+        (!parsed || Object.keys(parsed).length === 0 || !parsed.clinicLogo) &&
+        !!selectedProfileId;
+
+      if (needsFetch) {
+        try {
+          const ref = doc(db, "evaluatorProfiles", selectedProfileId as string);
+          const snap = await getDoc(ref);
+          if (snap.exists()) {
+            const d: any = snap.data();
+            const fromServer = {
+              name: d.name || "",
+              licenseNo: d.licenseNo || "",
+              clinicName: d.clinicName || "",
+              address: d.address || "",
+              country: d.country || "",
+              city: d.city || "",
+              zipcode: d.zipcode || "",
+              email: d.email || "",
+              phone: d.phone || "",
+              fax: d.fax || "",
+              website: d.website || "",
+              profilePhoto: d.profilePhoto || null,
+              clinicLogo: d.clinicLogo || null,
+            };
+            parsed = { ...fromServer, ...parsed };
+          }
+        } catch (e) {
+          console.error("Failed to load evaluator profile for report:", e);
+        }
+      }
+
+      return parsed || {};
+    } catch (e) {
+      console.error("Error reading evaluator data:", e);
+      return {};
+    }
+  };
+
   useEffect(() => {
     // Load summary data from all steps
     const loadSummaryData = async () => {
       try {
-        const evaluatorData = JSON.parse(
-          localStorage.getItem("evaluatorData") || "{}",
-        );
+        const evaluatorData = await getEvaluatorData();
         const claimantData = JSON.parse(
           localStorage.getItem("claimantData") || "{}",
         );
@@ -237,9 +284,7 @@ export default function DownloadReport() {
 
   const generateReportContent = async () => {
     // Load all evaluation data
-    const evaluatorData = JSON.parse(
-      localStorage.getItem("evaluatorData") || "{}",
-    );
+    const evaluatorData = await getEvaluatorData();
     const claimantData = JSON.parse(
       localStorage.getItem("claimantData") || "{}",
     );
@@ -336,7 +381,7 @@ export default function DownloadReport() {
             <h4 class="test-header" style="font-weight: bold; margin-bottom: 16px;">Occupational Tasks Methods Time Measurement Analysis</h4>
 
             <!-- Full height vertical line starting below the heading (fixed to match regular tests) -->
-            <div style="position: absolute; left: 160px; top: 60px; bottom: 0; width: 1px; background-color: #333;"></div>
+            <div style="position: absolute; left: 150px; top: 60px; bottom: 0; width: 1px; background-color: #333;"></div>
 
             <div style="display: grid; grid-template-columns: 160px 1fr; gap: 16px;">
                 <!-- Left Column - Illustrations -->
@@ -3762,7 +3807,7 @@ export default function DownloadReport() {
                     }</h4>
 
                     <!-- Full height vertical line starting below the heading (moved left to match occupational test) -->
-                    <div style="position: absolute; left: 160px; top: 60px; bottom: 0; width: 1px; background-color: #333;"></div>
+                    <div style="position: absolute; left: 150px; top: 60px; bottom: 0; width: 1px; background-color: #333;"></div>
 
                     <div style="display: grid; grid-template-columns: 160px 1fr; gap: 16px;">
                         <!-- Left Column - Illustrations -->
@@ -3796,23 +3841,23 @@ export default function DownloadReport() {
                                       !testName.includes("pinch")
                                         ? `
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-1.webp" alt="Grip Test Position 1" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-1.webp" alt="Grip Test Position 1" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 1</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-2.webp" alt="Grip Test Position 2" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-2.webp" alt="Grip Test Position 2" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 2</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-3.webp" alt="Grip Test Position 3" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-3.webp" alt="Grip Test Position 3" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 3</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-4.webp" alt="Grip Test Position 4" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-4.webp" alt="Grip Test Position 4" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 4</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/grip-test-5.webp" alt="Grip Test Position 5" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/grip-test-5.webp" alt="Grip Test Position 5" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 5</p>
                                     </div>
                                     `
@@ -3823,19 +3868,19 @@ export default function DownloadReport() {
                                       testName.includes("pinch")
                                         ? `
                                     <div style="text-align: left;">
-                                        <img src="/pinch-key-test.webp" alt="Key Pinch Test" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/pinch-key-test.webp" alt="Key Pinch Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Key Pinch</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/pinch-tip-test.webp" alt="Tip Pinch Test" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/pinch-tip-test.webp" alt="Tip Pinch Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Tip Pinch</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/pinch-palmer-test.webp" alt="Palmer Pinch Test" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/pinch-palmer-test.webp" alt="Palmer Pinch Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Palmer Pinch</p>
                                     </div>
                                     <div style="text-align: left;">
-                                        <img src="/pinch-grasp-test.webp" alt="Pinch Grasp Test" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                                        <img src="/pinch-grasp-test.webp" alt="Pinch Grasp Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                                         <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Pinch Grasp</p>
                                     </div>
                                     `
@@ -3907,27 +3952,27 @@ export default function DownloadReport() {
           testName.includes("bruce") || testName.includes("treadmill")
             ? `
         <div style="text-align: left;">
-            <img src="/mcaft-step-illustration.jpg" alt="Bruce treadmill test illustration" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+            <img src="/mcaft-step-illustration.jpg" alt="Bruce treadmill test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
             <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Bruce Protocol</p>
         </div>
         `
             : testName.includes("mcaft")
               ? `
         <div style="text-align: left;">
-            <img src="/bruce-treadmill-illustration.jpg" alt="mCAFT step test illustration" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+            <img src="/bruce-treadmill-illustration.jpg" alt="mCAFT step test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
             <p style="font-size: 7px; color: #555; margin: 1px 0 0;">mCAFT Step Test</p>
         </div>
         `
               : testName.includes("kasch")
                 ? `
         <div style="text-align: left;">
-            <img src="/kasch-step-illustration.jpg" alt="KASCH step test illustration" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+            <img src="/kasch-step-illustration.jpg" alt="KASCH step test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
             <p style="font-size: 7px; color: #555; margin: 1px 0 0;">KASCH Step Test</p>
         </div>
         `
                 : `
         <div style="text-align: left;">
-            <img src="/cardio-test-illustration.jpg" alt="Cardio test illustration" style="width: 60px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+            <img src="/cardio-test-illustration.jpg" alt="Cardio test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
             <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Cardio Test</p>
         </div>
         `
@@ -5057,9 +5102,7 @@ export default function DownloadReport() {
     } else {
       try {
         // Load all evaluation data for DOCX generation
-        const evaluatorData = JSON.parse(
-          localStorage.getItem("evaluatorData") || "{}",
-        );
+        const evaluatorData = await getEvaluatorData();
         const claimantData = JSON.parse(
           localStorage.getItem("claimantData") || "{}",
         );
