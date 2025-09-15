@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
-import { db } from "../firebase";
+import { db, auth } from "../firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import {
   Loader2,
