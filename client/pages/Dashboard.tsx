@@ -622,6 +622,14 @@ export default function Dashboard() {
               <Button
                 variant="outline"
                 size="sm"
+                onClick={() => navigate("/profiles")}
+                className="w-full sm:w-auto text-xs sm:text-sm min-w-[140px]"
+              >
+                Switch Profile
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => navigate("/edit-profile")}
                 className="w-full sm:w-auto text-xs sm:text-sm min-w-[140px]"
               >
