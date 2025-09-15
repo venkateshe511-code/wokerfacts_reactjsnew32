@@ -502,10 +502,10 @@ export default function ReviewReport() {
                         alt={
                           reportData.evaluatorData.clinicName || "Company Logo"
                         }
-                        className="h-12 w-auto max-w-48"
+                        className="h-24 w-auto max-w-96"
                       />
                     ) : (
-                      <div className="h-12 flex items-center">
+                      <div className="h-24 flex items-center">
                         <span className="text-xl font-bold text-blue-800">
                           {reportData.evaluatorData.clinicName || "Clinic Name"}
                         </span>
