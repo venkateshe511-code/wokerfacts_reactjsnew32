@@ -27,7 +27,14 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "../firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { useDemoMode } from "@/hooks/use-demo-mode";
 import {
   countryData,
@@ -95,34 +102,80 @@ export default function Register() {
   };
 
   const fillSampleProfile = async () => {
-    // Use assets from public folder for the demo/sample mode
     const defaultLogoPath = "/workerfacts-logo.png";
     const defaultProfilePath = "/sample-avatar.svg";
     setLogoPreview(defaultLogoPath);
     setProfilePreview(defaultProfilePath);
 
     setFormData(sampleProfileData);
-    setEnableDemoMode(true); // Automatically enable demo mode for sample
+    setEnableDemoMode(true);
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Must be signed in to create/select a profile
+    if (!user) {
+      setIsSubmitting(false);
+      navigate(`/login?redirect=${encodeURIComponent("/register")}`);
+      return;
+    }
 
-    // Store sample data in localStorage for demo
-    localStorage.setItem(
-      "evaluatorData",
-      JSON.stringify({
-        ...sampleProfileData,
-        clinicLogo: defaultLogoPath,
-        profilePhoto: defaultProfilePath,
-      }),
-    );
+    try {
+      // Reuse existing matching profile to avoid duplicates
+      const qExisting = query(
+        collection(db, "evaluatorProfiles"),
+        where("ownerId", "==", user.uid),
+      );
+      const existingSnap = await getDocs(qExisting);
+      let existingId: string | null = null;
+      existingSnap.forEach((d) => {
+        const data = d.data() as any;
+        if (
+          (data.name || "").trim().toLowerCase() ===
+            sampleProfileData.name.trim().toLowerCase() &&
+          (data.clinicName || "").trim().toLowerCase() ===
+            sampleProfileData.clinicName.trim().toLowerCase()
+        ) {
+          existingId = d.id;
+        }
+      });
 
-    // Enable demo mode for all subsequent steps
-    localStorage.setItem("demoMode", "true");
+      if (existingId) {
+        setSelectedProfileId(existingId);
+      } else {
+        const docRef = await addDoc(collection(db, "evaluatorProfiles"), {
+          ownerId: user.uid,
+          name: sampleProfileData.name,
+          licenseNo: sampleProfileData.licenseNo,
+          clinicName: sampleProfileData.clinicName,
+          address: sampleProfileData.address,
+          country: sampleProfileData.country,
+          city: sampleProfileData.city,
+          zipcode: sampleProfileData.zipcode,
+          email: sampleProfileData.email,
+          phone: sampleProfileData.phone,
+          website: sampleProfileData.website,
+          profilePhoto: defaultProfilePath,
+          clinicLogo: defaultLogoPath,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        });
+        setSelectedProfileId(docRef.id);
+      }
 
-    setIsSubmitting(false);
-    navigate("/dashboard");
+      // Persist evaluatorData locally for demo mode flows
+      localStorage.setItem(
+        "evaluatorData",
+        JSON.stringify({
+          ...sampleProfileData,
+          clinicLogo: defaultLogoPath,
+          profilePhoto: defaultProfilePath,
+        }),
+      );
+      localStorage.setItem("demoMode", "true");
+
+      navigate("/dashboard");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: keyof EvaluatorData, value: string) => {
@@ -223,6 +276,34 @@ export default function Register() {
     }
 
     setIsSubmitting(true);
+
+    // Prevent duplicate profiles: reuse an existing one with same name + clinic for this user
+    try {
+      const qExisting = query(
+        collection(db, "evaluatorProfiles"),
+        where("ownerId", "==", user.uid),
+      );
+      const existingSnap = await getDocs(qExisting);
+      let existingId: string | null = null;
+      existingSnap.forEach((d) => {
+        const data = d.data() as any;
+        if (
+          (data.name || "").trim().toLowerCase() ===
+            formData.name.trim().toLowerCase() &&
+          (data.clinicName || "").trim().toLowerCase() ===
+            formData.clinicName.trim().toLowerCase()
+        ) {
+          existingId = d.id;
+        }
+      });
+
+      if (existingId) {
+        setSelectedProfileId(existingId);
+        setIsSubmitting(false);
+        navigate("/dashboard");
+        return;
+      }
+    } catch {}
 
     const docRef = await addDoc(collection(db, "evaluatorProfiles"), {
       ownerId: user.uid,

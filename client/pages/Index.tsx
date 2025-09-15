@@ -82,9 +82,30 @@ export default function Index() {
   const handleSignOut = async () => {
     try {
       await signOut();
+
+      // Mirror dashboard: wipe all locally stored evaluation and profile data
+      const keysToRemove = [
+        "evaluatorData",
+        "completedSteps",
+        "claimantData",
+        "painIllustrationData",
+        "activityRatingData",
+        "referralQuestionsData",
+        "protocolTestsData",
+        "occupationalTasksData",
+        "testData",
+        "mtmTestData",
+        "digitalLibraryData",
+        "paymentData",
+        "reviewReportData",
+      ];
+
+      keysToRemove.forEach((key) => localStorage.removeItem(key));
+      localStorage.clear();
+
       toast({
         title: "Signed out",
-        description: "You have been signed out successfully.",
+        description: "All local data cleared and you have been signed out.",
         duration: 5000,
         className:
           "border-0 text-white bg-gradient-to-r from-indigo-600 to-blue-600 shadow-xl",
@@ -637,7 +658,7 @@ export default function Index() {
                   Rehab Baseline / Progress Checks
                 </CardTitle>
                 <CardDescription>
-                  An overview of patients��� ability and function to document
+                  An overview of patients' ability and function to document
                   baseline and progress monitoring for range of motion, muscle
                   testing and physical tasks directed at the area of
                   work-related injury.
@@ -1790,7 +1811,7 @@ export default function Index() {
                 <p>• Complete FCE evaluation report</p>
                 <p>• Downloadable PDF and DOC formats</p>
                 <p>• Professional medical documentation</p>
-                <p>�� No hidden fees or charges</p>
+                <p>• No hidden fees or charges</p>
               </div>
             </div>
           </div>
@@ -1933,7 +1954,7 @@ export default function Index() {
               </h3>
               <div className="text-gray-700 space-y-2">
                 <p>
-                  �� <strong>Encryption:</strong> All data is encrypted in
+                  • <strong>Encryption:</strong> All data is encrypted in
                   transit and at rest using industry-standard protocols
                 </p>
                 <p>

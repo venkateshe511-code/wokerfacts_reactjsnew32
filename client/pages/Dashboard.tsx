@@ -908,24 +908,26 @@ export default function Dashboard() {
                 Warning: Complete Data Wipe
               </h3>
               <p className="text-gray-600">
-                ALL data will be permanently deleted if you logout, including:
+                Logging out will remove all locally stored data on this device,
+                including:
               </p>
               <div className="bg-red-50 border border-red-200 rounded p-3 text-left">
                 <ul className="text-red-700 text-sm space-y-1">
-                  <li>• Your evaluator profile information</li>
                   <li>• All claimant data and test results</li>
-                  <li>• Uploaded images and documents</li>
-                  <li>• Payment and transaction data</li>
-                  <li>• All progress and step data</li>
+                  <li>• Uploaded images and documents cached locally</li>
+                  <li>• Payment data and step/progress data</li>
+                  <li>• Local selections (e.g., selected profile)</li>
                 </ul>
               </div>
               <p className="text-sm text-red-600 font-bold">
-                You will need to register again as a new evaluator. This cannot
-                be undone!
+                Your evaluator profiles stored in your account will NOT be
+                deleted. To remove a profile permanently, go to "Select
+                Evaluator Profile" and delete it. This cannot be undone.
               </p>
               <p className="text-xs text-gray-500 mt-2">
-                Note: Downloading a report only clears evaluation steps, not
-                your profile.
+                Note: Downloading a report only clears evaluation steps locally;
+                your evaluator profiles remain in your account until you delete
+                them.
               </p>
             </div>
           </div>
@@ -976,25 +978,26 @@ export default function Dashboard() {
                 Warning: Complete Data Wipe
               </h3>
               <p className="text-gray-600">
-                Going back to the home page will permanently delete ALL data,
-                including:
+                Going back to the home page will remove all locally stored data
+                on this device, including:
               </p>
               <div className="bg-red-50 border border-red-200 rounded p-3 text-left">
                 <ul className="text-red-700 text-sm space-y-1">
-                  <li>• Your evaluator profile information</li>
                   <li>• All claimant data and test results</li>
-                  <li>• Uploaded images and documents</li>
-                  <li>• Payment and transaction data</li>
-                  <li>• All progress and step data</li>
+                  <li>• Uploaded images and documents cached locally</li>
+                  <li>• Payment data and step/progress data</li>
+                  <li>• Local selections (e.g., selected profile)</li>
                 </ul>
               </div>
               <p className="text-sm text-red-600 font-bold">
-                You will need to register again as a new evaluator. This cannot
-                be undone!
+                Your evaluator profiles stored in your account will NOT be
+                deleted. To remove a profile permanently, go to "Select
+                Evaluator Profile" and delete it. This cannot be undone.
               </p>
               <p className="text-xs text-gray-500 mt-2">
                 Note: Use "Download Report" to save your work before navigating
-                away.
+                away. Your evaluator profiles stored in your account will not be
+                deleted by this action.
               </p>
             </div>
           </div>

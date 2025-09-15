@@ -8,10 +8,23 @@ import {
   query,
   where,
   Timestamp,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, CheckCircle2 } from "lucide-react";
+import { PlusCircle, CheckCircle2, Trash } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "@/hooks/use-toast";
 
 interface EvaluatorProfile {
   id: string;
@@ -24,11 +37,15 @@ export default function ProfileSelector() {
   const { user, setSelectedProfileId } = useAuth();
   const [profiles, setProfiles] = useState<EvaluatorProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const load = async () => {
       if (!user) return;
+      // Ensure no cached selection carries over (especially from demo flows)
+      setSelectedProfileId(null);
       const q = query(
         collection(db, "evaluatorProfiles"),
         where("ownerId", "==", user.uid),
@@ -48,7 +65,7 @@ export default function ProfileSelector() {
       setLoading(false);
     };
     load();
-  }, [user]);
+  }, [user, setSelectedProfileId]);
 
   if (!user) return null;
 
@@ -113,6 +130,16 @@ export default function ProfileSelector() {
                         Edit
                       </Button>
                       <Button
+                        variant="outline"
+                        onClick={() => {
+                          setDeletingId(p.id);
+                          setDeleteOpen(true);
+                        }}
+                        className="border-red-200 text-red-700 hover:bg-red-50"
+                      >
+                        <Trash className="mr-2" /> Delete
+                      </Button>
+                      <Button
                         onClick={() => {
                           setSelectedProfileId(p.id);
                           navigate("/dashboard");
@@ -139,6 +166,52 @@ export default function ProfileSelector() {
           </CardContent>
         </Card>
       </div>
+
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete evaluator profile?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the selected evaluator profile from
+              the server. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={async () => {
+                if (!deletingId) return;
+                try {
+                  await deleteDoc(doc(db, "evaluatorProfiles", deletingId));
+                  setProfiles((prev) =>
+                    prev.filter((x) => x.id !== deletingId),
+                  );
+                  setDeleteOpen(false);
+                  if (
+                    (localStorage.getItem("selectedEvaluatorProfileId") ||
+                      "") === deletingId
+                  ) {
+                    setSelectedProfileId(null);
+                  }
+                  // Clear local cached evaluator data if any
+                  localStorage.removeItem("evaluatorData");
+                  toast({ title: "Profile deleted" });
+                } catch (e) {
+                  toast({
+                    title: "Failed to delete profile",
+                    variant: "destructive",
+                  });
+                } finally {
+                  setDeletingId(null);
+                }
+              }}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
