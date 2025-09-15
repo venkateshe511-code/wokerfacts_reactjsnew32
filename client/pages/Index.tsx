@@ -208,7 +208,7 @@ export default function Index() {
                 size="sm"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 font-semibold"
               >
-                {user ? "Open Dashboard" : "Get Started"}
+                {user ? "Choose Profile" : "Get Started"}
               </Button>
             </Link>
           </nav>
@@ -276,7 +276,7 @@ export default function Index() {
                 size="sm"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 font-semibold text-sm"
               >
-                {user ? "Open Dashboard" : "Get Started"}
+                {user ? "Choose Profile" : "Get Started"}
               </Button>
             </Link>
           </nav>
@@ -342,7 +342,7 @@ export default function Index() {
                     size="sm"
                     className="bg-blue-500 hover:bg-blue-600 text-white w-full font-semibold text-center"
                   >
-                    {user ? "Open Dashboard" : "Get Started"}
+                    {user ? "Choose Profile" : "Get Started"}
                   </Button>
                 </Link>
               </div>
