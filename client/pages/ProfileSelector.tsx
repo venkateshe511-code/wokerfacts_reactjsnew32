@@ -121,6 +121,16 @@ export default function ProfileSelector() {
                         Edit
                       </Button>
                       <Button
+                        variant="outline"
+                        onClick={() => {
+                          setDeletingId(p.id);
+                          setDeleteOpen(true);
+                        }}
+                        className="border-red-200 text-red-700 hover:bg-red-50"
+                      >
+                        <Trash className="mr-2" /> Delete
+                      </Button>
+                      <Button
                         onClick={() => {
                           setSelectedProfileId(p.id);
                           navigate("/dashboard");
