@@ -45,7 +45,7 @@ export default function Login() {
         navigate(redirect);
         return;
       }
-      const uid = user?.uid;
+      const uid = auth.currentUser?.uid || user?.uid;
       if (!uid) {
         navigate("/profiles");
         return;
@@ -55,8 +55,29 @@ export default function Login() {
         where("ownerId", "==", uid),
       );
       const snap = await getDocs(q);
-      if (snap.size > 0) navigate("/profiles");
-      else navigate("/register");
+      const ids: string[] = [];
+      snap.forEach((d) => ids.push(d.id));
+
+      if (ids.length === 0) {
+        navigate("/register");
+        return;
+      }
+
+      // Use previously selected profile if still valid
+      if (selectedProfileId && ids.includes(selectedProfileId)) {
+        navigate("/dashboard");
+        return;
+      }
+
+      // Auto-select when exactly one profile exists
+      if (ids.length === 1) {
+        setSelectedProfileId(ids[0]);
+        navigate("/dashboard");
+        return;
+      }
+
+      // Multiple profiles and none selected: go to selector
+      navigate("/profiles");
     } catch {
       navigate("/profiles");
     }
