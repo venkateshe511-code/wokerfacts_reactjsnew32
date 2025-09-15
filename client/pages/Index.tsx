@@ -367,7 +367,7 @@ export default function Index() {
             <Link to="/profiles">
               <Button
                 size="sm"
-                className="bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 hover:from-indigo-700 hover:via-blue-700 hover:to-indigo-800 text-white shadow-lg ring-1 ring-white/10"
+                className="rounded-full bg-white/90 text-slate-900 border border-slate-200 hover:bg-white shadow-sm backdrop-blur px-4 py-2"
               >
                 <UserCircle className="mr-2 h-5 w-5" />
                 <span className="flex flex-col items-start leading-tight text-left">
@@ -1851,7 +1851,7 @@ export default function Index() {
               </p>
               <div className="text-gray-700 space-y-1">
                 <p>
-                  • Implement comprehensive safeguards for Protected Health
+                  ��� Implement comprehensive safeguards for Protected Health
                   Information (PHI)
                 </p>
                 <p>
