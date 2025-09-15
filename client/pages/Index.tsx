@@ -69,6 +69,8 @@ export default function Index() {
   const displayName = user?.displayName || user?.email || null;
 
   const handleSignOut = async () => {
+    const ok = window.confirm("Are you sure you want to sign out?");
+    if (!ok) return;
     try {
       await signOut();
       toast({ title: "Signed out" });
