@@ -598,7 +598,7 @@ export default function TestData() {
       unitMeasure: "",
     };
 
-    // If not already present, push these sample grips so the crosscheck logic is applicable
+    // If not already present AND if user selected any grip-related tests, push sample grips so the crosscheck logic is applicable
     const hasStd = sampleTests.some(
       (t) =>
         (t.testName || "").toLowerCase().includes("position 2") ||
@@ -612,10 +612,19 @@ export default function TestData() {
         (t.testName || "").toLowerCase().includes("exchange"),
     );
 
-    if (!hasStd) sampleTests.push(standardGrip as any);
-    if (!hasRapid) sampleTests.push(rapidGrip as any);
+    const selectedHasGrip = selectedTests.some((id: string) => {
+      const name = (testNames[id] || id).toLowerCase();
+      return (
+        name.includes("grip") ||
+        name.includes("pinch") ||
+        name.includes("hand")
+      );
+    });
 
-    // Ensure we don't duplicate if already present
+    if (selectedHasGrip) {
+      if (!hasStd) sampleTests.push(standardGrip as any);
+      if (!hasRapid) sampleTests.push(rapidGrip as any);
+    }
 
     // Generate sample MTM test data for occupational tests
     const sampleMtmData: Record<string, any> = {};
