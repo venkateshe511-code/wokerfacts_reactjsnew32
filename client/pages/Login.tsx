@@ -26,6 +26,8 @@ export default function Login() {
     signInWithEmail,
     signUpWithEmail,
     user,
+    selectedProfileId,
+    setSelectedProfileId,
   } = useAuth();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get("redirect");
