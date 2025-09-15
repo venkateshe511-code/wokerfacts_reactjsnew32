@@ -339,6 +339,7 @@ export default function Dashboard() {
   };
 
   const confirmLogout = async () => {
+    try { await signOut(); } catch {}
     // Complete data wipe - clear ALL stored data including profile
     const keysToRemove = [
       "evaluatorData",
