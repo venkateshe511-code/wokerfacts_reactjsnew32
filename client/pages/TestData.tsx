@@ -1425,7 +1425,7 @@ export default function TestData() {
         {isMTMTest && (
           <div className="mb-6">
             <OccupationalTestConfigurator
-              key={`mtm-${currentTest.testId}-${(mtmTestData[currentTest.testId]?.trials?.length || 0)}`}
+              key={`mtm-${currentTest.testId}-${mtmTestData[currentTest.testId]?.trials?.length || 0}`}
               testType={currentTest.testId}
               onSave={(data) => handleMTMTestSave(currentTest.testId, data)}
               onBack={() => {}}
