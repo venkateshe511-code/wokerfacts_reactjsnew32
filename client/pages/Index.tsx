@@ -354,7 +354,6 @@ export default function Index() {
         )}
       </header>
 
-
       {/* Hero Section */}
       <section className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden">
         <OfflineBackground
@@ -370,8 +369,15 @@ export default function Index() {
             >
               <UserCircle className="mr-2 h-5 w-5" />
               <span className="flex flex-col items-start leading-tight text-left">
-                <span className="text-xs uppercase tracking-wide opacity-90">Signed in as</span>
-                <span className="text-sm font-medium truncate max-w-[240px]" title={displayName || undefined}>{displayName}</span>
+                <span className="text-xs uppercase tracking-wide opacity-90">
+                  Signed in as
+                </span>
+                <span
+                  className="text-sm font-medium truncate max-w-[240px]"
+                  title={displayName || undefined}
+                >
+                  {displayName}
+                </span>
               </span>
             </div>
           </div>

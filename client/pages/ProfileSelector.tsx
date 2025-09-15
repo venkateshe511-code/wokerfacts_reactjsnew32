@@ -57,7 +57,9 @@ export default function ProfileSelector() {
       <div className="container mx-auto max-w-3xl">
         <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-2xl bg-gradient-to-r from-indigo-700 via-blue-600 to-indigo-700 bg-clip-text text-transparent">Select Evaluator Profile</CardTitle>
+            <CardTitle className="text-2xl bg-gradient-to-r from-indigo-700 via-blue-600 to-indigo-700 bg-clip-text text-transparent">
+              Select Evaluator Profile
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {loading ? (
@@ -65,7 +67,10 @@ export default function ProfileSelector() {
             ) : profiles.length === 0 ? (
               <div className="text-center space-y-3">
                 <p>No profiles found for your account.</p>
-                <Button onClick={() => navigate("/register")} className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white">
+                <Button
+                  onClick={() => navigate("/register")}
+                  className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white"
+                >
                   Create your first profile
                 </Button>
               </div>
@@ -110,7 +115,11 @@ export default function ProfileSelector() {
             )}
 
             <div className="pt-4 border-t">
-              <Button variant="outline" onClick={() => navigate("/register")} className="border-indigo-200 text-indigo-700 hover:bg-indigo-50">
+              <Button
+                variant="outline"
+                onClick={() => navigate("/register")}
+                className="border-indigo-200 text-indigo-700 hover:bg-indigo-50"
+              >
                 <PlusCircle className="mr-2" /> Create new profile
               </Button>
             </div>
