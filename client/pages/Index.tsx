@@ -419,7 +419,8 @@ export default function Index() {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Sign out?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    You will be signed out of your account and returned to the home page.
+                    You will be signed out of your account and returned to the
+                    home page.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

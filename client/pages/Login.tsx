@@ -64,7 +64,8 @@ export default function Login() {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingApple, setLoadingApple] = useState(false);
   const [loadingReset, setLoadingReset] = useState(false);
-  const isLoading = loadingEmail || loadingGoogle || loadingApple || loadingReset;
+  const isLoading =
+    loadingEmail || loadingGoogle || loadingApple || loadingReset;
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
 
@@ -99,12 +100,10 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await withLoading(
-      setLoadingEmail,
-      () =>
-        mode === "signin"
-          ? signInWithEmail(email, password)
-          : signUpWithEmail(email, password),
+    await withLoading(setLoadingEmail, () =>
+      mode === "signin"
+        ? signInWithEmail(email, password)
+        : signUpWithEmail(email, password),
     );
   };
 
@@ -254,7 +253,8 @@ export default function Login() {
                   if (!email) {
                     toast({
                       title: "Enter your email",
-                      description: "Add your account email to get a reset link.",
+                      description:
+                        "Add your account email to get a reset link.",
                       variant: "destructive",
                     });
                     return;
