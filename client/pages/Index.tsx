@@ -354,9 +354,16 @@ export default function Index() {
         )}
       </header>
 
-      {displayName && (
-        <div className="bg-transparent">
-          <div className="container mx-auto px-4 py-2 flex justify-end">
+
+      {/* Hero Section */}
+      <section className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden">
+        <OfflineBackground
+          backgroundImage="/home_page_background_image.jpg"
+          fallbackColor="bg-gradient-to-br from-blue-600 to-blue-800"
+          className="absolute inset-0"
+        />
+        {displayName && (
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20">
             <Link to="/profiles">
               <Button
                 size="sm"
@@ -370,16 +377,7 @@ export default function Index() {
               </Button>
             </Link>
           </div>
-        </div>
-      )}
-
-      {/* Hero Section */}
-      <section className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden">
-        <OfflineBackground
-          backgroundImage="/home_page_background_image.jpg"
-          fallbackColor="bg-gradient-to-br from-blue-600 to-blue-800"
-          className="absolute inset-0"
-        />
+        )}
         {/* Slideshow Background */}
         {/* <div className="absolute inset-0">
           {slideImages.map((image, index) => (
