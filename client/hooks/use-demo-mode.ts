@@ -1,13 +1,19 @@
-import { useAuth } from "@/hooks/use-auth";
-
 /**
- * Returns true only for the designated sample/demo account.
+ * Global sample/demo mode flag.
+ * Enabled when URL contains ?admin=raygagne@12!%&A and persisted in localStorage.
  */
 export const useDemoMode = (): boolean => {
-  const { user } = useAuth();
-  const email = user?.email?.toLowerCase() || "";
-  const sampleFlag =
+  if (typeof window !== "undefined") {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const adminParam = params.get("admin");
+      if (adminParam === "raygagne@12!%&A") {
+        localStorage.setItem("sampleAccess", "1");
+      }
+    } catch {}
+  }
+  return (
     typeof window !== "undefined" &&
-    localStorage.getItem("sampleAccess") === "1";
-  return email === "workerfacts@gmail.com" && sampleFlag;
+    localStorage.getItem("sampleAccess") === "1"
+  );
 };
