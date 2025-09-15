@@ -225,7 +225,9 @@ export default function Dashboard() {
     if (!nextStep) return;
     // Delay to ensure DOM is fully painted
     setTimeout(() => {
-      const el = document.getElementById(`step-${nextStep}`) as HTMLElement | null;
+      const el = document.getElementById(
+        `step-${nextStep}`,
+      ) as HTMLElement | null;
       if (!el) return;
       el.scrollIntoView({ behavior: "smooth", block: "center" });
       setTimeout(() => {

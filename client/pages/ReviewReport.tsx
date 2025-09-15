@@ -258,7 +258,9 @@ export default function ReviewReport() {
       }
 
       const evaluatorDataStr = evaluatorData;
-      let parsedEvaluator = evaluatorDataStr ? JSON.parse(evaluatorDataStr) : null;
+      let parsedEvaluator = evaluatorDataStr
+        ? JSON.parse(evaluatorDataStr)
+        : null;
       if (!parsedEvaluator && selectedProfileId) {
         try {
           const ref = doc(db, "evaluatorProfiles", selectedProfileId);
