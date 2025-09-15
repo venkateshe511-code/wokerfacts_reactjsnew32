@@ -17,9 +17,19 @@ import {
   LogIn,
   LogOut,
   ShieldCheck,
-  UserCircle,
   ArrowRight,
 } from "lucide-react";
+
+function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false" {...props}>
+      <path d="M17.64 9.2045c0-.638-.0571-1.251-.1636-1.836H9v3.472h4.844c-.2091 1.127-.844 2.081-1.797 2.72v2.256h2.904c1.7009-1.566 2.688-3.874 2.688-6.612z" fill="#4285F4"/>
+      <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.904-2.256C11.2 14.19 10.2 14.6 9 14.6c-2.31 0-4.268-1.56-4.971-3.654H1.028v2.3C2.508 16.44 5.522 18 9 18z" fill="#34A853"/>
+      <path d="M4.029 10.946C3.85 10.413 3.75 9.842 3.75 9.25c0-.592.1-1.163.279-1.696V5.254H1.028C.372 6.506 0 7.944 0 9.5s.372 2.994 1.028 4.246l3.001-2.8z" fill="#FBBC05"/>
+      <path d="M9 3.6c1.318 0 2.506.454 3.438 1.345l2.578-2.579C13.465.892 11.43 0 9 0 5.522 0 2.508 1.56 1.028 4.254l3.001 2.3C4.732 5.16 6.69 3.6 9 3.6z" fill="#EA4335"/>
+    </svg>
+  );
+}
 
 export default function Login() {
   const {
@@ -146,7 +156,9 @@ export default function Login() {
             onClick={() => withLoading(loginWithGoogle)}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
-            {loading ? <Loader2 className="animate-spin" /> : <UserCircle />}{" "}
+            {loading ? <Loader2 className="animate-spin" /> : (
+              <GoogleIcon className="h-4 w-4" />
+            )}{" "}
             Continue with Google
           </Button>
 
