@@ -576,8 +576,9 @@ export default function Dashboard() {
 
           {/* User controls */}
           <div className="ml-auto flex flex-col items-end space-y-2 text-right">
-            <span className="text-gray-700 text-sm break-all">
+            <span className="flex items-center gap-2 text-gray-700 text-sm break-all">
               {user?.email || user?.displayName}
+              <User className="h-4 w-4 text-gray-500" />
             </span>
             <div className="flex items-center gap-2">
               <Button
