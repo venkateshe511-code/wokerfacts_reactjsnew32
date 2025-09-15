@@ -25,6 +25,9 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import { db } from "../firebase";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useDemoMode } from "@/hooks/use-demo-mode";
 import {
   countryData,
@@ -51,6 +54,7 @@ interface EvaluatorData {
 
 export default function Register() {
   const navigate = useNavigate();
+  const { user, setSelectedProfileId } = useAuth();
   const isDemoMode = useDemoMode();
   const [searchParams] = useSearchParams();
   const isAdmin = searchParams.get("admin") === "raygagne@12!%&A";
@@ -212,23 +216,32 @@ export default function Register() {
       return;
     }
 
+    if (!user) {
+      navigate(`/login?redirect=${encodeURIComponent("/register")}`);
+      return;
+    }
+
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const docRef = await addDoc(collection(db, "evaluatorProfiles"), {
+      ownerId: user.uid,
+      name: formData.name,
+      licenseNo: formData.licenseNo,
+      clinicName: formData.clinicName,
+      address: formData.address,
+      country: formData.country,
+      city: formData.city,
+      zipcode: formData.zipcode,
+      email: formData.email,
+      phone: formData.phone,
+      website: formData.website,
+      profilePhoto: profilePreview || null,
+      clinicLogo: logoPreview || null,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
 
-    // Store data in localStorage for demo
-    localStorage.setItem(
-      "evaluatorData",
-      JSON.stringify({
-        ...formData,
-        clinicLogo: logoPreview, // Store base64 for demo
-        profilePhoto: profilePreview, // Store base64 for demo
-      }),
-    );
-
-    // Store demo mode preference (only if enabled by sample profile)
-    localStorage.setItem("demoMode", enableDemoMode.toString());
+    setSelectedProfileId(docRef.id);
 
     setIsSubmitting(false);
     navigate("/dashboard");
