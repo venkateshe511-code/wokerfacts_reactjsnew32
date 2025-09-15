@@ -255,7 +255,7 @@ export default function Index() {
                 size="sm"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 font-semibold text-sm"
               >
-                {user ? "Open" : "Get Started"}
+                {user ? "Choose" : "Get Started"}
               </Button>
             </Link>
           </nav>
@@ -556,7 +556,7 @@ export default function Index() {
                   Rehab Baseline / Progress Checks
                 </CardTitle>
                 <CardDescription>
-                  An overview of patients’ ability and function to document
+                  An overview of patients��� ability and function to document
                   baseline and progress monitoring for range of motion, muscle
                   testing and physical tasks directed at the area of
                   work-related injury.
