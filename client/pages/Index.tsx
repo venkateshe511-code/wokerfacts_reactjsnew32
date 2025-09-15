@@ -658,7 +658,7 @@ export default function Index() {
                   Rehab Baseline / Progress Checks
                 </CardTitle>
                 <CardDescription>
-                  An overview of patients��� ability and function to document
+                  An overview of patients' ability and function to document
                   baseline and progress monitoring for range of motion, muscle
                   testing and physical tasks directed at the area of
                   work-related injury.
@@ -1811,7 +1811,7 @@ export default function Index() {
                 <p>• Complete FCE evaluation report</p>
                 <p>• Downloadable PDF and DOC formats</p>
                 <p>• Professional medical documentation</p>
-                <p>�� No hidden fees or charges</p>
+                <p>• No hidden fees or charges</p>
               </div>
             </div>
           </div>
@@ -1954,7 +1954,7 @@ export default function Index() {
               </h3>
               <div className="text-gray-700 space-y-2">
                 <p>
-                  �� <strong>Encryption:</strong> All data is encrypted in
+                  • <strong>Encryption:</strong> All data is encrypted in
                   transit and at rest using industry-standard protocols
                 </p>
                 <p>
