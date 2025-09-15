@@ -27,7 +27,7 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "../firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp, getDocs, query, where } from "firebase/firestore";
 import { useDemoMode } from "@/hooks/use-demo-mode";
 import {
   countryData,
@@ -226,9 +226,8 @@ export default function Register() {
 
     // Prevent duplicate profiles: reuse an existing one with same name + clinic for this user
     try {
-      const { getDocs, collection, query, where } = await import("firebase/firestore");
-      const q = query(collection(db, "evaluatorProfiles"), where("ownerId", "==", user.uid));
-      const existingSnap = await getDocs(q);
+      const qExisting = query(collection(db, "evaluatorProfiles"), where("ownerId", "==", user.uid));
+      const existingSnap = await getDocs(qExisting);
       let existingId: string | null = null;
       existingSnap.forEach((d) => {
         const data = d.data() as any;
