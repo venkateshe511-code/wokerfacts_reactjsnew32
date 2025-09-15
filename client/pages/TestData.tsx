@@ -619,7 +619,7 @@ export default function TestData() {
       );
     });
 
-    if (selectedHasGrip) {
+    if (false) {
       if (!hasStd) sampleTests.push(standardGrip as any);
       if (!hasRapid) sampleTests.push(rapidGrip as any);
     }
@@ -1425,6 +1425,7 @@ export default function TestData() {
         {isMTMTest && (
           <div className="mb-6">
             <OccupationalTestConfigurator
+              key={`mtm-${currentTest.testId}-${mtmTestData[currentTest.testId]?.trials?.length || 0}`}
               testType={currentTest.testId}
               onSave={(data) => handleMTMTestSave(currentTest.testId, data)}
               onBack={() => {}}
