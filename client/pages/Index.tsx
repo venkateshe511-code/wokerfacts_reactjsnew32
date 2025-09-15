@@ -203,7 +203,7 @@ export default function Index() {
             {displayName && (
               <span className="text-white/90 text-sm">Signed in as {displayName}</span>
             )}
-            <Link to={user ? "/dashboard" : "/login?redirect=/register"}>
+            <Link to={user ? "/profiles" : "/login?redirect=/register"}>
               <Button
                 size="sm"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 font-semibold"
@@ -250,7 +250,7 @@ export default function Index() {
               Sample
             </a>
 
-            <Link to={user ? "/dashboard" : "/login?redirect=/register"}>
+            <Link to={user ? "/profiles" : "/login?redirect=/register"}>
               <Button
                 size="sm"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 font-semibold text-sm"
@@ -271,7 +271,7 @@ export default function Index() {
               Sample
             </a>
 
-            <Link to={user ? "/dashboard" : "/login?redirect=/register"}>
+            <Link to={user ? "/profiles" : "/login?redirect=/register"}>
               <Button
                 size="sm"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 font-semibold text-sm"
