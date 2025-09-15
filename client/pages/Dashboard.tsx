@@ -29,6 +29,9 @@ import {
   LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { toast } from "@/hooks/use-toast";
 import { useDemoMode } from "@/hooks/use-demo-mode";
 import { startCheckout } from "@/lib/payments";
@@ -60,6 +63,7 @@ export default function Dashboard() {
   const [checkoutRedirecting, setCheckoutRedirecting] = useState(false);
   const navigate = useNavigate();
   const isDemoMode = useDemoMode();
+  const { selectedProfileId, user } = useAuth();
   const [evaluatorData, setEvaluatorData] = useState<EvaluatorData | null>(
     null,
   );
@@ -144,12 +148,35 @@ export default function Dashboard() {
   ];
 
   useEffect(() => {
-    const savedData = localStorage.getItem("evaluatorData");
-    if (savedData) {
-      setEvaluatorData(JSON.parse(savedData));
-    } else {
-      navigate("/register");
-    }
+    const loadProfile = async () => {
+      if (!user) return;
+      if (!selectedProfileId) {
+        navigate("/profiles");
+        return;
+      }
+      const ref = doc(db, "evaluatorProfiles", selectedProfileId);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) {
+        navigate("/register");
+        return;
+      }
+      const data = snap.data() as any;
+      setEvaluatorData({
+        name: data.name || "",
+        licenseNo: data.licenseNo || "",
+        clinicName: data.clinicName || "",
+        address: data.address || "",
+        country: data.country || "",
+        city: data.city || "",
+        zipcode: data.zipcode || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        website: data.website || "",
+        profilePhoto: data.profilePhoto || null,
+        clinicLogo: data.clinicLogo || null,
+      });
+    };
+    loadProfile();
 
     // Load completed steps
     const savedCompletedSteps = localStorage.getItem("completedSteps");
@@ -206,7 +233,7 @@ export default function Dashboard() {
         }
       }, 300);
     }
-  }, [navigate]);
+  }, [navigate, selectedProfileId, user]);
 
   // Handle browser back button
   useEffect(() => {
