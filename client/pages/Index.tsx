@@ -201,7 +201,9 @@ export default function Index() {
             </a>
 
             {displayName && (
-              <span className="text-white/90 text-sm">Signed in as {displayName}</span>
+              <span className="text-white/90 text-sm">
+                Signed in as {displayName}
+              </span>
             )}
             <Link to={user ? "/profiles" : "/login?redirect=/register"}>
               <Button
@@ -335,9 +337,14 @@ export default function Index() {
                 </a>
 
                 {displayName && (
-                  <div className="text-white/90 text-sm text-center">Signed in as {displayName}</div>
+                  <div className="text-white/90 text-sm text-center">
+                    Signed in as {displayName}
+                  </div>
                 )}
-                <Link to={user ? "/dashboard" : "/login?redirect=/register"} className="w-full">
+                <Link
+                  to={user ? "/dashboard" : "/login?redirect=/register"}
+                  className="w-full"
+                >
                   <Button
                     size="sm"
                     className="bg-blue-500 hover:bg-blue-600 text-white w-full font-semibold text-center"

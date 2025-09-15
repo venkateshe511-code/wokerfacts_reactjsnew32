@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { auth, googleProvider, appleProvider } from "../firebase";
 import {
   onAuthStateChanged,
@@ -26,9 +32,9 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedProfileId, setSelectedProfileIdState] = useState<string | null>(
-    () => localStorage.getItem("selectedEvaluatorProfileId")
-  );
+  const [selectedProfileId, setSelectedProfileIdState] = useState<
+    string | null
+  >(() => localStorage.getItem("selectedEvaluatorProfileId"));
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
@@ -77,7 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signUpWithEmail,
       signOut,
     }),
-    [user, loading, selectedProfileId]
+    [user, loading, selectedProfileId],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

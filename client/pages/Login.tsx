@@ -7,10 +7,26 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "../firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { Loader2, Apple, Mail, UserPlus, LogIn, LogOut, ShieldCheck, UserCircle, ArrowRight } from "lucide-react";
+import {
+  Loader2,
+  Apple,
+  Mail,
+  UserPlus,
+  LogIn,
+  LogOut,
+  ShieldCheck,
+  UserCircle,
+  ArrowRight,
+} from "lucide-react";
 
 export default function Login() {
-  const { loginWithGoogle, loginWithApple, signInWithEmail, signUpWithEmail, user } = useAuth();
+  const {
+    loginWithGoogle,
+    loginWithApple,
+    signInWithEmail,
+    signUpWithEmail,
+    user,
+  } = useAuth();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get("redirect");
   const navigate = useNavigate();
@@ -32,7 +48,10 @@ export default function Login() {
         navigate("/profiles");
         return;
       }
-      const q = query(collection(db, "evaluatorProfiles"), where("ownerId", "==", uid));
+      const q = query(
+        collection(db, "evaluatorProfiles"),
+        where("ownerId", "==", uid),
+      );
       const snap = await getDocs(q);
       if (snap.size > 0) navigate("/profiles");
       else navigate("/register");
@@ -58,26 +77,50 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl">Sign {mode === "signin" ? "in" : "up"}</CardTitle>
+          <CardTitle className="text-2xl">
+            Sign {mode === "signin" ? "in" : "up"}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {error && (
-            <div className="text-sm text-red-600 border border-red-200 rounded-md p-2">{error}</div>
+            <div className="text-sm text-red-600 border border-red-200 rounded-md p-2">
+              {error}
+            </div>
           )}
 
-          <Button disabled={loading} onClick={() => withLoading(loginWithGoogle)} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-            {loading ? <Loader2 className="animate-spin" /> : <UserCircle />} Continue with Google
+          <Button
+            disabled={loading}
+            onClick={() => withLoading(loginWithGoogle)}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            {loading ? <Loader2 className="animate-spin" /> : <UserCircle />}{" "}
+            Continue with Google
           </Button>
 
-          <Button disabled={loading} onClick={() => withLoading(loginWithApple)} className="w-full bg-black hover:bg-black/90 text-white">
-            {loading ? <Loader2 className="animate-spin" /> : <Apple />} Continue with Apple
+          <Button
+            disabled={loading}
+            onClick={() => withLoading(loginWithApple)}
+            className="w-full bg-black hover:bg-black/90 text-white"
+          >
+            {loading ? <Loader2 className="animate-spin" /> : <Apple />}{" "}
+            Continue with Apple
           </Button>
 
           <div className="grid gap-2 pt-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <Button
               disabled={loading}
               onClick={() =>
@@ -89,13 +132,22 @@ export default function Login() {
               }
               className="w-full"
             >
-              {loading ? <Loader2 className="animate-spin" /> : mode === "signin" ? <LogIn /> : <UserPlus />} {mode === "signin" ? "Sign in" : "Create account"}
+              {loading ? (
+                <Loader2 className="animate-spin" />
+              ) : mode === "signin" ? (
+                <LogIn />
+              ) : (
+                <UserPlus />
+              )}{" "}
+              {mode === "signin" ? "Sign in" : "Create account"}
             </Button>
             <button
               className="text-sm text-blue-600 hover:underline"
               onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
             >
-              {mode === "signin" ? "Need an account? Sign up" : "Have an account? Sign in"}
+              {mode === "signin"
+                ? "Need an account? Sign up"
+                : "Have an account? Sign in"}
             </button>
           </div>
         </CardContent>
