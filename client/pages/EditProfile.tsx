@@ -134,16 +134,33 @@ export default function EditProfile() {
   const countries = Object.keys(countryData);
 
   useEffect(() => {
-    const savedData = localStorage.getItem('evaluatorData');
-    if (savedData) {
-      const data = JSON.parse(savedData);
-      setFormData(data);
-      setLogoPreview(data.clinicLogo);
-      setProfilePreview(data.profilePhoto);
-    } else {
-      navigate('/register');
-    }
-  }, [navigate]);
+    const load = async () => {
+      if (!user) return;
+      if (!targetProfileId) { navigate('/profiles'); return; }
+      const ref = doc(db, 'evaluatorProfiles', targetProfileId);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) { navigate('/register'); return; }
+      const data = snap.data() as any;
+      const mapped: EvaluatorData = {
+        name: data.name || '',
+        licenseNo: data.licenseNo || '',
+        clinicName: data.clinicName || '',
+        address: data.address || '',
+        country: data.country || '',
+        city: data.city || '',
+        zipcode: data.zipcode || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        website: data.website || '',
+        profilePhoto: data.profilePhoto || null,
+        clinicLogo: data.clinicLogo || null,
+      };
+      setFormData(mapped);
+      setLogoPreview(mapped.clinicLogo);
+      setProfilePreview(mapped.profilePhoto);
+    };
+    load();
+  }, [navigate, targetProfileId, user]);
 
   const handleInputChange = (field: keyof EvaluatorData, value: string) => {
     setFormData(prev => ({
