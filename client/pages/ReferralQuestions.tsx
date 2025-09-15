@@ -589,7 +589,11 @@ export default function ReferralQuestions() {
           <CardContent className="p-8">
             <div className="space-y-8">
               {referralData.questions.map((question, index) => (
-                <div key={question.id} ref={(el) => (questionRefs.current[question.id] = el)} className="space-y-4">
+                <div
+                  key={question.id}
+                  ref={(el) => (questionRefs.current[question.id] = el)}
+                  className="space-y-4"
+                >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       {question.id.startsWith("custom-") ? (
@@ -612,7 +616,9 @@ export default function ReferralQuestions() {
                               })()}
                             </span>
                             <Textarea
-                              ref={(el) => (textareaRefs.current[question.id] = el)}
+                              ref={(el) =>
+                                (textareaRefs.current[question.id] = el)
+                              }
                               value={question.question}
                               onChange={(e) =>
                                 updateQuestion(question.id, e.target.value)
