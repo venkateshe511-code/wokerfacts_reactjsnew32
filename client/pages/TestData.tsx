@@ -615,9 +615,7 @@ export default function TestData() {
     const selectedHasGrip = selectedTests.some((id: string) => {
       const name = (testNames[id] || id).toLowerCase();
       return (
-        name.includes("grip") ||
-        name.includes("pinch") ||
-        name.includes("hand")
+        name.includes("grip") || name.includes("pinch") || name.includes("hand")
       );
     });
 

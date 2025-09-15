@@ -453,7 +453,10 @@ export default function ReviewReport() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4" style={{ fontFamily: "Arial, sans-serif" }}>
+    <div
+      className="min-h-screen bg-gray-50 py-8 px-4"
+      style={{ fontFamily: "Arial, sans-serif" }}
+    >
       <div className="container mx-auto max-w-6xl">
         <div className="mb-8">
           <Button
@@ -1110,8 +1113,7 @@ export default function ReviewReport() {
                                     <p
                                       className="font-bold text-sm text-gray-800 text-center"
                                       style={{
-                                        fontFamily:
-                                          "Arial, sans-serif",
+                                        fontFamily: "Arial, sans-serif",
                                       }}
                                     >
                                       {image.title}
