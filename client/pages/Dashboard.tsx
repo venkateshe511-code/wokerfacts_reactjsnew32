@@ -63,7 +63,7 @@ export default function Dashboard() {
   const [checkoutRedirecting, setCheckoutRedirecting] = useState(false);
   const navigate = useNavigate();
   const isDemoMode = useDemoMode();
-  const { selectedProfileId, user } = useAuth();
+  const { selectedProfileId, user, signOut } = useAuth();
   const [evaluatorData, setEvaluatorData] = useState<EvaluatorData | null>(
     null,
   );
