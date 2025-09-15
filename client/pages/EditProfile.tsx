@@ -6,7 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Upload, X, Check, User, Building, Globe, Phone, Mail, Camera, RotateCcw, ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '@/hooks/use-auth';
+import { db } from '../firebase';
+import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 interface EvaluatorData {
   name: string;
