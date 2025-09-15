@@ -103,18 +103,8 @@ export default function Login() {
     if (mode === "signin") {
       await withLoading(setLoadingEmail, async () => {
         await signInWithEmail(email, password);
-        if (
-          email.toLowerCase() === "workerfacts@gmail.com" &&
-          password === "`1234567890-="
-        ) {
-          localStorage.setItem("sampleAccess", "1");
-        } else {
-          localStorage.removeItem("sampleAccess");
-        }
       });
     } else {
-      // On sign up, never grant sample access
-      localStorage.removeItem("sampleAccess");
       await withLoading(setLoadingEmail, () =>
         signUpWithEmail(email, password),
       );
@@ -217,10 +207,7 @@ export default function Login() {
           <Button
             type="button"
             disabled={isLoading}
-            onClick={() => {
-              localStorage.removeItem("sampleAccess");
-              return withLoading(setLoadingGoogle, loginWithGoogle);
-            }}
+            onClick={() => withLoading(setLoadingGoogle, loginWithGoogle)}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
             {loadingGoogle ? (
@@ -234,10 +221,7 @@ export default function Login() {
           <Button
             type="button"
             disabled={isLoading}
-            onClick={() => {
-              localStorage.removeItem("sampleAccess");
-              return withLoading(setLoadingApple, loginWithApple);
-            }}
+            onClick={() => withLoading(setLoadingApple, loginWithApple)}
             className="w-full bg-black hover:bg-black/90 text-white"
           >
             {loadingApple ? <Loader2 className="animate-spin" /> : <Apple />}{" "}
