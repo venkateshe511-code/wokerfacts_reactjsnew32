@@ -1,16 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useAuth } from "@/hooks/use-auth";
 
 /**
- * Hook to detect if demo mode is enabled
- * @returns {boolean} true if demo mode was selected during registration
+ * Returns true only for the designated sample/demo account.
  */
 export const useDemoMode = (): boolean => {
-  const [isDemoMode, setIsDemoMode] = useState(false);
-
-  useEffect(() => {
-    const demoMode = localStorage.getItem('demoMode');
-    setIsDemoMode(demoMode === 'true');
-  }, []);
-
-  return isDemoMode;
+  const { user } = useAuth();
+  const email = user?.email?.toLowerCase() || "";
+  return email === "workerfacts@gmail.com";
 };
