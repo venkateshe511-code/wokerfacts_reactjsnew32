@@ -211,12 +211,16 @@ export default function Dashboard() {
     const nextStep = completedStepsArray.length + 1;
     if (nextStep <= workflowSteps.length) {
       setTimeout(() => {
-        const nextStepElement = document.getElementById(`step-${nextStep}`);
+        const nextStepElement = document.getElementById(`step-${nextStep}`) as HTMLElement | null;
         if (nextStepElement) {
           nextStepElement.scrollIntoView({
             behavior: "smooth",
             block: "center",
           });
+          // Programmatically focus the next step for accessibility and fast action
+          setTimeout(() => {
+            nextStepElement.focus({ preventScroll: true });
+          }, 250);
           // Add a subtle highlight effect
           nextStepElement.classList.add(
             "ring-2",
@@ -785,7 +789,10 @@ export default function Dashboard() {
                   <Card
                     key={step.id}
                     id={`step-${step.id}`}
-                    className={`border-2 transition-all duration-200 ${
+                    role="button"
+                    aria-disabled={!isAvailable}
+                    tabIndex={isAvailable ? 0 : -1}
+                    className={`border-2 transition-all duration-200 outline-none focus:ring-2 focus:ring-blue-400 ${
                       isAvailable
                         ? `cursor-pointer ${getStatusColor(status)}`
                         : "cursor-not-allowed bg-gray-100 border-gray-200 opacity-50"
@@ -793,6 +800,13 @@ export default function Dashboard() {
                     onClick={
                       isAvailable ? () => handleStepClick(step.id) : undefined
                     }
+                    onKeyDown={(e) => {
+                      if (!isAvailable) return;
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleStepClick(step.id);
+                      }
+                    }}
                   >
                     <CardContent className="p-4 sm:p-6">
                       <div className="flex items-center justify-between">
