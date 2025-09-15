@@ -41,7 +41,7 @@ export default function Login() {
 
   const postLoginRedirect = async () => {
     try {
-      if (redirect) {
+      if (redirect && !redirect.startsWith("/register")) {
         navigate(redirect);
         return;
       }
