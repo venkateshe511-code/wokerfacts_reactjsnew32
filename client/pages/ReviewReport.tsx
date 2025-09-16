@@ -3292,7 +3292,7 @@ export default function ReviewReport() {
                                 }}
                               >
                                 <div
-                                  className="h-5 relative"
+                                  className="h-5 relative overflow-hidden"
                                   style={{
                                     height: "20px",
                                     background:
@@ -3303,7 +3303,7 @@ export default function ReviewReport() {
                                   <div
                                     className="h-5 flex items-center justify-end pr-1"
                                     style={{
-                                      width: `${(activity.rating / 10) * 100}%`,
+                                      width: `${Math.min(100, Math.max(0, ((Number(activity.rating) || 0) / 10) * 100))}%`,
                                       backgroundColor:
                                         barColors[index % barColors.length],
                                       height: "20px",
