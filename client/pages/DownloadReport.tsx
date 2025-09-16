@@ -395,20 +395,20 @@ export default function DownloadReport() {
                     <!-- Occupational task specific illustrations -->
                     <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
                         <div style="text-align: left;">
-                            <img src="/occupational-task-1.jpg" alt="Balance Assessment" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                            <img src="/occupational-balance.webp" alt="Balance Assessment" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                             <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Balance</p>
                         </div>
                         <div style="text-align: left;">
-                            <img src="/occupational-task-2.jpg" alt="Bi-Manual Handling" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Bi-Manual Handling</p>
+                            <img src="/occupational-push-pull.webp" alt="Push/Pull Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Push/Pull</p>
                         </div>
                         <div style="text-align: left;">
-                            <img src="/occupational-task-3.jpg" alt="Carry Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Carry</p>
+                            <img src="/occupational-climb-stairs.webp" alt="Climb Stairs Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Climb Stairs</p>
                         </div>
                         <div style="text-align: left;">
-                            <img src="/occupational-task-4.jpg" alt="Walk Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Walk</p>
+                            <img src="/occupational-crawl.webp" alt="Crawl Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Crawl</p>
                         </div>
                     </div>
                 </div>
