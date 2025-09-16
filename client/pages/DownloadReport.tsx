@@ -21,7 +21,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "../firebase";
-import { getSampleIllustrations, illustrationsToHtml } from "@/lib/test-illustrations";
+import {
+  getSampleIllustrations,
+  illustrationsToHtml,
+} from "@/lib/test-illustrations";
 import { doc, getDoc } from "firebase/firestore";
 import { getReferencesForTest, formatReference } from "@shared/references";
 

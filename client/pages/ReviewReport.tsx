@@ -3444,7 +3444,43 @@ export default function ReviewReport() {
                                     Sample Illustration:
                                   </p>
 
-                                  {(() => { const illos = getSampleIllustrations(test.testId || testName); if (!illos.length) return null; return (<div className="grid grid-cols-1 gap-3">{illos.map((ill, i) => (<div className="text-center" key={i}>{ill.yPercent === undefined || ill.yPercent === null ? (<img src={ill.src} alt={ill.label} className="w-16 h-20 mx-auto border object-cover bg-white" />) : (<div className="mx-auto border bg-white" style={{ width: 64, height: 80, backgroundImage: `url(${ill.src})`, backgroundRepeat: "no-repeat", backgroundSize: "100% auto", backgroundPosition: `center ${ill.yPercent}%` }} />)}<p className="text-xs mt-1">{ill.label}</p></div>))}</div>); })()}
+                                  {(() => {
+                                    const illos = getSampleIllustrations(
+                                      test.testId || testName,
+                                    );
+                                    if (!illos.length) return null;
+                                    return (
+                                      <div className="grid grid-cols-1 gap-3">
+                                        {illos.map((ill, i) => (
+                                          <div className="text-center" key={i}>
+                                            {ill.yPercent === undefined ||
+                                            ill.yPercent === null ? (
+                                              <img
+                                                src={ill.src}
+                                                alt={ill.label}
+                                                className="w-16 h-20 mx-auto border object-cover bg-white"
+                                              />
+                                            ) : (
+                                              <div
+                                                className="mx-auto border bg-white"
+                                                style={{
+                                                  width: 64,
+                                                  height: 80,
+                                                  backgroundImage: `url(${ill.src})`,
+                                                  backgroundRepeat: "no-repeat",
+                                                  backgroundSize: "100% auto",
+                                                  backgroundPosition: `center ${ill.yPercent}%`,
+                                                }}
+                                              />
+                                            )}
+                                            <p className="text-xs mt-1">
+                                              {ill.label}
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    );
+                                  })()}
 
                                   {/* Test-specific illustrations */}
                                   {isRangeOfMotion && (
@@ -5419,7 +5455,7 @@ export default function ReviewReport() {
                                                     <div
                                                       className="w-4 rounded-t"
                                                       style={{
-                                                        height: `${Math.max(((value || 0) / Math.max((test.leftMeasurements?.trial1 || 0),(test.leftMeasurements?.trial2 || 0),(test.leftMeasurements?.trial3 || 0),(test.leftMeasurements?.trial4 || 0),(test.leftMeasurements?.trial5 || 0),(test.leftMeasurements?.trial6 || 0),(test.rightMeasurements?.trial1 || 0),(test.rightMeasurements?.trial2 || 0),(test.rightMeasurements?.trial3 || 0),(test.rightMeasurements?.trial4 || 0),(test.rightMeasurements?.trial5 || 0),(test.rightMeasurements?.trial6 || 0),1)) * 120, 8)}px`,
+                                                        height: `${Math.max(((value || 0) / Math.max(test.leftMeasurements?.trial1 || 0, test.leftMeasurements?.trial2 || 0, test.leftMeasurements?.trial3 || 0, test.leftMeasurements?.trial4 || 0, test.leftMeasurements?.trial5 || 0, test.leftMeasurements?.trial6 || 0, test.rightMeasurements?.trial1 || 0, test.rightMeasurements?.trial2 || 0, test.rightMeasurements?.trial3 || 0, test.rightMeasurements?.trial4 || 0, test.rightMeasurements?.trial5 || 0, test.rightMeasurements?.trial6 || 0, 1)) * 120, 8)}px`,
                                                         backgroundColor:
                                                           trialColors[i],
                                                       }}
@@ -5503,7 +5539,7 @@ export default function ReviewReport() {
                                                     <div
                                                       className="w-4 rounded-t"
                                                       style={{
-                                                        height: `${Math.max(((value || 0) / Math.max((test.leftMeasurements?.trial1 || 0),(test.leftMeasurements?.trial2 || 0),(test.leftMeasurements?.trial3 || 0),(test.leftMeasurements?.trial4 || 0),(test.leftMeasurements?.trial5 || 0),(test.leftMeasurements?.trial6 || 0),(test.rightMeasurements?.trial1 || 0),(test.rightMeasurements?.trial2 || 0),(test.rightMeasurements?.trial3 || 0),(test.rightMeasurements?.trial4 || 0),(test.rightMeasurements?.trial5 || 0),(test.rightMeasurements?.trial6 || 0),1)) * 120, 8)}px`,
+                                                        height: `${Math.max(((value || 0) / Math.max(test.leftMeasurements?.trial1 || 0, test.leftMeasurements?.trial2 || 0, test.leftMeasurements?.trial3 || 0, test.leftMeasurements?.trial4 || 0, test.leftMeasurements?.trial5 || 0, test.leftMeasurements?.trial6 || 0, test.rightMeasurements?.trial1 || 0, test.rightMeasurements?.trial2 || 0, test.rightMeasurements?.trial3 || 0, test.rightMeasurements?.trial4 || 0, test.rightMeasurements?.trial5 || 0, test.rightMeasurements?.trial6 || 0, 1)) * 120, 8)}px`,
                                                         backgroundColor:
                                                           trialColors[i],
                                                       }}
