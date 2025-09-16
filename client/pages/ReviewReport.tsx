@@ -3292,7 +3292,7 @@ export default function ReviewReport() {
                                 }}
                               >
                                 <div
-                                  className="h-5 relative"
+                                  className="h-5 relative overflow-hidden"
                                   style={{
                                     height: "20px",
                                     background:
@@ -3303,7 +3303,7 @@ export default function ReviewReport() {
                                   <div
                                     className="h-5 flex items-center justify-end pr-1"
                                     style={{
-                                      width: `${(activity.rating / 10) * 100}%`,
+                                      width: `${Math.min(100, Math.max(0, ((Number(activity.rating) || 0) / 10) * 100))}%`,
                                       backgroundColor:
                                         barColors[index % barColors.length],
                                       height: "20px",
@@ -3443,6 +3443,44 @@ export default function ReviewReport() {
                                   <p className="text-sm font-medium underline">
                                     Sample Illustration:
                                   </p>
+
+                                  {(() => {
+                                    const illos = getSampleIllustrations(
+                                      test.testId || testName,
+                                    );
+                                    if (!illos.length) return null;
+                                    return (
+                                      <div className="grid grid-cols-1 gap-3">
+                                        {illos.map((ill, i) => (
+                                          <div className="text-center" key={i}>
+                                            {ill.yPercent === undefined ||
+                                            ill.yPercent === null ? (
+                                              <img
+                                                src={ill.src}
+                                                alt={ill.label}
+                                                className="w-16 h-20 mx-auto border object-cover bg-white"
+                                              />
+                                            ) : (
+                                              <div
+                                                className="mx-auto border bg-white"
+                                                style={{
+                                                  width: 64,
+                                                  height: 80,
+                                                  backgroundImage: `url(${ill.src})`,
+                                                  backgroundRepeat: "no-repeat",
+                                                  backgroundSize: "100% auto",
+                                                  backgroundPosition: `center ${ill.yPercent}%`,
+                                                }}
+                                              />
+                                            )}
+                                            <p className="text-xs mt-1">
+                                              {ill.label}
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    );
+                                  })()}
 
                                   {/* Test-specific illustrations */}
                                   {isRangeOfMotion && (
@@ -4660,7 +4698,7 @@ export default function ReviewReport() {
                                               </h5>
                                               <div className="bg-gray-100 p-3 text-xs">
                                                 <p className="mb-2">
-                                                  VO₂ max (ml•kg⁻��•min⁻¹) =
+                                                  VO₂ max (ml•kg⁻���•min⁻¹) =
                                                   17.2 + (1.29 × O₂ cost of the
                                                   last completed stage) - (0.09
                                                   × mass in kg) - (0.18 × age in
@@ -5391,7 +5429,7 @@ export default function ReviewReport() {
                                       <div className="grid grid-cols-2 gap-4">
                                         {/* Left Side Graph */}
                                         <div className="border border-gray-300 p-2">
-                                          <div className="h-40 bg-white border relative">
+                                          <div className="h-40 bg-white border relative overflow-hidden">
                                             <div className="flex items-end justify-center h-full p-2 space-x-1">
                                               {[
                                                 test.leftMeasurements?.trial1,
@@ -5417,7 +5455,7 @@ export default function ReviewReport() {
                                                     <div
                                                       className="w-4 rounded-t"
                                                       style={{
-                                                        height: `${Math.max(((value || 0) / Math.max(leftAvg, rightAvg, 1)) * 120, 8)}px`,
+                                                        height: `${Math.max(((value || 0) / Math.max(test.leftMeasurements?.trial1 || 0, test.leftMeasurements?.trial2 || 0, test.leftMeasurements?.trial3 || 0, test.leftMeasurements?.trial4 || 0, test.leftMeasurements?.trial5 || 0, test.leftMeasurements?.trial6 || 0, test.rightMeasurements?.trial1 || 0, test.rightMeasurements?.trial2 || 0, test.rightMeasurements?.trial3 || 0, test.rightMeasurements?.trial4 || 0, test.rightMeasurements?.trial5 || 0, test.rightMeasurements?.trial6 || 0, 1)) * 120, 8)}px`,
                                                         backgroundColor:
                                                           trialColors[i],
                                                       }}
@@ -5475,7 +5513,7 @@ export default function ReviewReport() {
 
                                         {/* Right Side Graph */}
                                         <div className="border border-gray-300 p-2">
-                                          <div className="h-40 bg-white border relative">
+                                          <div className="h-40 bg-white border relative overflow-hidden">
                                             <div className="flex items-end justify-center h-full p-2 space-x-1">
                                               {[
                                                 test.rightMeasurements?.trial1,
@@ -5501,7 +5539,7 @@ export default function ReviewReport() {
                                                     <div
                                                       className="w-4 rounded-t"
                                                       style={{
-                                                        height: `${Math.max(((value || 0) / Math.max(leftAvg, rightAvg, 1)) * 120, 8)}px`,
+                                                        height: `${Math.max(((value || 0) / Math.max(test.leftMeasurements?.trial1 || 0, test.leftMeasurements?.trial2 || 0, test.leftMeasurements?.trial3 || 0, test.leftMeasurements?.trial4 || 0, test.leftMeasurements?.trial5 || 0, test.leftMeasurements?.trial6 || 0, test.rightMeasurements?.trial1 || 0, test.rightMeasurements?.trial2 || 0, test.rightMeasurements?.trial3 || 0, test.rightMeasurements?.trial4 || 0, test.rightMeasurements?.trial5 || 0, test.rightMeasurements?.trial6 || 0, 1)) * 120, 8)}px`,
                                                         backgroundColor:
                                                           trialColors[i],
                                                       }}
