@@ -5828,6 +5828,34 @@ export default function ReviewReport() {
                             />
                             <p className="text-xs mt-1">Crawl</p>
                           </div>
+
+                          {/* Legacy samples kept in addition to new ones (except Balance corrected above) */}
+                          <div className="text-center">
+                            <img
+                              src="/occupational-task-2.jpg"
+                              alt="Bi-Manual Handling illustration showing both hands"
+                              className="w-16 h-20 mx-auto border object-cover bg-white"
+                            />
+                            <p className="text-xs mt-1">Bi-Manual Handling</p>
+                          </div>
+
+                          <div className="text-center">
+                            <img
+                              src="/occupational-task-3.jpg"
+                              alt="Carry task illustration showing human carrying weight"
+                              className="w-16 h-20 mx-auto border object-cover bg-white"
+                            />
+                            <p className="text-xs mt-1">Carry</p>
+                          </div>
+
+                          <div className="text-center">
+                            <img
+                              src="/occupational-task-4.jpg"
+                              alt="Walk task illustration showing human walking"
+                              className="w-16 h-20 mx-auto border object-cover bg-white"
+                            />
+                            <p className="text-xs mt-1">Walk</p>
+                          </div>
                         </div>
 
                         {/* Vertical Divider */}
