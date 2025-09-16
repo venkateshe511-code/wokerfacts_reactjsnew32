@@ -9,6 +9,7 @@ import { FirebaseError } from "firebase/app";
 import { toast } from "@/hooks/use-toast";
 import { db, auth } from "../firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
 import {
   Loader2,
   Apple,
@@ -19,6 +20,8 @@ import {
   ShieldCheck,
   ArrowRight,
 } from "lucide-react";
+
+type ProviderHint = "google.com" | "apple.com" | "password" | null;
 
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -68,6 +71,8 @@ export default function Login() {
     loadingEmail || loadingGoogle || loadingApple || loadingReset;
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
+  const [suggestedProvider, setSuggestedProvider] =
+    useState<ProviderHint>(null);
 
   const mapAuthError = (err: unknown): string => {
     const code = (err as FirebaseError)?.code || "unknown";
@@ -84,6 +89,10 @@ export default function Login() {
       case "auth/invalid-credential":
       case "auth/wrong-password":
         return "Invalid email or password. Please try again.";
+      case "auth/email-already-in-use":
+        return "An account with this email already exists. Use the sign-in options shown below.";
+      case "auth/account-exists-with-different-credential":
+        return "This email is already linked to another sign-in method. Use the recommended option below.";
       case "auth/too-many-requests":
         return "Too many attempts. Please wait a moment and try again.";
       case "auth/popup-closed-by-user":
@@ -157,12 +166,48 @@ export default function Login() {
     fn: () => Promise<void>,
   ) => {
     setError(null);
+    setSuggestedProvider(null);
     setSpecificLoading(true);
     try {
       await fn();
       await postLoginRedirect();
     } catch (e: any) {
-      const msg = mapAuthError(e);
+      let msg = mapAuthError(e);
+      // Try to provide tailored guidance if the email exists with a different provider
+      try {
+        const code = (e as FirebaseError)?.code;
+        let conflictEmail = email;
+        if (
+          code === "auth/account-exists-with-different-credential" &&
+          (e as any)?.customData?.email
+        ) {
+          conflictEmail = (e as any).customData.email;
+        }
+        if (
+          conflictEmail &&
+          (code === "auth/email-already-in-use" ||
+            code === "auth/account-exists-with-different-credential")
+        ) {
+          const methods = await fetchSignInMethodsForEmail(auth, conflictEmail);
+          if (methods.includes("google.com")) {
+            setSuggestedProvider("google.com");
+            msg =
+              "This email is registered with Google. Click 'Continue with Google' to sign in.";
+          } else if (methods.includes("apple.com")) {
+            setSuggestedProvider("apple.com");
+            msg =
+              "This email is registered with Apple. Click 'Continue with Apple' to sign in.";
+          } else if (methods.includes("password")) {
+            setSuggestedProvider("password");
+            setMode("signin");
+            msg =
+              "This email already has a password. Please sign in with email and password.";
+          }
+        }
+      } catch {
+        // Ignore provider suggestion failures
+      }
+
       setError(msg);
       toast({
         title: "Sign-in error",
@@ -211,6 +256,53 @@ export default function Login() {
           {error && (
             <div className="text-sm text-red-600 border border-red-200 rounded-md p-2">
               {error}
+            </div>
+          )}
+
+          {suggestedProvider && (
+            <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
+              Recommended action:
+              <div className="mt-2 flex gap-2">
+                {suggestedProvider === "google.com" && (
+                  <Button
+                    type="button"
+                    disabled={isLoading}
+                    onClick={() => {
+                      localStorage.removeItem("sampleAccess");
+                      return withLoading(setLoadingGoogle, loginWithGoogle);
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    {loadingGoogle ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <GoogleIcon className="h-4 w-4" />
+                    )}
+                    <span className="ml-2">Continue with Google</span>
+                  </Button>
+                )}
+                {suggestedProvider === "apple.com" && (
+                  <Button
+                    type="button"
+                    disabled={isLoading}
+                    onClick={() => {
+                      localStorage.removeItem("sampleAccess");
+                      return withLoading(setLoadingApple, loginWithApple);
+                    }}
+                    className="bg-black hover:bg-black/90 text-white"
+                  >
+                    {loadingApple ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <Apple />
+                    )}
+                    <span className="ml-2">Continue with Apple</span>
+                  </Button>
+                )}
+                {suggestedProvider === "password" && (
+                  <span>Switch to sign in and enter your password below.</span>
+                )}
+              </div>
             </div>
           )}
 
