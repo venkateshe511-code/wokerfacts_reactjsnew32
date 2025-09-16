@@ -88,6 +88,10 @@ export default function Login() {
       case "auth/invalid-credential":
       case "auth/wrong-password":
         return "Invalid email or password. Please try again.";
+      case "auth/email-already-in-use":
+        return "An account with this email already exists. Use the sign-in options shown below.";
+      case "auth/account-exists-with-different-credential":
+        return "This email is already linked to another sign-in method. Use the recommended option below.";
       case "auth/too-many-requests":
         return "Too many attempts. Please wait a moment and try again.";
       case "auth/popup-closed-by-user":
