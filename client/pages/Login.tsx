@@ -258,6 +258,51 @@ export default function Login() {
             </div>
           )}
 
+          {suggestedProvider && (
+            <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
+              Recommended action:
+              <div className="mt-2 flex gap-2">
+                {suggestedProvider === "google.com" && (
+                  <Button
+                    type="button"
+                    disabled={isLoading}
+                    onClick={() => {
+                      localStorage.removeItem("sampleAccess");
+                      return withLoading(setLoadingGoogle, loginWithGoogle);
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    {loadingGoogle ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <GoogleIcon className="h-4 w-4" />
+                    )}
+                    <span className="ml-2">Continue with Google</span>
+                  </Button>
+                )}
+                {suggestedProvider === "apple.com" && (
+                  <Button
+                    type="button"
+                    disabled={isLoading}
+                    onClick={() => {
+                      localStorage.removeItem("sampleAccess");
+                      return withLoading(setLoadingApple, loginWithApple);
+                    }}
+                    className="bg-black hover:bg-black/90 text-white"
+                  >
+                    {loadingApple ? <Loader2 className="animate-spin" /> : <Apple />}
+                    <span className="ml-2">Continue with Apple</span>
+                  </Button>
+                )}
+                {suggestedProvider === "password" && (
+                  <span>
+                    Switch to sign in and enter your password below.
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
           <Button
             type="button"
             disabled={isLoading}
