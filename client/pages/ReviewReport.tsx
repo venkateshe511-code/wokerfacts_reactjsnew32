@@ -2030,7 +2030,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Cervical extension ≥45�� for functional neck movement",
+                                  "Cervical extension ��45�� for functional neck movement",
                                 norm: 45, // degrees
                                 functionalMin: 45,
                                 unit: "degrees",
@@ -5795,8 +5795,8 @@ export default function ReviewReport() {
                           {/* Sample Illustration Images */}
                           <div className="text-center">
                             <img
-                              src="/occupational-task-1.jpg"
-                              alt="Balance assessment illustration showing legs and feet"
+                              src="/occupational-balance.webp"
+                              alt="Balance assessment illustration showing feet in tandem stance"
                               className="w-16 h-20 mx-auto border object-cover bg-white"
                             />
                             <p className="text-xs mt-1">Balance</p>
@@ -5804,38 +5804,29 @@ export default function ReviewReport() {
 
                           <div className="text-center">
                             <img
-                              src="/occupational-task-2.jpg"
-                              alt="Bi-Manual Handling illustration showing both hands"
+                              src="/occupational-push-pull.webp"
+                              alt="Push/Pull task illustration"
                               className="w-16 h-20 mx-auto border object-cover bg-white"
                             />
-                            <p className="text-xs mt-1">Bi-Manual Handling</p>
+                            <p className="text-xs mt-1">Push/Pull</p>
                           </div>
 
                           <div className="text-center">
                             <img
-                              src="/occupational-task-2.jpg"
-                              alt="Bi-Manual Handling illustration showing both hands"
+                              src="/occupational-climb-stairs.webp"
+                              alt="Climb stairs task illustration"
                               className="w-16 h-20 mx-auto border object-cover bg-white"
                             />
-                            <p className="text-xs mt-1">Bi-Manual Handling</p>
+                            <p className="text-xs mt-1">Climb Stairs</p>
                           </div>
 
                           <div className="text-center">
                             <img
-                              src="/occupational-task-3.jpg"
-                              alt="Carry task illustration showing human carrying weight"
+                              src="/occupational-crawl.webp"
+                              alt="Crawl task illustration"
                               className="w-16 h-20 mx-auto border object-cover bg-white"
                             />
-                            <p className="text-xs mt-1">Carry</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-task-4.jpg"
-                              alt="Walk task illustration showing human walking"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Walk</p>
+                            <p className="text-xs mt-1">Crawl</p>
                           </div>
                         </div>
 
