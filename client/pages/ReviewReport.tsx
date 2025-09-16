@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { getSampleIllustrations } from "@/lib/test-illustrations";
 
 // IndexedDB utilities for loading digital library images
 const DB_NAME = "DigitalLibraryDB";
