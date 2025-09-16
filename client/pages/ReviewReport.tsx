@@ -3624,10 +3624,10 @@ export default function ReviewReport() {
                                         testName.includes("treadmill")) && (
                                         <div className="text-center">
                                           <img
-                                              src="/bruce-treadmill-illustration.jpg"
-                                              alt="Bruce treadmill test illustration"
-                                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                                            />
+                                            src="/bruce-treadmill-illustration.jpg"
+                                            alt="Bruce treadmill test illustration"
+                                            className="w-16 h-20 mx-auto border object-cover bg-white"
+                                          />
                                           <p className="text-xs mt-1">
                                             Bruce Protocol
                                           </p>
@@ -3638,10 +3638,10 @@ export default function ReviewReport() {
                                       {testName.includes("mcaft") && (
                                         <div className="text-center">
                                           <img
-                                              src="/mcaft-step-illustration.jpg"
-                                              alt="mCAFT step test illustration"
-                                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                                            />
+                                            src="/mcaft-step-illustration.jpg"
+                                            alt="mCAFT step test illustration"
+                                            className="w-16 h-20 mx-auto border object-cover bg-white"
+                                          />
                                           <p className="text-xs mt-1">
                                             mCAFT Step Test
                                           </p>
