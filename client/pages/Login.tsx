@@ -71,7 +71,8 @@ export default function Login() {
     loadingEmail || loadingGoogle || loadingApple || loadingReset;
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
-  const [suggestedProvider, setSuggestedProvider] = useState<ProviderHint>(null);
+  const [suggestedProvider, setSuggestedProvider] =
+    useState<ProviderHint>(null);
 
   const mapAuthError = (err: unknown): string => {
     const code = (err as FirebaseError)?.code || "unknown";
@@ -290,14 +291,16 @@ export default function Login() {
                     }}
                     className="bg-black hover:bg-black/90 text-white"
                   >
-                    {loadingApple ? <Loader2 className="animate-spin" /> : <Apple />}
+                    {loadingApple ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <Apple />
+                    )}
                     <span className="ml-2">Continue with Apple</span>
                   </Button>
                 )}
                 {suggestedProvider === "password" && (
-                  <span>
-                    Switch to sign in and enter your password below.
-                  </span>
+                  <span>Switch to sign in and enter your password below.</span>
                 )}
               </div>
             </div>
