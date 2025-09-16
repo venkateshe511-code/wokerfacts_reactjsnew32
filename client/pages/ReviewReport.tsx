@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { getSampleIllustrations } from "@/lib/test-illustrations";
 
 // IndexedDB utilities for loading digital library images
 const DB_NAME = "DigitalLibraryDB";
@@ -3623,7 +3624,7 @@ export default function ReviewReport() {
                                         testName.includes("treadmill")) && (
                                         <div className="text-center">
                                           <img
-                                            src="/mcaft-step-illustration.jpg"
+                                            src="/bruce-treadmill-illustration.jpg"
                                             alt="Bruce treadmill test illustration"
                                             className="w-16 h-20 mx-auto border object-cover bg-white"
                                           />
@@ -3637,7 +3638,7 @@ export default function ReviewReport() {
                                       {testName.includes("mcaft") && (
                                         <div className="text-center">
                                           <img
-                                            src="/bruce-treadmill-illustration.jpg"
+                                            src="/mcaft-step-illustration.jpg"
                                             alt="mCAFT step test illustration"
                                             className="w-16 h-20 mx-auto border object-cover bg-white"
                                           />
@@ -5794,8 +5795,8 @@ export default function ReviewReport() {
                           {/* Sample Illustration Images */}
                           <div className="text-center">
                             <img
-                              src="/occupational-task-1.jpg"
-                              alt="Balance assessment illustration showing legs and feet"
+                              src="/occupational-balance.webp"
+                              alt="Balance assessment illustration showing feet in tandem stance"
                               className="w-16 h-20 mx-auto border object-cover bg-white"
                             />
                             <p className="text-xs mt-1">Balance</p>
@@ -5803,13 +5804,32 @@ export default function ReviewReport() {
 
                           <div className="text-center">
                             <img
-                              src="/occupational-task-2.jpg"
-                              alt="Bi-Manual Handling illustration showing both hands"
+                              src="/occupational-push-pull.webp"
+                              alt="Push/Pull task illustration"
                               className="w-16 h-20 mx-auto border object-cover bg-white"
                             />
-                            <p className="text-xs mt-1">Bi-Manual Handling</p>
+                            <p className="text-xs mt-1">Push/Pull</p>
                           </div>
 
+                          <div className="text-center">
+                            <img
+                              src="/occupational-climb-stairs.webp"
+                              alt="Climb stairs task illustration"
+                              className="w-16 h-20 mx-auto border object-cover bg-white"
+                            />
+                            <p className="text-xs mt-1">Climb Stairs</p>
+                          </div>
+
+                          <div className="text-center">
+                            <img
+                              src="/occupational-crawl.webp"
+                              alt="Crawl task illustration"
+                              className="w-16 h-20 mx-auto border object-cover bg-white"
+                            />
+                            <p className="text-xs mt-1">Crawl</p>
+                          </div>
+
+                          {/* Legacy samples kept in addition to new ones (except Balance corrected above) */}
                           <div className="text-center">
                             <img
                               src="/occupational-task-2.jpg"
