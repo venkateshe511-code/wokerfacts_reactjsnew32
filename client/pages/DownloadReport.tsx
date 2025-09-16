@@ -410,6 +410,19 @@ export default function DownloadReport() {
                             <img src="/occupational-crawl.webp" alt="Crawl Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
                             <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Crawl</p>
                         </div>
+                        <!-- Legacy samples kept in addition to new ones (except Balance corrected above) -->
+                        <div style="text-align: left;">
+                            <img src="/occupational-task-2.jpg" alt="Bi-Manual Handling" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Bi-Manual Handling</p>
+                        </div>
+                        <div style="text-align: left;">
+                            <img src="/occupational-task-3.jpg" alt="Carry Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Carry</p>
+                        </div>
+                        <div style="text-align: left;">
+                            <img src="/occupational-task-4.jpg" alt="Walk Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
+                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Walk</p>
+                        </div>
                     </div>
                 </div>
 
