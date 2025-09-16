@@ -21,6 +21,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "../firebase";
+import { getSampleIllustrations, illustrationsToHtml } from "@/lib/test-illustrations";
 import { doc, getDoc } from "firebase/firestore";
 import { getReferencesForTest, formatReference } from "@shared/references";
 
@@ -3800,6 +3801,7 @@ export default function DownloadReport() {
             // Only add page break for the first test in each major category
             const needsPageBreak = testIndex === 0;
 
+            const illos = getSampleIllustrations(test.testId || testName);
             return `
                 <div class="test-section ${isPinchTest ? "pinch-test" : ""}" style="page-break-before: always; padding: 20px 0; position: relative;">
                     <h4 class="test-header" style="font-weight: bold; margin-bottom: 16px; color: #4472C4;">${
@@ -3813,201 +3815,8 @@ export default function DownloadReport() {
                         <!-- Left Column - Illustrations -->
                         <div style="display: flex; flex-direction: column; gap: 6px;">
                             <p style="font-size: 11px; font-weight: 400; text-decoration: underline; color: #666; margin: 0;">Sample Illustration:</p>
-
-                            <!-- Test-specific illustrations -->
-                            ${
-                              isRangeOfMotion
-                                ? `
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                    <div style="text-align: left;">
-                                        <img src="/range-spine-test.webp" alt="Range of Motion Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Range of Motion</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/range-lateral-test.webp" alt="Lateral Range Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Lateral Flexion</p>
-                                    </div>
-                                </div>
-                            `
-                                : ""
-                            }
-
-                            ${
-                              isGripTest
-                                ? `
-                                <div style="display: flex; flex-direction: column; gap: 3px;">
-                                    ${
-                                      testName.includes("grip") &&
-                                      !testName.includes("pinch")
-                                        ? `
-                                    <div style="text-align: left;">
-                                        <img src="/grip-test-1.webp" alt="Grip Test Position 1" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 1</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/grip-test-2.webp" alt="Grip Test Position 2" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 2</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/grip-test-3.webp" alt="Grip Test Position 3" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 3</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/grip-test-4.webp" alt="Grip Test Position 4" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 4</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/grip-test-5.webp" alt="Grip Test Position 5" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Position 5</p>
-                                    </div>
-                                    `
-                                        : ``
-                                    }
-
-                                    ${
-                                      testName.includes("pinch")
-                                        ? `
-                                    <div style="text-align: left;">
-                                        <img src="/pinch-key-test.webp" alt="Key Pinch Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Key Pinch</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/pinch-tip-test.webp" alt="Tip Pinch Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Tip Pinch</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/pinch-palmer-test.webp" alt="Palmer Pinch Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Palmer Pinch</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/pinch-grasp-test.webp" alt="Pinch Grasp Test" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Pinch Grasp</p>
-                                    </div>
-                                    `
-                                        : ``
-                                    }
-                                </div>
-                            `
-                                : ""
-                            }
-
-                            ${
-                              isLiftTest
-                                ? `
-                                <div style="display: flex; flex-direction: column; gap: 3px;">
-                                    <div style="text-align: left;">
-                                        <img src="/lift-overhead-test.webp" alt="Overhead Lift Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Overhead Lift</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/lift-standing-test.webp" alt="Standing Lift Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Standing Lift</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/lift-standing-test.webp" alt="Mid Lift Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Mid Lift</p>
-                                    </div>
-                                    <div style="text-align: left;">
-                                        <img src="/lift-squat-test.webp" alt="Low Lift Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                                        <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">Low Lift</p>
-                                    </div>
-                                </div>
-                            `
-                                : ""
-                            }
-
-                    ${
-                      isStrengthTest &&
-                      !isGripTest &&
-                      !isLiftTest &&
-                      !isRangeOfMotion
-                        ? `
-    <div style="display: flex; flex-direction: column; gap: 3px; align-items: flex-start;">
-        <div style="text-align: left;">
-            <img src="/lift-overhead-test.webp" alt="Static High Lift Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Static High</p>
-        </div>
-        <div style="text-align: left;">
-            <img src="/lift-squat-test.webp" alt="Static Low Lift Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Static Low</p>
-        </div>
-        <div style="text-align: left;">
-            <img src="/lift-standing-test.webp" alt="Static Mid Lift Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Static Mid</p>
-        </div>
-        <div style="text-align: left;">
-            <img src="/lift-push-pull-test.webp" alt="Static Pull Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Static Pull</p>
-        </div>
-        <div style="text-align: left;">
-            <img src="/lift-push-pull-test.webp" alt="Static Push Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Static Push</p>
-        </div>
-    </div>
-  `
-                        : isCardioTest
-                          ? `
-    <div style="display: flex; flex-direction: column; gap: 3px;">
-        ${
-          testName.includes("bruce") || testName.includes("treadmill")
-            ? `
-        <div style="text-align: left;">
-            <img src="/mcaft-step-illustration.jpg" alt="Bruce treadmill test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Bruce Protocol</p>
-        </div>
-        `
-            : testName.includes("mcaft")
-              ? `
-        <div style="text-align: left;">
-            <img src="/bruce-treadmill-illustration.jpg" alt="mCAFT step test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">mCAFT Step Test</p>
-        </div>
-        `
-              : testName.includes("kasch")
-                ? `
-        <div style="text-align: left;">
-            <img src="/kasch-step-illustration.jpg" alt="KASCH step test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">KASCH Step Test</p>
-        </div>
-        `
-                : `
-        <div style="text-align: left;">
-            <img src="/cardio-test-illustration.jpg" alt="Cardio test illustration" style="width: 72px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Cardio Test</p>
-        </div>
-        `
-        }
-    </div>
-    `
-                          : !isRangeOfMotion &&
-                              !isGripTest &&
-                              !isLiftTest &&
-                              !isStrengthTest
-                            ? `
-    <div style="display: flex; flex-direction: column; gap: 3px; align-items: flex-start;">
-        <div style="text-align: left;">
-            <img src="/occupational-task-1.jpg" alt="Balance Assessment" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Balance</p>
-        </div>
-        <div style="text-align: left;">
-            <img src="/occupational-task-2.jpg" alt="Bi-Manual Handling" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Bi-Manual Handling</p>
-        </div>
-        <div style="text-align: left;">
-            <img src="/occupational-task-3.jpg" alt="Carry Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Carry</p>
-        </div>
-        <div style="text-align: left;">
-            <img src="/occupational-task-4.jpg" alt="Walk Test" style="width: 70px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-            <p style="font-size: 7px; color: #555; margin: 1px 0 0;">Walk</p>
-        </div>
-    </div>
-    `
-                            : ``
-                    }
-
-              
-                        </div>
+                            ${illustrationsToHtml(illos)}
+                        </div
 
                         <!-- Right Column - Combined Content with Tests and Charts -->
                         <div style="display: flex; flex-direction: column; gap: 15px;">
