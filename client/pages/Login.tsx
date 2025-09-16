@@ -9,6 +9,7 @@ import { FirebaseError } from "firebase/app";
 import { toast } from "@/hooks/use-toast";
 import { db, auth } from "../firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { fetchSignInMethodsForEmail } from "firebase/auth";
 import {
   Loader2,
   Apple,
@@ -19,6 +20,8 @@ import {
   ShieldCheck,
   ArrowRight,
 } from "lucide-react";
+
+type ProviderHint = "google.com" | "apple.com" | "password" | null;
 
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
