@@ -71,6 +71,7 @@ export default function Login() {
     loadingEmail || loadingGoogle || loadingApple || loadingReset;
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
+  const [suggestedProvider, setSuggestedProvider] = useState<ProviderHint>(null);
 
   const mapAuthError = (err: unknown): string => {
     const code = (err as FirebaseError)?.code || "unknown";
