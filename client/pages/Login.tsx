@@ -165,12 +165,48 @@ export default function Login() {
     fn: () => Promise<void>,
   ) => {
     setError(null);
+    setSuggestedProvider(null);
     setSpecificLoading(true);
     try {
       await fn();
       await postLoginRedirect();
     } catch (e: any) {
-      const msg = mapAuthError(e);
+      let msg = mapAuthError(e);
+      // Try to provide tailored guidance if the email exists with a different provider
+      try {
+        const code = (e as FirebaseError)?.code;
+        let conflictEmail = email;
+        if (
+          code === "auth/account-exists-with-different-credential" &&
+          (e as any)?.customData?.email
+        ) {
+          conflictEmail = (e as any).customData.email;
+        }
+        if (
+          conflictEmail &&
+          (code === "auth/email-already-in-use" ||
+            code === "auth/account-exists-with-different-credential")
+        ) {
+          const methods = await fetchSignInMethodsForEmail(auth, conflictEmail);
+          if (methods.includes("google.com")) {
+            setSuggestedProvider("google.com");
+            msg =
+              "This email is registered with Google. Click 'Continue with Google' to sign in.";
+          } else if (methods.includes("apple.com")) {
+            setSuggestedProvider("apple.com");
+            msg =
+              "This email is registered with Apple. Click 'Continue with Apple' to sign in.";
+          } else if (methods.includes("password")) {
+            setSuggestedProvider("password");
+            setMode("signin");
+            msg =
+              "This email already has a password. Please sign in with email and password.";
+          }
+        }
+      } catch {
+        // Ignore provider suggestion failures
+      }
+
       setError(msg);
       toast({
         title: "Sign-in error",
