@@ -3402,7 +3402,19 @@ export default function ReviewReport() {
                         const isRangeOfMotion =
                           testName.includes("flexion") ||
                           testName.includes("extension") ||
-                          testName.includes("range");
+                          testName.includes("range") ||
+                          testName.includes("lateral") ||
+                          testName.includes("rotation") ||
+                          testName.includes("abduction") ||
+                          testName.includes("adduction") ||
+                          testName.includes("radial") ||
+                          testName.includes("ulnar") ||
+                          testName.includes("deviation") ||
+                          testName.includes("supination") ||
+                          testName.includes("pronation") ||
+                          testName.includes("dorsi") ||
+                          testName.includes("dorsiflexion") ||
+                          testName.includes("palmar");
                         const isGripTest =
                           testName.includes("grip") ||
                           testName.includes("pinch");
@@ -4595,7 +4607,7 @@ export default function ReviewReport() {
                                                 </span>
                                                 <span className="text-sm">
                                                   {" "}
-                                                  (ml•kg⁻¹•min⁻��)
+                                                  (ml���kg⁻¹•min⁻��)
                                                 </span>
                                               </div>
                                               <div>
