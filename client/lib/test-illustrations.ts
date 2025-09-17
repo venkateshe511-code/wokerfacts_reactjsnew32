@@ -44,49 +44,33 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
 
   // Strength mappings
   if (isStrength) {
-    // Grip (by position if present)
+    // Grip (detect detailed positions and variants)
     if (key.includes("grip")) {
-      if (/position\s*1|pos\s*1|p1/.test(key)) {
+      const toArabic = (roman: string) => {
+        const map: Record<string, number> = { i: 1, ii: 2, iii: 3, iv: 4, v: 5 };
+        return map[roman.toLowerCase()] || 0;
+      };
+      const numMatch = key.match(/position\s*[#-:]?\s*(\d)/) || key.match(/pos\s*[#-:]?\s*(\d)/);
+      const romanMatch = key.match(/position\s*[#-:]?\s*(i{1,3}|iv|v)\b/);
+      let pos = 0;
+      if (numMatch) pos = parseInt(numMatch[1], 10);
+      else if (romanMatch) pos = toArabic(romanMatch[1]);
+      else if (/\bp\s*1\b|\bp1\b/.test(key)) pos = 1;
+      else if (/\bp\s*2\b|\bp2\b/.test(key)) pos = 2;
+      else if (/\bp\s*3\b|\bp3\b/.test(key)) pos = 3;
+      else if (/\bp\s*4\b|\bp4\b/.test(key)) pos = 4;
+      else if (/\bp\s*5\b|\bp5\b/.test(key)) pos = 5;
+
+      if (pos >= 1 && pos <= 5) {
         return [
           {
-            src: "/sampe_illustration/Hand_grip_mvve_mve_position1.png",
-            label: "Grip Position 1",
+            src: `/sampe_illustration/Hand_grip_mvve_mve_position${pos}.png`,
+            label: `Grip Position ${pos}`,
           },
         ];
       }
-      if (/position\s*2|pos\s*2|p2/.test(key)) {
-        return [
-          {
-            src: "/sampe_illustration/Hand_grip_mvve_mve_position2.png",
-            label: "Grip Position 2",
-          },
-        ];
-      }
-      if (/position\s*3|pos\s*3|p3/.test(key)) {
-        return [
-          {
-            src: "/sampe_illustration/Hand_grip_mvve_mve_position3.png",
-            label: "Grip Position 3",
-          },
-        ];
-      }
-      if (/position\s*4|pos\s*4|p4/.test(key)) {
-        return [
-          {
-            src: "/sampe_illustration/Hand_grip_mvve_mve_position4.png",
-            label: "Grip Position 4",
-          },
-        ];
-      }
-      if (/position\s*5|pos\s*5|p5/.test(key)) {
-        return [
-          {
-            src: "/sampe_illustration/Hand_grip_mvve_mve_position5.png",
-            label: "Grip Position 5",
-          },
-        ];
-      }
-      if (key.includes("rapid")) {
+
+      if (key.includes("rapid") || key.includes("exchange")) {
         return [
           {
             src: "/sampe_illustration/Hand_grip_rapid_exchange.png",
@@ -94,7 +78,8 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
           },
         ];
       }
-      // Default grip illustration
+
+      // Default grip illustration (MVVE/MVE generic)
       return [
         {
           src: "/sampe_illustration/Hand_grip_mvve_mve_position2.png",
