@@ -32,7 +32,12 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
     key.includes("grip") ||
     key.includes("pinch") ||
     key.includes("strength") ||
-    key.includes("force");
+    key.includes("force") ||
+    key.includes("lift") ||
+    key.includes("push") ||
+    key.includes("pull") ||
+    key.includes("static") ||
+    key.includes("dynamic");
 
   // If not Strength/ROM, return empty (don't touch MTM/Occupational/Cardio)
   if (!isROM && !isStrength) return [];
