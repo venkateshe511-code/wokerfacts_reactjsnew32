@@ -3405,6 +3405,7 @@ export default function ReviewReport() {
                           testName.includes("range") ||
                           testName.includes("lateral") ||
                           testName.includes("rotation") ||
+                          testName.includes("oblique") ||
                           testName.includes("abduction") ||
                           testName.includes("adduction") ||
                           testName.includes("radial") ||
@@ -3412,9 +3413,14 @@ export default function ReviewReport() {
                           testName.includes("deviation") ||
                           testName.includes("supination") ||
                           testName.includes("pronation") ||
+                          testName.includes("inversion") ||
+                          testName.includes("eversion") ||
                           testName.includes("dorsi") ||
                           testName.includes("dorsiflexion") ||
-                          testName.includes("palmar");
+                          testName.includes("palmar") ||
+                          testName.includes("straight-leg") ||
+                          (testName.includes("straight") && testName.includes("leg") && testName.includes("raise")) ||
+                          testName.includes("slr");
                         const isGripTest =
                           testName.includes("grip") ||
                           testName.includes("pinch");
@@ -3423,7 +3429,8 @@ export default function ReviewReport() {
                           testName.includes("carry");
                         const isStrengthTest =
                           testName.includes("strength") ||
-                          testName.includes("force");
+                          testName.includes("force") ||
+                          testName.includes("lift");
                         const isCardioTest =
                           testName.includes("step") ||
                           testName.includes("treadmill") ||
@@ -4607,7 +4614,7 @@ export default function ReviewReport() {
                                                 </span>
                                                 <span className="text-sm">
                                                   {" "}
-                                                  (ml���kg⁻¹•min⁻��)
+                                                  (ml•kg⁻¹•min⁻��)
                                                 </span>
                                               </div>
                                               <div>
