@@ -3510,7 +3510,7 @@ export default function ReviewReport() {
                                         testName.includes("treadmill")) && (
                                         <div className="text-center">
                                           <img
-                                            src="/bruce-treadmill-illustration.jpg"
+                                            src="/mcaft-step-illustration.jpg"
                                             alt="Bruce treadmill test illustration"
                                             className="w-16 h-20 mx-auto border object-cover bg-white"
                                           />
@@ -3524,7 +3524,7 @@ export default function ReviewReport() {
                                       {testName.includes("mcaft") && (
                                         <div className="text-center">
                                           <img
-                                            src="/mcaft-step-illustration.jpg"
+                                            src="/bruce-treadmill-illustration.jpg"
                                             alt="mCAFT step test illustration"
                                             className="w-16 h-20 mx-auto border object-cover bg-white"
                                           />
