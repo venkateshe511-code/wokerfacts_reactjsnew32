@@ -1981,7 +1981,7 @@ export default function ReviewReport() {
                           ) {
                             return {
                               requirement:
-                                "Key pinch ≥4.3 kg (Light) / ���7.0 kg (Medium work)",
+                                "Key pinch ≥4.3 kg (Light) / �����7.0 kg (Medium work)",
                               lightWork: 4.3, // kg
                               mediumWork: 7.0, // kg
                               unit: "kg",
@@ -3402,7 +3402,27 @@ export default function ReviewReport() {
                         const isRangeOfMotion =
                           testName.includes("flexion") ||
                           testName.includes("extension") ||
-                          testName.includes("range");
+                          testName.includes("range") ||
+                          testName.includes("lateral") ||
+                          testName.includes("rotation") ||
+                          testName.includes("oblique") ||
+                          testName.includes("abduction") ||
+                          testName.includes("adduction") ||
+                          testName.includes("radial") ||
+                          testName.includes("ulnar") ||
+                          testName.includes("deviation") ||
+                          testName.includes("supination") ||
+                          testName.includes("pronation") ||
+                          testName.includes("inversion") ||
+                          testName.includes("eversion") ||
+                          testName.includes("dorsi") ||
+                          testName.includes("dorsiflexion") ||
+                          testName.includes("palmar") ||
+                          testName.includes("straight-leg") ||
+                          (testName.includes("straight") &&
+                            testName.includes("leg") &&
+                            testName.includes("raise")) ||
+                          testName.includes("slr");
                         const isGripTest =
                           testName.includes("grip") ||
                           testName.includes("pinch");
@@ -3411,7 +3431,8 @@ export default function ReviewReport() {
                           testName.includes("carry");
                         const isStrengthTest =
                           testName.includes("strength") ||
-                          testName.includes("force");
+                          testName.includes("force") ||
+                          testName.includes("lift");
                         const isCardioTest =
                           testName.includes("step") ||
                           testName.includes("treadmill") ||
@@ -3450,172 +3471,37 @@ export default function ReviewReport() {
                                       test.testId || testName,
                                     );
                                     if (!illos.length) return null;
+                                    const ill = illos[0];
                                     return (
                                       <div className="grid grid-cols-1 gap-3">
-                                        {illos.map((ill, i) => (
-                                          <div className="text-center" key={i}>
-                                            {ill.yPercent === undefined ||
-                                            ill.yPercent === null ? (
-                                              <img
-                                                src={ill.src}
-                                                alt={ill.label}
-                                                className="w-16 h-20 mx-auto border object-cover bg-white"
-                                              />
-                                            ) : (
-                                              <div
-                                                className="mx-auto border bg-white"
-                                                style={{
-                                                  width: 64,
-                                                  height: 80,
-                                                  backgroundImage: `url(${ill.src})`,
-                                                  backgroundRepeat: "no-repeat",
-                                                  backgroundSize: "100% auto",
-                                                  backgroundPosition: `center ${ill.yPercent}%`,
-                                                }}
-                                              />
-                                            )}
-                                            <p className="text-xs mt-1">
-                                              {ill.label}
-                                            </p>
-                                          </div>
-                                        ))}
+                                        <div className="text-center">
+                                          {ill.yPercent === undefined ||
+                                          ill.yPercent === null ? (
+                                            <img
+                                              src={ill.src}
+                                              alt={ill.label}
+                                              className="w-16 h-20 mx-auto border object-cover bg-white"
+                                            />
+                                          ) : (
+                                            <div
+                                              className="mx-auto border bg-white"
+                                              style={{
+                                                width: 64,
+                                                height: 80,
+                                                backgroundImage: `url(${ill.src})`,
+                                                backgroundRepeat: "no-repeat",
+                                                backgroundSize: "100% auto",
+                                                backgroundPosition: `center ${ill.yPercent}%`,
+                                              }}
+                                            />
+                                          )}
+                                          <p className="text-xs mt-1">
+                                            {ill.label}
+                                          </p>
+                                        </div>
                                       </div>
                                     );
                                   })()}
-
-                                  {/* Test-specific illustrations */}
-                                  {isRangeOfMotion && (
-                                    <div className="space-y-4">
-                                      {/* Lumbar Flexion/Extension */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/range-spine-test.webp"
-                                          alt="Spine flexion/extension"
-                                          className="w-16 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">
-                                          Flexion/Extension
-                                        </p>
-                                      </div>
-
-                                      {/* Lumbar Lateral Flexion */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/range-lateral-test.webp"
-                                          alt="Lumbar lateral flexion"
-                                          className="w-16 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">
-                                          Lumbar Lateral
-                                        </p>
-                                      </div>
-
-                                      {/* Cervical Range */}
-                                      {testName.includes("cervical") && (
-                                        <div className="text-center">
-                                          <img
-                                            src="/range-spine-test.webp"
-                                            alt="Cervical range of motion"
-                                            className="w-20 h-28 mx-auto border object-cover bg-white"
-                                          />
-                                          <p className="text-xs mt-1">
-                                            Cervical ROM
-                                          </p>
-                                        </div>
-                                      )}
-                                    </div>
-                                  )}
-
-                                  {isGripTest && (
-                                    <div className="space-y-4">
-                                      {/* Standard Grip */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/grip-test-1.webp"
-                                          alt="Grip strength test"
-                                          className="w-16 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">
-                                          Grip Strength
-                                        </p>
-                                      </div>
-
-                                      {/* Pinch Tests */}
-                                      {testName.includes("pinch") && (
-                                        <>
-                                          <div className="text-center">
-                                            <img
-                                              src="/pinch-tip-test.webp"
-                                              alt="Tip pinch test"
-                                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                                            />
-                                            <p className="text-xs mt-1">
-                                              Tip Pinch
-                                            </p>
-                                          </div>
-
-                                          <div className="text-center">
-                                            <img
-                                              src="/pinch-key-test.webp"
-                                              alt="Key/Palmer pinch test"
-                                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                                            />
-                                            <p className="text-xs mt-1">
-                                              Key/Palmar
-                                            </p>
-                                          </div>
-                                        </>
-                                      )}
-                                    </div>
-                                  )}
-
-                                  {isLiftTest && (
-                                    <div className="space-y-4">
-                                      {/* Overhead Lift */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/lift-overhead-test.webp"
-                                          alt="Overhead lift test"
-                                          className="w-16 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">
-                                          High Lift
-                                        </p>
-                                      </div>
-
-                                      {/* Mid Level Lift */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/lift-standing-test.webp"
-                                          alt="Mid lift test"
-                                          className="w-16 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">Mid Lift</p>
-                                      </div>
-
-                                      {/* Low Lift */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/lift-squat-test.webp"
-                                          alt="Low lift test"
-                                          className="w-16 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">Low Lift</p>
-                                      </div>
-
-                                      {/* Full Lift Sequence */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/lift-push-pull-test.webp"
-                                          alt="Lift sequence test"
-                                          className="w-20 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">
-                                          Lift Sequence
-                                        </p>
-                                      </div>
-                                    </div>
-                                  )}
 
                                   {isCardioTest && (
                                     <div className="space-y-4">
@@ -3685,7 +3571,8 @@ export default function ReviewReport() {
                                   {!isRangeOfMotion &&
                                     !isGripTest &&
                                     !isLiftTest &&
-                                    !isCardioTest && (
+                                    !isCardioTest &&
+                                    !isStrengthTest && (
                                       <div className="space-y-4">
                                         <div className="text-center">
                                           <img
