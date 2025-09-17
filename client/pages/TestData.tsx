@@ -1552,8 +1552,8 @@ export default function TestData() {
                               {Math.round(
                                 calculatePercentOfNorm(
                                   calculateAverage(currentTest.leftMeasurements),
-                                  getNormForSide("left"),
-                                ),
+                                  getNormForSide("left")
+                                )
                               )}
                               %
                             </div>
@@ -1777,8 +1777,8 @@ export default function TestData() {
                               {Math.round(
                                 calculatePercentOfNorm(
                                   calculateAverage(currentTest.rightMeasurements),
-                                  getNormForSide("right"),
-                                ),
+                                  getNormForSide("right")
+                                )
                               )}
                               %
                             </div>
