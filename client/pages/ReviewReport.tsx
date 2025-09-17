@@ -2277,11 +2277,11 @@ export default function ReviewReport() {
 
                         // Group tests by specific categories collected in software
                         const testsByCategory: { [key: string]: any[] } = {
+                          Cardio: [],
                           Strength: [],
                           "ROM Total Spine/Extremity": [],
                           "ROM Hand/Foot": [],
                           "Occupational Tasks": [],
-                          Cardio: [],
                         };
 
                         reportData.testData.tests?.forEach((test: any) => {
