@@ -88,6 +88,18 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
       ];
     }
 
+    // Hand strength naming variants mapping
+    if (!key.includes("grip") && key.includes("strength") && key.includes("hand")) {
+      if (key.includes("rapid") || key.includes("exchange")) {
+        return [
+          { src: "/sampe_illustration/Hand_grip_rapid_exchange.png", label: "Rapid Exchange Grip" },
+        ];
+      }
+      return [
+        { src: "/sampe_illustration/Hand_grip_mvve_mve_position2.png", label: "Grip Strength" },
+      ];
+    }
+
     // Pinch types
     if (key.includes("pinch") && key.includes("key")) {
       return [
