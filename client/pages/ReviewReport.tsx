@@ -2122,7 +2122,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Hip extension ≥20�� for walking and posture",
+                                  "Hip extension ≥20° for walking and posture",
                                 norm: 20, // degrees
                                 functionalMin: 15,
                                 unit: "degrees",
@@ -2524,8 +2524,8 @@ export default function ReviewReport() {
                                           test.testName,
                                         );
 
-                                        // Show user's specific target if provided
-                                        if (test.valueToBeTestedNumber) {
+                                        // Show user's specific target only for weight-based tests
+                                        if (test.valueToBeTestedNumber && jobReq.type === "weight") {
                                           return `Target: ${test.valueToBeTestedNumber} ${test.valueToBeTestedUnit || jobReq.unit}`;
                                         }
 
@@ -3100,7 +3100,7 @@ export default function ReviewReport() {
                           crosschecks.push({
                             name: "Dominant side monitoring",
                             description:
-                              "It is expected that if the client is Right-Handed, he/she will demonstrate approx.10% greater values on the dominant side – if Left-Handed then the values would be close to the same.",
+                              "It is expected that if the client is Right-Handed, he/she will demonstrate approx.10% greater values on the dominant side ��� if Left-Handed then the values would be close to the same.",
                             pass: dominantSideValid,
                             applicable: true,
                           });
