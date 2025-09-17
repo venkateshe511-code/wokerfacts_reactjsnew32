@@ -3100,7 +3100,7 @@ export default function ReviewReport() {
                           crosschecks.push({
                             name: "Dominant side monitoring",
                             description:
-                              "It is expected that if the client is Right-Handed, he/she will demonstrate approx.10% greater values on the dominant side ��� if Left-Handed then the values would be close to the same.",
+                              "It is expected that if the client is Right-Handed, he/she will demonstrate approx.10% greater values on the dominant side - if Left-Handed then the values would be close to the same.",
                             pass: dominantSideValid,
                             applicable: true,
                           });
