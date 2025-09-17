@@ -2339,7 +2339,7 @@ export default function DownloadReport() {
                       if (testNameLower.includes("flexion")) {
                         return {
                           requirement:
-                            "Lumbar flexion ≥80�� for bending and lifting activities",
+                            "Lumbar flexion ≥80° for bending and lifting activities",
                           norm: 80, // degrees
                           functionalMin: 60, // Minimum for basic function
                           unit: "degrees",
@@ -5996,7 +5996,7 @@ export default function DownloadReport() {
                   including:
                 </p>
                 <ul className="text-sm text-gray-600 text-left space-y-1">
-                  <li>�� Evaluator profile information</li>
+                  <li>- Evaluator profile information</li>
                   <li>• Claimant data</li>
                   <li>• Test results and measurements</li>
                   <li>• Uploaded images</li>
