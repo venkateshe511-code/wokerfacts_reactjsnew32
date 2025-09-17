@@ -1551,9 +1551,11 @@ export default function TestData() {
                             <div className="text-xl font-bold">
                               {Math.round(
                                 calculatePercentOfNorm(
-                                  calculateAverage(currentTest.leftMeasurements),
-                                  getNormForSide("left")
-                                )
+                                  calculateAverage(
+                                    currentTest.leftMeasurements,
+                                  ),
+                                  getNormForSide("left"),
+                                ),
                               )}
                               %
                             </div>
@@ -1776,9 +1778,11 @@ export default function TestData() {
                             <div className="text-xl font-bold">
                               {Math.round(
                                 calculatePercentOfNorm(
-                                  calculateAverage(currentTest.rightMeasurements),
-                                  getNormForSide("right")
-                                )
+                                  calculateAverage(
+                                    currentTest.rightMeasurements,
+                                  ),
+                                  getNormForSide("right"),
+                                ),
                               )}
                               %
                             </div>
