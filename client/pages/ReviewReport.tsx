@@ -1981,7 +1981,7 @@ export default function ReviewReport() {
                           ) {
                             return {
                               requirement:
-                                "Key pinch ≥4.3 kg (Light) / �����7.0 kg (Medium work)",
+                                "Key pinch ≥4.3 kg (Light) / ≥7.0 kg (Medium work)",
                               lightWork: 4.3, // kg
                               mediumWork: 7.0, // kg
                               unit: "kg",
