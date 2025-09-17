@@ -3485,53 +3485,6 @@ export default function ReviewReport() {
 
 
 
-                                  {isLiftTest && (
-                                    <div className="space-y-4">
-                                      {/* Overhead Lift */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/lift-overhead-test.webp"
-                                          alt="Overhead lift test"
-                                          className="w-16 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">
-                                          High Lift
-                                        </p>
-                                      </div>
-
-                                      {/* Mid Level Lift */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/lift-standing-test.webp"
-                                          alt="Mid lift test"
-                                          className="w-16 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">Mid Lift</p>
-                                      </div>
-
-                                      {/* Low Lift */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/lift-squat-test.webp"
-                                          alt="Low lift test"
-                                          className="w-16 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">Low Lift</p>
-                                      </div>
-
-                                      {/* Full Lift Sequence */}
-                                      <div className="text-center">
-                                        <img
-                                          src="/lift-push-pull-test.webp"
-                                          alt="Lift sequence test"
-                                          className="w-20 h-20 mx-auto border object-cover bg-white"
-                                        />
-                                        <p className="text-xs mt-1">
-                                          Lift Sequence
-                                        </p>
-                                      </div>
-                                    </div>
-                                  )}
 
                                   {isCardioTest && (
                                     <div className="space-y-4">
