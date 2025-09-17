@@ -35,6 +35,7 @@ import CardioTestRouter, {
   CardioTestData,
 } from "@/components/cardio-tests/CardioTestRouter";
 import { calculatePercentISByTest } from "@shared/mtm-standards";
+import { inferNormsForTest } from "@/lib/norms";
 
 interface TestMeasurement {
   trial1: number;
@@ -1050,6 +1051,11 @@ export default function TestData() {
   };
 
   const getNormForSide = (side: "left" | "right"): number => {
+    // Prefer standardized norms used by Review/Download reports
+    const norm = inferNormsForTest(currentTest?.testName || "");
+    const v = side === "left" ? norm.left : norm.right;
+    if (typeof v === "number" && v > 0) return v;
+    // Fallback to user-entered target if no standardized norm exists
     const base = currentTest?.valueToBeTestedNumber || "";
     const left = currentTest?.valueToBeTestedNumberLeft || base;
     const right = currentTest?.valueToBeTestedNumberRight || base;
@@ -1059,7 +1065,9 @@ export default function TestData() {
   };
 
   const getUnitSuffix = (): string => {
-    // Prefer the specific unitMeasure when available (e.g., lbs, kg, °, sec)
+    const norm = inferNormsForTest(currentTest?.testName || "");
+    if (norm.unit) return norm.unit;
+    // Prefer the specific unitMeasure when available (e.g., lbs, kg, deg, sec)
     return currentTest?.unitMeasure ? `${currentTest.unitMeasure}` : "";
   };
 
@@ -1541,9 +1549,11 @@ export default function TestData() {
                                 : "Left % of Norm"}
                             </div>
                             <div className="text-xl font-bold">
-                              {calculatePercentOfNorm(
-                                calculateAverage(currentTest.leftMeasurements),
-                                getNormForSide("left"),
+                              {Math.round(
+                                calculatePercentOfNorm(
+                                  calculateAverage(currentTest.leftMeasurements),
+                                  getNormForSide("left"),
+                                ),
                               )}
                               %
                             </div>
@@ -1764,9 +1774,11 @@ export default function TestData() {
                                 : "Right % of Norm"}
                             </div>
                             <div className="text-xl font-bold">
-                              {calculatePercentOfNorm(
-                                calculateAverage(currentTest.rightMeasurements),
-                                getNormForSide("right"),
+                              {Math.round(
+                                calculatePercentOfNorm(
+                                  calculateAverage(currentTest.rightMeasurements),
+                                  getNormForSide("right"),
+                                ),
                               )}
                               %
                             </div>
