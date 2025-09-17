@@ -1981,7 +1981,7 @@ export default function ReviewReport() {
                           ) {
                             return {
                               requirement:
-                                "Key pinch ≥4.3 kg (Light) / ���7.0 kg (Medium work)",
+                                "Key pinch ≥4.3 kg (Light) / �����7.0 kg (Medium work)",
                               lightWork: 4.3, // kg
                               mediumWork: 7.0, // kg
                               unit: "kg",
@@ -3450,35 +3450,31 @@ export default function ReviewReport() {
                                       test.testId || testName,
                                     );
                                     if (!illos.length) return null;
+                                    const ill = illos[0];
                                     return (
                                       <div className="grid grid-cols-1 gap-3">
-                                        {illos.map((ill, i) => (
-                                          <div className="text-center" key={i}>
-                                            {ill.yPercent === undefined ||
-                                            ill.yPercent === null ? (
-                                              <img
-                                                src={ill.src}
-                                                alt={ill.label}
-                                                className="w-16 h-20 mx-auto border object-cover bg-white"
-                                              />
-                                            ) : (
-                                              <div
-                                                className="mx-auto border bg-white"
-                                                style={{
-                                                  width: 64,
-                                                  height: 80,
-                                                  backgroundImage: `url(${ill.src})`,
-                                                  backgroundRepeat: "no-repeat",
-                                                  backgroundSize: "100% auto",
-                                                  backgroundPosition: `center ${ill.yPercent}%`,
-                                                }}
-                                              />
-                                            )}
-                                            <p className="text-xs mt-1">
-                                              {ill.label}
-                                            </p>
-                                          </div>
-                                        ))}
+                                        <div className="text-center">
+                                          {ill.yPercent === undefined || ill.yPercent === null ? (
+                                            <img
+                                              src={ill.src}
+                                              alt={ill.label}
+                                              className="w-16 h-20 mx-auto border object-cover bg-white"
+                                            />
+                                          ) : (
+                                            <div
+                                              className="mx-auto border bg-white"
+                                              style={{
+                                                width: 64,
+                                                height: 80,
+                                                backgroundImage: `url(${ill.src})`,
+                                                backgroundRepeat: "no-repeat",
+                                                backgroundSize: "100% auto",
+                                                backgroundPosition: `center ${ill.yPercent}%`,
+                                              }}
+                                            />
+                                          )}
+                                          <p className="text-xs mt-1">{ill.label}</p>
+                                        </div>
                                       </div>
                                     );
                                   })()}
@@ -3554,7 +3550,8 @@ export default function ReviewReport() {
                                   {!isRangeOfMotion &&
                                     !isGripTest &&
                                     !isLiftTest &&
-                                    !isCardioTest && (
+                                    !isCardioTest &&
+                                    !isStrengthTest && (
                                       <div className="space-y-4">
                                         <div className="text-center">
                                           <img
