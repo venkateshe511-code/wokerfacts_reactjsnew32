@@ -131,6 +131,67 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
       ];
     }
 
+    // Lifts
+    if (key.includes("lift")) {
+      if (key.includes("static")) {
+        if (key.includes("high") || key.includes("overhead")) {
+          return [
+            { src: "/sampe_illustration/static_high_lift.png", label: "Static High Lift" },
+          ];
+        }
+        if (key.includes("mid") || key.includes("waist") || key.includes("standing")) {
+          return [
+            { src: "/sampe_illustration/static_mid_lift.png", label: "Static Mid Lift" },
+          ];
+        }
+        if (key.includes("low") || key.includes("squat")) {
+          return [
+            { src: "/sampe_illustration/static_low_lift.png", label: "Static Low Lift" },
+          ];
+        }
+        return [
+          { src: "/sampe_illustration/static_mid_lift.png", label: "Static Lift" },
+        ];
+      }
+      // dynamic lifts
+      if (key.includes("dynamic")) {
+        if (key.includes("full") || key.includes("sequence")) {
+          return [
+            { src: "/sampe_illustration/full_lift.png", label: "Dynamic Full Lift" },
+          ];
+        }
+        if (key.includes("mid") || key.includes("waist") || key.includes("standing")) {
+          return [
+            { src: "/sampe_illustration/mid_lift.png", label: "Dynamic Mid Lift" },
+          ];
+        }
+        if (key.includes("low") || key.includes("squat")) {
+          return [
+            { src: "/sampe_illustration/low_lift.png", label: "Dynamic Low Lift" },
+          ];
+        }
+        return [
+          { src: "/sampe_illustration/full_lift.png", label: "Dynamic Lift" },
+        ];
+      }
+      // generic lift
+      return [
+        { src: "/sampe_illustration/full_lift.png", label: "Lift" },
+      ];
+    }
+
+    // Static push/pull strength
+    if (key.includes("static") && key.includes("pull")) {
+      return [
+        { src: "/sampe_illustration/static_pull.png", label: "Static Pull" },
+      ];
+    }
+    if (key.includes("static") && key.includes("push")) {
+      return [
+        { src: "/sampe_illustration/static_push.png", label: "Static Push" },
+      ];
+    }
+
     // Generic strength fallback
     return [
       { src: "/sampe_illustration/Overhead.png", label: "Strength" },
@@ -147,11 +208,11 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
       },
     ];
   }
-  if (key.includes("cervical") && key.includes("lateral")) {
+  if (key.includes("cervical") && (key.includes("lateral") || key.includes("oblique"))) {
     return [
       {
         src: "/sampe_illustration/cervical_lateral_flexion.png",
-        label: "Cervical Lateral Flexion",
+        label: "Cervical Lateral/Oblique",
       },
     ];
   }
@@ -322,6 +383,23 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
   if (key.includes("ankle") && (key.includes("inversion") || key.includes("eversion"))) {
     return [
       { src: "/sampe_illustration/Ankle_inversion_eversion.png", label: "Ankle Inversion/Eversion" },
+    ];
+  }
+  // Handle muscle strength wording
+  if (key.includes("ankle") && key.includes("muscle") && (key.includes("inversion") || key.includes("eversion"))) {
+    return [
+      { src: "/sampe_illustration/Ankle_inversion_eversion.png", label: "Ankle Muscle Inversion/Eversion" },
+    ];
+  }
+
+  // Lumbar SLR mapping
+  if (
+    (key.includes("lumbar") && key.includes("straight") && key.includes("leg") && key.includes("raise")) ||
+    key.includes("straight-leg-raise") ||
+    key.includes("slr")
+  ) {
+    return [
+      { src: "/sampe_illustration/Lumbar_flexion_extension.png", label: "Lumbar Straight Leg Raise" },
     ];
   }
 
