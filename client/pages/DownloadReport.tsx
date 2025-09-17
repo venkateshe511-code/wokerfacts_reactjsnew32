@@ -2730,7 +2730,10 @@ export default function DownloadReport() {
                             const jobReq = getJobRequirements(test.testName);
 
                             // Show user's specific target only for weight-based tests
-                            if (test.valueToBeTestedNumber && jobReq.type === "weight") {
+                            if (
+                              test.valueToBeTestedNumber &&
+                              jobReq.type === "weight"
+                            ) {
                               return `Target: ${test.valueToBeTestedNumber} ${test.valueToBeTestedUnit || jobReq.unit}`;
                             }
 

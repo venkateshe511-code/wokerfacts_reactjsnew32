@@ -2525,7 +2525,10 @@ export default function ReviewReport() {
                                         );
 
                                         // Show user's specific target only for weight-based tests
-                                        if (test.valueToBeTestedNumber && jobReq.type === "weight") {
+                                        if (
+                                          test.valueToBeTestedNumber &&
+                                          jobReq.type === "weight"
+                                        ) {
                                           return `Target: ${test.valueToBeTestedNumber} ${test.valueToBeTestedUnit || jobReq.unit}`;
                                         }
 
@@ -4586,16 +4589,16 @@ export default function ReviewReport() {
                                               </h5>
                                               <div className="bg-gray-100 p-3 text-xs">
                                                 <p className="mb-2">
-                                                  VO2 max (ml/kg/min) =
-                                                  17.2 + (1.29 × O2 cost of the
-                                                  last completed stage) - (0.09
-                                                  × mass in kg) - (0.18 × age in
+                                                  VO2 max (ml/kg/min) = 17.2 +
+                                                  (1.29 × O2 cost of the last
+                                                  completed stage) - (0.09 ×
+                                                  mass in kg) - (0.18 × age in
                                                   years)
                                                 </p>
                                                 <p className="mb-2">
-                                                  VO2 max (ml/kg/min) = 17.2
-                                                  + (1.29 × _____) - (0.09 ×
-                                                  _____ kg) - (0.18 × _____ )
+                                                  VO2 max (ml/kg/min) = 17.2 +
+                                                  (1.29 × _____) - (0.09 × _____
+                                                  kg) - (0.18 × _____ )
                                                 </p>
                                                 <p className="text-xs italic">
                                                   Note: O2 cost is provided in

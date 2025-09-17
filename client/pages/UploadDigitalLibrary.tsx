@@ -207,7 +207,8 @@ export default function UploadDigitalLibrary() {
           const res = await fetch(url);
           if (!res.ok) throw new Error(`Failed to load ${url}`);
           const blob = await res.blob();
-          const type = blob.type || (url.endsWith(".png") ? "image/png" : "image/jpeg");
+          const type =
+            blob.type || (url.endsWith(".png") ? "image/png" : "image/jpeg");
           const name = url.split("/").pop() || `image-${idx + 1}.jpg`;
           let file: File;
           try {
@@ -279,7 +280,11 @@ export default function UploadDigitalLibrary() {
         // Fallback to localStorage if IndexedDB not available
         localStorage.setItem(
           "digitalLibraryData",
-          JSON.stringify({ files: [], savedFileData, storageType: "localStorage" }),
+          JSON.stringify({
+            files: [],
+            savedFileData,
+            storageType: "localStorage",
+          }),
         );
       }
 
@@ -287,7 +292,9 @@ export default function UploadDigitalLibrary() {
       setLibraryData({ files, savedFileData });
 
       // Mark step completed
-      const completedSteps = JSON.parse(localStorage.getItem("completedSteps") || "[]");
+      const completedSteps = JSON.parse(
+        localStorage.getItem("completedSteps") || "[]",
+      );
       if (!completedSteps.includes(7)) {
         completedSteps.push(7);
         localStorage.setItem("completedSteps", JSON.stringify(completedSteps));
@@ -296,7 +303,9 @@ export default function UploadDigitalLibrary() {
       setShowSuccessDialog(true);
     } catch (error: any) {
       console.error("Error filling sample digital library:", error);
-      setAlertMessage(error?.message || "Failed to load sample images. Please try again.");
+      setAlertMessage(
+        error?.message || "Failed to load sample images. Please try again.",
+      );
       setShowAlertDialog(true);
     } finally {
       setIsSubmitting(false);
