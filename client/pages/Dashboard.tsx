@@ -154,27 +154,58 @@ export default function Dashboard() {
         navigate("/profiles");
         return;
       }
-      const ref = doc(db, "evaluatorProfiles", selectedProfileId);
-      const snap = await getDoc(ref);
-      if (!snap.exists()) {
-        navigate("/register");
-        return;
+      try {
+        const ref = doc(db, "evaluatorProfiles", selectedProfileId);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+          navigate("/register");
+          return;
+        }
+        const data = snap.data() as any;
+        setEvaluatorData({
+          name: data.name || "",
+          licenseNo: data.licenseNo || "",
+          clinicName: data.clinicName || "",
+          address: data.address || "",
+          country: data.country || "",
+          city: data.city || "",
+          zipcode: data.zipcode || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          website: data.website || "",
+          profilePhoto: data.profilePhoto || null,
+          clinicLogo: data.clinicLogo || null,
+        });
+        // Cache for offline resilience
+        localStorage.setItem("evaluatorData", JSON.stringify(data));
+      } catch (e) {
+        // Fallback to cached evaluator data if available
+        const cached = localStorage.getItem("evaluatorData");
+        if (cached) {
+          const data = JSON.parse(cached);
+          setEvaluatorData({
+            name: data.name || "",
+            licenseNo: data.licenseNo || "",
+            clinicName: data.clinicName || "",
+            address: data.address || "",
+            country: data.country || "",
+            city: data.city || "",
+            zipcode: data.zipcode || "",
+            email: data.email || "",
+            phone: data.phone || "",
+            website: data.website || "",
+            profilePhoto: data.profilePhoto || null,
+            clinicLogo: data.clinicLogo || null,
+          });
+        } else {
+          toast({
+            title: "Network error",
+            description:
+              "We couldn't load your evaluator profile. Check your connection and try again.",
+            variant: "destructive",
+          });
+        }
       }
-      const data = snap.data() as any;
-      setEvaluatorData({
-        name: data.name || "",
-        licenseNo: data.licenseNo || "",
-        clinicName: data.clinicName || "",
-        address: data.address || "",
-        country: data.country || "",
-        city: data.city || "",
-        zipcode: data.zipcode || "",
-        email: data.email || "",
-        phone: data.phone || "",
-        website: data.website || "",
-        profilePhoto: data.profilePhoto || null,
-        clinicLogo: data.clinicLogo || null,
-      });
     };
     loadProfile();
 
@@ -592,7 +623,7 @@ export default function Dashboard() {
                 onClick={() => navigate("/profiles")}
                 className="text-xs sm:text-sm min-w-[120px]"
               >
-                Switch Profile
+                Switch Evaluator
               </Button>
               <Button
                 variant="outline"
@@ -601,7 +632,7 @@ export default function Dashboard() {
                 className="text-xs sm:text-sm min-w-[120px]"
               >
                 <Edit className="mr-2 h-4 w-4" />
-                Edit Profile
+                Edit Evaluator
               </Button>
               <Button
                 variant="outline"

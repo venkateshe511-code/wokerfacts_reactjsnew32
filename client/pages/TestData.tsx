@@ -820,7 +820,7 @@ export default function TestData() {
         jobMatch: "",
         jobDemands: "",
         jobDescription: "",
-        normLevel: "",
+        normLevel: "yes",
         valueToBeTestedNumber: "",
         valueToBeTestedUnit: "",
         unitMeasure: "",

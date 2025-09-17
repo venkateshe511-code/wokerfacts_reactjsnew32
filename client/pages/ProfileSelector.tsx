@@ -44,25 +44,30 @@ export default function ProfileSelector() {
   useEffect(() => {
     const load = async () => {
       if (!user) return;
-      // Ensure no cached selection carries over (especially from demo flows)
-      setSelectedProfileId(null);
-      const q = query(
-        collection(db, "evaluatorProfiles"),
-        where("ownerId", "==", user.uid),
-      );
-      const snap = await getDocs(q);
-      const items: EvaluatorProfile[] = [];
-      snap.forEach((doc) => {
-        const d = doc.data() as any;
-        items.push({
-          id: doc.id,
-          name: d.name || "Untitled Evaluator",
-          clinicName: d.clinicName || "",
-          createdAt: d.createdAt,
+      try {
+        // Ensure no cached selection carries over (especially from demo flows)
+        setSelectedProfileId(null);
+        const q = query(
+          collection(db, "evaluatorProfiles"),
+          where("ownerId", "==", user.uid),
+        );
+        const snap = await getDocs(q);
+        const items: EvaluatorProfile[] = [];
+        snap.forEach((doc) => {
+          const d = doc.data() as any;
+          items.push({
+            id: doc.id,
+            name: d.name || "Untitled Evaluator",
+            clinicName: d.clinicName || "",
+            createdAt: d.createdAt,
+          });
         });
-      });
-      setProfiles(items);
-      setLoading(false);
+        setProfiles(items);
+      } catch (e) {
+        toast({ title: "Unable to load profiles", variant: "destructive" });
+      } finally {
+        setLoading(false);
+      }
     };
     load();
   }, [user, setSelectedProfileId]);
