@@ -2030,7 +2030,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Cervical extension ≥45�� for functional neck movement",
+                                  "Cervical extension ≥45° for functional neck movement",
                                 norm: 45, // degrees
                                 functionalMin: 45,
                                 unit: "degrees",
@@ -6772,7 +6772,7 @@ export default function ReviewReport() {
                             ) : (
                               <div className="flex flex-col">
                                 <div className="aspect-square bg-gray-200 flex flex-col items-center justify-center">
-                                  <div className="text-2xl mb-2">��</div>
+                                  <div className="text-2xl mb-2">-</div>
                                 </div>
                                 <div className="p-2 bg-gray-50">
                                   <p
