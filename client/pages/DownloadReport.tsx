@@ -4501,7 +4501,7 @@ export default function DownloadReport() {
           
   <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Perceived Exertion and Pain Scales</h3>
             <div style="border: 1px solid #333; margin-bottom: 20px;">
-            <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
+            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px; text-align: center;">
                 <thead>
                     <tr style="background: #fef3c7;">
                         <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">Perceived Exertion</th>
@@ -4539,7 +4539,7 @@ export default function DownloadReport() {
       
   <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">Physical Demand Characteristics of Work</h3>
             <div style="border: 1px solid #333; margin-bottom: 20px;">
-            <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
+            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px; text-align: center;">
                 <thead>
                     <tr style="background: #fef3c7;">
                         <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;" colspan="4">Physical Demand Characteristics of Work</th>
@@ -4571,7 +4571,7 @@ export default function DownloadReport() {
             <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">PDC Categories based on Sustainable Energy Level</h3>
 
             <div style="border: 1px solid #333; margin-bottom: 20px;">
-            <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
+            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px; text-align: center;">
                 <thead>
                     <tr style="background: #fef3c7;">
                         <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;" colspan="2">PDC Categories based on Sustainable Energy Level (Energy Cost) over an 8-hour workday</th>
@@ -4627,7 +4627,7 @@ export default function DownloadReport() {
         <div style="margin-bottom: 20px; page-break-inside: avoid;">
   <h3 style="font-weight: bold; margin-bottom: 10px; font-family: Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
             <div style="border: 1px solid #333;">
-            <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px;">
+            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px; text-align: center;">
                 <thead>
                     <tr style="background: #fef3c7;">
                         <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;" colspan="2">Test End Point Conditions</th>
@@ -4769,6 +4769,11 @@ export default function DownloadReport() {
               text-align: left;
               vertical-align: top;
               font-size: 10px;
+            }
+
+            table.center-cells th, table.center-cells td {
+              text-align: center !important;
+              vertical-align: middle !important;
             }
 
             th {
