@@ -592,7 +592,7 @@ export default function Dashboard() {
                 onClick={() => navigate("/profiles")}
                 className="text-xs sm:text-sm min-w-[120px]"
               >
-                Switch Profile
+                Switch Evaluator
               </Button>
               <Button
                 variant="outline"
@@ -601,7 +601,7 @@ export default function Dashboard() {
                 className="text-xs sm:text-sm min-w-[120px]"
               >
                 <Edit className="mr-2 h-4 w-4" />
-                Edit Profile
+                Edit Evaluator
               </Button>
               <Button
                 variant="outline"
