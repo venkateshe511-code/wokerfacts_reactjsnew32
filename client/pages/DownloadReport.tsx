@@ -1577,7 +1577,7 @@ export default function DownloadReport() {
                 <div style="width: 70px;">04/2011</div>
                 <div style="flex: 1; margin-left: 10px;">${
                   claimantData.claimantHistory ||
-                  "While working in Cartons assembly area, client noted groin pain and subsequently was diagnosed with a hernia – PT ��� 4-5 wks – back to work �� continued to have pain – lumbar area – cortisone injection (had three injections total) – Sept 10th out of work again – to date no return to duties – last injection was Oct 4th2011."
+                  "While working in Cartons assembly area, client noted groin pain and subsequently was diagnosed with a hernia – PT - 4-5 wks – back to work - continued to have pain – lumbar area – cortisone injection (had three injections total) – Sept 10th out of work again – to date no return to duties – last injection was Oct 4th2011."
                 }</div>
             </div>
         </div>
@@ -2266,7 +2266,7 @@ export default function DownloadReport() {
                     ) {
                       return {
                         requirement:
-                          "Key pinch ≥4.3 kg (Light) / ���7.0 kg (Medium work)",
+                          "Key pinch ≥4.3 kg (Light) / ≥7.0 kg (Medium work)",
                         lightWork: 4.3, // kg
                         mediumWork: 7.0, // kg
                         unit: "kg",
@@ -2744,7 +2744,7 @@ export default function DownloadReport() {
                             // Show industry standards based on test type
                             if (jobReq.type === "weight") {
                               if (jobReq.lightWork && jobReq.mediumWork) {
-                                return `≥${jobReq.lightWork} ${jobReq.unit} (Light) / ����${jobReq.mediumWork} ${jobReq.unit} (Medium)`;
+                                return `≥${jobReq.lightWork} ${jobReq.unit} (Light) / ≥${jobReq.mediumWork} ${jobReq.unit} (Medium)`;
                               } else if (jobReq.norm) {
                                 return `≥${jobReq.norm} ${jobReq.unit}`;
                               }
@@ -3001,7 +3001,7 @@ export default function DownloadReport() {
                                     <p>✗ Not Demonstrated: <span style="font-weight: bold; color: #dc3545;">${
                                       effortCounts.notDemonstrated
                                     } tests</span></p>
-                                    <p>��� Success Rate: <span style="font-weight: bold; color: #007bff;">
+                                    <p>Success Rate: <span style="font-weight: bold; color: #007bff;">
                                         ${
                                           testData.tests.length > 0
                                             ? Math.round(
@@ -5515,7 +5515,7 @@ export default function DownloadReport() {
           console.log("✅ Test data available - will generate test sections");
           console.log("Sample test:", requestData.testData.tests[0]);
         } else {
-          console.error("����� No test data - sections will be missing!");
+          console.error("No test data - sections will be missing!");
         }
 
         console.log(
