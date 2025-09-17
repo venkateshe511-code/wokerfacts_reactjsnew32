@@ -3419,7 +3419,9 @@ export default function ReviewReport() {
                           testName.includes("dorsiflexion") ||
                           testName.includes("palmar") ||
                           testName.includes("straight-leg") ||
-                          (testName.includes("straight") && testName.includes("leg") && testName.includes("raise")) ||
+                          (testName.includes("straight") &&
+                            testName.includes("leg") &&
+                            testName.includes("raise")) ||
                           testName.includes("slr");
                         const isGripTest =
                           testName.includes("grip") ||
@@ -3473,7 +3475,8 @@ export default function ReviewReport() {
                                     return (
                                       <div className="grid grid-cols-1 gap-3">
                                         <div className="text-center">
-                                          {ill.yPercent === undefined || ill.yPercent === null ? (
+                                          {ill.yPercent === undefined ||
+                                          ill.yPercent === null ? (
                                             <img
                                               src={ill.src}
                                               alt={ill.label}
@@ -3492,14 +3495,13 @@ export default function ReviewReport() {
                                               }}
                                             />
                                           )}
-                                          <p className="text-xs mt-1">{ill.label}</p>
+                                          <p className="text-xs mt-1">
+                                            {ill.label}
+                                          </p>
                                         </div>
                                       </div>
                                     );
                                   })()}
-
-
-
 
                                   {isCardioTest && (
                                     <div className="space-y-4">
