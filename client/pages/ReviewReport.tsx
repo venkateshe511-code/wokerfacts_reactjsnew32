@@ -2122,7 +2122,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Hip extension ≥20° for walking and posture",
+                                  "Hip extension ≥20�� for walking and posture",
                                 norm: 20, // degrees
                                 functionalMin: 15,
                                 unit: "degrees",
@@ -4002,7 +4002,7 @@ export default function ReviewReport() {
                                             <div className="grid grid-cols-2 gap-3 mt-4">
                                               <div>
                                                 <h6 className="text-xs font-semibold text-center mb-1">
-                                                  VO₂ Max Norms for Men as
+                                                  VO2 Max Norms for Men as
                                                   Measured in ml/kg/min
                                                 </h6>
                                                 <table className="w-full border border-gray-400 text-[10px]">
@@ -4176,7 +4176,7 @@ export default function ReviewReport() {
 
                                               <div>
                                                 <h6 className="text-xs font-semibold text-center mb-1">
-                                                  VO₂ Max Norms for Women as
+                                                  VO2 Max Norms for Women as
                                                   Measured in ml/kg/min
                                                 </h6>
                                                 <table className="w-full border border-gray-400 text-[10px]">
@@ -4582,23 +4582,23 @@ export default function ReviewReport() {
                                             <div>
                                               <h5 className="font-semibold mb-2">
                                                 mCAFT EQUATIONS TO PREDICT
-                                                VO₂MAX
+                                                VO2MAX
                                               </h5>
                                               <div className="bg-gray-100 p-3 text-xs">
                                                 <p className="mb-2">
-                                                  VO₂ max (ml•kg⁻���•min⁻¹) =
-                                                  17.2 + (1.29 × O₂ cost of the
+                                                  VO2 max (ml/kg/min) =
+                                                  17.2 + (1.29 × O2 cost of the
                                                   last completed stage) - (0.09
                                                   × mass in kg) - (0.18 × age in
                                                   years)
                                                 </p>
                                                 <p className="mb-2">
-                                                  VO₂ max (ml•kg⁻¹•min⁻¹) = 17.2
+                                                  VO2 max (ml/kg/min) = 17.2
                                                   + (1.29 × _____) - (0.09 ×
                                                   _____ kg) - (0.18 × _____ )
                                                 </p>
                                                 <p className="text-xs italic">
-                                                  Note: O₂ cost is provided in
+                                                  Note: O2 cost is provided in
                                                   Table 2 on the back of this
                                                   worksheet.
                                                 </p>
@@ -4609,14 +4609,14 @@ export default function ReviewReport() {
                                             <div className="grid grid-cols-2 gap-8 mt-4">
                                               <div>
                                                 <span className="font-semibold">
-                                                  Predicted VO₂ max:{" "}
+                                                  Predicted VO2 max:{" "}
                                                 </span>
                                                 <span className="border-b border-gray-400 px-4 py-1 inline-block min-w-[120px]">
                                                   {test.predictedVo2Max || ""}
                                                 </span>
                                                 <span className="text-sm">
                                                   {" "}
-                                                  (ml•kg⁻¹•min⁻��)
+                                                  (ml/kg/min)
                                                 </span>
                                               </div>
                                               <div>
