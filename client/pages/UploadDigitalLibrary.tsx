@@ -184,48 +184,132 @@ export default function UploadDigitalLibrary() {
   };
 
   const fillSampleDigitalLibrary = async () => {
-    const sampleFiles = [
-      createSampleFile("Medical_Report_2024.jpg", "image/jpeg", "image"),
-      createSampleFile("X_Ray_Results.jpg", "image/jpeg", "image"),
-      createSampleFile("Physical_Therapy_Notes.jpg", "image/jpeg", "image"),
-      createSampleFile("Doctor_Assessment.jpg", "image/jpeg", "image"),
-      createSampleFile("Work_Injury_Photos.jpg", "image/jpeg", "image"),
-    ];
+    try {
+      setIsSubmitting(true);
 
-    setLibraryData({ files: sampleFiles });
-    setIsSubmitting(true);
+      // Pick 10 real images from public folder
+      const imagePaths = [
+        "/clinical-software-overview.jpg",
+        "/functional-assessment.jpg",
+        "/grip-exerciser.jpg",
+        "/hand-grip.jpg",
+        "/kasch-step-illustration.jpg",
+        "/mcaft-step-illustration.jpg",
+        "/occupational-task-1.jpg",
+        "/occupational-task-2.jpg",
+        "/workplace-wellness-round.jpg",
+        "/home_page_background_image.jpg",
+      ];
 
-    // Convert files to base64 for storage (simplified for samples)
-    const savedFileData = sampleFiles.map((digitalFile) => ({
-      id: digitalFile.id,
-      name: digitalFile.name,
-      type: digitalFile.type,
-      size: digitalFile.size,
-      category: digitalFile.category,
-      dataUrl:
-        "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDX/9k=", // Minimal placeholder
-    }));
+      // Fetch images and build File objects
+      const fetchedFiles = await Promise.all(
+        imagePaths.map(async (url, idx) => {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(`Failed to load ${url}`);
+          const blob = await res.blob();
+          const type =
+            blob.type || (url.endsWith(".png") ? "image/png" : "image/jpeg");
+          const name = url.split("/").pop() || `image-${idx + 1}.jpg`;
+          let file: File;
+          try {
+            file = new (File as any)([blob], name, { type }) as File;
+          } catch {
+            file = Object.assign(blob, {
+              name,
+              lastModified: Date.now(),
+              webkitRelativePath: "",
+            }) as File;
+          }
+          return { name, type, size: blob.size, file };
+        }),
+      );
 
-    // Store sample data in localStorage
-    localStorage.setItem(
-      "digitalLibraryData",
-      JSON.stringify({
-        files: [],
-        savedFileData,
-      }),
-    );
+      // Compress and prepare for state + storage
+      const processed = await Promise.all(
+        fetchedFiles.map(async ({ name, type, size, file }) => {
+          const id = `file-${Date.now()}-${Math.random()}`;
+          const dataUrl = await compressImage(file, "high");
+          return {
+            digitalFile: {
+              id,
+              name,
+              type,
+              size,
+              category: "image" as const,
+              file,
+            },
+            saved: {
+              id,
+              name,
+              type,
+              size,
+              category: "image" as const,
+              dataUrl,
+            },
+          };
+        }),
+      );
 
-    // Update completed steps
-    const completedSteps = JSON.parse(
-      localStorage.getItem("completedSteps") || "[]",
-    );
-    if (!completedSteps.includes(7)) {
-      completedSteps.push(7);
-      localStorage.setItem("completedSteps", JSON.stringify(completedSteps));
+      const files: DigitalFile[] = processed.map((p) => p.digitalFile);
+      const savedFileData = processed.map((p) => p.saved);
+
+      // Save to IndexedDB for large, persistent storage
+      const imagesForDB: IndexedDBImage[] = savedFileData.map((img) => ({
+        id: img.id,
+        name: img.name,
+        type: img.type,
+        size: img.size,
+        category: img.category,
+        dataUrl: img.dataUrl,
+        timestamp: Date.now(),
+      }));
+
+      try {
+        await saveImagesToDB(imagesForDB);
+        // Store only metadata in localStorage
+        localStorage.setItem(
+          "digitalLibraryData",
+          JSON.stringify({
+            imageCount: savedFileData.length,
+            totalSize: savedFileData.reduce((s, i) => s + (i.size || 0), 0),
+            lastUpdated: Date.now(),
+            storageType: "indexeddb",
+          }),
+        );
+      } catch (e) {
+        // Fallback to localStorage if IndexedDB not available
+        localStorage.setItem(
+          "digitalLibraryData",
+          JSON.stringify({
+            files: [],
+            savedFileData,
+            storageType: "localStorage",
+          }),
+        );
+      }
+
+      // Update UI state
+      setLibraryData({ files, savedFileData });
+
+      // Mark step completed
+      const completedSteps = JSON.parse(
+        localStorage.getItem("completedSteps") || "[]",
+      );
+      if (!completedSteps.includes(7)) {
+        completedSteps.push(7);
+        localStorage.setItem("completedSteps", JSON.stringify(completedSteps));
+      }
+
+      setShowSuccessDialog(true);
+    } catch (error: any) {
+      console.error("Error filling sample digital library:", error);
+      setAlertMessage(
+        error?.message || "Failed to load sample images. Please try again.",
+      );
+      setShowAlertDialog(true);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
-    setShowSuccessDialog(true);
   };
 
   useEffect(() => {

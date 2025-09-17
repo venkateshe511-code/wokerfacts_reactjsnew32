@@ -526,28 +526,28 @@ export default function DownloadReport() {
             <!-- Measuring VO2 Max and Stages Table -->
             <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
               <div style="flex: 1; min-width: 300px;">
-                <h5 style="font-weight: bold; margin-bottom: 8px; font-size: 11px;">Measuring VO₂ Max:</h5>
+                <h5 style="font-weight: bold; margin-bottom: 8px; font-size: 11px;">Measuring VO2 Max:</h5>
                 <p style="font-size: 9px; margin-bottom: 12px;">
-                  Maximal oxygen uptake (VO₂ max) refers to the maximum amount of oxygen an individual
+                  Maximal oxygen uptake (VO2 max) refers to the maximum amount of oxygen an individual
                   can use during intense or maximal exercise. It is measured as milliliters of oxygen
                   used in one minute per kilogram of body weight (ml/kg/min).
                 </p>
                 <p style="font-size: 9px; margin-bottom: 12px;">
                   The Bruce treadmill test is an indirect maximal oxygen uptake test. It is indirect
-                  because it estimates VO₂ max using a formula and the person's performance on a
+                  because it estimates VO2 max using a formula and the person's performance on a
                   treadmill as the workload increases.
                 </p>
                 <p style="font-size: 9px; margin-bottom: 12px;">
                   When the Bruce protocol formula is used, T stands for total time on the treadmill
                   and is measured as a fraction of a minute. If test time of 10 minutes 15 seconds
                   would be written as T=10.25); this formula changes based on gender. The time you
-                  spend on the treadmill is your test score and can be used to estimate your VO₂ max
+                  spend on the treadmill is your test score and can be used to estimate your VO2 max
                   value. Blood pressure and ratings of perceived exertion are also often collected
                   during the Bruce protocol test.
                 </p>
                 <p style="font-size: 9px;">
-                  <strong>Men:</strong> 14.8 - (1.379 × T) + (0.451 × T²) - (0.012 × T³) = VO₂ max<br />
-                  <strong>Women:</strong> 4.38 × T - 3.9 = VO₂ max
+                  <strong>Men:</strong> 14.8 - (1.379 × T) + (0.451 × T²) - (0.012 × T³) = VO2 max<br />
+                  <strong>Women:</strong> 4.38 × T - 3.9 = VO2 max
                 </p>
               </div>
 
@@ -583,7 +583,7 @@ export default function DownloadReport() {
                 </span>
               </div>
               <div>
-                <span style="font-weight: bold; font-size: 11px;">VO₂ MAX: </span>
+                <span style="font-weight: bold; font-size: 11px;">VO2 MAX: </span>
                 <span style="border-bottom: 1px solid #333; padding: 4px 16px; display: inline-block; min-width: 120px; font-size: 11px;">
                   ${test.vo2Max || ""}
                 </span>
@@ -595,7 +595,7 @@ export default function DownloadReport() {
               <!-- Men's Table -->
               <div style="margin-bottom: 16px;">
                 <h6 style="font-size: 9px; font-weight: bold; text-align: center; margin-bottom: 4px;">
-                  VO�� Max Norms for Men as Measured in ml/kg/min
+                  VO2 Max Norms for Men as Measured in ml/kg/min
                 </h6>
                 <table style="width: 100%; border-collapse: collapse; border: 1px solid #333; font-size: 7px; table-layout: auto;">
                   <thead>
@@ -623,7 +623,7 @@ export default function DownloadReport() {
               <!-- Women's Table -->
               <div>
                 <h6 style="font-size: 9px; font-weight: bold; text-align: center; margin-bottom: 4px;">
-                  VO₂ Max Norms for Women as Measured in ml/kg/min
+                  VO2 Max Norms for Women as Measured in ml/kg/min
                 </h6>
                 <table style="width: 100%; border-collapse: collapse; border: 1px solid #333; font-size: 7px; table-layout: auto;">
                   <thead>
@@ -684,7 +684,7 @@ export default function DownloadReport() {
               the age and gender specific stepping rate requires 65% of the age-predicted maximum heart rate.
               The heart rate increases approximately in a linear fashion from 50% to 100% of maximal oxygen
               intake. The heart rate does not decrease significantly during the first fifteen seconds of recovery
-              (O₂ in). Thus, one can predict an aerobic fitness using the heart rate right after exercise of a
+              (O2 in). Thus, one can predict an aerobic fitness using the heart rate right after exercise of a
               known sub-maximal rate of working.
             </p>
 
@@ -736,16 +736,16 @@ export default function DownloadReport() {
 
             <!-- mCAFT EQUATIONS -->
             <div style="margin-bottom: 16px;">
-              <h5 style="font-weight: bold; margin-bottom: 8px; font-size: 12px;">mCAFT (Modified Canadian Aerobic Fitness Test) EQUATIONS TO PREDICT VO₂MAX</h5>
+              <h5 style="font-weight: bold; margin-bottom: 8px; font-size: 12px;">mCAFT (Modified Canadian Aerobic Fitness Test) EQUATIONS TO PREDICT VO2MAX</h5>
               <div style="background: #f0f0f0; padding: 12px; font-size: 10px;">
                 <p style="margin-bottom: 8px;">
-                  VO₂ max (ml•kg��¹•min⁻¹) = 17.2 + (1.29 × O₂ cost of the last completed stage) - (0.09 × mass in kg) - (0.18 × age in years)
+                  VO2 max (ml/kg/min) = 17.2 + (1.29 × O2 cost of the last completed stage) - (0.09 × mass in kg) - (0.18 × age in years)
                 </p>
                 <p style="margin-bottom: 8px;">
-                  VO₂ max (ml•kg⁻¹•min⁻¹) = 17.2 + (1.29 × _____) - (0.09 × _____ kg) - (0.18 × _____ )
+                  VO2 max (ml/kg/min) = 17.2 + (1.29 × _____) - (0.09 × _____ kg) - (0.18 × _____ )
                 </p>
                 <p style="font-size: 9px; font-style: italic;">
-                  Note: O₂ cost is provided in Table 2 on the back of this worksheet.
+                  Note: O2 cost is provided in Table 2 on the back of this worksheet.
                 </p>
               </div>
             </div>
@@ -753,11 +753,11 @@ export default function DownloadReport() {
             <!-- Results fields -->
             <div style="display: flex; flex-wrap: wrap; gap: 20px; margin: 12px 0;">
               <div>
-                <span style="font-weight: bold; font-size: 11px;">Predicted VO₂ max: </span>
+                <span style="font-weight: bold; font-size: 11px;">Predicted VO2 max: </span>
                 <span style="border-bottom: 1px solid #333; padding: 4px 16px; display: inline-block; min-width: 120px; font-size: 11px;">
                   ${test.predictedVo2Max || ""}
                 </span>
-                <span style="font-size: 10px;"> (ml•kg⁻¹•min⁻¹)</span>
+                <span style="font-size: 10px;"> (ml/kg/min)</span>
               </div>
               <div>
                 <span style="font-weight: bold; font-size: 11px;">HBR: </span>
@@ -1577,7 +1577,7 @@ export default function DownloadReport() {
                 <div style="width: 70px;">04/2011</div>
                 <div style="flex: 1; margin-left: 10px;">${
                   claimantData.claimantHistory ||
-                  "While working in Cartons assembly area, client noted groin pain and subsequently was diagnosed with a hernia – PT ��� 4-5 wks – back to work �� continued to have pain – lumbar area – cortisone injection (had three injections total) – Sept 10th out of work again – to date no return to duties – last injection was Oct 4th2011."
+                  "While working in Cartons assembly area, client noted groin pain and subsequently was diagnosed with a hernia – PT - 4-5 wks – back to work - continued to have pain – lumbar area – cortisone injection (had three injections total) – Sept 10th out of work again – to date no return to duties – last injection was Oct 4th2011."
                 }</div>
             </div>
         </div>
@@ -2266,7 +2266,7 @@ export default function DownloadReport() {
                     ) {
                       return {
                         requirement:
-                          "Key pinch ≥4.3 kg (Light) / ���7.0 kg (Medium work)",
+                          "Key pinch ≥4.3 kg (Light) / ≥7.0 kg (Medium work)",
                         lightWork: 4.3, // kg
                         mediumWork: 7.0, // kg
                         unit: "kg",
@@ -2339,7 +2339,7 @@ export default function DownloadReport() {
                       if (testNameLower.includes("flexion")) {
                         return {
                           requirement:
-                            "Lumbar flexion ≥80�� for bending and lifting activities",
+                            "Lumbar flexion ≥80° for bending and lifting activities",
                           norm: 80, // degrees
                           functionalMin: 60, // Minimum for basic function
                           unit: "degrees",
@@ -2558,11 +2558,11 @@ export default function DownloadReport() {
 
                   // Group tests by specific categories collected in software (same as ReviewReport)
                   const testsByCategory = {
+                    Cardio: [],
                     Strength: [],
                     "ROM Total Spine/Extremity": [],
                     "ROM Hand/Foot": [],
                     "Occupational Tasks": [],
-                    Cardio: [],
                   };
 
                   testData.tests?.forEach((test: any) => {
@@ -2729,8 +2729,11 @@ export default function DownloadReport() {
                           const jobRequirements = (() => {
                             const jobReq = getJobRequirements(test.testName);
 
-                            // Show user's specific target if provided
-                            if (test.valueToBeTestedNumber) {
+                            // Show user's specific target only for weight-based tests
+                            if (
+                              test.valueToBeTestedNumber &&
+                              jobReq.type === "weight"
+                            ) {
                               return `Target: ${test.valueToBeTestedNumber} ${test.valueToBeTestedUnit || jobReq.unit}`;
                             }
 
@@ -2744,7 +2747,7 @@ export default function DownloadReport() {
                             // Show industry standards based on test type
                             if (jobReq.type === "weight") {
                               if (jobReq.lightWork && jobReq.mediumWork) {
-                                return `≥${jobReq.lightWork} ${jobReq.unit} (Light) / ����${jobReq.mediumWork} ${jobReq.unit} (Medium)`;
+                                return `≥${jobReq.lightWork} ${jobReq.unit} (Light) / ≥${jobReq.mediumWork} ${jobReq.unit} (Medium)`;
                               } else if (jobReq.norm) {
                                 return `≥${jobReq.norm} ${jobReq.unit}`;
                               }
@@ -3001,7 +3004,7 @@ export default function DownloadReport() {
                                     <p>✗ Not Demonstrated: <span style="font-weight: bold; color: #dc3545;">${
                                       effortCounts.notDemonstrated
                                     } tests</span></p>
-                                    <p>• Success Rate: <span style="font-weight: bold; color: #007bff;">
+                                    <p>Success Rate: <span style="font-weight: bold; color: #007bff;">
                                         ${
                                           testData.tests.length > 0
                                             ? Math.round(
@@ -3836,9 +3839,9 @@ export default function DownloadReport() {
                               isCardioTest
                                 ? testName.includes("bruce") ||
                                   testName.includes("treadmill")
-                                  ? `<div style="text-align: left;"><img src="/bruce-treadmill-illustration.jpg" alt="Bruce treadmill test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Bruce Treadmill</p></div>`
+                                  ? `<div style="text-align: left;"><img src="/mcaft-step-illustration.jpg" alt="Bruce treadmill test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Bruce Treadmill</p></div>`
                                   : testName.includes("mcaft")
-                                    ? `<div style="text-align: left;"><img src="/mcaft-step-illustration.jpg" alt="mCAFT step test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">mCAFT</p></div>`
+                                    ? `<div style="text-align: left;"><img src="/bruce-treadmill-illustration.jpg" alt="mCAFT step test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">mCAFT</p></div>`
                                     : testName.includes("kasch")
                                       ? `<div style="text-align: left;"><img src="/kasch-step-illustration.jpg" alt="Kasch step test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Kasch</p></div>`
                                       : `<div style="text-align: left;"><img src="/mcaft-step-illustration.jpg" alt="Cardio test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Cardio Test</p></div>`
@@ -3862,7 +3865,7 @@ export default function DownloadReport() {
                                             testName.includes("treadmill")
                                             ? "The Bruce Treadmill Test (Bruce Protocol) is commonly used to help identify a person's level of aerobic endurance by providing an all-out maximal oxygen uptake or VO₂ max, which measures the capacity to perform sustained exercise and is linked to aerobic endurance."
                                             : testName.includes("mcaft")
-                                              ? "mCAFT is designed to give information about the aerobic fitness of a person, while using minimal equipment. The subject works by lifting its own body weight up and down double steps (40.6 cm in height total) while listening to set cadences from a compact disc. The end-stage of the age and gender specific stepping rate requires 65% of the age-predicted maximum heart rate. The heart rate increases approximately in a linear fashion from 50% to 100% of maximal oxygen intake. The heart rate does not decrease significantly during the first fifteen seconds of recovery (O₂ in). Thus, one can predict an aerobic fitness using the heart rate right after exercise of a known sub-maximal rate of working."
+                                              ? "mCAFT is designed to give information about the aerobic fitness of a person, while using minimal equipment. The subject works by lifting its own body weight up and down double steps (40.6 cm in height total) while listening to set cadences from a compact disc. The end-stage of the age and gender specific stepping rate requires 65% of the age-predicted maximum heart rate. The heart rate increases approximately in a linear fashion from 50% to 100% of maximal oxygen intake. The heart rate does not decrease significantly during the first fifteen seconds of recovery (O2 in). Thus, one can predict an aerobic fitness using the heart rate right after exercise of a known sub-maximal rate of working."
                                               : testName.includes("kasch")
                                                 ? "The Kasch step test, officially the Kasch Pulse Recovery Test (KPR Test), is a 3-minute step test used to assess cardiorespiratory fitness. The test involves stepping onto a 0.305-meter (12-inch) step at a rate of 24 steps per minute for three minutes, followed by immediately sitting and measuring heart rate recovery for one minute to determine fitness levels."
                                                 : "The client was tested in our facility using standardized cardiovascular assessment protocols. The test results were compared to normative data when available."
@@ -5515,7 +5518,7 @@ export default function DownloadReport() {
           console.log("✅ Test data available - will generate test sections");
           console.log("Sample test:", requestData.testData.tests[0]);
         } else {
-          console.error("����� No test data - sections will be missing!");
+          console.error("No test data - sections will be missing!");
         }
 
         console.log(
@@ -5996,7 +5999,7 @@ export default function DownloadReport() {
                   including:
                 </p>
                 <ul className="text-sm text-gray-600 text-left space-y-1">
-                  <li>�� Evaluator profile information</li>
+                  <li>- Evaluator profile information</li>
                   <li>• Claimant data</li>
                   <li>• Test results and measurements</li>
                   <li>• Uploaded images</li>

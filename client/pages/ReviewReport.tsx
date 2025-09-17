@@ -1981,7 +1981,7 @@ export default function ReviewReport() {
                           ) {
                             return {
                               requirement:
-                                "Key pinch ≥4.3 kg (Light) / �����7.0 kg (Medium work)",
+                                "Key pinch ≥4.3 kg (Light) / ≥7.0 kg (Medium work)",
                               lightWork: 4.3, // kg
                               mediumWork: 7.0, // kg
                               unit: "kg",
@@ -2030,7 +2030,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Cervical extension ≥45�� for functional neck movement",
+                                  "Cervical extension ≥45° for functional neck movement",
                                 norm: 45, // degrees
                                 functionalMin: 45,
                                 unit: "degrees",
@@ -2277,11 +2277,11 @@ export default function ReviewReport() {
 
                         // Group tests by specific categories collected in software
                         const testsByCategory: { [key: string]: any[] } = {
+                          Cardio: [],
                           Strength: [],
                           "ROM Total Spine/Extremity": [],
                           "ROM Hand/Foot": [],
                           "Occupational Tasks": [],
-                          Cardio: [],
                         };
 
                         reportData.testData.tests?.forEach((test: any) => {
@@ -2524,8 +2524,11 @@ export default function ReviewReport() {
                                           test.testName,
                                         );
 
-                                        // Show user's specific target if provided
-                                        if (test.valueToBeTestedNumber) {
+                                        // Show user's specific target only for weight-based tests
+                                        if (
+                                          test.valueToBeTestedNumber &&
+                                          jobReq.type === "weight"
+                                        ) {
                                           return `Target: ${test.valueToBeTestedNumber} ${test.valueToBeTestedUnit || jobReq.unit}`;
                                         }
 
@@ -3100,7 +3103,7 @@ export default function ReviewReport() {
                           crosschecks.push({
                             name: "Dominant side monitoring",
                             description:
-                              "It is expected that if the client is Right-Handed, he/she will demonstrate approx.10% greater values on the dominant side – if Left-Handed then the values would be close to the same.",
+                              "It is expected that if the client is Right-Handed, he/she will demonstrate approx.10% greater values on the dominant side - if Left-Handed then the values would be close to the same.",
                             pass: dominantSideValid,
                             applicable: true,
                           });
@@ -3510,7 +3513,7 @@ export default function ReviewReport() {
                                         testName.includes("treadmill")) && (
                                         <div className="text-center">
                                           <img
-                                            src="/bruce-treadmill-illustration.jpg"
+                                            src="/mcaft-step-illustration.jpg"
                                             alt="Bruce treadmill test illustration"
                                             className="w-16 h-20 mx-auto border object-cover bg-white"
                                           />
@@ -3524,7 +3527,7 @@ export default function ReviewReport() {
                                       {testName.includes("mcaft") && (
                                         <div className="text-center">
                                           <img
-                                            src="/mcaft-step-illustration.jpg"
+                                            src="/bruce-treadmill-illustration.jpg"
                                             alt="mCAFT step test illustration"
                                             className="w-16 h-20 mx-auto border object-cover bg-white"
                                           />
@@ -4002,7 +4005,7 @@ export default function ReviewReport() {
                                             <div className="grid grid-cols-2 gap-3 mt-4">
                                               <div>
                                                 <h6 className="text-xs font-semibold text-center mb-1">
-                                                  VO₂ Max Norms for Men as
+                                                  VO2 Max Norms for Men as
                                                   Measured in ml/kg/min
                                                 </h6>
                                                 <table className="w-full border border-gray-400 text-[10px]">
@@ -4176,7 +4179,7 @@ export default function ReviewReport() {
 
                                               <div>
                                                 <h6 className="text-xs font-semibold text-center mb-1">
-                                                  VO₂ Max Norms for Women as
+                                                  VO2 Max Norms for Women as
                                                   Measured in ml/kg/min
                                                 </h6>
                                                 <table className="w-full border border-gray-400 text-[10px]">
@@ -4582,23 +4585,23 @@ export default function ReviewReport() {
                                             <div>
                                               <h5 className="font-semibold mb-2">
                                                 mCAFT EQUATIONS TO PREDICT
-                                                VO₂MAX
+                                                VO2MAX
                                               </h5>
                                               <div className="bg-gray-100 p-3 text-xs">
                                                 <p className="mb-2">
-                                                  VO₂ max (ml•kg⁻���•min⁻¹) =
-                                                  17.2 + (1.29 × O₂ cost of the
-                                                  last completed stage) - (0.09
-                                                  × mass in kg) - (0.18 × age in
+                                                  VO2 max (ml/kg/min) = 17.2 +
+                                                  (1.29 × O2 cost of the last
+                                                  completed stage) - (0.09 ×
+                                                  mass in kg) - (0.18 × age in
                                                   years)
                                                 </p>
                                                 <p className="mb-2">
-                                                  VO₂ max (ml•kg⁻¹•min⁻¹) = 17.2
-                                                  + (1.29 × _____) - (0.09 ×
-                                                  _____ kg) - (0.18 × _____ )
+                                                  VO2 max (ml/kg/min) = 17.2 +
+                                                  (1.29 × _____) - (0.09 × _____
+                                                  kg) - (0.18 × _____ )
                                                 </p>
                                                 <p className="text-xs italic">
-                                                  Note: O₂ cost is provided in
+                                                  Note: O2 cost is provided in
                                                   Table 2 on the back of this
                                                   worksheet.
                                                 </p>
@@ -4609,14 +4612,14 @@ export default function ReviewReport() {
                                             <div className="grid grid-cols-2 gap-8 mt-4">
                                               <div>
                                                 <span className="font-semibold">
-                                                  Predicted VO₂ max:{" "}
+                                                  Predicted VO2 max:{" "}
                                                 </span>
                                                 <span className="border-b border-gray-400 px-4 py-1 inline-block min-w-[120px]">
                                                   {test.predictedVo2Max || ""}
                                                 </span>
                                                 <span className="text-sm">
                                                   {" "}
-                                                  (ml•kg⁻¹•min⁻��)
+                                                  (ml/kg/min)
                                                 </span>
                                               </div>
                                               <div>
@@ -6772,7 +6775,7 @@ export default function ReviewReport() {
                             ) : (
                               <div className="flex flex-col">
                                 <div className="aspect-square bg-gray-200 flex flex-col items-center justify-center">
-                                  <div className="text-2xl mb-2">��</div>
+                                  <div className="text-2xl mb-2">-</div>
                                 </div>
                                 <div className="p-2 bg-gray-50">
                                   <p
