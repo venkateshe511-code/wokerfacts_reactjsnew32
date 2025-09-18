@@ -220,7 +220,6 @@ const testGroups = {
       tests: [
         { id: "cervical-flexion-extension", name: "Flexion/Extension" },
         { id: "cervical-lateral-flexion", name: "Lateral Flexion" },
-        { id: "cervical-anterior-obliques", name: "Anterior Obliques" },
         { id: "cervical-30-rotation", name: "30° Rotation" },
         { id: "cervical-60-rotation", name: "60° Rotation" },
       ],
@@ -613,6 +612,7 @@ export default function ProtocolTests() {
       // Clean up any old mcafi test IDs (replace with mcaft)
       const cleanedSelectedTests = savedData.selectedTests
         .filter((testId: string) => !testId.includes("mcafi")) // Remove old mcafi tests
+        .filter((testId: string) => testId !== "cervical-anterior-obliques")
         .map((testId: string) => {
           // This shouldn't be needed since we're filtering above, but just in case
           return testId.replace("mcafi", "mcaft");

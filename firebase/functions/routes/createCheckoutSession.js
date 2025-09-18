@@ -47,9 +47,6 @@
 
 // module.exports = router;
 
-
-
-
 const express = require("express");
 const Stripe = require("stripe");
 
