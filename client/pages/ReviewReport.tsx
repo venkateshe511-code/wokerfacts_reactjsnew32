@@ -3507,70 +3507,7 @@ export default function ReviewReport() {
                                     );
                                   })()}
 
-                                  {isCardioTest && (
-                                    <div className="space-y-4">
-                                      {/* Bruce Treadmill Test */}
-                                      {(testName.includes("bruce") ||
-                                        testName.includes("treadmill")) && (
-                                        <div className="text-center">
-                                          <img
-                                            src="/bruce-treadmill-illustration.jpg"
-                                            alt="Bruce treadmill test illustration"
-                                            className="w-16 h-20 mx-auto border object-cover bg-white"
-                                          />
-                                          <p className="text-xs mt-1">
-                                            Bruce Protocol
-                                          </p>
-                                        </div>
-                                      )}
-
-                                      {/* mCAFT Step Test */}
-                                      {testName.includes("mcaft") && (
-                                        <div className="text-center">
-                                          <img
-                                            src="/mcaft-step-illustration.jpg"
-                                            alt="mCAFT step test illustration"
-                                            className="w-16 h-20 mx-auto border object-cover bg-white"
-                                          />
-                                          <p className="text-xs mt-1">
-                                            mCAFT Step Test
-                                          </p>
-                                        </div>
-                                      )}
-
-                                      {/* Kasch Step Test */}
-                                      {testName.includes("kasch") && (
-                                        <div className="text-center">
-                                          <img
-                                            src="/kasch-step-illustration.jpg"
-                                            alt="Kasch step test illustration"
-                                            className="w-16 h-20 mx-auto border object-cover bg-white"
-                                          />
-                                          <p className="text-xs mt-1">
-                                            Kasch Step Test
-                                          </p>
-                                        </div>
-                                      )}
-
-                                      {/* Generic cardio test if none of the above match */}
-                                      {!testName.includes("bruce") &&
-                                        !testName.includes("treadmill") &&
-                                        !testName.includes("mcaft") &&
-                                        !testName.includes("kasch") && (
-                                          <div className="text-center">
-                                            <img
-                                              src="/kasch-step-illustration.jpg"
-                                              alt="Cardio test illustration"
-                                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                                            />
-                                            <p className="text-xs mt-1">
-                                              Cardio Test
-                                            </p>
-                                          </div>
-                                        )}
-                                    </div>
-                                  )}
-
+                                  
                                   {/* Generic Test Illustrations for other tests */}
                                   {!isRangeOfMotion &&
                                     !isGripTest &&
@@ -5970,6 +5907,25 @@ export default function ReviewReport() {
                                           ` Post: ${testData.hrPost} bpm`}
                                       </div>
                                     )}
+
+                                    {/* Sample Illustration from library */}
+                                    {(() => {
+                                      const illos = getSampleIllustrations(testType);
+                                      if (!illos.length) return null;
+                                      return (
+                                        <div className="mt-4">
+                                          <h5 className="text-xs font-semibold mb-2">Sample Illustration:</h5>
+                                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                            {illos.map((ill, i) => (
+                                              <div key={i} className="text-center">
+                                                <img src={ill.src} alt={ill.label} className="w-full h-24 object-cover rounded-lg border shadow-sm bg-white" />
+                                                <p className="text-xs text-gray-500 mt-1 truncate">{ill.label}</p>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      );
+                                    })()}
 
                                     {/* MTM Test Images */}
                                     {testData.savedImageData &&
