@@ -536,7 +536,7 @@ export default function DownloadReport() {
                   during the Bruce protocol test.
                 </p>
                 <p style="font-size: 9px;">
-                  <strong>Men:</strong> 14.8 - (1.379 × T) + (0.451 × T²) - (0.012 × T³) = VO2 max<br />
+                  <strong>Men:</strong> 14.8 - (1.379 �� T) + (0.451 × T²) - (0.012 × T³) = VO2 max<br />
                   <strong>Women:</strong> 4.38 × T - 3.9 = VO2 max
                 </p>
               </div>
@@ -2210,7 +2210,7 @@ export default function DownloadReport() {
                     <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Test Results</th>
                     <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Job Description</th>
                     <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Job Requirements</th>
-                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Job Match (Yes/No)</th>
+                    <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif; text-align: center;">Job Match (Yes/No)</th>
                 </tr>
             </thead>
             <tbody>
