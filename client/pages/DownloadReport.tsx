@@ -282,8 +282,15 @@ export default function DownloadReport() {
   };
 
   const clearAllData = () => {
-    // Clear all localStorage data including profile
+    // Clear all evaluation data but KEEP evaluator profile info
+    const evaluatorBackup = localStorage.getItem("evaluatorData");
+    const selectedProfileIdBackup = localStorage.getItem("selectedEvaluatorProfileId");
+
     localStorage.clear();
+
+    if (evaluatorBackup) localStorage.setItem("evaluatorData", evaluatorBackup);
+    if (selectedProfileIdBackup)
+      localStorage.setItem("selectedEvaluatorProfileId", selectedProfileIdBackup);
   };
 
   const generateReportContent = async () => {
@@ -6004,12 +6011,14 @@ export default function DownloadReport() {
                   including:
                 </p>
                 <ul className="text-sm text-gray-600 text-left space-y-1">
-                  <li>- Evaluator profile information</li>
                   <li>• Claimant data</li>
                   <li>• Test results and measurements</li>
                   <li>• Uploaded images</li>
                   <li>• Payment information</li>
                 </ul>
+                <p className="text-green-700 font-medium mt-2">
+                  Note: Your evaluator profile is preserved.
+                </p>
                 <p className="text-red-600 font-medium">
                   This action cannot be undone!
                 </p>
