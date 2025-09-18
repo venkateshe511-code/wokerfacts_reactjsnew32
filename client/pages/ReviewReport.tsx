@@ -5616,73 +5616,23 @@ export default function ReviewReport() {
                       {/* Left Column - Illustrations */}
                       <div className="col-span-3">
                         <div className="space-y-4">
-                          <p className="text-sm font-medium underline">
-                            Sample Illustration:
-                          </p>
+                          <p className="text-sm font-medium underline">Sample Illustration:</p>
 
-                          {/* Sample Illustration Images */}
-                          <div className="text-center">
-                            <img
-                              src="/occupational-balance.webp"
-                              alt="Balance assessment illustration showing feet in tandem stance"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Balance</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-push-pull.webp"
-                              alt="Push/Pull task illustration"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Push/Pull</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-climb-stairs.webp"
-                              alt="Climb stairs task illustration"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Climb Stairs</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-crawl.webp"
-                              alt="Crawl task illustration"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Crawl</p>
-                          </div>
-
-                          {/* Legacy samples kept in addition to new ones (except Balance corrected above) */}
-                          <div className="text-center">
-                            <img
-                              src="/occupational-task-2.jpg"
-                              alt="Bi-Manual Handling illustration showing both hands"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Bi-Manual Handling</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-task-3.jpg"
-                              alt="Carry task illustration showing human carrying weight"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Carry</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-task-4.jpg"
-                              alt="Walk task illustration showing human walking"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Walk</p>
+                          <div className="grid grid-cols-1 gap-3">
+                            {Object.keys(reportData.mtmTestData || {}).map((testType) => {
+                              const illos = getSampleIllustrations(testType);
+                              if (!illos.length) return null;
+                              return illos.map((ill, i) => (
+                                <div key={`${testType}-${i}`} className="text-center">
+                                  <img
+                                    src={ill.src}
+                                    alt={ill.label}
+                                    className="w-16 h-20 mx-auto border object-cover bg-white"
+                                  />
+                                  <p className="text-xs mt-1">{ill.label}</p>
+                                </div>
+                              ));
+                            })}
                           </div>
                         </div>
 
@@ -5907,25 +5857,6 @@ export default function ReviewReport() {
                                           ` Post: ${testData.hrPost} bpm`}
                                       </div>
                                     )}
-
-                                    {/* Sample Illustration from library */}
-                                    {(() => {
-                                      const illos = getSampleIllustrations(testType);
-                                      if (!illos.length) return null;
-                                      return (
-                                        <div className="mt-4">
-                                          <h5 className="text-xs font-semibold mb-2">Sample Illustration:</h5>
-                                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                            {illos.map((ill, i) => (
-                                              <div key={i} className="text-center">
-                                                <img src={ill.src} alt={ill.label} className="w-full h-24 object-cover rounded-lg border shadow-sm bg-white" />
-                                                <p className="text-xs text-gray-500 mt-1 truncate">{ill.label}</p>
-                                              </div>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      );
-                                    })()}
 
                                     {/* MTM Test Images */}
                                     {testData.savedImageData &&
