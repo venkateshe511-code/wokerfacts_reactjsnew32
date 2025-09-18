@@ -327,7 +327,22 @@ export default function Dashboard() {
           try {
 
               setCheckoutRedirecting(true);
-              await startCheckout({ amount: 25, currency: "USD" });
+              // Prepare report metadata for webhook linkage
+              const claimantRaw = localStorage.getItem("claimantData");
+              const claimant = claimantRaw ? JSON.parse(claimantRaw) : {};
+              const claimantName = `${claimant.firstName || ""} ${claimant.lastName || ""}`.trim();
+              const existingReportId = localStorage.getItem("currentReportId");
+              const reportId = existingReportId || `FCE-${Date.now()}`;
+              localStorage.setItem("currentReportId", reportId);
+              await startCheckout({
+                amount: 25,
+                currency: "USD",
+                metadata: {
+                  reportId,
+                  evaluatorId: selectedProfileId || "",
+                  claimantName: claimantName || "",
+                },
+              });
             } catch (e: any) {
               console.error(e);
               toast({
