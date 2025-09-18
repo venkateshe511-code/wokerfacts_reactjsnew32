@@ -5765,7 +5765,11 @@ export default function DownloadReport() {
 
     setIsDownloading(false);
     if (didSucceed) {
-      toast({ title: "Report ready" });
+      toast({
+        title: "Report downloaded successfully",
+        description: "You can modify details and download again anytime.",
+        variant: "success",
+      });
       // Stay on this page to allow further edits and re-downloads
     } else {
       toast({ title: "Failed to generate report", variant: "destructive" });
