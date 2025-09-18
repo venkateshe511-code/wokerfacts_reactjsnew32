@@ -4,7 +4,7 @@ export type Illustration = {
   yPercent?: number | null;
 };
 
-const BASE = "/sampe_illustration"; // folder name in repo (intended "sample_illustration")
+const BASE = "/sample_illustration"; // folder name corrected
 
 const map = {
   // Strength - Hand
