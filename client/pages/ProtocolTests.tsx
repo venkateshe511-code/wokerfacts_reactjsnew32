@@ -245,6 +245,7 @@ const testGroups = {
         { id: "shoulder-muscle-extension", name: "Extension" },
         { id: "shoulder-muscle-abduction", name: "Abduction" },
         { id: "shoulder-muscle-adduction", name: "Adduction" },
+        { id: "shoulder-muscle-internal-rotation", name: "Internal Rotation" },
         { id: "shoulder-muscle-external-rotation", name: "External Rotation" },
       ],
     },
