@@ -70,24 +70,39 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
 
       // Default hand grip
       return [
-        { src: "/sampe_illustration/Hand_Strength_MVE.jpg", label: "Grip Strength" },
+        {
+          src: "/sampe_illustration/Hand_Strength_MVE.jpg",
+          label: "Grip Strength",
+        },
       ];
     }
 
     // Pinch types
     if (key.includes("pinch") && key.includes("key")) {
       return [
-        { src: "/sampe_illustration/Pinch_Strength_Key.jpg", label: "Key Pinch" },
+        {
+          src: "/sampe_illustration/Pinch_Strength_Key.jpg",
+          label: "Key Pinch",
+        },
       ];
     }
     if (key.includes("pinch") && key.includes("tip")) {
       return [
-        { src: "/sampe_illustration/Pinch_Strength_Tip.jpg", label: "Tip Pinch" },
+        {
+          src: "/sampe_illustration/Pinch_Strength_Tip.jpg",
+          label: "Tip Pinch",
+        },
       ];
     }
-    if (key.includes("pinch") && (key.includes("palmar") || key.includes("palmer"))) {
+    if (
+      key.includes("pinch") &&
+      (key.includes("palmar") || key.includes("palmer"))
+    ) {
       return [
-        { src: "/sampe_illustration/Pinch_Strength_Palmar.jpg", label: "Palmar Pinch" },
+        {
+          src: "/sampe_illustration/Pinch_Strength_Palmar.jpg",
+          label: "Palmar Pinch",
+        },
       ];
     }
     if (key.includes("pinch") || key.includes("grasp")) {
@@ -100,166 +115,310 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
     if (key.includes("static") && key.includes("lift")) {
       if (key.includes("high") || key.includes("overhead")) {
         return [
-          { src: "/sampe_illustration/Static_Lift_High.jpg", label: "Static High Lift" },
+          {
+            src: "/sampe_illustration/Static_Lift_High.jpg",
+            label: "Static High Lift",
+          },
         ];
       }
-      if (key.includes("mid") || key.includes("waist") || key.includes("standing")) {
+      if (
+        key.includes("mid") ||
+        key.includes("waist") ||
+        key.includes("standing")
+      ) {
         return [
-          { src: "/sampe_illustration/Static_Lift_Mid.jpg", label: "Static Mid Lift" },
+          {
+            src: "/sampe_illustration/Static_Lift_Mid.jpg",
+            label: "Static Mid Lift",
+          },
         ];
       }
       if (key.includes("low") || key.includes("squat")) {
         return [
-          { src: "/sampe_illustration/Static_Lift_Low.jpg", label: "Static Low Lift" },
+          {
+            src: "/sampe_illustration/Static_Lift_Low.jpg",
+            label: "Static Low Lift",
+          },
         ];
       }
       return [
-        { src: "/sampe_illustration/Static_Lift_Mid.jpg", label: "Static Lift" },
+        {
+          src: "/sampe_illustration/Static_Lift_Mid.jpg",
+          label: "Static Lift",
+        },
       ];
     }
 
     // Dynamic lifts
     if (key.includes("dynamic") && key.includes("lift")) {
-      if (key.includes("full") || key.includes("sequence") || key.includes("overhead")) {
+      if (
+        key.includes("full") ||
+        key.includes("sequence") ||
+        key.includes("overhead")
+      ) {
         return [
-          { src: "/sampe_illustration/Dynamic_Lift_Overhead.jpg", label: "Dynamic Overhead Lift" },
+          {
+            src: "/sampe_illustration/Dynamic_Lift_Overhead.jpg",
+            label: "Dynamic Overhead Lift",
+          },
         ];
       }
-      if (key.includes("mid") || key.includes("waist") || key.includes("standing")) {
+      if (
+        key.includes("mid") ||
+        key.includes("waist") ||
+        key.includes("standing")
+      ) {
         return [
-          { src: "/sampe_illustration/Dynamic_Lift_Mid.jpg", label: "Dynamic Mid Lift" },
+          {
+            src: "/sampe_illustration/Dynamic_Lift_Mid.jpg",
+            label: "Dynamic Mid Lift",
+          },
         ];
       }
       if (key.includes("low") || key.includes("squat")) {
         return [
-          { src: "/sampe_illustration/Dynamic_Lift_Low.jpg", label: "Dynamic Low Lift" },
+          {
+            src: "/sampe_illustration/Dynamic_Lift_Low.jpg",
+            label: "Dynamic Low Lift",
+          },
         ];
       }
       return [
-        { src: "/sampe_illustration/Dynamic_Lift_High.jpg", label: "Dynamic Lift" },
+        {
+          src: "/sampe_illustration/Dynamic_Lift_High.jpg",
+          label: "Dynamic Lift",
+        },
       ];
     }
 
     // Push/Pull (fallback using MTM cart push/pull image)
-    if ((key.includes("push") || key.includes("pull")) && !key.includes("static") && !key.includes("dynamic")) {
+    if (
+      (key.includes("push") || key.includes("pull")) &&
+      !key.includes("static") &&
+      !key.includes("dynamic")
+    ) {
       return [
-        { src: "/sampe_illustration/MTM_Test_Battery_Push_Pull_Cart.jpg", label: "Push/Pull" },
+        {
+          src: "/sampe_illustration/MTM_Test_Battery_Push_Pull_Cart.jpg",
+          label: "Push/Pull",
+        },
       ];
     }
 
     // Generic strength fallback
     return [
-      { src: "/sampe_illustration/Hand_Strength_Standard.jpg", label: "Strength" },
+      {
+        src: "/sampe_illustration/Hand_Strength_Standard.jpg",
+        label: "Strength",
+      },
     ];
   }
 
   // ROM mappings
   // Cervical
-  if (key.includes("cervical") && (key.includes("flexion") || key.includes("extension") || key.includes("range"))) {
+  if (
+    key.includes("cervical") &&
+    (key.includes("flexion") ||
+      key.includes("extension") ||
+      key.includes("range"))
+  ) {
     return [
-      { src: "/sampe_illustration/Cervical_Total_Spine_Flexion_Extension.jpg", label: "Cervical Flex/Ext" },
+      {
+        src: "/sampe_illustration/Cervical_Total_Spine_Flexion_Extension.jpg",
+        label: "Cervical Flex/Ext",
+      },
     ];
   }
-  if (key.includes("cervical") && (key.includes("lateral") || key.includes("oblique"))) {
+  if (
+    key.includes("cervical") &&
+    (key.includes("lateral") || key.includes("oblique"))
+  ) {
     return [
-      { src: "/sampe_illustration/Cervical_Total_Spine_Lateral_Flexion.jpg", label: "Cervical Lateral Flexion" },
+      {
+        src: "/sampe_illustration/Cervical_Total_Spine_Lateral_Flexion.jpg",
+        label: "Cervical Lateral Flexion",
+      },
     ];
   }
   if (key.includes("cervical") && key.includes("rotation")) {
     return [
-      { src: "/sampe_illustration/Cervical_Total_Spine_Rotation.jpg", label: "Cervical Rotation" },
+      {
+        src: "/sampe_illustration/Cervical_Total_Spine_Rotation.jpg",
+        label: "Cervical Rotation",
+      },
     ];
   }
 
   // Thoracic
   if (key.includes("thoracic") && key.includes("flexion")) {
     return [
-      { src: "/sampe_illustration/Thoracic_Total_Spine_Flexion.jpg", label: "Thoracic Flexion" },
+      {
+        src: "/sampe_illustration/Thoracic_Total_Spine_Flexion.jpg",
+        label: "Thoracic Flexion",
+      },
     ];
   }
   if (key.includes("thoracic") && key.includes("rotation")) {
     return [
-      { src: "/sampe_illustration/Thoracic_Total_Spine_Rotation.jpg", label: "Thoracic Rotation" },
+      {
+        src: "/sampe_illustration/Thoracic_Total_Spine_Rotation.jpg",
+        label: "Thoracic Rotation",
+      },
     ];
   }
 
   // Lumbar
-  if (key.includes("lumbar") && (key.includes("flexion") || key.includes("extension") || key.includes("range"))) {
+  if (
+    key.includes("lumbar") &&
+    (key.includes("flexion") ||
+      key.includes("extension") ||
+      key.includes("range"))
+  ) {
     return [
-      { src: "/sampe_illustration/Lumbar_Total_Spine_Flexion_Extension.jpg", label: "Lumbar Flex/Ext" },
+      {
+        src: "/sampe_illustration/Lumbar_Total_Spine_Flexion_Extension.jpg",
+        label: "Lumbar Flex/Ext",
+      },
     ];
   }
   if (key.includes("lumbar") && key.includes("lateral")) {
     return [
-      { src: "/sampe_illustration/Lumbar_Total_Spine_Lateral_Flexion.jpg", label: "Lumbar Lateral Flexion" },
+      {
+        src: "/sampe_illustration/Lumbar_Total_Spine_Lateral_Flexion.jpg",
+        label: "Lumbar Lateral Flexion",
+      },
     ];
   }
 
   // Shoulder
-  if (key.includes("shoulder") && (key.includes("flexion") || key.includes("extension"))) {
+  if (
+    key.includes("shoulder") &&
+    (key.includes("flexion") || key.includes("extension"))
+  ) {
     return [
-      { src: "/sampe_illustration/Extremity_Shoulder_Flexion_Extension.jpg", label: key.includes("extension") ? "Shoulder Extension" : "Shoulder Flexion" },
+      {
+        src: "/sampe_illustration/Extremity_Shoulder_Flexion_Extension.jpg",
+        label: key.includes("extension")
+          ? "Shoulder Extension"
+          : "Shoulder Flexion",
+      },
     ];
   }
-  if (key.includes("shoulder") && (key.includes("internal") || key.includes("external"))) {
+  if (
+    key.includes("shoulder") &&
+    (key.includes("internal") || key.includes("external"))
+  ) {
     return [
-      { src: "/sampe_illustration/Extremity_Shoulder_Internal_External_Rotation.jpg", label: "Shoulder Int/Ext Rotation" },
+      {
+        src: "/sampe_illustration/Extremity_Shoulder_Internal_External_Rotation.jpg",
+        label: "Shoulder Int/Ext Rotation",
+      },
     ];
   }
-  if (key.includes("shoulder") && (key.includes("abduction") || key.includes("adduction"))) {
+  if (
+    key.includes("shoulder") &&
+    (key.includes("abduction") || key.includes("adduction"))
+  ) {
     return [
-      { src: "/sampe_illustration/Extremity_Shoulder_Abduction_Adduction.jpg", label: "Shoulder Abd/Add" },
+      {
+        src: "/sampe_illustration/Extremity_Shoulder_Abduction_Adduction.jpg",
+        label: "Shoulder Abd/Add",
+      },
     ];
   }
 
   // Elbow
-  if (key.includes("elbow") && (key.includes("flexion") || key.includes("extension"))) {
+  if (
+    key.includes("elbow") &&
+    (key.includes("flexion") || key.includes("extension"))
+  ) {
     return [
-      { src: "/sampe_illustration/Extremity_Elbow_Flexion_Extension.jpg", label: "Elbow Flex/Ext" },
+      {
+        src: "/sampe_illustration/Extremity_Elbow_Flexion_Extension.jpg",
+        label: "Elbow Flex/Ext",
+      },
     ];
   }
-  if (key.includes("elbow") && (key.includes("supination") || key.includes("pronation"))) {
+  if (
+    key.includes("elbow") &&
+    (key.includes("supination") || key.includes("pronation"))
+  ) {
     return [
-      { src: "/sampe_illustration/Extremity_Elbow_Supination_Pronation.jpg", label: "Elbow Sup/Pro" },
+      {
+        src: "/sampe_illustration/Extremity_Elbow_Supination_Pronation.jpg",
+        label: "Elbow Sup/Pro",
+      },
     ];
   }
 
   // Wrist
-  if (key.includes("wrist") && (key.includes("flexion") || key.includes("extension"))) {
+  if (
+    key.includes("wrist") &&
+    (key.includes("flexion") || key.includes("extension"))
+  ) {
     return [
-      { src: "/sampe_illustration/Extremity_Wrist_Flexion_Extension.jpg", label: "Wrist Flex/Ext" },
+      {
+        src: "/sampe_illustration/Extremity_Wrist_Flexion_Extension.jpg",
+        label: "Wrist Flex/Ext",
+      },
     ];
   }
-  if (key.includes("wrist") && (key.includes("radial") || key.includes("ulnar") || key.includes("deviation"))) {
+  if (
+    key.includes("wrist") &&
+    (key.includes("radial") ||
+      key.includes("ulnar") ||
+      key.includes("deviation"))
+  ) {
     return [
-      { src: "/sampe_illustration/Extremity_Wrist_Radial_Ulunar_Deviation.jpg", label: "Wrist Radial/Ulnar Deviation" },
+      {
+        src: "/sampe_illustration/Extremity_Wrist_Radial_Ulunar_Deviation.jpg",
+        label: "Wrist Radial/Ulnar Deviation",
+      },
     ];
   }
   if (key.includes("wrist") && key.includes("dorsiflexion")) {
     return [
-      { src: "/sampe_illustration/Wrist_Muscle_Test_Dorsiflexion.jpg", label: "Wrist Dorsiflexion" },
+      {
+        src: "/sampe_illustration/Wrist_Muscle_Test_Dorsiflexion.jpg",
+        label: "Wrist Dorsiflexion",
+      },
     ];
   }
   if (key.includes("wrist") && key.includes("palmar")) {
     return [
-      { src: "/sampe_illustration/Wrist_Muscle_Test_Palmar_Flexion.jpg", label: "Wrist Palmar Flexion" },
+      {
+        src: "/sampe_illustration/Wrist_Muscle_Test_Palmar_Flexion.jpg",
+        label: "Wrist Palmar Flexion",
+      },
     ];
   }
 
   // Thumb & Fingers
   if (key.includes("thumb") && key.includes("ip")) {
     return [
-      { src: "/sampe_illustration/Thumb_IP_Flexion_Extension.jpg", label: "Thumb IP Flex/Ext" },
+      {
+        src: "/sampe_illustration/Thumb_IP_Flexion_Extension.jpg",
+        label: "Thumb IP Flex/Ext",
+      },
     ];
   }
   if (key.includes("thumb") && key.includes("mp")) {
     return [
-      { src: "/sampe_illustration/Thumb_MP_Flexion_Extension.jpg", label: "Thumb MP Flex/Ext" },
+      {
+        src: "/sampe_illustration/Thumb_MP_Flexion_Extension.jpg",
+        label: "Thumb MP Flex/Ext",
+      },
     ];
   }
-  if (key.includes("thumb") && (key.includes("abduction") || key.includes("radial"))) {
+  if (
+    key.includes("thumb") &&
+    (key.includes("abduction") || key.includes("radial"))
+  ) {
     return [
-      { src: "/sampe_illustration/Thumb_Thumb_Abduction.jpg", label: "Thumb Abduction" },
+      {
+        src: "/sampe_illustration/Thumb_Thumb_Abduction.jpg",
+        label: "Thumb Abduction",
+      },
     ];
   }
 
@@ -295,9 +454,12 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
 
   for (const f of fingerMap) {
     if (f.pattern.test(key)) {
-      if (key.includes("dip")) return [{ src: f.dip, label: `${f.labelBase} DIP Flex/Ext` }];
-      if (key.includes("pip")) return [{ src: f.pip, label: `${f.labelBase} PIP Flex/Ext` }];
-      if (key.includes("mp")) return [{ src: f.mp, label: `${f.labelBase} MP Flex/Ext` }];
+      if (key.includes("dip"))
+        return [{ src: f.dip, label: `${f.labelBase} DIP Flex/Ext` }];
+      if (key.includes("pip"))
+        return [{ src: f.pip, label: `${f.labelBase} PIP Flex/Ext` }];
+      if (key.includes("mp"))
+        return [{ src: f.mp, label: `${f.labelBase} MP Flex/Ext` }];
       // default to PIP if joint unspecified
       return [{ src: f.pip, label: `${f.labelBase} PIP Flex/Ext` }];
     }
@@ -328,56 +490,95 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
   }
 
   // Knee
-  if (key.includes("knee") && (key.includes("flexion") || key.includes("extension"))) {
+  if (
+    key.includes("knee") &&
+    (key.includes("flexion") || key.includes("extension"))
+  ) {
     // Prefer ROM chart when available; muscle tests if explicitly stated
     if (key.includes("muscle")) {
       return [
-        { src: "/sampe_illustration/Knee_Muscle_Test_Flexion.jpg", label: "Knee Muscle Flexion" },
-        { src: "/sampe_illustration/Knee_Muscle_Test_Extension.jpg", label: "Knee Muscle Extension" },
+        {
+          src: "/sampe_illustration/Knee_Muscle_Test_Flexion.jpg",
+          label: "Knee Muscle Flexion",
+        },
+        {
+          src: "/sampe_illustration/Knee_Muscle_Test_Extension.jpg",
+          label: "Knee Muscle Extension",
+        },
       ];
     }
     return [
-      { src: "/sampe_illustration/Extremity_ Knee_Flexion_Extension.jpg", label: "Knee Flex/Ext" },
+      {
+        src: "/sampe_illustration/Extremity_ Knee_Flexion_Extension.jpg",
+        label: "Knee Flex/Ext",
+      },
     ];
   }
 
   // Ankle
-  if (key.includes("ankle") && (key.includes("dorsi") || key.includes("plantar"))) {
+  if (
+    key.includes("ankle") &&
+    (key.includes("dorsi") || key.includes("plantar"))
+  ) {
     if (key.includes("dorsi") && key.includes("plantar")) {
       return [
-        { src: "/sampe_illustration/Extremity_Ankle_Dorsi_Plantar_Flexion.jpg", label: "Ankle Dorsi/Plantar" },
+        {
+          src: "/sampe_illustration/Extremity_Ankle_Dorsi_Plantar_Flexion.jpg",
+          label: "Ankle Dorsi/Plantar",
+        },
       ];
     }
     if (key.includes("dorsi")) {
       return [
-        { src: "/sampe_illustration/Ankle_Muscle_Test_Dorsiflexion.jpg", label: "Ankle Dorsiflexion" },
+        {
+          src: "/sampe_illustration/Ankle_Muscle_Test_Dorsiflexion.jpg",
+          label: "Ankle Dorsiflexion",
+        },
       ];
     }
     return [
-      { src: "/sampe_illustration/Ankle_Muscle_Test_Plantar_Flexion.jpg", label: "Ankle Plantar Flexion" },
+      {
+        src: "/sampe_illustration/Ankle_Muscle_Test_Plantar_Flexion.jpg",
+        label: "Ankle Plantar Flexion",
+      },
     ];
   }
-  if (key.includes("ankle") && (key.includes("inversion") || key.includes("eversion"))) {
+  if (
+    key.includes("ankle") &&
+    (key.includes("inversion") || key.includes("eversion"))
+  ) {
     return [
-      { src: "/sampe_illustration/Extremity_Ankle_Inversion_Eversion.jpg", label: "Ankle Inversion/Eversion" },
+      {
+        src: "/sampe_illustration/Extremity_Ankle_Inversion_Eversion.jpg",
+        label: "Ankle Inversion/Eversion",
+      },
     ];
   }
 
   // Straight Leg Raise
   if (
-    (key.includes("lumbar") && key.includes("straight") && key.includes("leg") && key.includes("raise")) ||
+    (key.includes("lumbar") &&
+      key.includes("straight") &&
+      key.includes("leg") &&
+      key.includes("raise")) ||
     key.includes("straight-leg-raise") ||
     key.includes("slr")
   ) {
     return [
-      { src: "/sampe_illustration/Lumbar_Total_Spine_Straight_Leg_Raise.jpg", label: "Lumbar Straight Leg Raise" },
+      {
+        src: "/sampe_illustration/Lumbar_Total_Spine_Straight_Leg_Raise.jpg",
+        label: "Lumbar Straight Leg Raise",
+      },
     ];
   }
 
   // Fallbacks
   if (isROM) {
     return [
-      { src: "/sampe_illustration/Lumbar_Total_Spine_Flexion_Extension.jpg", label: "ROM" },
+      {
+        src: "/sampe_illustration/Lumbar_Total_Spine_Flexion_Extension.jpg",
+        label: "ROM",
+      },
     ];
   }
   if (isStrength) {
@@ -390,7 +591,10 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
 }
 
 // Convert illustrations to inline HTML snippet (used in DownloadReport)
-export function illustrationsToHtml(illos: Illustration[], sizePx = 72): string {
+export function illustrationsToHtml(
+  illos: Illustration[],
+  sizePx = 72,
+): string {
   if (!illos || illos.length === 0) return "";
   const items = illos
     .map((ill) => {

@@ -3478,7 +3478,8 @@ export default function ReviewReport() {
                                       <div className="grid grid-cols-1 gap-3">
                                         {illos.map((ill, i) => (
                                           <div key={i} className="text-center">
-                                            {ill.yPercent === undefined || ill.yPercent === null ? (
+                                            {ill.yPercent === undefined ||
+                                            ill.yPercent === null ? (
                                               <img
                                                 src={ill.src}
                                                 alt={ill.label}
@@ -3497,7 +3498,9 @@ export default function ReviewReport() {
                                                 }}
                                               />
                                             )}
-                                            <p className="text-xs mt-1">{ill.label}</p>
+                                            <p className="text-xs mt-1">
+                                              {ill.label}
+                                            </p>
                                           </div>
                                         ))}
                                       </div>
