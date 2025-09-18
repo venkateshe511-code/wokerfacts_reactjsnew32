@@ -67,8 +67,16 @@ function romNorm(name: string): { value: number | null } {
   }
   if (n.includes("wrist")) {
     // Typical wrist ROM norms
-    if (n.includes("dorsiflexion") || (n.includes("extension") && !n.includes("flexion"))) return { value: 70 };
-    if (n.includes("palmar") || (n.includes("flexion") && !n.includes("extension"))) return { value: 80 };
+    if (
+      n.includes("dorsiflexion") ||
+      (n.includes("extension") && !n.includes("flexion"))
+    )
+      return { value: 70 };
+    if (
+      n.includes("palmar") ||
+      (n.includes("flexion") && !n.includes("extension"))
+    )
+      return { value: 80 };
     if (n.includes("radial")) return { value: 20 };
     if (n.includes("ulnar")) return { value: 30 };
   }
