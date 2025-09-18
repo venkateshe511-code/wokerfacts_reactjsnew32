@@ -28,7 +28,7 @@ router.post(
       return res.status(500).send("Webhook not configured");
     }
 
-    const sig = req.headers["stripe-signature"]; 
+    const sig = req.headers["stripe-signature"];
     let event;
     try {
       event = getStripe().webhooks.constructEvent(req.body, sig, webhookSecret);
@@ -44,10 +44,12 @@ router.post(
       const meta = obj.metadata || {};
       const reportId = meta.reportId || meta.report_id || null;
       const paymentIntentId = obj.payment_intent || obj.id || null;
-      const checkoutSessionId = type === "checkout.session.completed" ? obj.id : null;
+      const checkoutSessionId =
+        type === "checkout.session.completed" ? obj.id : null;
 
       if (
-        (type === "checkout.session.completed" || type === "payment_intent.succeeded") &&
+        (type === "checkout.session.completed" ||
+          type === "payment_intent.succeeded") &&
         reportId
       ) {
         await db
@@ -57,7 +59,9 @@ router.post(
             {
               paid: true,
               paymentIntentId: paymentIntentId ? String(paymentIntentId) : null,
-              checkoutSessionId: checkoutSessionId ? String(checkoutSessionId) : null,
+              checkoutSessionId: checkoutSessionId
+                ? String(checkoutSessionId)
+                : null,
               evaluatorId: meta.evaluatorId || meta.evaluator_id || null,
               claimantId: meta.claimantId || meta.claimant_id || null,
               claimantName: meta.claimantName || meta.claimant_name || null,

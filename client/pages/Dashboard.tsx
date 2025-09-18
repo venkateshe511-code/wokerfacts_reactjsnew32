@@ -322,15 +322,15 @@ export default function Dashboard() {
           const forceReal =
             (import.meta as any)?.env?.VITE_FORCE_REAL_PAYMENT === "true";
           if (isDemoMode && !forceReal) {
-          navigate("/payment");
+            navigate("/payment");
           } else {
-          try {
-
+            try {
               setCheckoutRedirecting(true);
               // Prepare report metadata for webhook linkage
               const claimantRaw = localStorage.getItem("claimantData");
               const claimant = claimantRaw ? JSON.parse(claimantRaw) : {};
-              const claimantName = `${claimant.firstName || ""} ${claimant.lastName || ""}`.trim();
+              const claimantName =
+                `${claimant.firstName || ""} ${claimant.lastName || ""}`.trim();
               const existingReportId = localStorage.getItem("currentReportId");
               const reportId = existingReportId || `FCE-${Date.now()}`;
               localStorage.setItem("currentReportId", reportId);
