@@ -393,6 +393,7 @@ export const getReferencesForTest = (testId: string): Reference[] => {
     "shoulder-muscle-extension": "muscle-test",
     "shoulder-muscle-abduction": "muscle-test",
     "shoulder-muscle-adduction": "muscle-test",
+    "shoulder-muscle-internal-rotation": "muscle-test",
     "shoulder-muscle-external-rotation": "muscle-test",
     "wrist-muscle-flexion": "muscle-test",
     "wrist-muscle-extension": "muscle-test",
