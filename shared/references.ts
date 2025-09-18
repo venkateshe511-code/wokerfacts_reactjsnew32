@@ -263,7 +263,8 @@ export const testReferences: TestCategoryReferences = {
   "bruce-treadmill": [
     {
       author: "Bruce AM, Lawson D, Wasser TE, Raber-Baer D",
-      title: "Comparison of Bruce treadmill exercise test protocols: Is ramped Bruce equal or superior to standard bruce in producing clinically valid studies for patients presenting for evaluation of cardiac ischemia or arrhythmia with body mass index equal to or greater than 30?",
+      title:
+        "Comparison of Bruce treadmill exercise test protocols: Is ramped Bruce equal or superior to standard bruce in producing clinically valid studies for patients presenting for evaluation of cardiac ischemia or arrhythmia with body mass index equal to or greater than 30?",
       journal: "J Nucl Med Technol",
       year: 2013,
       volume: "41(4)",
@@ -271,7 +272,8 @@ export const testReferences: TestCategoryReferences = {
     },
     {
       author: "Poehlman CP, Llewellyn TL",
-      title: "The Effects of Submaximal and Maximal Exercise on Heart Rate Variability",
+      title:
+        "The Effects of Submaximal and Maximal Exercise on Heart Rate Variability",
       journal: "Int J Exerc Sci",
       year: 2019,
       volume: "12(9)",
@@ -280,7 +282,7 @@ export const testReferences: TestCategoryReferences = {
   ],
 
   // mCAFT Test
-  "mcaft": [
+  mcaft: [
     {
       author: "Canadian Society for Exercise Physiology",
       title: "mCAFT: modified Canadian Aerobic Fitness Test",
@@ -290,10 +292,11 @@ export const testReferences: TestCategoryReferences = {
   ],
 
   // Kasch Step Test
-  "kasch": [
+  kasch: [
     {
       author: "Davis JA, Wilmore JH",
-      title: "Validation of a bench stepping test for cardiorespiratory fitness classification of emergency service personnel",
+      title:
+        "Validation of a bench stepping test for cardiorespiratory fitness classification of emergency service personnel",
       journal: "Journal of Occupational Medicine",
       year: 1979,
       pages: "PMID: 5014456",
@@ -393,6 +396,7 @@ export const getReferencesForTest = (testId: string): Reference[] => {
     "shoulder-muscle-extension": "muscle-test",
     "shoulder-muscle-abduction": "muscle-test",
     "shoulder-muscle-adduction": "muscle-test",
+    "shoulder-muscle-internal-rotation": "muscle-test",
     "shoulder-muscle-external-rotation": "muscle-test",
     "wrist-muscle-flexion": "muscle-test",
     "wrist-muscle-extension": "muscle-test",
@@ -420,10 +424,10 @@ export const getReferencesForTest = (testId: string): Reference[] => {
     "bruce-treadmill": "bruce-treadmill",
     "treadmill-test": "bruce-treadmill",
     "bruce-test": "bruce-treadmill",
-    "mcaft": "mcaft",
+    mcaft: "mcaft",
     "mcaft-test": "mcaft",
     "step-test": "mcaft",
-    "kasch": "kasch",
+    kasch: "kasch",
     "kasch-test": "kasch",
     "kasch-step": "kasch",
   };

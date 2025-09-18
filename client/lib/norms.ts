@@ -24,7 +24,13 @@ function isROM(name: string) {
     n.includes("extension") ||
     n.includes("abduction") ||
     n.includes("adduction") ||
-    n.includes("rotation")
+    n.includes("rotation") ||
+    n.includes("dorsi") ||
+    n.includes("dorsiflexion") ||
+    n.includes("palmar") ||
+    n.includes("radial") ||
+    n.includes("ulnar") ||
+    n.includes("deviation")
   );
 }
 
@@ -56,6 +62,23 @@ function romNorm(name: string): { value: number | null } {
     if (n.includes("flexion")) return { value: 150 };
     if (n.includes("abduction")) return { value: 150 };
     if (n.includes("extension")) return { value: 45 };
+    if (n.includes("internal") && n.includes("rotation")) return { value: 70 };
+    if (n.includes("external") && n.includes("rotation")) return { value: 90 };
+  }
+  if (n.includes("wrist")) {
+    // Typical wrist ROM norms
+    if (
+      n.includes("dorsiflexion") ||
+      (n.includes("extension") && !n.includes("flexion"))
+    )
+      return { value: 70 };
+    if (
+      n.includes("palmar") ||
+      (n.includes("flexion") && !n.includes("extension"))
+    )
+      return { value: 80 };
+    if (n.includes("radial")) return { value: 20 };
+    if (n.includes("ulnar")) return { value: 30 };
   }
   if (n.includes("hip")) {
     if (n.includes("flexion")) return { value: 90 };

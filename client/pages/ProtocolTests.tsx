@@ -245,6 +245,7 @@ const testGroups = {
         { id: "shoulder-muscle-extension", name: "Extension" },
         { id: "shoulder-muscle-abduction", name: "Abduction" },
         { id: "shoulder-muscle-adduction", name: "Adduction" },
+        { id: "shoulder-muscle-internal-rotation", name: "Internal Rotation" },
         { id: "shoulder-muscle-external-rotation", name: "External Rotation" },
       ],
     },
@@ -252,8 +253,8 @@ const testGroups = {
       name: "Wrist (Muscle Test)",
       id: "wrist-muscle-test",
       tests: [
-        { id: "wrist-muscle-flexion", name: "Flexion" },
-        { id: "wrist-muscle-extension", name: "Extension" },
+        { id: "wrist-muscle-flexion", name: "Palmar Flexion" },
+        { id: "wrist-muscle-extension", name: "Dorsiflexion" },
         { id: "wrist-muscle-radial-deviation", name: "Radial Deviation" },
         { id: "wrist-muscle-ulnar-deviation", name: "Ulnar Deviation" },
       ],
