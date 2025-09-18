@@ -279,11 +279,11 @@ const map = {
     { src: `${BASE}/MTM_Test_Battery_Climb_Ladder.jpg`, label: "Climb Ladder" },
   ],
 
-  // Cardio
-  "mcaft-step-test": [{ src: "/mcaft-step-illustration.jpg", label: "mCAFT Step" }],
+  // Cardio (swapped per request)
+  "mcaft-step-test": [{ src: "/bruce-treadmill-illustration.jpg", label: "mCAFT Step" }],
   "kasch-step-test": [{ src: "/kasch-step-illustration.jpg", label: "Kasch Step" }],
   "bruce-treadmill-test": [
-    { src: "/bruce-treadmill-illustration.jpg", label: "Bruce Treadmill" },
+    { src: "/mcaft-step-illustration.jpg", label: "Bruce Treadmill" },
   ],
 } as Record<string, Illustration[]>;
 
