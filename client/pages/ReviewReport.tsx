@@ -3475,7 +3475,8 @@ export default function ReviewReport() {
                                     );
                                     if (!illos.length) return null;
                                     const isMVE = (() => {
-                                      const key = `${test.testId || ""} ${test.testName || ""}`.toLowerCase();
+                                      const key =
+                                        `${test.testId || ""} ${test.testName || ""}`.toLowerCase();
                                       return key.includes("mve"); // covers MVE and MMVE
                                     })();
                                     return (
@@ -3497,7 +3498,9 @@ export default function ReviewReport() {
                                                   height: isMVE ? 120 : 80,
                                                   backgroundImage: `url(${ill.src})`,
                                                   backgroundRepeat: "no-repeat",
-                                                  backgroundSize: isMVE ? "contain" : "100% auto",
+                                                  backgroundSize: isMVE
+                                                    ? "contain"
+                                                    : "100% auto",
                                                   backgroundPosition: `center ${ill.yPercent}%`,
                                                 }}
                                               />
@@ -3511,7 +3514,6 @@ export default function ReviewReport() {
                                     );
                                   })()}
 
-                                  
                                   {/* Generic Test Illustrations for other tests */}
                                   {!isRangeOfMotion &&
                                     !isGripTest &&
@@ -5620,23 +5622,30 @@ export default function ReviewReport() {
                       {/* Left Column - Illustrations */}
                       <div className="col-span-3">
                         <div className="space-y-4">
-                          <p className="text-sm font-medium underline">Sample Illustration:</p>
+                          <p className="text-sm font-medium underline">
+                            Sample Illustration:
+                          </p>
 
                           <div className="grid grid-cols-1 gap-3">
-                            {Object.keys(reportData.mtmTestData || {}).map((testType) => {
-                              const illos = getSampleIllustrations(testType);
-                              if (!illos.length) return null;
-                              return illos.map((ill, i) => (
-                                <div key={`${testType}-${i}`} className="text-center">
-                                  <img
-                                    src={ill.src}
-                                    alt={ill.label}
-                                    className="w-16 h-20 mx-auto border object-cover bg-white"
-                                  />
-                                  <p className="text-xs mt-1">{ill.label}</p>
-                                </div>
-                              ));
-                            })}
+                            {Object.keys(reportData.mtmTestData || {}).map(
+                              (testType) => {
+                                const illos = getSampleIllustrations(testType);
+                                if (!illos.length) return null;
+                                return illos.map((ill, i) => (
+                                  <div
+                                    key={`${testType}-${i}`}
+                                    className="text-center"
+                                  >
+                                    <img
+                                      src={ill.src}
+                                      alt={ill.label}
+                                      className="w-16 h-20 mx-auto border object-cover bg-white"
+                                    />
+                                    <p className="text-xs mt-1">{ill.label}</p>
+                                  </div>
+                                ));
+                              },
+                            )}
                           </div>
                         </div>
 

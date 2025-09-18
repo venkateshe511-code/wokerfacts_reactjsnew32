@@ -397,7 +397,9 @@ export default function DownloadReport() {
       }
 
       const mtmIllustrationsHtml = Object.keys(mtmData)
-        .map((testType: string) => illustrationsToHtml(getSampleIllustrations(testType)))
+        .map((testType: string) =>
+          illustrationsToHtml(getSampleIllustrations(testType)),
+        )
         .join("");
 
       return `
@@ -4891,11 +4893,18 @@ export default function DownloadReport() {
           }
         }, 2000);
       } else {
-        toast({ title: "Please allow popups for this site to download the PDF report.", variant: "destructive" });
+        toast({
+          title:
+            "Please allow popups for this site to download the PDF report.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error("Error generating PDF:", error);
-      toast({ title: "Error generating PDF. Please try again.", variant: "destructive" });
+      toast({
+        title: "Error generating PDF. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -5721,7 +5730,10 @@ export default function DownloadReport() {
         didSucceed = true;
       } catch (error) {
         console.error("DOCX generation error details:", error);
-        toast({ title: `Error generating DOCX report: ${String((error as any)?.message || error)}`, variant: "destructive" });
+        toast({
+          title: `Error generating DOCX report: ${String((error as any)?.message || error)}`,
+          variant: "destructive",
+        });
       }
     }
 
