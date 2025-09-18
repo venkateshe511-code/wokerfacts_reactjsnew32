@@ -2030,7 +2030,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Cervical extension ≥45° for functional neck movement",
+                                  "Cervical extension ≥45�� for functional neck movement",
                                 norm: 45, // degrees
                                 functionalMin: 45,
                                 unit: "degrees",
@@ -3474,6 +3474,11 @@ export default function ReviewReport() {
                                       test.testId || testName,
                                     );
                                     if (!illos.length) return null;
+                                    const isMVE = (() => {
+                                      const key =
+                                        `${test.testId || ""} ${test.testName || ""}`.toLowerCase();
+                                      return key.includes("mve"); // covers MVE and MMVE
+                                    })();
                                     return (
                                       <div className="grid grid-cols-1 gap-3">
                                         {illos.map((ill, i) => (
@@ -3483,17 +3488,19 @@ export default function ReviewReport() {
                                               <img
                                                 src={ill.src}
                                                 alt={ill.label}
-                                                className="w-16 h-20 mx-auto border object-cover bg-white"
+                                                className={`${isMVE ? "w-24 h-auto object-contain" : "w-16 h-20 object-cover"} mx-auto border bg-white`}
                                               />
                                             ) : (
                                               <div
                                                 className="mx-auto border bg-white"
                                                 style={{
-                                                  width: 64,
-                                                  height: 80,
+                                                  width: isMVE ? 96 : 64,
+                                                  height: isMVE ? 120 : 80,
                                                   backgroundImage: `url(${ill.src})`,
                                                   backgroundRepeat: "no-repeat",
-                                                  backgroundSize: "100% auto",
+                                                  backgroundSize: isMVE
+                                                    ? "contain"
+                                                    : "100% auto",
                                                   backgroundPosition: `center ${ill.yPercent}%`,
                                                 }}
                                               />
@@ -3506,70 +3513,6 @@ export default function ReviewReport() {
                                       </div>
                                     );
                                   })()}
-
-                                  {isCardioTest && (
-                                    <div className="space-y-4">
-                                      {/* Bruce Treadmill Test */}
-                                      {(testName.includes("bruce") ||
-                                        testName.includes("treadmill")) && (
-                                        <div className="text-center">
-                                          <img
-                                            src="/mcaft-step-illustration.jpg"
-                                            alt="Bruce treadmill test illustration"
-                                            className="w-16 h-20 mx-auto border object-cover bg-white"
-                                          />
-                                          <p className="text-xs mt-1">
-                                            Bruce Protocol
-                                          </p>
-                                        </div>
-                                      )}
-
-                                      {/* mCAFT Step Test */}
-                                      {testName.includes("mcaft") && (
-                                        <div className="text-center">
-                                          <img
-                                            src="/bruce-treadmill-illustration.jpg"
-                                            alt="mCAFT step test illustration"
-                                            className="w-16 h-20 mx-auto border object-cover bg-white"
-                                          />
-                                          <p className="text-xs mt-1">
-                                            mCAFT Step Test
-                                          </p>
-                                        </div>
-                                      )}
-
-                                      {/* Kasch Step Test */}
-                                      {testName.includes("kasch") && (
-                                        <div className="text-center">
-                                          <img
-                                            src="/kasch-step-illustration.jpg"
-                                            alt="Kasch step test illustration"
-                                            className="w-16 h-20 mx-auto border object-cover bg-white"
-                                          />
-                                          <p className="text-xs mt-1">
-                                            Kasch Step Test
-                                          </p>
-                                        </div>
-                                      )}
-
-                                      {/* Generic cardio test if none of the above match */}
-                                      {!testName.includes("bruce") &&
-                                        !testName.includes("treadmill") &&
-                                        !testName.includes("mcaft") &&
-                                        !testName.includes("kasch") && (
-                                          <div className="text-center">
-                                            <img
-                                              src="/kasch-step-illustration.jpg"
-                                              alt="Cardio test illustration"
-                                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                                            />
-                                            <p className="text-xs mt-1">
-                                              Cardio Test
-                                            </p>
-                                          </div>
-                                        )}
-                                    </div>
-                                  )}
 
                                   {/* Generic Test Illustrations for other tests */}
                                   {!isRangeOfMotion &&
@@ -5683,69 +5626,26 @@ export default function ReviewReport() {
                             Sample Illustration:
                           </p>
 
-                          {/* Sample Illustration Images */}
-                          <div className="text-center">
-                            <img
-                              src="/occupational-balance.webp"
-                              alt="Balance assessment illustration showing feet in tandem stance"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Balance</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-push-pull.webp"
-                              alt="Push/Pull task illustration"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Push/Pull</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-climb-stairs.webp"
-                              alt="Climb stairs task illustration"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Climb Stairs</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-crawl.webp"
-                              alt="Crawl task illustration"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Crawl</p>
-                          </div>
-
-                          {/* Legacy samples kept in addition to new ones (except Balance corrected above) */}
-                          <div className="text-center">
-                            <img
-                              src="/occupational-task-2.jpg"
-                              alt="Bi-Manual Handling illustration showing both hands"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Bi-Manual Handling</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-task-3.jpg"
-                              alt="Carry task illustration showing human carrying weight"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Carry</p>
-                          </div>
-
-                          <div className="text-center">
-                            <img
-                              src="/occupational-task-4.jpg"
-                              alt="Walk task illustration showing human walking"
-                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                            />
-                            <p className="text-xs mt-1">Walk</p>
+                          <div className="grid grid-cols-1 gap-3">
+                            {Object.keys(reportData.mtmTestData || {}).map(
+                              (testType) => {
+                                const illos = getSampleIllustrations(testType);
+                                if (!illos.length) return null;
+                                return illos.map((ill, i) => (
+                                  <div
+                                    key={`${testType}-${i}`}
+                                    className="text-center"
+                                  >
+                                    <img
+                                      src={ill.src}
+                                      alt={ill.label}
+                                      className="w-16 h-20 mx-auto border object-cover bg-white"
+                                    />
+                                    <p className="text-xs mt-1">{ill.label}</p>
+                                  </div>
+                                ));
+                              },
+                            )}
                           </div>
                         </div>
 

@@ -4,587 +4,694 @@ export type Illustration = {
   yPercent?: number | null;
 };
 
-// Return sample illustration(s) for a given test (Strength/ROM only)
-// Images are located in public/sampe_illustration (folder name as in repo)
+const BASE = "/sample_illustration"; // folder name corrected
+
+const map = {
+  // Strength - Hand
+  "hand-strength-standard": [
+    { src: `${BASE}/Hand_Strength_Standard.jpg`, label: "Standard Grip" },
+  ],
+  "hand-strength-rapid-exchange": [
+    {
+      src: `${BASE}/Hand_Strength_Rapid_Exchange.jpg`,
+      label: "Rapid Exchange Grip",
+    },
+  ],
+  "hand-strength-mve": [
+    { src: `${BASE}/Hand_Strength_MVE.jpg`, label: "Hand Strength MVE" },
+  ],
+  "hand-strength-mmve": [
+    { src: `${BASE}/Hand_Strength_MMVE.jpg`, label: "Hand Strength MMVE" },
+  ],
+
+  // Strength - Pinch
+  "pinch-strength-key": [
+    { src: `${BASE}/Pinch_Strength_Key.jpg`, label: "Key Pinch" },
+  ],
+  "pinch-strength-tip": [
+    { src: `${BASE}/Pinch_Strength_Tip.jpg`, label: "Tip Pinch" },
+  ],
+  "pinch-strength-palmar": [
+    { src: `${BASE}/Pinch_Strength_Palmar.jpg`, label: "Palmar Pinch" },
+  ],
+  "pinch-strength-grasp": [
+    { src: `${BASE}/Pinch_Strength_Grasp.jpg`, label: "Grasp" },
+  ],
+
+  // Strength - Muscle Tests (Cervical)
+  "cervical-flexion-extension": [
+    {
+      src: `${BASE}/Muscle_Test_Cervical_Flexion_Extension.jpg`,
+      label: "Cervical Flex/Ext",
+    },
+  ],
+  "cervical-lateral-flexion": [
+    {
+      src: `${BASE}/Muscle_Test_Cervical_Lateral_Flexion.jpg`,
+      label: "Cervical Lateral Flexion",
+    },
+  ],
+  "cervical-30-rotation": [
+    {
+      src: `${BASE}/Muscle_Test_Cervical_30_Degree_Rotation.jpg`,
+      label: "Cervical 30° Rotation",
+    },
+  ],
+  "cervical-60-rotation": [
+    {
+      src: `${BASE}/Muscle_Test_Cervical_60_Degree_Rotation.jpg`,
+      label: "Cervical 60° Rotation",
+    },
+  ],
+
+  // Strength - Muscle Tests (Hip)
+  "hip-muscle-flexion": [
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_1.jpg`,
+      label: "Hip Muscle (1)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_2.jpg`,
+      label: "Hip Muscle (2)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_3.jpg`,
+      label: "Hip Muscle (3)",
+    },
+  ],
+  "hip-muscle-extension": [
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_1.jpg`,
+      label: "Hip Muscle (1)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_2.jpg`,
+      label: "Hip Muscle (2)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_3.jpg`,
+      label: "Hip Muscle (3)",
+    },
+  ],
+  "hip-muscle-abduction": [
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_1.jpg`,
+      label: "Hip Muscle (1)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_2.jpg`,
+      label: "Hip Muscle (2)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_3.jpg`,
+      label: "Hip Muscle (3)",
+    },
+  ],
+  "hip-muscle-adduction": [
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_1.jpg`,
+      label: "Hip Muscle (1)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_2.jpg`,
+      label: "Hip Muscle (2)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_3.jpg`,
+      label: "Hip Muscle (3)",
+    },
+  ],
+  "hip-muscle-external-rotation": [
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_1.jpg`,
+      label: "Hip Muscle (1)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_2.jpg`,
+      label: "Hip Muscle (2)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_3.jpg`,
+      label: "Hip Muscle (3)",
+    },
+  ],
+  "hip-muscle-internal-rotation": [
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_1.jpg`,
+      label: "Hip Muscle (1)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_2.jpg`,
+      label: "Hip Muscle (2)",
+    },
+    {
+      src: `${BASE}/Hip_Muscle Test_Flexion_Extension_Abduction_Adduction_External_RotationInternal_Rotation_3.jpg`,
+      label: "Hip Muscle (3)",
+    },
+  ],
+
+  // Strength - Muscle Tests (Shoulder)
+  "shoulder-muscle-flexion": [
+    {
+      src: `${BASE}/Shoulder_Muscle Test_Flexion.jpg`,
+      label: "Shoulder Flexion",
+    },
+  ],
+  "shoulder-muscle-extension": [
+    {
+      src: `${BASE}/Shoulder_Muscle Test_Extension.jpg`,
+      label: "Shoulder Extension",
+    },
+  ],
+  "shoulder-muscle-abduction": [
+    {
+      src: `${BASE}/Shoulder_Muscle Test_Abduction.jpg`,
+      label: "Shoulder Abduction",
+    },
+  ],
+  "shoulder-muscle-adduction": [
+    {
+      src: `${BASE}/Shoulder_Muscle Test_Adduction.jpg`,
+      label: "Shoulder Adduction",
+    },
+  ],
+  "shoulder-muscle-external-rotation": [
+    {
+      src: `${BASE}/Shoulder_Muscle Test_External_Rotation.jpg`,
+      label: "Shoulder External Rotation",
+    },
+  ],
+  "shoulder-muscle-internal-rotation": [
+    {
+      src: `${BASE}/Shoulder_Muscle Test_Internal_Rotation.jpg`,
+      label: "Shoulder Internal Rotation",
+    },
+  ],
+
+  // Strength - Muscle Tests (Wrist)
+  "wrist-muscle-flexion": [
+    {
+      src: `${BASE}/Wrist_Muscle_Test_Palmar_Flexion.jpg`,
+      label: "Wrist Palmar Flexion",
+    },
+  ],
+  "wrist-muscle-extension": [
+    {
+      src: `${BASE}/Wrist_Muscle_Test_Dorsiflexion.jpg`,
+      label: "Wrist Dorsiflexion",
+    },
+  ],
+  "wrist-muscle-radial-deviation": [
+    {
+      src: `${BASE}/Wrist_Muscle Test_Radial_Deviation.jpg`,
+      label: "Wrist Radial Deviation",
+    },
+  ],
+  "wrist-muscle-ulnar-deviation": [
+    {
+      src: `${BASE}/Wrist_Muscle_Test_Ulnar_Deviation.jpg`,
+      label: "Wrist Ulnar Deviation",
+    },
+  ],
+
+  // Strength - Muscle Tests (Ankle)
+  "ankle-muscle-dorsiflexion": [
+    {
+      src: `${BASE}/Ankle_Muscle_Test_Dorsiflexion.jpg`,
+      label: "Ankle Dorsiflexion",
+    },
+  ],
+  "ankle-muscle-plantar-flexion": [
+    {
+      src: `${BASE}/Ankle_Muscle_Test_Plantar_Flexion.jpg`,
+      label: "Ankle Plantar Flexion",
+    },
+  ],
+  "ankle-muscle-eversion": [
+    { src: `${BASE}/Ankle_Muscle_Test_Eversion.jpg`, label: "Ankle Eversion" },
+  ],
+  "ankle-muscle-inversion": [
+    {
+      src: `${BASE}/Ankle_Muscle_Test_Inversion.jpg`,
+      label: "Ankle Inversion",
+    },
+  ],
+
+  // Strength - Muscle Tests (Knee/Elbow)
+  "knee-muscle-flexion": [
+    { src: `${BASE}/Knee_Muscle_Test_Flexion.jpg`, label: "Knee Flexion" },
+  ],
+  "knee-muscle-extension": [
+    { src: `${BASE}/Knee_Muscle_Test_Extension.jpg`, label: "Knee Extension" },
+  ],
+  "elbow-muscle-flexion": [
+    { src: `${BASE}/Elbow_Muscle_Test_Flexion.jpg`, label: "Elbow Flexion" },
+  ],
+  "elbow-muscle-extension": [
+    {
+      src: `${BASE}/Elbow_Muscle_Test_Extension.jpg`,
+      label: "Elbow Extension",
+    },
+  ],
+
+  // Strength - Static/Dynamic Lifts
+  "static-lift-low": [
+    { src: `${BASE}/Static_Lift_Low.jpg`, label: "Static Lift Low" },
+  ],
+  "static-lift-mid": [
+    { src: `${BASE}/Static_Lift_Mid.jpg`, label: "Static Lift Mid" },
+  ],
+  "static-lift-high": [
+    { src: `${BASE}/Static_Lift_High.jpg`, label: "Static Lift High" },
+  ],
+
+  "dynamic-lift-low": [
+    { src: `${BASE}/Dynamic_Lift_Low.jpg`, label: "Dynamic Lift Low" },
+  ],
+  "dynamic-lift-mid": [
+    { src: `${BASE}/Dynamic_Lift_Mid.jpg`, label: "Dynamic Lift Mid" },
+  ],
+  "dynamic-lift-high": [
+    { src: `${BASE}/Dynamic_Lift_High.jpg`, label: "Dynamic Lift High" },
+  ],
+  "dynamic-lift-overhead": [
+    {
+      src: `${BASE}/Dynamic_Lift_Overhead.jpg`,
+      label: "Dynamic Lift Overhead",
+    },
+  ],
+
+  // ROM - Total Spine
+  "cervical-spine-flexion-extension": [
+    {
+      src: `${BASE}/Cervical_Total_Spine_Flexion_Extension.jpg`,
+      label: "Cervical Flex/Ext",
+    },
+  ],
+  "cervical-spine-lateral-flexion": [
+    {
+      src: `${BASE}/Cervical_Total_Spine_Lateral_Flexion.jpg`,
+      label: "Cervical Lateral Flexion",
+    },
+  ],
+  "cervical-spine-rotation": [
+    {
+      src: `${BASE}/Cervical_Total_Spine_Rotation.jpg`,
+      label: "Cervical Rotation",
+    },
+  ],
+  "lumbar-spine-flexion-extension": [
+    {
+      src: `${BASE}/Lumbar_Total_Spine_Flexion_Extension.jpg`,
+      label: "Lumbar Flex/Ext",
+    },
+  ],
+  "lumbar-spine-lateral-flexion": [
+    {
+      src: `${BASE}/Lumbar_Total_Spine_Lateral_Flexion.jpg`,
+      label: "Lumbar Lateral Flexion",
+    },
+  ],
+  "lumbar-spine-straight-leg-raise": [
+    {
+      src: `${BASE}/Lumbar_Total_Spine_Straight_Leg_Raise.jpg`,
+      label: "Straight Leg Raise",
+    },
+  ],
+  "thoracic-spine-flexion": [
+    {
+      src: `${BASE}/Thoracic_Total_Spine_Flexion.jpg`,
+      label: "Thoracic Flexion",
+    },
+  ],
+  "thoracic-spine-rotation": [
+    {
+      src: `${BASE}/Thoracic_Total_Spine_Rotation.jpg`,
+      label: "Thoracic Rotation",
+    },
+  ],
+
+  // ROM - Extremities
+  "elbow-rom-flexion-extension": [
+    {
+      src: `${BASE}/Extremity_Elbow_Flexion_Extension.jpg`,
+      label: "Elbow Flex/Ext",
+    },
+  ],
+  "elbow-rom-supination-pronation": [
+    {
+      src: `${BASE}/Extremity_Elbow_Supination_Pronation.jpg`,
+      label: "Elbow Supination/Pronation",
+    },
+  ],
+  "wrist-rom-flexion-extension": [
+    {
+      src: `${BASE}/Extremity_Wrist_Flexion_Extension.jpg`,
+      label: "Wrist Flex/Ext",
+    },
+  ],
+  "wrist-rom-radial-ulnar-deviation": [
+    {
+      src: `${BASE}/Extremity_Wrist_Radial_Ulunar_Deviation.jpg`,
+      label: "Wrist Radial/Ulnar Deviation",
+    },
+  ],
+  "knee-rom-flexion-extension": [
+    {
+      src: `${BASE}/Extremity_ Knee_Flexion_Extension.jpg`,
+      label: "Knee Flex/Ext",
+    },
+  ],
+  "shoulder-rom-flexion-extension": [
+    {
+      src: `${BASE}/Extremity_Shoulder_Flexion_Extension.jpg`,
+      label: "Shoulder Flex/Ext",
+    },
+  ],
+  "shoulder-rom-internal-external-rotation": [
+    {
+      src: `${BASE}/Extremity_Shoulder_Internal_External_Rotation.jpg`,
+      label: "Shoulder Int/Ext Rotation",
+    },
+  ],
+  "shoulder-rom-abduction-adduction": [
+    {
+      src: `${BASE}/Extremity_Shoulder_Abduction_Adduction.jpg`,
+      label: "Shoulder Abd/Add",
+    },
+  ],
+  "hip-rom-flexion-extension": [
+    {
+      src: `${BASE}/Extremity_Hip_Flexion_Extension_Internal_External_Rotation_Abduction_Adduction_1.jpg`,
+      label: "Hip ROM (1)",
+    },
+    {
+      src: `${BASE}/Extremity_Hip_Flexion_Extension_Internal_External_Rotation_Abduction_Adduction_2.jpg`,
+      label: "Hip ROM (2)",
+    },
+  ],
+  "hip-rom-internal-external-rotation": [
+    {
+      src: `${BASE}/Extremity_Hip_Flexion_Extension_Internal_External_Rotation_Abduction_Adduction_1.jpg`,
+      label: "Hip ROM (1)",
+    },
+    {
+      src: `${BASE}/Extremity_Hip_Flexion_Extension_Internal_External_Rotation_Abduction_Adduction_2.jpg`,
+      label: "Hip ROM (2)",
+    },
+  ],
+  "hip-rom-abduction-adduction": [
+    {
+      src: `${BASE}/Extremity_Hip_Flexion_Extension_Internal_External_Rotation_Abduction_Adduction_1.jpg`,
+      label: "Hip ROM (1)",
+    },
+    {
+      src: `${BASE}/Extremity_Hip_Flexion_Extension_Internal_External_Rotation_Abduction_Adduction_2.jpg`,
+      label: "Hip ROM (2)",
+    },
+  ],
+  "ankle-rom-dorsi-plantar-flexion": [
+    {
+      src: `${BASE}/Extremity_Ankle_Dorsi_Plantar_Flexion.jpg`,
+      label: "Ankle Dorsi/Plantar",
+    },
+  ],
+  "ankle-rom-inversion-eversion": [
+    {
+      src: `${BASE}/Extremity_Ankle_Inversion_Eversion.jpg`,
+      label: "Ankle Inversion/Eversion",
+    },
+  ],
+
+  // ROM - Hand/Foot
+  "thumb-ip-flexion-extension": [
+    {
+      src: `${BASE}/Thumb_IP_Flexion_Extension.jpg`,
+      label: "Thumb IP Flex/Ext",
+    },
+  ],
+  "thumb-mp-flexion-extension": [
+    {
+      src: `${BASE}/Thumb_MP_Flexion_Extension.jpg`,
+      label: "Thumb MP Flex/Ext",
+    },
+  ],
+  "thumb-abduction": [
+    { src: `${BASE}/Thumb_Thumb_Abduction.jpg`, label: "Thumb Abduction" },
+  ],
+
+  "index-dip-flexion-extension": [
+    {
+      src: `${BASE}/Index_Finger_DIP_Flexion_Extension.jpg`,
+      label: "Index DIP Flex/Ext",
+    },
+  ],
+  "index-pip-flexion-extension": [
+    {
+      src: `${BASE}/Index_Finger_PIP_Flexion_Extension.jpg`,
+      label: "Index PIP Flex/Ext",
+    },
+  ],
+  "index-mp-flexion-extension": [
+    {
+      src: `${BASE}/Index_Finger_MP_Flexion_Extension.jpg`,
+      label: "Index MP Flex/Ext",
+    },
+  ],
+
+  "middle-dip-flexion-extension": [
+    {
+      src: `${BASE}/Middle_Finger_DIP_Flexion_Extension.jpg`,
+      label: "Middle DIP Flex/Ext",
+    },
+  ],
+  "middle-pip-flexion-extension": [
+    {
+      src: `${BASE}/Middle_Finger_PIP_Flexion_Extension.jpg`,
+      label: "Middle PIP Flex/Ext",
+    },
+  ],
+  "middle-mp-flexion-extension": [
+    {
+      src: `${BASE}/Middle_Finger_MP_Flexion_Extension.jpg`,
+      label: "Middle MP Flex/Ext",
+    },
+  ],
+
+  "ring-dip-flexion-extension": [
+    {
+      src: `${BASE}/Ring_Finger_DIP_Flexion_Extension.jpg`,
+      label: "Ring DIP Flex/Ext",
+    },
+  ],
+  "ring-pip-flexion-extension": [
+    {
+      src: `${BASE}/Ring_Finger_PIP_Flexion_Extension.jpg`,
+      label: "Ring PIP Flex/Ext",
+    },
+  ],
+  "ring-mp-flexion-extension": [
+    {
+      src: `${BASE}/Ring_Finger_MP_Flexion_Extension.jpg`,
+      label: "Ring MP Flex/Ext",
+    },
+  ],
+
+  "little-dip-flexion-extension": [
+    {
+      src: `${BASE}/Little_Finger_DIP_Flexion_Extension_PIP_Flexion_Extension_MP_Flexion_Extension.jpg`,
+      label: "Little Finger ROM",
+    },
+  ],
+  "little-pip-flexion-extension": [
+    {
+      src: `${BASE}/Little_Finger_DIP_Flexion_Extension_PIP_Flexion_Extension_MP_Flexion_Extension.jpg`,
+      label: "Little Finger ROM",
+    },
+  ],
+  "little-mp-flexion-extension": [
+    {
+      src: `${BASE}/Little_Finger_DIP_Flexion_Extension_PIP_Flexion_Extension_MP_Flexion_Extension.jpg`,
+      label: "Little Finger ROM",
+    },
+  ],
+
+  "great-toe-ip-flexion": [
+    {
+      src: `${BASE}/Extremity_Great_Toe_IP_Flexion_MP_Dorsi_Plantar_Flexion.jpg`,
+      label: "Great Toe IP Flexion",
+    },
+  ],
+  "great-toe-mp-dorsi-plantar-flexion": [
+    {
+      src: `${BASE}/Extremity_Great_Toe_IP_Flexion_MP_Dorsi_Plantar_Flexion.jpg`,
+      label: "Great Toe MP Dorsi/Plantar",
+    },
+  ],
+
+  "2nd-toe-mp-dorsi-plantar-flexion": [
+    {
+      src: `${BASE}/Extremity_2nd_Toe_MP_Dorsi_Plantar_Flexion.jpg`,
+      label: "2nd Toe MP Dorsi/Plantar",
+    },
+  ],
+  "3rd-toe-mp-dorsi-plantar-flexion": [
+    {
+      src: `${BASE}/Extremity_3rd_Toe_MP_Dorsi_Plantar_Flexion.jpg`,
+      label: "3rd Toe MP Dorsi/Plantar",
+    },
+  ],
+  "4th-toe-mp-dorsi-plantar-flexion": [
+    {
+      src: `${BASE}/Extremity_4th_Toe_MP_Dorsi_Plantar_Flexion.jpg`,
+      label: "4th Toe MP Dorsi/Plantar",
+    },
+  ],
+  "5th-toe-mp-dorsi-plantar-flexion": [
+    {
+      src: `${BASE}/Extremity_5th_Toe_MP_Dorsi_Plantar_Flexion.jpg`,
+      label: "5th Toe MP Dorsi/Plantar",
+    },
+  ],
+
+  // Occupational (MTM)
+  fingering: [
+    { src: `${BASE}/MTM_Test_Battery_Fingering.jpg`, label: "Fingering" },
+  ],
+  "bi-manual-fingering": [
+    {
+      src: `${BASE}/MTM_Test_Battery_Bi_Manual_Fingering.jpg`,
+      label: "Bi-manual Fingering",
+    },
+  ],
+  handling: [
+    { src: `${BASE}/MTM_Test_Battery_Handling.jpg`, label: "Handling" },
+  ],
+  "bi-manual-handling": [
+    {
+      src: `${BASE}/MTM_Test_Battery_Bi_Manual_Handling.jpg`,
+      label: "Bi-manual Handling",
+    },
+  ],
+  "reach-immediate": [
+    {
+      src: `${BASE}/MTM_Test_Battery_Reach_Immediate.jpg`,
+      label: "Reach Immediate",
+    },
+  ],
+  "reach-overhead": [
+    {
+      src: `${BASE}/MTM_Test_Battery_Reach_Overhead.jpg`,
+      label: "Reach Overhead",
+    },
+  ],
+  "reach-with-weight": [
+    {
+      src: `${BASE}/MTM_Test_Battery_Reach_With_Weight.jpg`,
+      label: "Reach With Weight",
+    },
+  ],
+  stoop: [{ src: `${BASE}/MTM_Test_Battery_Stoop.jpg`, label: "Stoop" }],
+  walk: [{ src: `${BASE}/MTM_Test_Battery_Walk.jpg`, label: "Walk" }],
+  "push-pull-cart": [
+    {
+      src: `${BASE}/MTM_Test_Battery_Push_Pull_Cart.jpg`,
+      label: "Push/Pull Cart",
+    },
+  ],
+  crouch: [{ src: `${BASE}/MTM_Test_Battery_Crouch.jpg`, label: "Crouch" }],
+  carry: [{ src: `${BASE}/MTM_Test_Battery_Carry.jpg`, label: "Carry" }],
+  crawl: [{ src: `${BASE}/MTM_Test_Battery_Crawl.jpg`, label: "Crawl" }],
+  "climb-stairs": [
+    { src: `${BASE}/MTM_Test_Battery_Climb_Stairs.jpg`, label: "Climb Stairs" },
+  ],
+  balance: [{ src: `${BASE}/MTM_Test_Battery_Balance.jpg`, label: "Balance" }],
+  kneel: [{ src: `${BASE}/MTM_Test_Battery_Kneel.jpg`, label: "Kneel" }],
+  "climb-ladder": [
+    { src: `${BASE}/MTM_Test_Battery_Climb_Ladder.jpg`, label: "Climb Ladder" },
+  ],
+
+  // Cardio (swapped per request)
+  "mcaft-step-test": [
+    { src: "/bruce-treadmill-illustration.jpg", label: "mCAFT Step" },
+  ],
+  "kasch-step-test": [
+    { src: "/kasch-step-illustration.jpg", label: "Kasch Step" },
+  ],
+  "bruce-treadmill-test": [
+    { src: "/mcaft-step-illustration.jpg", label: "Bruce Treadmill" },
+  ],
+} as Record<string, Illustration[]>;
+
+function normalizeKey(key: string) {
+  return (key || "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[()]/g, "")
+    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/-+/g, "-")
+    .trim();
+}
+
+// Return sample illustration(s) for a given test using explicit mapping first, then lightweight fallbacks
 export function getSampleIllustrations(testIdOrName: string): Illustration[] {
-  const key = (testIdOrName || "").toLowerCase();
+  const raw = testIdOrName || "";
+  const idKey = normalizeKey(raw);
 
-  // Determine type buckets (only handle ROM/Strength here)
-  const isROM =
-    key.includes("flexion") ||
-    key.includes("extension") ||
-    key.includes("rotation") ||
-    key.includes("range") ||
-    key.includes("abduction") ||
-    key.includes("adduction") ||
-    key.includes("deviation") ||
-    key.includes("supination") ||
-    key.includes("pronation") ||
-    key.includes("dorsi") ||
-    key.includes("plantar") ||
-    key.includes("inversion") ||
-    key.includes("eversion");
+  // 1) Exact id match from our known test ids
+  if (map[idKey]) return map[idKey];
 
-  const isStrength =
-    key.includes("grip") ||
-    key.includes("pinch") ||
-    key.includes("strength") ||
-    key.includes("force") ||
-    key.includes("lift") ||
-    key.includes("push") ||
-    key.includes("pull") ||
-    key.includes("static") ||
-    key.includes("dynamic");
-
-  // Ignore non-ROM/Strength categories
-  if (!isROM && !isStrength) return [];
-
-  // Strength mappings
-  if (isStrength) {
-    // Hand Grip (detect position, rapid exchange, etc.)
-    if (key.includes("grip")) {
-      // Rapid exchange
-      if (key.includes("rapid") || key.includes("exchange")) {
-        return [
-          {
-            src: "/sampe_illustration/Hand_Strength_Rapid_Exchange.jpg",
-            label: "Rapid Exchange Grip",
-          },
-        ];
-      }
-
-      // Positions 1-5 (use a standard grip illustration; positions are conceptually similar here)
-      const posMatch =
-        key.match(/position\s*[#-:]?\s*(\d)/) || key.match(/\bp\s*(\d)\b/);
-      if (posMatch) {
-        const pos = parseInt(posMatch[1], 10);
-        if (pos >= 1 && pos <= 5) {
-          return [
-            {
-              src: "/sampe_illustration/Hand_Strength_Standard.jpg",
-              label: `Grip Position ${pos}`,
-            },
-          ];
-        }
-      }
-
-      // Default hand grip
-      return [
-        {
-          src: "/sampe_illustration/Hand_Strength_MVE.jpg",
-          label: "Grip Strength",
-        },
-      ];
-    }
-
-    // Pinch types
-    if (key.includes("pinch") && key.includes("key")) {
-      return [
-        {
-          src: "/sampe_illustration/Pinch_Strength_Key.jpg",
-          label: "Key Pinch",
-        },
-      ];
-    }
-    if (key.includes("pinch") && key.includes("tip")) {
-      return [
-        {
-          src: "/sampe_illustration/Pinch_Strength_Tip.jpg",
-          label: "Tip Pinch",
-        },
-      ];
-    }
-    if (
-      key.includes("pinch") &&
-      (key.includes("palmar") || key.includes("palmer"))
-    ) {
-      return [
-        {
-          src: "/sampe_illustration/Pinch_Strength_Palmar.jpg",
-          label: "Palmar Pinch",
-        },
-      ];
-    }
-    if (key.includes("pinch") || key.includes("grasp")) {
-      return [
-        { src: "/sampe_illustration/Pinch_Strength_Grasp.jpg", label: "Pinch" },
-      ];
-    }
-
-    // Static lifts
-    if (key.includes("static") && key.includes("lift")) {
-      if (key.includes("high") || key.includes("overhead")) {
-        return [
-          {
-            src: "/sampe_illustration/Static_Lift_High.jpg",
-            label: "Static High Lift",
-          },
-        ];
-      }
-      if (
-        key.includes("mid") ||
-        key.includes("waist") ||
-        key.includes("standing")
-      ) {
-        return [
-          {
-            src: "/sampe_illustration/Static_Lift_Mid.jpg",
-            label: "Static Mid Lift",
-          },
-        ];
-      }
-      if (key.includes("low") || key.includes("squat")) {
-        return [
-          {
-            src: "/sampe_illustration/Static_Lift_Low.jpg",
-            label: "Static Low Lift",
-          },
-        ];
-      }
-      return [
-        {
-          src: "/sampe_illustration/Static_Lift_Mid.jpg",
-          label: "Static Lift",
-        },
-      ];
-    }
-
-    // Dynamic lifts
-    if (key.includes("dynamic") && key.includes("lift")) {
-      if (
-        key.includes("full") ||
-        key.includes("sequence") ||
-        key.includes("overhead")
-      ) {
-        return [
-          {
-            src: "/sampe_illustration/Dynamic_Lift_Overhead.jpg",
-            label: "Dynamic Overhead Lift",
-          },
-        ];
-      }
-      if (
-        key.includes("mid") ||
-        key.includes("waist") ||
-        key.includes("standing")
-      ) {
-        return [
-          {
-            src: "/sampe_illustration/Dynamic_Lift_Mid.jpg",
-            label: "Dynamic Mid Lift",
-          },
-        ];
-      }
-      if (key.includes("low") || key.includes("squat")) {
-        return [
-          {
-            src: "/sampe_illustration/Dynamic_Lift_Low.jpg",
-            label: "Dynamic Low Lift",
-          },
-        ];
-      }
-      return [
-        {
-          src: "/sampe_illustration/Dynamic_Lift_High.jpg",
-          label: "Dynamic Lift",
-        },
-      ];
-    }
-
-    // Push/Pull (fallback using MTM cart push/pull image)
-    if (
-      (key.includes("push") || key.includes("pull")) &&
-      !key.includes("static") &&
-      !key.includes("dynamic")
-    ) {
-      return [
-        {
-          src: "/sampe_illustration/MTM_Test_Battery_Push_Pull_Cart.jpg",
-          label: "Push/Pull",
-        },
-      ];
-    }
-
-    // Generic strength fallback
-    return [
-      {
-        src: "/sampe_illustration/Hand_Strength_Standard.jpg",
-        label: "Strength",
-      },
-    ];
+  // 2) Try to infer common aliases for grip/pinch/lifts
+  if (idKey.includes("grip") || idKey.includes("hand-strength")) {
+    if (idKey.includes("rapid")) return map["hand-strength-rapid-exchange"];
+    if (idKey.includes("standard") || idKey.includes("p2"))
+      return map["hand-strength-standard"];
+    return map["hand-strength-mve"] || [];
   }
 
-  // ROM mappings
-  // Cervical
+  if (idKey.includes("pinch")) {
+    if (idKey.includes("key")) return map["pinch-strength-key"];
+    if (idKey.includes("tip")) return map["pinch-strength-tip"];
+    if (idKey.includes("palmar") || idKey.includes("palmer"))
+      return map["pinch-strength-palmar"];
+    if (idKey.includes("grasp")) return map["pinch-strength-grasp"];
+  }
+
+  if (idKey.includes("static-lift")) {
+    if (idKey.includes("high")) return map["static-lift-high"];
+    if (idKey.includes("mid")) return map["static-lift-mid"];
+    if (idKey.includes("low")) return map["static-lift-low"];
+  }
+
+  if (idKey.includes("dynamic-lift")) {
+    if (idKey.includes("overhead")) return map["dynamic-lift-overhead"];
+    if (idKey.includes("high")) return map["dynamic-lift-high"];
+    if (idKey.includes("mid")) return map["dynamic-lift-mid"];
+    if (idKey.includes("low")) return map["dynamic-lift-low"];
+  }
+
+  // 3) ROM generic fallbacks by body part
+  if (idKey.includes("cervical"))
+    return map["cervical-spine-flexion-extension"] || [];
+  if (idKey.includes("lumbar"))
+    return map["lumbar-spine-flexion-extension"] || [];
+  if (idKey.includes("thoracic")) return map["thoracic-spine-flexion"] || [];
+  if (idKey.includes("shoulder"))
+    return map["shoulder-rom-flexion-extension"] || [];
+  if (idKey.includes("elbow")) return map["elbow-rom-flexion-extension"] || [];
+  if (idKey.includes("wrist")) return map["wrist-rom-flexion-extension"] || [];
+  if (idKey.includes("hip")) return map["hip-rom-flexion-extension"] || [];
+  if (idKey.includes("knee")) return map["knee-rom-flexion-extension"] || [];
+  if (idKey.includes("ankle"))
+    return map["ankle-rom-dorsi-plantar-flexion"] || [];
+
+  // 4) Strength generic fallback
   if (
-    key.includes("cervical") &&
-    (key.includes("flexion") ||
-      key.includes("extension") ||
-      key.includes("range"))
+    idKey.includes("strength") ||
+    idKey.includes("muscle") ||
+    idKey.includes("lift")
   ) {
-    return [
-      {
-        src: "/sampe_illustration/Cervical_Total_Spine_Flexion_Extension.jpg",
-        label: "Cervical Flex/Ext",
-      },
-    ];
-  }
-  if (
-    key.includes("cervical") &&
-    (key.includes("lateral") || key.includes("oblique"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Cervical_Total_Spine_Lateral_Flexion.jpg",
-        label: "Cervical Lateral Flexion",
-      },
-    ];
-  }
-  if (key.includes("cervical") && key.includes("rotation")) {
-    return [
-      {
-        src: "/sampe_illustration/Cervical_Total_Spine_Rotation.jpg",
-        label: "Cervical Rotation",
-      },
-    ];
-  }
-
-  // Thoracic
-  if (key.includes("thoracic") && key.includes("flexion")) {
-    return [
-      {
-        src: "/sampe_illustration/Thoracic_Total_Spine_Flexion.jpg",
-        label: "Thoracic Flexion",
-      },
-    ];
-  }
-  if (key.includes("thoracic") && key.includes("rotation")) {
-    return [
-      {
-        src: "/sampe_illustration/Thoracic_Total_Spine_Rotation.jpg",
-        label: "Thoracic Rotation",
-      },
-    ];
-  }
-
-  // Lumbar
-  if (
-    key.includes("lumbar") &&
-    (key.includes("flexion") ||
-      key.includes("extension") ||
-      key.includes("range"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Lumbar_Total_Spine_Flexion_Extension.jpg",
-        label: "Lumbar Flex/Ext",
-      },
-    ];
-  }
-  if (key.includes("lumbar") && key.includes("lateral")) {
-    return [
-      {
-        src: "/sampe_illustration/Lumbar_Total_Spine_Lateral_Flexion.jpg",
-        label: "Lumbar Lateral Flexion",
-      },
-    ];
-  }
-
-  // Shoulder
-  if (
-    key.includes("shoulder") &&
-    (key.includes("flexion") || key.includes("extension"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Extremity_Shoulder_Flexion_Extension.jpg",
-        label: key.includes("extension")
-          ? "Shoulder Extension"
-          : "Shoulder Flexion",
-      },
-    ];
-  }
-  if (
-    key.includes("shoulder") &&
-    (key.includes("internal") || key.includes("external"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Extremity_Shoulder_Internal_External_Rotation.jpg",
-        label: "Shoulder Int/Ext Rotation",
-      },
-    ];
-  }
-  if (
-    key.includes("shoulder") &&
-    (key.includes("abduction") || key.includes("adduction"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Extremity_Shoulder_Abduction_Adduction.jpg",
-        label: "Shoulder Abd/Add",
-      },
-    ];
-  }
-
-  // Elbow
-  if (
-    key.includes("elbow") &&
-    (key.includes("flexion") || key.includes("extension"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Extremity_Elbow_Flexion_Extension.jpg",
-        label: "Elbow Flex/Ext",
-      },
-    ];
-  }
-  if (
-    key.includes("elbow") &&
-    (key.includes("supination") || key.includes("pronation"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Extremity_Elbow_Supination_Pronation.jpg",
-        label: "Elbow Sup/Pro",
-      },
-    ];
-  }
-
-  // Wrist
-  if (
-    key.includes("wrist") &&
-    (key.includes("flexion") || key.includes("extension"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Extremity_Wrist_Flexion_Extension.jpg",
-        label: "Wrist Flex/Ext",
-      },
-    ];
-  }
-  if (
-    key.includes("wrist") &&
-    (key.includes("radial") ||
-      key.includes("ulnar") ||
-      key.includes("deviation"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Extremity_Wrist_Radial_Ulunar_Deviation.jpg",
-        label: "Wrist Radial/Ulnar Deviation",
-      },
-    ];
-  }
-  if (key.includes("wrist") && key.includes("dorsiflexion")) {
-    return [
-      {
-        src: "/sampe_illustration/Wrist_Muscle_Test_Dorsiflexion.jpg",
-        label: "Wrist Dorsiflexion",
-      },
-    ];
-  }
-  if (key.includes("wrist") && key.includes("palmar")) {
-    return [
-      {
-        src: "/sampe_illustration/Wrist_Muscle_Test_Palmar_Flexion.jpg",
-        label: "Wrist Palmar Flexion",
-      },
-    ];
-  }
-
-  // Thumb & Fingers
-  if (key.includes("thumb") && key.includes("ip")) {
-    return [
-      {
-        src: "/sampe_illustration/Thumb_IP_Flexion_Extension.jpg",
-        label: "Thumb IP Flex/Ext",
-      },
-    ];
-  }
-  if (key.includes("thumb") && key.includes("mp")) {
-    return [
-      {
-        src: "/sampe_illustration/Thumb_MP_Flexion_Extension.jpg",
-        label: "Thumb MP Flex/Ext",
-      },
-    ];
-  }
-  if (
-    key.includes("thumb") &&
-    (key.includes("abduction") || key.includes("radial"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Thumb_Thumb_Abduction.jpg",
-        label: "Thumb Abduction",
-      },
-    ];
-  }
-
-  const fingerMap: {
-    pattern: RegExp;
-    dip: string;
-    pip: string;
-    mp: string;
-    labelBase: string;
-  }[] = [
-    {
-      pattern: /(index|1st)/,
-      dip: "/sampe_illustration/Index_Finger_DIP_Flexion_Extension.jpg",
-      pip: "/sampe_illustration/Index_Finger_PIP_Flexion_Extension.jpg",
-      mp: "/sampe_illustration/Index_Finger_MP_Flexion_Extension.jpg",
-      labelBase: "Index",
-    },
-    {
-      pattern: /(middle|2nd)/,
-      dip: "/sampe_illustration/Middle_Finger_DIP_Flexion_Extension.jpg",
-      pip: "/sampe_illustration/Middle_Finger_PIP_Flexion_Extension.jpg",
-      mp: "/sampe_illustration/Middle_Finger_MP_Flexion_Extension.jpg",
-      labelBase: "Middle",
-    },
-    {
-      pattern: /(ring|3rd)/,
-      dip: "/sampe_illustration/Ring_Finger_DIP_Flexion_Extension.jpg",
-      pip: "/sampe_illustration/Ring_Finger_PIP_Flexion_Extension.jpg",
-      mp: "/sampe_illustration/Ring_Finger_MP_Flexion_Extension.jpg",
-      labelBase: "Ring",
-    },
-  ];
-
-  for (const f of fingerMap) {
-    if (f.pattern.test(key)) {
-      if (key.includes("dip"))
-        return [{ src: f.dip, label: `${f.labelBase} DIP Flex/Ext` }];
-      if (key.includes("pip"))
-        return [{ src: f.pip, label: `${f.labelBase} PIP Flex/Ext` }];
-      if (key.includes("mp"))
-        return [{ src: f.mp, label: `${f.labelBase} MP Flex/Ext` }];
-      // default to PIP if joint unspecified
-      return [{ src: f.pip, label: `${f.labelBase} PIP Flex/Ext` }];
-    }
-  }
-
-  // Hip
-  if (key.includes("hip")) {
-    const images: Illustration[] = [];
-    if (
-      key.includes("flexion") ||
-      key.includes("extension") ||
-      key.includes("internal") ||
-      key.includes("external") ||
-      key.includes("abduction") ||
-      key.includes("adduction")
-    ) {
-      // Provide multiple panels for comprehensive hip ROM
-      images.push({
-        src: "/sampe_illustration/Extremity_Hip_Flexion_Extension_Internal_External_Rotation_Abduction_Adduction_1.jpg",
-        label: "Hip ROM (1)",
-      });
-      images.push({
-        src: "/sampe_illustration/Extremity_Hip_Flexion_Extension_Internal_External_Rotation_Abduction_Adduction_2.jpg",
-        label: "Hip ROM (2)",
-      });
-      return images;
-    }
-  }
-
-  // Knee
-  if (
-    key.includes("knee") &&
-    (key.includes("flexion") || key.includes("extension"))
-  ) {
-    // Prefer ROM chart when available; muscle tests if explicitly stated
-    if (key.includes("muscle")) {
-      return [
-        {
-          src: "/sampe_illustration/Knee_Muscle_Test_Flexion.jpg",
-          label: "Knee Muscle Flexion",
-        },
-        {
-          src: "/sampe_illustration/Knee_Muscle_Test_Extension.jpg",
-          label: "Knee Muscle Extension",
-        },
-      ];
-    }
-    return [
-      {
-        src: "/sampe_illustration/Extremity_ Knee_Flexion_Extension.jpg",
-        label: "Knee Flex/Ext",
-      },
-    ];
-  }
-
-  // Ankle
-  if (
-    key.includes("ankle") &&
-    (key.includes("dorsi") || key.includes("plantar"))
-  ) {
-    if (key.includes("dorsi") && key.includes("plantar")) {
-      return [
-        {
-          src: "/sampe_illustration/Extremity_Ankle_Dorsi_Plantar_Flexion.jpg",
-          label: "Ankle Dorsi/Plantar",
-        },
-      ];
-    }
-    if (key.includes("dorsi")) {
-      return [
-        {
-          src: "/sampe_illustration/Ankle_Muscle_Test_Dorsiflexion.jpg",
-          label: "Ankle Dorsiflexion",
-        },
-      ];
-    }
-    return [
-      {
-        src: "/sampe_illustration/Ankle_Muscle_Test_Plantar_Flexion.jpg",
-        label: "Ankle Plantar Flexion",
-      },
-    ];
-  }
-  if (
-    key.includes("ankle") &&
-    (key.includes("inversion") || key.includes("eversion"))
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Extremity_Ankle_Inversion_Eversion.jpg",
-        label: "Ankle Inversion/Eversion",
-      },
-    ];
-  }
-
-  // Straight Leg Raise
-  if (
-    (key.includes("lumbar") &&
-      key.includes("straight") &&
-      key.includes("leg") &&
-      key.includes("raise")) ||
-    key.includes("straight-leg-raise") ||
-    key.includes("slr")
-  ) {
-    return [
-      {
-        src: "/sampe_illustration/Lumbar_Total_Spine_Straight_Leg_Raise.jpg",
-        label: "Lumbar Straight Leg Raise",
-      },
-    ];
-  }
-
-  // Fallbacks
-  if (isROM) {
-    return [
-      {
-        src: "/sampe_illustration/Lumbar_Total_Spine_Flexion_Extension.jpg",
-        label: "ROM",
-      },
-    ];
-  }
-  if (isStrength) {
-    return [
-      { src: "/sampe_illustration/Hand_Strength_MVE.jpg", label: "Strength" },
-    ];
+    return map["hand-strength-mve"] || [];
   }
 
   return [];
@@ -599,9 +706,9 @@ export function illustrationsToHtml(
   const items = illos
     .map((ill) => {
       if (ill.yPercent === undefined || ill.yPercent === null) {
-        return `\n<div style="text-align: left;">\n  <img src="${ill.src}" alt="${ill.label}" style="width: ${sizePx}px; height: auto; border: 1px solid #333; border-radius: 4px;" />\n  <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">${ill.label}</p>\n</div>`;
+        return `\n<div style="text-align: left;">\n  <img src="${ill.src}" alt="${ill.label}" style="width: ${sizePx}px; height: auto; border: 1px solid #333; border-radius: 4px;" />\n  <p style=\"font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;\">${ill.label}</p>\n</div>`;
       }
-      return `\n<div style="text-align: left;">\n  <div style="width: ${sizePx}px; height: ${Math.round((sizePx * 5) / 4)}px; border: 1px solid #333; border-radius: 4px; background-image: url('${ill.src}'); background-repeat: no-repeat; background-size: 100% auto; background-position: center ${ill.yPercent}%;"></div>\n  <p style="font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;">${ill.label}</p>\n</div>`;
+      return `\n<div style="text-align: left;">\n  <div style="width: ${sizePx}px; height: ${Math.round((sizePx * 5) / 4)}px; border: 1px solid #333; border-radius: 4px; background-image: url('${ill.src}'); background-repeat: no-repeat; background-size: 100% auto; background-position: center ${ill.yPercent}%;"></div>\n  <p style=\"font-size: 7px; color: #555; margin: 1px 0 0 0; text-align: left;\">${ill.label}</p>\n</div>`;
     })
     .join("\n");
 
