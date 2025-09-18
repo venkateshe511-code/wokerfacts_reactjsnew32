@@ -3855,9 +3855,9 @@ export default function DownloadReport() {
                               isCardioTest
                                 ? testName.includes("bruce") ||
                                   testName.includes("treadmill")
-                                  ? `<div style="text-align: left;"><img src="/mcaft-step-illustration.jpg" alt="Bruce treadmill test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Bruce Treadmill</p></div>`
+                                  ? `<div style="text-align: left;"><img src="/bruce-treadmill-illustration.jpg" alt="Bruce treadmill test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Bruce Treadmill</p></div>`
                                   : testName.includes("mcaft")
-                                    ? `<div style="text-align: left;"><img src="/bruce-treadmill-illustration.jpg" alt="mCAFT step test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">mCAFT</p></div>`
+                                    ? `<div style="text-align: left;"><img src="/mcaft-step-illustration.jpg" alt="mCAFT step test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">mCAFT</p></div>`
                                     : testName.includes("kasch")
                                       ? `<div style="text-align: left;"><img src="/kasch-step-illustration.jpg" alt="Kasch step test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Kasch</p></div>`
                                       : `<div style="text-align: left;"><img src="/mcaft-step-illustration.jpg" alt="Cardio test" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" /><p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Cardio Test</p></div>`
