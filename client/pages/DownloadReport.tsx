@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { toast } from "@/hooks/use-toast";
 import { db } from "../firebase";
 import {
   getSampleIllustrations,
@@ -4928,11 +4929,11 @@ export default function DownloadReport() {
           }
         }, 2000);
       } else {
-        alert("Please allow popups for this site to download the PDF report.");
+        toast({ title: "Please allow popups for this site to download the PDF report.", variant: "destructive" });
       }
     } catch (error) {
       console.error("Error generating PDF:", error);
-      alert("Error generating PDF. Please try again.");
+      toast({ title: "Error generating PDF. Please try again.", variant: "destructive" });
     }
   };
 
@@ -5758,14 +5759,21 @@ export default function DownloadReport() {
         didSucceed = true;
       } catch (error) {
         console.error("DOCX generation error details:", error);
-        alert(
-          `Error generating DOCX report: ${error.message}. Please check console for details and try again.`,
-        );
+        toast({ title: `Error generating DOCX report: ${String((error as any)?.message || error)}`, variant: "destructive" });
       }
     }
 
     setIsDownloading(false);
-    setShowSuccessDialog(didSucceed);
+    if (didSucceed) {
+      toast({
+        title: "Report downloaded successfully",
+        description: "You can modify details and download again anytime.",
+        variant: "success",
+      });
+      // Stay on this page to allow further edits and re-downloads
+    } else {
+      toast({ title: "Failed to generate report", variant: "destructive" });
+    }
   };
 
   const handlePostDownloadCleanup = () => {
