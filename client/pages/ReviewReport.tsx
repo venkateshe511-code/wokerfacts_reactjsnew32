@@ -3474,34 +3474,32 @@ export default function ReviewReport() {
                                       test.testId || testName,
                                     );
                                     if (!illos.length) return null;
-                                    const ill = illos[0];
                                     return (
                                       <div className="grid grid-cols-1 gap-3">
-                                        <div className="text-center">
-                                          {ill.yPercent === undefined ||
-                                          ill.yPercent === null ? (
-                                            <img
-                                              src={ill.src}
-                                              alt={ill.label}
-                                              className="w-16 h-20 mx-auto border object-cover bg-white"
-                                            />
-                                          ) : (
-                                            <div
-                                              className="mx-auto border bg-white"
-                                              style={{
-                                                width: 64,
-                                                height: 80,
-                                                backgroundImage: `url(${ill.src})`,
-                                                backgroundRepeat: "no-repeat",
-                                                backgroundSize: "100% auto",
-                                                backgroundPosition: `center ${ill.yPercent}%`,
-                                              }}
-                                            />
-                                          )}
-                                          <p className="text-xs mt-1">
-                                            {ill.label}
-                                          </p>
-                                        </div>
+                                        {illos.map((ill, i) => (
+                                          <div key={i} className="text-center">
+                                            {ill.yPercent === undefined || ill.yPercent === null ? (
+                                              <img
+                                                src={ill.src}
+                                                alt={ill.label}
+                                                className="w-16 h-20 mx-auto border object-cover bg-white"
+                                              />
+                                            ) : (
+                                              <div
+                                                className="mx-auto border bg-white"
+                                                style={{
+                                                  width: 64,
+                                                  height: 80,
+                                                  backgroundImage: `url(${ill.src})`,
+                                                  backgroundRepeat: "no-repeat",
+                                                  backgroundSize: "100% auto",
+                                                  backgroundPosition: `center ${ill.yPercent}%`,
+                                                }}
+                                              />
+                                            )}
+                                            <p className="text-xs mt-1">{ill.label}</p>
+                                          </div>
+                                        ))}
                                       </div>
                                     );
                                   })()}
