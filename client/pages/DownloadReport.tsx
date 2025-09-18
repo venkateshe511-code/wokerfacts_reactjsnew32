@@ -5765,8 +5765,8 @@ export default function DownloadReport() {
 
     setIsDownloading(false);
     if (didSucceed) {
-      toast({ title: "Report download started" });
-      handlePostDownloadCleanup();
+      toast({ title: "Report ready" });
+      // Stay on this page to allow further edits and re-downloads
     } else {
       toast({ title: "Failed to generate report", variant: "destructive" });
     }
