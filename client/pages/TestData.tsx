@@ -499,6 +499,9 @@ export default function TestData() {
       "shoulder-flexion": "Shoulder Flexion",
       "shoulder-abduction": "Shoulder Abduction",
       "hip-flexion": "Hip Flexion",
+      "wrist-muscle-flexion": "Wrist Muscle-Palmar Flexion",
+      "wrist-muscle-extension": "Wrist Muscle-Dorsiflexion",
+      "shoulder-muscle-internal-rotation": "Shoulder Muscle Internal Rotation",
       // MTM Test Names
       fingering: "Fingering",
       "bi-manual-fingering": "Bi-manual Fingering",
@@ -524,7 +527,7 @@ export default function TestData() {
         testId,
         testNames[testId] ||
           testId
-            .replace("-", " ")
+            .replace(/-/g, " ")
             .replace(/\b\w/g, (l: string) => l.toUpperCase()),
       ),
     );
@@ -781,6 +784,9 @@ export default function TestData() {
         "cervical-flexion": "Cervical Flexion",
         "hip-abduction": "Hip Abduction",
         "shoulder-flexion": "Shoulder Flexion",
+        "wrist-muscle-flexion": "Wrist Muscle-Palmar Flexion",
+        "wrist-muscle-extension": "Wrist Muscle-Dorsiflexion",
+        "shoulder-muscle-internal-rotation": "Shoulder Muscle Internal Rotation",
         // Add more mappings as needed
       };
 
@@ -789,7 +795,7 @@ export default function TestData() {
         testName:
           testNames[testId] ||
           testId
-            .replace("-", " ")
+            .replace(/-/g, " ")
             .replace(/\b\w/g, (l: string) => l.toUpperCase()),
         leftMeasurements: {
           trial1: 0,
