@@ -285,12 +285,15 @@ export default function DownloadReport() {
     // Clear all evaluation data but KEEP evaluator profile info
     const evaluatorBackup = localStorage.getItem("evaluatorData");
     const selectedProfileIdBackup = localStorage.getItem("selectedEvaluatorProfileId");
+    const sampleAccessBackup = localStorage.getItem("sampleAccess");
 
     localStorage.clear();
 
     if (evaluatorBackup) localStorage.setItem("evaluatorData", evaluatorBackup);
     if (selectedProfileIdBackup)
       localStorage.setItem("selectedEvaluatorProfileId", selectedProfileIdBackup);
+    if (sampleAccessBackup)
+      localStorage.setItem("sampleAccess", sampleAccessBackup);
   };
 
   const generateReportContent = async () => {
