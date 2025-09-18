@@ -1656,7 +1656,7 @@ export default function DownloadReport() {
                                       symbolText = "x";
                                       symbolColor = "#ea580c";
                                     } else if (marker.type === "pins-needles") {
-                                      symbolText = "•";
+                                      symbolText = "��";
                                       symbolColor = "#7c3aed";
                                     } else if (marker.type === "numbness") {
                                       symbolText = "o";
@@ -5769,7 +5769,7 @@ export default function DownloadReport() {
   const confirmManualClear = () => {
     clearAllData();
     setShowClearDialog(false);
-    navigate("/");
+    navigate("/dashboard");
   };
 
   return (
