@@ -1052,7 +1052,7 @@ export default function TestData() {
 
   const getNormForSide = (side: "left" | "right"): number => {
     // Prefer standardized norms used by Review/Download reports
-    const norm = inferNormsForTest(currentTest?.testName || "");
+    const norm = inferNormsForTest(`${currentTest?.testId || ""} ${currentTest?.testName || ""}`);
     const v = side === "left" ? norm.left : norm.right;
     if (typeof v === "number" && v > 0) return v;
     // Fallback to user-entered target if no standardized norm exists
@@ -1065,7 +1065,7 @@ export default function TestData() {
   };
 
   const getUnitSuffix = (): string => {
-    const norm = inferNormsForTest(currentTest?.testName || "");
+    const norm = inferNormsForTest(`${currentTest?.testId || ""} ${currentTest?.testName || ""}`);
     if (norm.unit) return norm.unit;
     // Prefer the specific unitMeasure when available (e.g., lbs, kg, deg, sec)
     return currentTest?.unitMeasure ? `${currentTest.unitMeasure}` : "";
