@@ -3474,6 +3474,10 @@ export default function ReviewReport() {
                                       test.testId || testName,
                                     );
                                     if (!illos.length) return null;
+                                    const isMVE = (() => {
+                                      const key = `${test.testId || ""} ${test.testName || ""}`.toLowerCase();
+                                      return key.includes("mve"); // covers MVE and MMVE
+                                    })();
                                     return (
                                       <div className="grid grid-cols-1 gap-3">
                                         {illos.map((ill, i) => (
@@ -3483,17 +3487,17 @@ export default function ReviewReport() {
                                               <img
                                                 src={ill.src}
                                                 alt={ill.label}
-                                                className="w-16 h-20 mx-auto border object-cover bg-white"
+                                                className={`${isMVE ? "w-24 h-auto object-contain" : "w-16 h-20 object-cover"} mx-auto border bg-white`}
                                               />
                                             ) : (
                                               <div
                                                 className="mx-auto border bg-white"
                                                 style={{
-                                                  width: 64,
-                                                  height: 80,
+                                                  width: isMVE ? 96 : 64,
+                                                  height: isMVE ? 120 : 80,
                                                   backgroundImage: `url(${ill.src})`,
                                                   backgroundRepeat: "no-repeat",
-                                                  backgroundSize: "100% auto",
+                                                  backgroundSize: isMVE ? "contain" : "100% auto",
                                                   backgroundPosition: `center ${ill.yPercent}%`,
                                                 }}
                                               />
