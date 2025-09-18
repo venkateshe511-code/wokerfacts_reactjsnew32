@@ -337,7 +337,6 @@ export const getReferencesForTest = (testId: string): Reference[] => {
     // Range of Motion Tests (Cervical, Lumbar, etc.)
     "cervical-flexion-extension": "range-of-motion",
     "cervical-lateral-flexion": "range-of-motion",
-    "cervical-anterior-obliques": "range-of-motion",
     "cervical-30-rotation": "range-of-motion",
     "cervical-60-rotation": "range-of-motion",
     "cervical-spine-flexion-extension": "range-of-motion",
