@@ -396,6 +396,10 @@ export default function DownloadReport() {
         return "";
       }
 
+      const mtmIllustrationsHtml = Object.keys(mtmData)
+        .map((testType: string) => illustrationsToHtml(getSampleIllustrations(testType)))
+        .join("");
+
       return `
         <div class="test-section" style="page-break-before: always; padding: 20px 0; position: relative;">
             <h4 class="test-header" style="font-weight: bold; margin-bottom: 16px;">Occupational Tasks Methods Time Measurement Analysis</h4>
@@ -408,38 +412,8 @@ export default function DownloadReport() {
                 <div style="display: flex; flex-direction: column; gap: 6px;">
                     <p style="font-size: 12px; font-weight: 400; text-decoration: underline; color: #666;">Sample Illustration:</p>
 
-                    <!-- Occupational task specific illustrations -->
-                    <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
-                        <div style="text-align: left;">
-                            <img src="/occupational-balance.webp" alt="Balance Assessment" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Balance</p>
-                        </div>
-                        <div style="text-align: left;">
-                            <img src="/occupational-push-pull.webp" alt="Push/Pull Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Push/Pull</p>
-                        </div>
-                        <div style="text-align: left;">
-                            <img src="/occupational-climb-stairs.webp" alt="Climb Stairs Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Climb Stairs</p>
-                        </div>
-                        <div style="text-align: left;">
-                            <img src="/occupational-crawl.webp" alt="Crawl Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Crawl</p>
-                        </div>
-                        <!-- Legacy samples kept in addition to new ones (except Balance corrected above) -->
-                        <div style="text-align: left;">
-                            <img src="/occupational-task-2.jpg" alt="Bi-Manual Handling" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Bi-Manual Handling</p>
-                        </div>
-                        <div style="text-align: left;">
-                            <img src="/occupational-task-3.jpg" alt="Carry Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Carry</p>
-                        </div>
-                        <div style="text-align: left;">
-                            <img src="/occupational-task-4.jpg" alt="Walk Task" style="width: 90px; height: auto; border: 1px solid #333; border-radius: 4px;" />
-                            <p style="font-size: 8px; color: #555; margin: 2px 0 0 0; text-align: left;">Walk</p>
-                        </div>
-                    </div>
+                    <!-- MTM Illustrations (mapped) -->
+                    ${mtmIllustrationsHtml}
                 </div>
 
                 <!-- Right Column - Combined Content with Tests and Charts -->
