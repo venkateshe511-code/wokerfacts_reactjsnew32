@@ -281,10 +281,10 @@ const map = {
     },
   ],
   "dynamic-lift-frequent": [
-    { src: `${BASE}/Dynamic_Lift_Mid.jpg`, label: "Dynamic Lift Frequent" },
+    { src: `${BASE}/Dynamic_Lift_Mid.jpg`, label: "Dynamic Frequent Lifts" },
   ],
   "dynamic-lift-infrequent": [
-    { src: `${BASE}/Dynamic_Lift_Low.jpg`, label: "Dynamic Lift Infrequent" },
+    { src: `${BASE}/Dynamic_Lift_Low.jpg`, label: "Dynamic Infrequent Lifts" },
   ],
 
   // ROM - Total Spine
