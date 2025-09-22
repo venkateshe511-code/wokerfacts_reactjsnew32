@@ -503,7 +503,7 @@ export default function TestData() {
       "wrist-muscle-extension": "Wrist Muscle-Dorsiflexion",
       "shoulder-muscle-internal-rotation": "Shoulder Muscle Internal Rotation",
       "dynamic-lift-frequent": "Dynamic Frequent Lifts",
-      
+
       // MTM Test Names
       fingering: "Fingering",
       "bi-manual-fingering": "Bi-manual Fingering",
@@ -791,7 +791,7 @@ export default function TestData() {
         "shoulder-muscle-internal-rotation":
           "Shoulder Muscle Internal Rotation",
         "dynamic-lift-frequent": "Dynamic Frequent Lifts",
-        
+
         // Add more mappings as needed
       };
 
@@ -1499,93 +1499,97 @@ export default function TestData() {
                       side="left"
                     />
                     <div className="mt-4 space-y-4">
-                    <div className="bg-blue-400 text-white p-3 rounded text-center">
-                      <div className="text-sm">
-                        {isRangeOfMotionTest
-                          ? "Average Degrees"
-                          : isCardioTest
-                            ? "Average Heart Rate"
-                            : isBalanceTest
-                              ? "Average Time"
-                              : "Average Peak Force"}
-                      </div>
-                      <div className="text-xl font-bold">
-                        {calculateAverage(currentTest.leftMeasurements)}
-                        {isRangeOfMotionTest
-                          ? "°"
-                          : isCardioTest
-                            ? " bpm"
-                            : isBalanceTest
-                              ? "s"
-                              : ""}
-                      </div>
-                    </div>
-                    <div className="bg-blue-400 text-white p-3 rounded text-center">
-                      <div className="text-sm">Coefficient Of Variation</div>
-                      <div className="text-xl font-bold">
-                        {calculateCoefficientOfVariation(
-                          currentTest.leftMeasurements,
-                        )}
-                        %
-                      </div>
-                    </div>
-                    {(isForceTest || isRangeOfMotionTest) && (
                       <div className="bg-blue-400 text-white p-3 rounded text-center">
                         <div className="text-sm">
                           {isRangeOfMotionTest
-                            ? "Primary to Secondary Difference"
-                            : "Left to Right Deficiency"}
+                            ? "Average Degrees"
+                            : isCardioTest
+                              ? "Average Heart Rate"
+                              : isBalanceTest
+                                ? "Average Time"
+                                : "Average Peak Force"}
                         </div>
                         <div className="text-xl font-bold">
-                          {calculateBilateralDeficiency(
+                          {calculateAverage(currentTest.leftMeasurements)}
+                          {isRangeOfMotionTest
+                            ? "°"
+                            : isCardioTest
+                              ? " bpm"
+                              : isBalanceTest
+                                ? "s"
+                                : ""}
+                        </div>
+                      </div>
+                      <div className="bg-blue-400 text-white p-3 rounded text-center">
+                        <div className="text-sm">Coefficient Of Variation</div>
+                        <div className="text-xl font-bold">
+                          {calculateCoefficientOfVariation(
                             currentTest.leftMeasurements,
-                            currentTest.rightMeasurements,
                           )}
                           %
                         </div>
                       </div>
-                    )}
-                    {currentTest.normLevel === "yes" &&
-                      getNormForSide("left") > 0 && (
-                        <>
-                          <div className="bg-blue-400 text-white p-3 rounded text-center">
-                            <div className="text-sm">
-                              {isRangeOfMotionTest
-                                ? "Primary Norm"
-                                : "Left Norm"}
-                            </div>
-                            <div className="text-xl font-bold">
-                              {getNormForSide("left")} {getUnitSuffix()}
-                            </div>
+                      {(isForceTest || isRangeOfMotionTest) && (
+                        <div className="bg-blue-400 text-white p-3 rounded text-center">
+                          <div className="text-sm">
+                            {isRangeOfMotionTest
+                              ? "Primary to Secondary Difference"
+                              : "Left to Right Deficiency"}
                           </div>
-                          <div className="bg-blue-400 text-white p-3 rounded text-center">
-                            <div className="text-sm">
-                              {isRangeOfMotionTest
-                                ? "Primary % of Norm"
-                                : "Left % of Norm"}
-                            </div>
-                            <div className="text-xl font-bold">
-                              {Math.round(
-                                calculatePercentOfNorm(
-                                  calculateAverage(
-                                    currentTest.leftMeasurements,
-                                  ),
-                                  getNormForSide("left"),
-                                ),
-                              )}
-                              %
-                            </div>
+                          <div className="text-xl font-bold">
+                            {calculateBilateralDeficiency(
+                              currentTest.leftMeasurements,
+                              currentTest.rightMeasurements,
+                            )}
+                            %
                           </div>
-                        </>
+                        </div>
                       )}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                      {currentTest.normLevel === "yes" &&
+                        getNormForSide("left") > 0 && (
+                          <>
+                            <div className="bg-blue-400 text-white p-3 rounded text-center">
+                              <div className="text-sm">
+                                {isRangeOfMotionTest
+                                  ? "Primary Norm"
+                                  : "Left Norm"}
+                              </div>
+                              <div className="text-xl font-bold">
+                                {getNormForSide("left")} {getUnitSuffix()}
+                              </div>
+                            </div>
+                            <div className="bg-blue-400 text-white p-3 rounded text-center">
+                              <div className="text-sm">
+                                {isRangeOfMotionTest
+                                  ? "Primary % of Norm"
+                                  : "Left % of Norm"}
+                              </div>
+                              <div className="text-xl font-bold">
+                                {Math.round(
+                                  calculatePercentOfNorm(
+                                    calculateAverage(
+                                      currentTest.leftMeasurements,
+                                    ),
+                                    getNormForSide("left"),
+                                  ),
+                                )}
+                                %
+                              </div>
+                            </div>
+                          </>
+                        )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             )}
 
             {/* Center Measurements Input */}
-            <div className={isLiftTest ? "lg:col-span-2 lg:col-start-2" : "lg:col-span-2"}>
+            <div
+              className={
+                isLiftTest ? "lg:col-span-2 lg:col-start-2" : "lg:col-span-2"
+              }
+            >
               <Card className="shadow-lg">
                 <CardHeader className="bg-blue-600 text-white">
                   <CardTitle className="text-center">
@@ -1595,7 +1599,10 @@ export default function TestData() {
                 <CardContent className="p-6">
                   {isLiftTest && (
                     <div className="mb-6">
-                      <BarChart measurements={currentTest.leftMeasurements} side="left" />
+                      <BarChart
+                        measurements={currentTest.leftMeasurements}
+                        side="left"
+                      />
                     </div>
                   )}
                   {isLiftTest && (
@@ -1603,16 +1610,26 @@ export default function TestData() {
                       <div className="bg-blue-400 text-white p-3 rounded text-center">
                         <div className="text-sm">Coefficient Of Variation</div>
                         <div className="text-xl font-bold">
-                          {calculateCoefficientOfVariation(currentTest.leftMeasurements)}%
+                          {calculateCoefficientOfVariation(
+                            currentTest.leftMeasurements,
+                          )}
+                          %
                         </div>
                       </div>
                       {(() => {
                         const rawStr = currentTest?.valueToBeTestedNumber || "";
                         const raw = parseFloat(rawStr);
-                        const unit = (currentTest?.unitMeasure || "").toLowerCase();
+                        const unit = (
+                          currentTest?.unitMeasure || ""
+                        ).toLowerCase();
                         let lbs = 0;
                         if (!Number.isNaN(raw) && raw > 0) {
-                          lbs = unit === "kg" ? Math.round(raw * 2.20462 * 10) / 10 : unit === "lbs" ? Math.round(raw * 10) / 10 : 0;
+                          lbs =
+                            unit === "kg"
+                              ? Math.round(raw * 2.20462 * 10) / 10
+                              : unit === "lbs"
+                                ? Math.round(raw * 10) / 10
+                                : 0;
                         }
                         return lbs > 0 ? (
                           <div className="bg-blue-400 text-white p-3 rounded text-center">
@@ -1790,89 +1807,89 @@ export default function TestData() {
                       side="right"
                     />
                     <div className="mt-4 space-y-4">
-                    <div className="bg-blue-400 text-white p-3 rounded text-center">
-                      <div className="text-sm">
-                        {isRangeOfMotionTest
-                          ? "Average Degrees"
-                          : isCardioTest
-                            ? "Average Heart Rate"
-                            : isBalanceTest
-                              ? "Average Time"
-                              : "Average Peak Force"}
-                      </div>
-                      <div className="text-xl font-bold">
-                        {calculateAverage(currentTest.rightMeasurements)}
-                        {isRangeOfMotionTest
-                          ? "°"
-                          : isCardioTest
-                            ? " bpm"
-                            : isBalanceTest
-                              ? "s"
-                              : ""}
-                      </div>
-                    </div>
-                    <div className="bg-blue-400 text-white p-3 rounded text-center">
-                      <div className="text-sm">Coefficient Of Variation</div>
-                      <div className="text-xl font-bold">
-                        {calculateCoefficientOfVariation(
-                          currentTest.rightMeasurements,
-                        )}
-                        %
-                      </div>
-                    </div>
-                    {(isForceTest || isRangeOfMotionTest) && (
                       <div className="bg-blue-400 text-white p-3 rounded text-center">
                         <div className="text-sm">
                           {isRangeOfMotionTest
-                            ? "Secondary to Primary Difference"
-                            : "Right to Left Deficiency"}
+                            ? "Average Degrees"
+                            : isCardioTest
+                              ? "Average Heart Rate"
+                              : isBalanceTest
+                                ? "Average Time"
+                                : "Average Peak Force"}
                         </div>
                         <div className="text-xl font-bold">
-                          {calculateBilateralDeficiency(
+                          {calculateAverage(currentTest.rightMeasurements)}
+                          {isRangeOfMotionTest
+                            ? "°"
+                            : isCardioTest
+                              ? " bpm"
+                              : isBalanceTest
+                                ? "s"
+                                : ""}
+                        </div>
+                      </div>
+                      <div className="bg-blue-400 text-white p-3 rounded text-center">
+                        <div className="text-sm">Coefficient Of Variation</div>
+                        <div className="text-xl font-bold">
+                          {calculateCoefficientOfVariation(
                             currentTest.rightMeasurements,
-                            currentTest.leftMeasurements,
                           )}
                           %
                         </div>
                       </div>
-                    )}
-                    {currentTest.normLevel === "yes" &&
-                      getNormForSide("right") > 0 && (
-                        <>
-                          <div className="bg-blue-400 text-white p-3 rounded text-center">
-                            <div className="text-sm">
-                              {isRangeOfMotionTest
-                                ? "Secondary Norm"
-                                : "Right Norm"}
-                            </div>
-                            <div className="text-xl font-bold">
-                              {getNormForSide("right")} {getUnitSuffix()}
-                            </div>
+                      {(isForceTest || isRangeOfMotionTest) && (
+                        <div className="bg-blue-400 text-white p-3 rounded text-center">
+                          <div className="text-sm">
+                            {isRangeOfMotionTest
+                              ? "Secondary to Primary Difference"
+                              : "Right to Left Deficiency"}
                           </div>
-                          <div className="bg-blue-400 text-white p-3 rounded text-center">
-                            <div className="text-sm">
-                              {isRangeOfMotionTest
-                                ? "Secondary % of Norm"
-                                : "Right % of Norm"}
-                            </div>
-                            <div className="text-xl font-bold">
-                              {Math.round(
-                                calculatePercentOfNorm(
-                                  calculateAverage(
-                                    currentTest.rightMeasurements,
-                                  ),
-                                  getNormForSide("right"),
-                                ),
-                              )}
-                              %
-                            </div>
+                          <div className="text-xl font-bold">
+                            {calculateBilateralDeficiency(
+                              currentTest.rightMeasurements,
+                              currentTest.leftMeasurements,
+                            )}
+                            %
                           </div>
-                        </>
+                        </div>
                       )}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                      {currentTest.normLevel === "yes" &&
+                        getNormForSide("right") > 0 && (
+                          <>
+                            <div className="bg-blue-400 text-white p-3 rounded text-center">
+                              <div className="text-sm">
+                                {isRangeOfMotionTest
+                                  ? "Secondary Norm"
+                                  : "Right Norm"}
+                              </div>
+                              <div className="text-xl font-bold">
+                                {getNormForSide("right")} {getUnitSuffix()}
+                              </div>
+                            </div>
+                            <div className="bg-blue-400 text-white p-3 rounded text-center">
+                              <div className="text-sm">
+                                {isRangeOfMotionTest
+                                  ? "Secondary % of Norm"
+                                  : "Right % of Norm"}
+                              </div>
+                              <div className="text-xl font-bold">
+                                {Math.round(
+                                  calculatePercentOfNorm(
+                                    calculateAverage(
+                                      currentTest.rightMeasurements,
+                                    ),
+                                    getNormForSide("right"),
+                                  ),
+                                )}
+                                %
+                              </div>
+                            </div>
+                          </>
+                        )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             )}
           </div>
         )}

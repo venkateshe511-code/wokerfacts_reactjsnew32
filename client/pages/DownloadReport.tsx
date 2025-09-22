@@ -3925,10 +3925,17 @@ export default function DownloadReport() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            ${[1,2,3,4,5,6].map(n => {
-                                              const v = (test.leftMeasurements && test.leftMeasurements[`trial${n}`]) || 0;
-                                              return `<tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${n}</td><td style=\"border: 1px solid #333; border-right: 1px solid #333; padding: 6px;\">${v}</td></tr>`;
-                                            }).join("")}
+                                            ${[1, 2, 3, 4, 5, 6]
+                                              .map((n) => {
+                                                const v =
+                                                  (test.leftMeasurements &&
+                                                    test.leftMeasurements[
+                                                      `trial${n}`
+                                                    ]) ||
+                                                  0;
+                                                return `<tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${n}</td><td style=\"border: 1px solid #333; border-right: 1px solid #333; padding: 6px;\">${v}</td></tr>`;
+                                              })
+                                              .join("")}
                                         </tbody>
                                     </table>
                                 `
@@ -4012,9 +4019,8 @@ export default function DownloadReport() {
                                     <!-- Trial-by-Trial Measurement Table (FOR NON-CARDIO TESTS) -->
                                     ${
                                       !isCardioTest
-                                        ? (
-                                          isLiftTest
-                                            ? `
+                                        ? isLiftTest
+                                          ? `
                                     <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                         <thead>
                                             <tr style="background: #fef3c7;">
@@ -4023,10 +4029,17 @@ export default function DownloadReport() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            ${[1,2,3,4,5,6].map(n => {
-                                              const v = (test.leftMeasurements && test.leftMeasurements[`trial${n}`]) || 0;
-                                              return `<tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${n}</td><td style=\"border: 1px solid #333; border-right: 1px solid #333; padding: 6px;\">${v}</td></tr>`;
-                                            }).join("")}
+                                            ${[1, 2, 3, 4, 5, 6]
+                                              .map((n) => {
+                                                const v =
+                                                  (test.leftMeasurements &&
+                                                    test.leftMeasurements[
+                                                      `trial${n}`
+                                                    ]) ||
+                                                  0;
+                                                return `<tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${n}</td><td style=\"border: 1px solid #333; border-right: 1px solid #333; padding: 6px;\">${v}</td></tr>`;
+                                              })
+                                              .join("")}
                                             <tr>
                                               <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; text-align:right;"><strong>Average</strong></td>
                                               <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${leftAvg.toFixed(1)}</strong></td>
@@ -4034,7 +4047,7 @@ export default function DownloadReport() {
                                         </tbody>
                                     </table>
                                             `
-                                            : `
+                                          : `
                                     <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                         <thead>
                                             <tr style="background: #fef3c7;">
@@ -4112,7 +4125,7 @@ export default function DownloadReport() {
                                         </tbody>
                                     </table>
                                             `
-                                        ) : ""
+                                        : ""
                                     }
 
                                     <!-- Visual Chart Representation (NOT FOR CARDIO TESTS) -->

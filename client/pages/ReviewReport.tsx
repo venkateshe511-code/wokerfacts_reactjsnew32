@@ -3648,42 +3648,71 @@ export default function ReviewReport() {
                                           </tr>
                                         </tbody>
                                       </table>
-) : isLiftTest ? (
+                                    ) : isLiftTest ? (
                                       // Lift Results - Six Trials (single table)
-                                      <div><table className="w-full border border-gray-400 text-xs mb-4">
-                                        <thead>
-                                          <tr className="bg-yellow-300">
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">Trial</th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">Value</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          {[1, 2, 3, 4, 5, 6].map((n) => {
-                                            const key = `trial${n}` as keyof typeof test.leftMeasurements;
-                                            const v = test.leftMeasurements?.[key] ?? 0;
-                                            return (
-                                              <tr key={n}>
-                                                <td className="border border-gray-400 border-r-gray-400 p-2">{n}</td>
-                                                <td className="border border-gray-400 border-r-gray-400 p-2">{v}</td>
-                                              </tr>
+                                      <div>
+                                        <table className="w-full border border-gray-400 text-xs mb-4">
+                                          <thead>
+                                            <tr className="bg-yellow-300">
+                                              <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                Trial
+                                              </th>
+                                              <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                Value
+                                              </th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {[1, 2, 3, 4, 5, 6].map((n) => {
+                                              const key =
+                                                `trial${n}` as keyof typeof test.leftMeasurements;
+                                              const v =
+                                                test.leftMeasurements?.[key] ??
+                                                0;
+                                              return (
+                                                <tr key={n}>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {n}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {v}
+                                                  </td>
+                                                </tr>
+                                              );
+                                            })}
+                                          </tbody>
+                                        </table>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                                          <div className="text-xs">
+                                            <strong>CV%:</strong> {leftCV}%
+                                          </div>
+                                          {(() => {
+                                            const raw = parseFloat(
+                                              (test.valueToBeTestedNumber as any) ||
+                                                "",
                                             );
-                                          })}
-                                        </tbody>
-                                      </table>
-                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                                        <div className="text-xs"><strong>CV%:</strong> {leftCV}%</div>
-                                        {(() => {
-                                          const raw = parseFloat((test.valueToBeTestedNumber as any) || "");
-                                          const unit = ((test.unitMeasure as any) || "").toLowerCase();
-                                          let lbs = 0;
-                                          if (!Number.isNaN(raw) && raw > 0) {
-                                            lbs = unit === "kg" ? Math.round(raw * 2.20462 * 10) / 10 : unit === "lbs" ? Math.round(raw * 10) / 10 : 0;
-                                          }
-                                          return lbs > 0 ? (
-                                            <div className="text-xs"><strong>Norm Weight:</strong> {lbs} lbs</div>
-                                          ) : null;
-                                        })()}
-                                      </div>
+                                            const unit = (
+                                              (test.unitMeasure as any) || ""
+                                            ).toLowerCase();
+                                            let lbs = 0;
+                                            if (!Number.isNaN(raw) && raw > 0) {
+                                              lbs =
+                                                unit === "kg"
+                                                  ? Math.round(
+                                                      raw * 2.20462 * 10,
+                                                    ) / 10
+                                                  : unit === "lbs"
+                                                    ? Math.round(raw * 10) / 10
+                                                    : 0;
+                                            }
+                                            return lbs > 0 ? (
+                                              <div className="text-xs">
+                                                <strong>Norm Weight:</strong>{" "}
+                                                {lbs} lbs
+                                              </div>
+                                            ) : null;
+                                          })()}
+                                        </div>
                                       </div>
                                     ) : isCardioTest ? (
                                       // Cardio Test Results
