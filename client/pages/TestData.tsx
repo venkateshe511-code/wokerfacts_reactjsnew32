@@ -1593,6 +1593,11 @@ export default function TestData() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
+                  {isLiftTest && (
+                    <div className="mb-6">
+                      <BarChart measurements={currentTest.leftMeasurements} side="left" />
+                    </div>
+                  )}
                   {/* Heart Rate Fields - Separated Section */}
                   <div className="mb-6 p-6 bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-800 rounded-xl shadow-lg">
                     <h4 className="text-center font-bold text-gray-800 mb-4 text-base">
