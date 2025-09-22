@@ -3812,8 +3812,9 @@ export default function DownloadReport() {
               testName.includes("cardio") ||
               testName.includes("cardiovascular");
             const isStaticLift =
-              ((String(test.testId || testName).toLowerCase().includes("static-lift")) ||
-               testName.includes("static"));
+              String(test.testId || testName)
+                .toLowerCase()
+                .includes("static-lift") || testName.includes("static");
 
             // Determine if this test needs a page break
             // Force page breaks for first test, lift tests, range of motion tests, and specific tests
@@ -4405,7 +4406,9 @@ export default function DownloadReport() {
                                 }
 
                                 ${
-                                  !test.demonstrated && !isCardioTest && !isStaticLift
+                                  !test.demonstrated &&
+                                  !isCardioTest &&
+                                  !isStaticLift
                                     ? `
                                     <div style="margin: 8px 0 12px 0;">
                                         <p style="font-size: 11px; font-weight: bold;">Reason For Incomplete Test:</p>

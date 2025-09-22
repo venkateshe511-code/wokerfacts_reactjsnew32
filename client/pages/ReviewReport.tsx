@@ -3452,7 +3452,9 @@ export default function ReviewReport() {
                           testName.includes("lift") ||
                           testName.includes("carry");
                         const isStaticLift =
-                          (String(test.testId || testName).toLowerCase().includes("static-lift")) ||
+                          String(test.testId || testName)
+                            .toLowerCase()
+                            .includes("static-lift") ||
                           testName.includes("static");
                         const isStrengthTest =
                           testName.includes("strength") ||
@@ -5262,22 +5264,24 @@ export default function ReviewReport() {
                                       </p>
                                     )}
 
-                                    {!test.demonstrated && !isCardioTest && !isStaticLift && (
-                                      <div className="mb-4">
-                                        <p className="text-sm font-semibold">
-                                          Reason For Incomplete Test:
-                                        </p>
-                                        <p className="text-sm">
-                                          Limited by pain/discomfort
-                                        </p>
-                                        <p className="text-sm font-semibold mt-2">
-                                          Endpoint Condition:
-                                        </p>
-                                        <p className="text-sm">
-                                          Psychophysical
-                                        </p>
-                                      </div>
-                                    )}
+                                    {!test.demonstrated &&
+                                      !isCardioTest &&
+                                      !isStaticLift && (
+                                        <div className="mb-4">
+                                          <p className="text-sm font-semibold">
+                                            Reason For Incomplete Test:
+                                          </p>
+                                          <p className="text-sm">
+                                            Limited by pain/discomfort
+                                          </p>
+                                          <p className="text-sm font-semibold mt-2">
+                                            Endpoint Condition:
+                                          </p>
+                                          <p className="text-sm">
+                                            Psychophysical
+                                          </p>
+                                        </div>
+                                      )}
                                   </div>
 
                                   {/* Graphs Section */}
