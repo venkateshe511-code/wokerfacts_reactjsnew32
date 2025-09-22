@@ -2778,6 +2778,14 @@ export default function DownloadReport() {
                               } else {
                                 return `F=${leftAvg.toFixed(2)} E=${rightAvg.toFixed(2)}`;
                               }
+                            } else if (test.testName?.toLowerCase().includes("lift")) {
+                              // Lift tests: show average weight in lbs
+                              const unit = ((test.unitMeasure) || "").toLowerCase();
+                              const baseAvg = leftAvg > 0 ? leftAvg : rightAvg;
+                              const avgLbs = unit === "kg"
+                                ? Math.round(baseAvg * 2.20462 * 10) / 10
+                                : Math.round(baseAvg * 10) / 10;
+                              return `${avgLbs.toFixed(1)} lbs`;
                             } else {
                               // Default format for strength and cardio tests
                               return `L=${leftAvg.toFixed(1)} R=${rightAvg.toFixed(1)}`;
