@@ -502,6 +502,8 @@ export default function TestData() {
       "wrist-muscle-flexion": "Wrist Muscle-Palmar Flexion",
       "wrist-muscle-extension": "Wrist Muscle-Dorsiflexion",
       "shoulder-muscle-internal-rotation": "Shoulder Muscle Internal Rotation",
+      "dynamic-lift-frequent": "Dynamic Frequent Lifts",
+      "dynamic-lift-infrequent": "Dynamic Infrequent Lifts",
       // MTM Test Names
       fingering: "Fingering",
       "bi-manual-fingering": "Bi-manual Fingering",
@@ -788,6 +790,8 @@ export default function TestData() {
         "wrist-muscle-extension": "Wrist Muscle-Dorsiflexion",
         "shoulder-muscle-internal-rotation":
           "Shoulder Muscle Internal Rotation",
+        "dynamic-lift-frequent": "Dynamic Frequent Lifts",
+        "dynamic-lift-infrequent": "Dynamic Infrequent Lifts",
         // Add more mappings as needed
       };
 
