@@ -2903,7 +2903,7 @@ export default function ReviewReport() {
                           applicable: pinchTests.length > 0,
                         });
 
-                        // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high/overhead/frequent) shows postHR > preHR
+                        // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high/overhead/frequent/infrequent) shows postHR > preHR
                         const dynamicLifts = liftTests.filter((test: any) => {
                           const n = (test.testName || "").toLowerCase();
                           return (
@@ -2912,6 +2912,7 @@ export default function ReviewReport() {
                             n.includes("high") ||
                             n.includes("overhead") ||
                             n.includes("frequent") ||
+                            n.includes("infrequent") ||
                             n.includes("dynamic")
                           );
                         });
@@ -2934,7 +2935,7 @@ export default function ReviewReport() {
                         crosschecks.push({
                           name: "Dynamic lift HR fluctuation",
                           description:
-                            "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, overhead, or frequent).",
+                            "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, overhead, frequent, or infrequent).",
                           pass: hrConsistent,
                           applicable: dynamicLifts.length > 0,
                         });
@@ -3817,7 +3818,7 @@ export default function ReviewReport() {
                                                 <p className="text-xs">
                                                   <strong>Men:</strong> 14.8 -
                                                   (1.379 × T) + (0.451 × T²) -
-                                                  (0.012 × T³) = VO₂ max
+                                                  (0.012 × T��) = VO₂ max
                                                   <br />
                                                   <strong>Women:</strong> 4.38 ×
                                                   T - 3.9 = VO₂ max
@@ -4542,7 +4543,7 @@ export default function ReviewReport() {
                                                 </p>
                                                 <p className="mb-2">
                                                   VO2 max (ml/kg/min) = 17.2 +
-                                                  (1.29 �� _____) - (0.09 × _____
+                                                  (1.29 × _____) - (0.09 × _____
                                                   kg) - (0.18 × _____ )
                                                 </p>
                                                 <p className="text-xs italic">

@@ -319,6 +319,7 @@ export const getReferencesForTest = (testId: string): Reference[] => {
     "dynamic-lift-high": "dynamic-lift",
     "dynamic-lift-overhead": "dynamic-lift",
     "dynamic-lift-frequent": "dynamic-lift",
+    "dynamic-lift-infrequent": "dynamic-lift",
 
     // Hand Strength Tests
     "hand-strength-standard": "hand-strength",
