@@ -450,8 +450,8 @@ export default function TestData() {
         trial4: Math.round(randomValue(20, 30) * effortMultiplier),
         trial5: Math.round(randomValue(17, 27) * effortMultiplier),
         trial6: Math.round(randomValue(19, 29) * effortMultiplier),
-        preHeartRate: randomValue(65, 85),
-        postHeartRate: randomValue(85, demonstrated ? 120 : 100), // Lower post HR if not demonstrated
+        preHeartRate: randomValue(71, 74),
+        postHeartRate: randomValue(75, 76),
       },
       rightMeasurements: {
         trial1: Math.round(randomValue(20, 30) * effortMultiplier),
@@ -460,8 +460,8 @@ export default function TestData() {
         trial4: Math.round(randomValue(25, 35) * effortMultiplier),
         trial5: Math.round(randomValue(23, 33) * effortMultiplier),
         trial6: Math.round(randomValue(24, 34) * effortMultiplier),
-        preHeartRate: randomValue(65, 85),
-        postHeartRate: randomValue(85, demonstrated ? 120 : 100), // Lower post HR if not demonstrated
+        preHeartRate: randomValue(71, 74),
+        postHeartRate: randomValue(75, 76),
       },
       comments: demonstrated
         ? `${testName} performed with ${effort.toLowerCase()} effort. Client demonstrated good understanding of test requirements and maintained consistent performance throughout all trials. ${testSpecificObservations.length > 3 ? "Multiple clinical observations documented." : ""}`
@@ -660,8 +660,8 @@ export default function TestData() {
             testName: testNames[testId] || testId,
             testType: testId,
             trials,
-            hrPre: Math.floor(Math.random() * 20 + 65), // 65-85 bpm
-            hrPost: Math.floor(Math.random() * 35 + 85), // 85-120 bpm
+            hrPre: Math.floor(Math.random() * 4 + 71), // 71-74 bpm
+            hrPost: Math.floor(Math.random() * 2 + 75), // 75-76 bpm
             completedAt: new Date().toISOString(),
           };
         }
