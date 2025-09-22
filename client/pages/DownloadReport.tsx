@@ -3916,22 +3916,19 @@ export default function DownloadReport() {
                                 ${
                                   isLiftTest
                                     ? `
-                                    <!-- Lift Test Table -->
+                                    <!-- Lift Results - Six Trials (single table) -->
                                     <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                         <thead>
                                             <tr style="background: #fef3c7;">
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Cycle:</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Weight:</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Reps:</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Client Perceived:</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">HR Pre/During/Post:</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Total Work (METs):</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Value</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">1</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">15</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">4</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">13</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Norm</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">255</td></tr>
-                                            <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">2</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">25</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">4</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">15</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Norm</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">510</td></tr>
-                                            <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">3</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">35</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">4</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">15</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Norm</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">1020</td></tr>
+                                            ${[1,2,3,4,5,6].map(n => {
+                                              const v = (test.leftMeasurements && test.leftMeasurements[`trial${n}`]) || 0;
+                                              return `<tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${n}</td><td style=\"border: 1px solid #333; border-right: 1px solid #333; padding: 6px;\">${v}</td></tr>`;
+                                            }).join("")}
                                         </tbody>
                                     </table>
                                 `
