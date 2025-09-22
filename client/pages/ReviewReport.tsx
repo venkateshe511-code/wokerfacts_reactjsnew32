@@ -3651,39 +3651,8 @@ export default function ReviewReport() {
                                     ) : isLiftTest ? (
                                       // Lift Results - Six Trials (single table)
                                       <div>
-                                        <table className="w-full border border-gray-400 text-xs mb-4">
-                                          <thead>
-                                            <tr className="bg-yellow-300">
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                Trial
-                                              </th>
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                Value
-                                              </th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            {[1, 2, 3, 4, 5, 6].map((n) => {
-                                              const key =
-                                                `trial${n}` as keyof typeof test.leftMeasurements;
-                                              const v =
-                                                test.leftMeasurements?.[key] ??
-                                                0;
-                                              return (
-                                                <tr key={n}>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                    {n}
-                                                  </td>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                    {v}
-                                                  </td>
-                                                </tr>
-                                              );
-                                            })}
-                                          </tbody>
-                                        </table>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-                                          <div className="text-xs">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
+                                          <div className="text-xs sm:col-span-2">
                                             <strong>CV%:</strong> {leftCV}%
                                           </div>
                                           {(() => {
@@ -3694,9 +3663,9 @@ export default function ReviewReport() {
                                             const unit = (
                                               (test.unitMeasure as any) || ""
                                             ).toLowerCase();
-                                            let lbs = 0;
+                                            let normLbs = 0;
                                             if (!Number.isNaN(raw) && raw > 0) {
-                                              lbs =
+                                              normLbs =
                                                 unit === "kg"
                                                   ? Math.round(
                                                       raw * 2.20462 * 10,
@@ -3705,14 +3674,97 @@ export default function ReviewReport() {
                                                     ? Math.round(raw * 10) / 10
                                                     : 0;
                                             }
-                                            return lbs > 0 ? (
+                                            return normLbs > 0 ? (
                                               <div className="text-xs">
                                                 <strong>Norm Weight:</strong>{" "}
-                                                {lbs} lbs
+                                                {normLbs} lbs
                                               </div>
                                             ) : null;
                                           })()}
+                                          {(() => {
+                                            const unit = (
+                                              (test.unitMeasure as any) || ""
+                                            ).toLowerCase();
+                                            const avgLbs =
+                                              unit === "kg"
+                                                ? Math.round(
+                                                    leftAvg * 2.20462 * 10,
+                                                  ) / 10
+                                                : Math.round(leftAvg * 10) / 10;
+                                            return (
+                                              <div className="text-xs sm:col-span-2">
+                                                <strong>Avg Weight:</strong>{" "}
+                                                {avgLbs} lbs
+                                              </div>
+                                            );
+                                          })()}
                                         </div>
+
+                                        {(() => {
+                                          const unit = (
+                                            (test.unitMeasure as any) || ""
+                                          ).toLowerCase();
+                                          const avgLbs =
+                                            unit === "kg"
+                                              ? Math.round(
+                                                  leftAvg * 2.20462 * 10,
+                                                ) / 10
+                                              : Math.round(leftAvg * 10) / 10;
+                                          const raw = parseFloat(
+                                            (test.valueToBeTestedNumber as any) ||
+                                              "",
+                                          );
+                                          const normLbs =
+                                            !Number.isNaN(raw) && raw > 0
+                                              ? unit === "kg"
+                                                ? Math.round(
+                                                    raw * 2.20462 * 10,
+                                                  ) / 10
+                                                : Math.round(raw * 10) / 10
+                                              : 0;
+                                          const pctNorm =
+                                            normLbs > 0
+                                              ? Math.round(
+                                                  (avgLbs / normLbs) * 100,
+                                                )
+                                              : 0;
+                                          return (
+                                            <table className="w-full border border-gray-400 text-xs mb-4">
+                                              <thead>
+                                                <tr className="bg-yellow-300">
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Demonstrated Activity
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Avg. Weight (lb)
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    CV%
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Test Date
+                                                  </th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {test.testName}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {avgLbs.toFixed(1)}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {leftCV}%
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {currentDate}
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          );
+                                        })()}
                                       </div>
                                     ) : isCardioTest ? (
                                       // Cardio Test Results
