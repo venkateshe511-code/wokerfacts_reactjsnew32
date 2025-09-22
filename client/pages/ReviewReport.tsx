@@ -3734,6 +3734,22 @@ export default function ReviewReport() {
                                             </table>
                                           );
                                         })()}
+                                        {(() => {
+                                          const map: any = {
+                                            biomechanical: "Biomechanical",
+                                            physiological: "Physiological",
+                                            psychophysical: "Psychophysical",
+                                            "task-requirement": "Task Requirement",
+                                          };
+                                          const key = String(
+                                            (test as any).dynamicEndpointType || "",
+                                          ).toLowerCase();
+                                          return testName.includes("dynamic") && map[key] ? (
+                                            <div className="text-xs mb-2">
+                                              <span className="font-semibold">Endpoint:</span> {map[key]}
+                                            </div>
+                                          ) : null;
+                                        })()}
                                       </div>
                                     ) : isCardioTest ? (
                                       // Cardio Test Results
