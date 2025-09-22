@@ -2778,6 +2778,19 @@ export default function DownloadReport() {
                               } else {
                                 return `F=${leftAvg.toFixed(2)} E=${rightAvg.toFixed(2)}`;
                               }
+                            } else if (
+                              test.testName?.toLowerCase().includes("lift")
+                            ) {
+                              // Lift tests: show average weight in lbs
+                              const unit = (
+                                test.unitMeasure || ""
+                              ).toLowerCase();
+                              const baseAvg = leftAvg > 0 ? leftAvg : rightAvg;
+                              const avgLbs =
+                                unit === "kg"
+                                  ? Math.round(baseAvg * 2.20462 * 10) / 10
+                                  : Math.round(baseAvg * 10) / 10;
+                              return `${avgLbs.toFixed(1)} lbs`;
                             } else {
                               // Default format for strength and cardio tests
                               return `L=${leftAvg.toFixed(1)} R=${rightAvg.toFixed(1)}`;
@@ -4242,6 +4255,9 @@ export default function DownloadReport() {
                                             </div>
                                         </div>
 
+                                        ${
+                                          !isLiftTest
+                                            ? `
                                         <!-- Right Side Chart -->
                                         <div style="background: #ffffff; border: 2px solid #10b981; border-radius: 8px; padding: 12px; page-break-inside: avoid; flex: 1; min-width: 250px;">
                                             <div style="background: #10b981; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">Right Side</div>
@@ -4349,7 +4365,10 @@ export default function DownloadReport() {
                                             <div style="text-align: center; font-size: 10px; color: #10b981; margin-top: 8px; font-weight: bold; background: #d1fae5; padding: 4px; border-radius: 4px;">
                                                 Avg: ${rightAvg.toFixed(1)} lbs
                                             </div>
-                                        </div>
+                                        </div
+                                        `
+                                            : ""
+                                        }>
                                     </div>
 
                                     <!-- Comparison Summary -->
