@@ -3216,7 +3216,7 @@ export default function DownloadReport() {
                         applicable: pinchTests.length > 0,
                       });
 
-                      // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high/overhead) shows postHR > preHR
+                      // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high/overhead/frequent) shows postHR > preHR
                       const dynamicLifts = liftTests.filter((test) => {
                         const n = (test.testName || "").toLowerCase();
                         return (
@@ -3224,6 +3224,7 @@ export default function DownloadReport() {
                           n.includes("mid") ||
                           n.includes("high") ||
                           n.includes("overhead") ||
+                          n.includes("frequent") ||
                           n.includes("dynamic")
                         );
                       });
@@ -3246,7 +3247,7 @@ export default function DownloadReport() {
                       crosschecks.push({
                         name: "Dynamic lift HR fluctuation",
                         description:
-                          "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, or overhead).",
+                          "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, overhead, or frequent).",
                         pass: hrConsistent,
                         applicable: dynamicLifts.length > 0,
                       });
