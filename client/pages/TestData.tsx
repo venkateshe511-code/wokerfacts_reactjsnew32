@@ -1639,8 +1639,12 @@ export default function TestData() {
                         ) : null;
                       })()}
                       {(() => {
-                        const avg = calculateAverage(currentTest.leftMeasurements);
-                        const unit = (currentTest?.unitMeasure || "").toLowerCase();
+                        const avg = calculateAverage(
+                          currentTest.leftMeasurements,
+                        );
+                        const unit = (
+                          currentTest?.unitMeasure || ""
+                        ).toLowerCase();
                         const avgLbs =
                           unit === "kg"
                             ? Math.round(avg * 2.20462 * 10) / 10
@@ -1648,7 +1652,9 @@ export default function TestData() {
                         return (
                           <div className="bg-blue-400 text-white p-3 rounded text-center sm:col-span-2">
                             <div className="text-sm">Average Weight</div>
-                            <div className="text-xl font-bold">{avgLbs} lbs</div>
+                            <div className="text-xl font-bold">
+                              {avgLbs} lbs
+                            </div>
                           </div>
                         );
                       })()}

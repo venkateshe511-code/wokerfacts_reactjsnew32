@@ -3687,39 +3687,79 @@ export default function ReviewReport() {
                                             ).toLowerCase();
                                             const avgLbs =
                                               unit === "kg"
-                                                ? Math.round(leftAvg * 2.20462 * 10) /
-                                                  10
+                                                ? Math.round(
+                                                    leftAvg * 2.20462 * 10,
+                                                  ) / 10
                                                 : Math.round(leftAvg * 10) / 10;
                                             return (
                                               <div className="text-xs sm:col-span-2">
-                                                <strong>Avg Weight:</strong> {avgLbs} lbs
+                                                <strong>Avg Weight:</strong>{" "}
+                                                {avgLbs} lbs
                                               </div>
                                             );
                                           })()}
                                         </div>
 
                                         {(() => {
-                                          const unit = ((test.unitMeasure as any) || "").toLowerCase();
-                                          const avgLbs = unit === "kg" ? Math.round(leftAvg * 2.20462 * 10) / 10 : Math.round(leftAvg * 10) / 10;
-                                          const raw = parseFloat(((test.valueToBeTestedNumber as any) || ""));
-                                          const normLbs = !Number.isNaN(raw) && raw > 0 ? (unit === "kg" ? Math.round(raw * 2.20462 * 10) / 10 : Math.round(raw * 10) / 10) : 0;
-                                          const pctNorm = normLbs > 0 ? Math.round(((avgLbs / normLbs) * 100)) : 0;
+                                          const unit = (
+                                            (test.unitMeasure as any) || ""
+                                          ).toLowerCase();
+                                          const avgLbs =
+                                            unit === "kg"
+                                              ? Math.round(
+                                                  leftAvg * 2.20462 * 10,
+                                                ) / 10
+                                              : Math.round(leftAvg * 10) / 10;
+                                          const raw = parseFloat(
+                                            (test.valueToBeTestedNumber as any) ||
+                                              "",
+                                          );
+                                          const normLbs =
+                                            !Number.isNaN(raw) && raw > 0
+                                              ? unit === "kg"
+                                                ? Math.round(
+                                                    raw * 2.20462 * 10,
+                                                  ) / 10
+                                                : Math.round(raw * 10) / 10
+                                              : 0;
+                                          const pctNorm =
+                                            normLbs > 0
+                                              ? Math.round(
+                                                  (avgLbs / normLbs) * 100,
+                                                )
+                                              : 0;
                                           return (
                                             <table className="w-full border border-gray-400 text-xs mb-4">
                                               <thead>
                                                 <tr className="bg-yellow-300">
-                                                  <th className="border border-gray-400 border-r-gray-400 p-2">Demonstrated Activity</th>
-                                                  <th className="border border-gray-400 border-r-gray-400 p-2">Avg. Weight (lb)</th>
-                                                  <th className="border border-gray-400 border-r-gray-400 p-2">CV%</th>
-                                                  <th className="border border-gray-400 border-r-gray-400 p-2">Test Date</th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Demonstrated Activity
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Avg. Weight (lb)
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    CV%
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Test Date
+                                                  </th>
                                                 </tr>
                                               </thead>
                                               <tbody>
                                                 <tr>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">{test.testName}</td>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">{avgLbs.toFixed(1)}</td>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">{leftCV}%</td>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">{currentDate}</td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {test.testName}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {avgLbs.toFixed(1)}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {leftCV}%
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {currentDate}
+                                                  </td>
                                                 </tr>
                                               </tbody>
                                             </table>

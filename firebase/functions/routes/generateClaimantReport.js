@@ -108,9 +108,10 @@ const calcCV = (measurements = {}) => {
   ].filter((v) => typeof v === "number" && !isNaN(v) && v > 0);
   if (!vals.length) return 0;
   const mean = vals.reduce((s, v) => s + v, 0) / vals.length;
-  const variance = vals.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / vals.length;
+  const variance =
+    vals.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / vals.length;
   const sd = Math.sqrt(variance);
-  return Math.round(((sd / mean) * 100) * 100) / 100;
+  return Math.round((sd / mean) * 100 * 100) / 100;
 };
 
 const getImageBuffer = async (src) => {
@@ -830,11 +831,15 @@ function addFunctionalTests(children, body) {
         );
         children.push(labelValueRow("Average", String(avg)));
         if (t.unit) children.push(labelValueRow("Unit", t.unit));
-        const nameKey = `${String(t.testId || "")} ${String(t.testName || "")}`.toLowerCase();
+        const nameKey =
+          `${String(t.testId || "")} ${String(t.testName || "")}`.toLowerCase();
         const isLift = nameKey.includes("lift") || nameKey.includes("carry");
         if (isLift) {
           const unit = String(t.unit || "").toLowerCase();
-          const avgLbs = unit === "kg" ? Math.round(avg * 2.20462 * 10) / 10 : Math.round(avg * 10) / 10;
+          const avgLbs =
+            unit === "kg"
+              ? Math.round(avg * 2.20462 * 10) / 10
+              : Math.round(avg * 10) / 10;
           children.push(labelValueRow("Average Weight (lbs)", String(avgLbs)));
           const cv = calcCV(t.measurements || {});
           children.push(labelValueRow("CV (%)", String(cv)));
