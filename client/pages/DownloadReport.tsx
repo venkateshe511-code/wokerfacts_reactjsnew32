@@ -301,7 +301,6 @@ export default function DownloadReport() {
     if (sampleAccessBackup)
       localStorage.setItem("sampleAccess", sampleAccessBackup);
   };
-
   const generateReportContent = async () => {
     // Load all evaluation data
     const evaluatorData = await getEvaluatorData();
@@ -640,7 +639,6 @@ export default function DownloadReport() {
                 </table>
               </div>
             </div>
-
             <!-- Client Images Section -->
             ${
               test.serializedImages && test.serializedImages.length > 0
@@ -956,7 +954,6 @@ export default function DownloadReport() {
         if (tt > 0 && p > 0) return (tt * (p / 100)).toFixed(1);
         return (tt || 0).toFixed(1);
       };
-
       return `
         <!-- MTM Test Table for ${testName} -->
         <div style="margin-bottom: 15px; border: 1px solid #333; padding: 8px; background-color: #ffffff;">
@@ -1307,7 +1304,6 @@ export default function DownloadReport() {
         .toc-page {
             page: toc;
         }
-
         @page cover {
             @top-right {
                 content: "";
@@ -2291,7 +2287,6 @@ export default function DownloadReport() {
                         type: "weight",
                       };
                     }
-
                     // Range of Motion Norms - Cervical Spine
                     if (testNameLower.includes("cervical")) {
                       if (testNameLower.includes("flexion")) {
@@ -2641,7 +2636,6 @@ export default function DownloadReport() {
                       testsByCategory["Strength"].push(test);
                     }
                   });
-
                   let rows = [];
                   let totalSitTime = 45; // Initial interview sit time
                   let totalStandTime = 5; // Initial activity overview stand time
@@ -2965,7 +2959,6 @@ export default function DownloadReport() {
                         </tbody>
                     </table>
                     -->
-
                     <!-- Detailed Effort Analysis (COMMENTED OUT) -->
                     <!--
                     <div style="margin-top: 16px; background: #f8f9fa; border: 1px solid #dee2e6; padding: 12px; border-radius: 4px;">
@@ -3945,7 +3938,6 @@ export default function DownloadReport() {
                                       )
                                     : ""
                                 }
-
                                 ${
                                   !isRangeOfMotion &&
                                   !isLiftTest &&
@@ -4907,7 +4899,6 @@ export default function DownloadReport() {
       });
     }
   };
-
   const handleDownloadReport = async () => {
     setIsDownloading(true);
 
@@ -5011,6 +5002,42 @@ export default function DownloadReport() {
         };
 
         // Prepare complete data structure for cloud function to match PDF output
+        // Include clinic logo redundantly and with debug info to ensure DOCX can load it
+        let logoCandidate = (evaluatorData.clinicLogo || "").trim();
+        // Ensure we always send a data URL to avoid CORS/public URL issues for DOCX service
+        async function ensureDataUrl(input: string): Promise<string> {
+          if (!input) return "";
+          if (/^data:image\//i.test(input)) return input; // already data URL
+          let absolute = input;
+          try {
+            if (!/^https?:\/\//i.test(input)) {
+              // resolve relative like "/workerfacts-logo.png"
+              if (input.startsWith("/")) {
+                const origin = typeof window !== "undefined" ? window.location.origin : "";
+                if (origin) absolute = `${origin}${input}`;
+              }
+            }
+            const resp = await fetch(absolute, { mode: "cors", cache: "no-store" });
+            if (!resp.ok) throw new Error(`Logo fetch failed: ${resp.status}`);
+            const blob = await resp.blob();
+            // Convert Blob -> data URL
+            const dataUrl: string = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onerror = () => reject(new Error("FileReader error"));
+              reader.onloadend = () => resolve(String(reader.result || ""));
+              reader.readAsDataURL(blob);
+            });
+            return dataUrl;
+          } catch (e) {
+            console.warn("Failed to convert logo to data URL:", e);
+            return input; // fall back to whatever we had
+          }
+        }
+        const logoCandidateDataUrl = await ensureDataUrl(logoCandidate);
+        const isDataUrl = /^data:image\//i.test(logoCandidateDataUrl);
+        const logoMimeMatch = isDataUrl
+          ? logoCandidateDataUrl.match(/^data:([^;]+);base64,/i)
+          : null;
         const requestData = {
           claimantName:
             `${claimantData.firstName || ""} ${
@@ -5018,13 +5045,27 @@ export default function DownloadReport() {
             }`.trim() || "Anonymous",
           claimNumber: claimantData.claimantId || reportSummary.reportId,
           evaluationDate: currentDate,
-          logoPath: evaluatorData.clinicLogo || null,
+          // Redundant logo fields so the cloud function can resolve any of them
+          logoPath: logoCandidateDataUrl || null,
+          logoUrl: logoCandidateDataUrl || null,
           clinicName: evaluatorData.clinicName || "MedSource",
           clinicAddress:
             evaluatorData.address ||
             "1490-5A Quarterpath Road #242, Williamsburg, VA  23185",
           clinicPhone: evaluatorData.phone || "757-220-5051",
           clinicFax: evaluatorData.fax || "757-273-6198",
+          // Provide evaluatorData with clinicLogo too, for server-side compatibility
+          evaluatorData: {
+            ...(evaluatorData || {}),
+            clinicLogo: logoCandidateDataUrl || null,
+          },
+          // Lightweight debug info to assist server logs
+          logoDebug: {
+            isDataUrl,
+            mime: logoMimeMatch ? logoMimeMatch[1] : null,
+            length: logoCandidateDataUrl ? logoCandidateDataUrl.length : 0,
+            prefix: logoCandidateDataUrl ? logoCandidateDataUrl.slice(0, 64) : null,
+          },
 
           // Enhanced claimant data to match PDF
           claimantData: {
@@ -5254,7 +5295,6 @@ export default function DownloadReport() {
                       },
                     ],
           },
-
           // Enhanced test data with comprehensive results - MUST have enough tests to trigger all DOCX sections
           testData: {
             tests: false // Force use of comprehensive fallback data for complete DOCX
@@ -5602,7 +5642,6 @@ export default function DownloadReport() {
         for (let [key, value] of response.headers.entries()) {
           console.log(`  ${key}: ${value}`);
         }
-
         // Force correct MIME type to help some viewers
         const arrayBuf = await response.arrayBuffer();
         const blob = new Blob([arrayBuf], {
@@ -5863,7 +5902,16 @@ export default function DownloadReport() {
                     PDF Format
                   </Label>
                 </div>
-                {/* DOCX Format option temporarily disabled */}
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="docx" id="docx" />
+                  <Label
+                    htmlFor="docx"
+                    className="flex items-center cursor-pointer"
+                  >
+                    <FileText className="mr-2 h-4 w-4 text-blue-600" />
+                    DOCX Format
+                  </Label>
+                </div>
               </RadioGroup>
             </div>
 
@@ -5934,7 +5982,6 @@ export default function DownloadReport() {
             </div>
           </CardContent>
         </Card>
-
         {/* Success Dialog */}
         <Dialog open={showSuccessDialog} onOpenChange={() => {}}>
           <DialogContent className="max-w-md">

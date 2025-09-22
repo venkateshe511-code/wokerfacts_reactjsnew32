@@ -118,7 +118,7 @@ const getImageBuffer = async (src) => {
       try {
         const tmpPath = path.join(os.tmpdir(), `docx_img_${Date.now()}.bin`);
         fs.writeFileSync(tmpPath, buffer);
-      } catch {}
+      } catch { }
     }
 
     return buffer;
@@ -146,12 +146,50 @@ async function addCoverPage(children, body) {
     `${claimantData?.lastName || ""}, ${claimantData?.firstName || ""}`.trim() ||
     "Unknown";
 
-  const logoBuffer = await getImageBuffer(
-    logoPath || body?.evaluatorData?.clinicLogo,
-  );
+  // Debug: log incoming logo sources (only short preview)
+  try {
+    const preview = (s) =>
+      typeof s === "string" ? `${s.slice(0, 48)}... (len=${s.length})` : String(s);
+    if (body?.logoPath)
+      console.log("[DOCX] logoPath:", preview(body.logoPath));
+    if (body?.evaluatorData?.clinicLogo)
+      console.log(
+        "[DOCX] evaluatorData.clinicLogo:",
+        preview(body.evaluatorData.clinicLogo),
+      );
+    if (body?.logoUrl)
+      console.log("[DOCX] logoUrl:", preview(body.logoUrl));
+  } catch { }
 
-  children.push(new Paragraph({ children: [], spacing: { after: 1200 } }));
+  let logoBuffer = null;
+  const logoSources = [
+    body?.logoPath,
+    body?.evaluatorData?.clinicLogo,
+    body?.logoUrl,
+  ].filter(Boolean);
+  for (const src of logoSources) {
+    // eslint-disable-next-line no-await-in-loop
+    logoBuffer = await getImageBuffer(src);
+    if (logoBuffer) {
+      try {
+        console.log("[DOCX] Loaded logo buffer from src prefix:", src.slice(0, 24));
+      } catch { }
+    }
+    if (logoBuffer) break;
+  }
+  if (!logoBuffer) {
+    logoBuffer = await getImageBuffer(
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/256px-React-icon.svg.png",
+    );
+    try {
+      console.log("[DOCX] Using fallback logo image (React icon)");
+    } catch { }
+  }
 
+  // Large top spacer to vertically center cover content area
+  children.push(new Paragraph({ children: [], spacing: { after: 4000 } }));
+
+  // Centered logo
   if (logoBuffer) {
     children.push(
       new Paragraph({
@@ -159,7 +197,7 @@ async function addCoverPage(children, body) {
         children: [
           new ImageRun({
             data: logoBuffer,
-            transformation: { width: 150, height: 70 },
+            transformation: { width: 70, height: 70 },
           }),
         ],
         spacing: { after: 200 },
@@ -170,133 +208,163 @@ async function addCoverPage(children, body) {
       new Paragraph({
         alignment: AlignmentType.CENTER,
         children: [
-          new TextRun({
-            text: clinicName,
-            bold: true,
-            color: BRAND_COLOR,
-            size: 32,
-            font: NARROW_FONT,
-          }),
+          new TextRun({ text: clinicName, bold: true, color: BRAND_COLOR }),
         ],
         spacing: { after: 200 },
       }),
     );
   }
 
+  // Centered title
   children.push(
     new Paragraph({
-      alignment: AlignmentType.LEFT,
-      indent: { left: 2880 },
+      alignment: AlignmentType.CENTER,
       children: [
         new TextRun({
           text: "Functional Abilities Determination",
           bold: true,
           color: BRAND_COLOR,
-          size: 28,
-          font: NARROW_FONT,
+          size: 32,
         }),
       ],
       spacing: { after: 200 },
     }),
   );
 
-  const coverInfoTable = new Table({
-    width: { size: 60, type: WidthType.PERCENTAGE },
-    alignment: AlignmentType.CENTER,
-    borders: {
-      top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
-      bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
-      left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
-      right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
-      insideH: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
-      insideV: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
-    },
-    rows: [
-      new TableRow({
-        children: [
-          borderlessCell("Claimant Name:", true),
-          borderlessCell(nameDisplay),
-        ],
-      }),
-      new TableRow({
-        children: [
-          borderlessCell("Claimant #:", true),
-          borderlessCell(claimNumber || "N/A"),
-        ],
-      }),
-      new TableRow({
-        children: [
-          borderlessCell("Date of Evaluation(s):", true),
-          borderlessCell(evaluationDate || ""),
-        ],
-      }),
-    ],
-  });
+  // Left-indented label/value rows
+  const displayClaimNumber = claimNumber || "N/A";
+  const displayEvalDate = evaluationDate || new Date().toISOString().split("T")[0];
 
-  children.push(coverInfoTable);
+  // Revert to non-table rows, positioned directly under the title
+  const coverRow = (label, val) =>
+    new Paragraph({
+      indent: { left: 3200 },
+      spacing: { after: 80 },
+      children: [
+        new TextRun({ text: `${label}:`, bold: true, size: 16, }),
+        new TextRun({ text: "  ", size: 16, }),
+        new TextRun({ text: val || "", size: 16, }),
+      ],
+    });
 
-  if (clinicName || clinicAddress || clinicPhone || clinicFax) {
-    children.push(
+  children.push(coverRow("Claimant Name", nameDisplay));
+  children.push(coverRow("Claimant #", displayClaimNumber));
+  children.push(coverRow("Date of Evaluation(s)", displayEvalDate));
+
+  // Return footer content so caller can place at page bottom
+  const phoneFax = `Phone: ${clinicPhone || ""}${clinicPhone && clinicFax ? "    " : ""
+    }${clinicFax ? `Fax: ${clinicFax}` : ""}`.trim();
+
+  const footerChildren = [];
+  footerChildren.push(
+    new Paragraph({
+      alignment: AlignmentType.CENTER,
+      children: [
+        new TextRun({
+          text: "CONFIDENTIAL INFORMATION ENCLOSED",
+          bold: true,
+          color: "808080",
+        }),
+      ],
+    }),
+  );
+  if (clinicName)
+    footerChildren.push(
       new Paragraph({
         alignment: AlignmentType.CENTER,
-        spacing: { before: 1200, after: 120 },
-        children: [
-          new TextRun({
-            text: "CONFIDENTIAL INFORMATION ENCLOSED",
-            bold: true,
-            size: 18,
-          }),
-        ],
+        children: [new TextRun({ text: clinicName, bold: true })],
       }),
     );
-    if (clinicName)
-      children.push(
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: clinicName, bold: true, size: 16 })],
-        }),
-      );
-    if (clinicAddress)
-      children.push(
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: clinicAddress, size: 16 })],
-        }),
-      );
-    const phoneFax =
-      `Phone: ${clinicPhone || ""}${clinicPhone && clinicFax ? "    " : ""}${
-        clinicFax ? `Fax: ${clinicFax}` : ""
-      }`.trim();
-    if (phoneFax)
-      children.push(
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: phoneFax, size: 16 })],
-        }),
-      );
-  }
+  if (clinicAddress)
+    footerChildren.push(
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [new TextRun({ text: clinicAddress })],
+      }),
+    );
+  if (phoneFax)
+    footerChildren.push(
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [new TextRun({ text: phoneFax })],
+      }),
+    );
+
+  children.__coverFooter = new (require("docx").Footer)({
+    children: footerChildren,
+  });
 }
 
-function addTableOfContents(children) {
-  children.push(new Paragraph({ pageBreakBefore: true }));
-  children.push(headerText("Contents of Report:"));
-  [
-    "Client Information",
-    "Pain & Symptom Illustration",
-    "Referral Questions",
-    "Conclusions",
-    "Functional Abilities Determination and Job Match Results",
-    "Test Data (Activity Overview, Extremity Strength, Occupational Tasks, Range of Motion, Whole Body Strength)",
-    "Appendix One: Reference Charts",
-    "Appendix Two: Digital Library",
-  ].forEach((item) =>
-    children.push(
-      new Paragraph({
-        children: [new TextRun({ text: `• ${item}` })],
-        spacing: { after: 80 },
-      }),
-    ),
-  );
+
+
+// Alternate contents builder for second page usage
+function addContentsOfReport() {
+  const blue = BRAND_COLOR;
+
+  const makeP = (text, opts = {}) =>
+    new Paragraph({
+      alignment: AlignmentType.LEFT,
+      spacing: { before: opts.before || 0, after: opts.after || 80 },
+      indent: { left: opts.left || 0 },
+      children: [
+        new TextRun({ text, bold: !!opts.bold, color: opts.color || undefined }),
+      ],
+    });
+
+  // Right column content: heading and list
+  const content = [
+    makeP("Contents of Report:", { bold: true, color: blue, after: 200 }),
+    makeP("Client Information"),
+    makeP("Pain & Symptom Illustration"),
+    makeP("Referral Questions"),
+    makeP("Conclusions"),
+    makeP("Functional Abilities Determination and Job Match Results"),
+    makeP("Test Data:", { before: 80 }),
+    makeP("o  Activity Overview", { left: 720 }),
+    makeP("o  Extremity Strength", { left: 720 }),
+    makeP("o  Occupational Tasks", { left: 720 }),
+    makeP("o  Range of Motion (Spine)", { left: 720 }),
+    makeP("Appendix One: Reference Charts", { before: 120 }),
+    makeP("Appendix Two: Digital Library", { after: 120 }),
+  ];
+
+  // Table with a narrow left rule column and the content on the right
+  const leftRuleCell = new TableCell({
+    width: { size: 400, type: WidthType.DXA },
+    borders: {
+      top: { style: BorderStyle.NONE },
+      bottom: { style: BorderStyle.NONE },
+      left: { style: BorderStyle.NONE },
+      right: { style: BorderStyle.SINGLE, size: 6, color: "404040" },
+    },
+    children: [new Paragraph("")],
+  });
+
+  const contentCell = new TableCell({
+    width: { size: 9000, type: WidthType.DXA },
+    borders: {
+      top: { style: BorderStyle.NONE },
+      bottom: { style: BorderStyle.NONE },
+      left: { style: BorderStyle.NONE },
+      right: { style: BorderStyle.NONE },
+    },
+    children: content,
+  });
+
+  const table = new Table({
+    width: { size: 100, type: WidthType.PERCENTAGE },
+    rows: [new TableRow({ children: [leftRuleCell, contentCell] })],
+    borders: {
+      top: { style: BorderStyle.NONE },
+      bottom: { style: BorderStyle.NONE },
+      left: { style: BorderStyle.NONE },
+      right: { style: BorderStyle.NONE },
+      insideHorizontal: { style: BorderStyle.NONE },
+      insideVertical: { style: BorderStyle.NONE },
+    },
+  });
+
+  return [table];
 }
 
 async function addClientInformation(children, body) {
@@ -582,6 +650,149 @@ async function addReferralQuestions(children, body) {
   }
 }
 
+// Add Conclusions section aligned with PDF content
+async function addConclusions(children, body) {
+  const { referralQuestionsData = {} } = body || {};
+  const items = Array.isArray(referralQuestionsData?.questions)
+    ? referralQuestionsData.questions
+    : [];
+
+  // Find conclusions question
+  const conclusionQA = items.find(
+    (qa) => qa && qa.question && String(qa.question).toLowerCase().includes("conclusion"),
+  );
+
+  if (!conclusionQA || (!conclusionQA.answer && !Array.isArray(conclusionQA.savedImageData))) {
+    return;
+  }
+
+  children.push(new Paragraph({ pageBreakBefore: true }));
+  children.push(headerText("Conclusions"));
+
+  if (conclusionQA.answer) {
+    children.push(
+      new Paragraph({
+        children: [new TextRun({ text: String(conclusionQA.answer) })],
+        spacing: { after: 200 },
+      }),
+    );
+  }
+
+  // Images grid if present
+  const imgs = Array.isArray(conclusionQA.savedImageData)
+    ? conclusionQA.savedImageData
+    : [];
+  if (imgs.length) {
+    const imagesPerRow = 4;
+    for (let i = 0; i < imgs.length; i += imagesPerRow) {
+      const cells = [];
+      for (let j = 0; j < imagesPerRow; j++) {
+        const img = imgs[i + j];
+        if (img) {
+          const src = img.dataUrl || img.data || img.url;
+          const buf = await getImageBuffer(src);
+          cells.push(
+            new TableCell({
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: buf
+                    ? [
+                      new ImageRun({
+                        data: buf,
+                        transformation: { width: 140, height: 90 },
+                      }),
+                    ]
+                    : [new TextRun("")],
+                }),
+              ],
+              borders: {
+                top: { style: BorderStyle.NONE },
+                bottom: { style: BorderStyle.NONE },
+                left: { style: BorderStyle.NONE },
+                right: { style: BorderStyle.NONE },
+              },
+            }),
+          );
+        } else {
+          cells.push(
+            new TableCell({
+              children: [new Paragraph("")],
+              borders: {
+                top: { style: BorderStyle.NONE },
+                bottom: { style: BorderStyle.NONE },
+                left: { style: BorderStyle.NONE },
+                right: { style: BorderStyle.NONE },
+              },
+            }),
+          );
+        }
+      }
+      children.push(
+        new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          rows: [new TableRow({ children: cells })],
+          borders: {
+            top: { style: BorderStyle.NONE },
+            bottom: { style: BorderStyle.NONE },
+            left: { style: BorderStyle.NONE },
+            right: { style: BorderStyle.NONE },
+            insideHorizontal: { style: BorderStyle.NONE },
+            insideVertical: { style: BorderStyle.NONE },
+          },
+        }),
+      );
+    }
+  }
+}
+
+// Signature section similar to PDF flow
+function addEvaluatorSignature(children, body) {
+  const name = body?.evaluatorData?.name || body?.evaluatorName || "";
+  const license = body?.evaluatorData?.licenseNo || "";
+  const date = body?.evaluationDate || new Date().toISOString().split("T")[0];
+
+  children.push(new Paragraph({ pageBreakBefore: true }));
+  children.push(headerText("Signature of Evaluator"));
+
+  const rows = [
+    new TableRow({
+      children: [
+        borderlessCell("Evaluator Name:", true),
+        borderlessCell(name || ""),
+      ],
+    }),
+    new TableRow({
+      children: [
+        borderlessCell("License #:", true),
+        borderlessCell(license || ""),
+      ],
+    }),
+    new TableRow({
+      children: [
+        borderlessCell("Date:", true),
+        borderlessCell(date),
+      ],
+    }),
+  ];
+
+  children.push(
+    new Table({
+      width: { size: 60, type: WidthType.PERCENTAGE },
+      alignment: AlignmentType.LEFT,
+      rows,
+      borders: {
+        top: { style: BorderStyle.NONE },
+        bottom: { style: BorderStyle.NONE },
+        left: { style: BorderStyle.NONE },
+        right: { style: BorderStyle.NONE },
+        insideHorizontal: { style: BorderStyle.NONE },
+        insideVertical: { style: BorderStyle.NONE },
+      },
+    }),
+  );
+}
+
 function addProtocolAndSelectedTests(children, body) {
   const { protocolTestsData = {} } = body || {};
   children.push(headerText("Protocol & Selected Tests"));
@@ -673,22 +884,26 @@ async function addMTMSection(children, body) {
               new TableCell({
                 children: [
                   new Paragraph(
-                    String(
-                      (t.testTime || 0).toFixed
-                        ? t.testTime.toFixed(1)
-                        : t.testTime || 0,
-                    ),
+                    (() => {
+                      const timeNum = Number(t.testTime);
+                      return String(
+                        Number.isFinite(timeNum) ? timeNum.toFixed(1) : "0",
+                      );
+                    })(),
                   ),
                 ],
               }),
               new TableCell({
                 children: [
                   new Paragraph(
-                    String(
-                      (t.percentIS || 0).toFixed
-                        ? t.percentIS.toFixed(1)
-                        : t.percentIS || 0,
-                    ),
+                    (() => {
+                      const percentNum = Number(t.percentIS);
+                      return String(
+                        Number.isFinite(percentNum)
+                          ? percentNum.toFixed(1)
+                          : "0",
+                      );
+                    })(),
                   ),
                 ],
               }),
@@ -700,13 +915,21 @@ async function addMTMSection(children, body) {
 
       // compute total sum for Time Set Completed across trials
       const totalSum = trials.reduce((sum, tt) => {
-        const val =
+        const totalCompletedNum =
           tt.totalCompleted !== undefined && tt.totalCompleted !== null
             ? Number(tt.totalCompleted)
-            : tt.testTime && tt.percentIS
-              ? Number(tt.testTime) * (Number(tt.percentIS) / 100)
-              : Number(tt.testTime || 0);
-        return sum + (isNaN(val) ? 0 : val);
+            : undefined;
+        const testTimeNum = Number(tt.testTime);
+        const percentNum = Number(tt.percentIS);
+        let val = 0;
+        if (Number.isFinite(totalCompletedNum)) {
+          val = totalCompletedNum;
+        } else if (Number.isFinite(testTimeNum) && Number.isFinite(percentNum)) {
+          val = testTimeNum * (percentNum / 100);
+        } else if (Number.isFinite(testTimeNum)) {
+          val = testTimeNum;
+        }
+        return sum + val;
       }, 0);
 
       // append totals row (last row showing total time)
@@ -722,7 +945,9 @@ async function addMTMSection(children, body) {
             new TableCell({ children: [new Paragraph("")] }),
             new TableCell({
               children: [
-                new Paragraph(String(totalSum.toFixed(1)), { bold: true }),
+                new Paragraph(String(Number(totalSum || 0).toFixed(1)), {
+                  bold: true,
+                }),
               ],
             }),
           ],
@@ -966,19 +1191,28 @@ router.post("/", async (req, res) => {
       `${body?.claimantData?.lastName || ""}, ${body?.claimantData?.firstName || ""}`.trim() ||
       "Unknown";
 
-    const children = [];
+    // Build cover content separately so its footer applies ONLY to page 1
+    const coverChildren = [];
+    await addCoverPage(coverChildren, body);
+    const coverFooter = coverChildren.__coverFooter || undefined;
+    if (coverChildren.__coverFooter) delete coverChildren.__coverFooter;
 
-    await addCoverPage(children, body);
-    addTableOfContents(children);
-    await addClientInformation(children, body);
-    await addPainSymptomIllustration(children, body);
-    addActivityOverview(children, body);
-    await addReferralQuestions(children, body);
-    addProtocolAndSelectedTests(children, body);
-    await addMTMSection(children, body);
-    addFunctionalTests(children, body);
-    addAppendixOne(children);
-    addDigitalLibrary(children, body);
+    // Build remaining pages in a separate children array (no footer)
+    const restChildren = [];
+    // Dedicated second page with Contents of Report
+    restChildren.push(new Paragraph({ pageBreakBefore: true }));
+    addContentsOfReport().forEach((n) => restChildren.push(n));
+    await addClientInformation(restChildren, body);
+    await addPainSymptomIllustration(restChildren, body);
+    addActivityOverview(restChildren, body);
+    await addReferralQuestions(restChildren, body);
+    await addConclusions(restChildren, body);
+    addEvaluatorSignature(restChildren, body);
+    addProtocolAndSelectedTests(restChildren, body);
+    await addMTMSection(restChildren, body);
+    addFunctionalTests(restChildren, body);
+    addAppendixOne(restChildren);
+    addDigitalLibrary(restChildren, body);
 
     const doc = new Document({
       styles: {
@@ -1030,7 +1264,18 @@ router.post("/", async (req, res) => {
               margin: { top: 1480, right: 720, bottom: 720, left: 720 },
             },
           },
-          children,
+          footers: coverFooter ? { default: coverFooter } : undefined,
+          children: coverChildren,
+        },
+        {
+          properties: {
+            page: {
+              margin: { top: 1480, right: 720, bottom: 720, left: 720 },
+            },
+          },
+          // Explicitly clear footer so it doesn't inherit from section 1
+          footers: { default: new (require("docx").Footer)({ children: [] }) },
+          children: restChildren,
         },
       ],
     });
@@ -1045,8 +1290,7 @@ router.post("/", async (req, res) => {
       )
       .set(
         "Content-Disposition",
-        `attachment; filename=FCE_Report_${claimantName.replace(/[^a-zA-Z0-9]/g, "_")}_${
-          new Date().toISOString().split("T")[0]
+        `attachment; filename=FCE_Report_${claimantName.replace(/[^a-zA-Z0-9]/g, "_")}_${new Date().toISOString().split("T")[0]
         }.docx`,
       )
       .send(buffer);
