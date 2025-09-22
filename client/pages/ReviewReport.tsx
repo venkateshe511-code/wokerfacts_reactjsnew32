@@ -3650,7 +3650,7 @@ export default function ReviewReport() {
                                       </table>
 ) : isLiftTest ? (
                                       // Lift Results - Six Trials (single table)
-                                      <table className="w-full border border-gray-400 text-xs mb-4">
+                                      <div><table className="w-full border border-gray-400 text-xs mb-4">
                                         <thead>
                                           <tr className="bg-yellow-300">
                                             <th className="border border-gray-400 border-r-gray-400 p-2">Trial</th>
@@ -3670,6 +3670,21 @@ export default function ReviewReport() {
                                           })}
                                         </tbody>
                                       </table>
+                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                                        <div className="text-xs"><strong>CV%:</strong> {leftCV}%</div>
+                                        {(() => {
+                                          const raw = parseFloat((test.valueToBeTestedNumber as any) || "");
+                                          const unit = ((test.unitMeasure as any) || "").toLowerCase();
+                                          let lbs = 0;
+                                          if (!Number.isNaN(raw) && raw > 0) {
+                                            lbs = unit === "kg" ? Math.round(raw * 2.20462 * 10) / 10 : unit === "lbs" ? Math.round(raw * 10) / 10 : 0;
+                                          }
+                                          return lbs > 0 ? (
+                                            <div className="text-xs"><strong>Norm Weight:</strong> {lbs} lbs</div>
+                                          ) : null;
+                                        })()}
+                                      </div>
+                                      </div>
                                     ) : isCardioTest ? (
                                       // Cardio Test Results
                                       <div className="space-y-4">
