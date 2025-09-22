@@ -1702,69 +1702,75 @@ export default function TestData() {
                   </div>
 
                   {/* Dynamic Lift Endpoint Selection */}
-                  {isLiftTest && currentTest.testName.toLowerCase().includes("dynamic") && (
-                    <div className="mb-6 p-6 bg-white border-2 border-blue-600 rounded-xl shadow-md">
-                      <h4 className="text-center font-bold text-blue-800 mb-4 text-base">
-                        Dynamic Lift Endpoint
-                      </h4>
-                      <p className="text-xs text-gray-600 text-center mb-4">
-                        Select the criterion used to stop this dynamic lift test.
-                      </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                        {[
-                          {
-                            key: "biomechanical",
-                            label: "Biomechanical",
-                            desc:
-                              "Follows the client's biomechanics during the task; encourage proper mechanics, assess capacity as they move in their usual way.",
-                          },
-                          {
-                            key: "physiological",
-                            label: "Physiological",
-                            desc:
-                              "Objective responses (HR, BP, RR, pallor). Keep HR < 85% APMHR during testing, recover to 70% APMHR before next test.",
-                          },
-                          {
-                            key: "psychophysical",
-                            label: "Psychophysical",
-                            desc:
-                              "Based on client's perceived rate of exertion; terminate when client feels they cannot continue (maximum performance).",
-                          },
-                          {
-                            key: "task-requirement",
-                            label: "Task Requirement",
-                            desc:
-                              "Stop when tested ability matches defined job requirement to avoid unnecessary risk.",
-                          },
-                        ].map((opt) => (
-                          <label
-                            key={opt.key}
-                            className={`flex items-start space-x-2 p-3 rounded border cursor-pointer hover:bg-blue-50 ${
-                              currentTest.dynamicEndpointType === opt.key
-                                ? "border-blue-600"
-                                : "border-gray-300"
-                            }`}
-                            title={opt.desc}
-                          >
-                            <input
-                              type="radio"
-                              name="dynamic-endpoint"
-                              value={opt.key}
-                              checked={currentTest.dynamicEndpointType === opt.key}
-                              onChange={(e) =>
-                                updateCurrentTest({ dynamicEndpointType: e.target.value })
-                              }
-                              className="mt-0.5 text-blue-600"
-                            />
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">{opt.label}</div>
-                              <div className="text-xs text-gray-600">{opt.desc}</div>
-                            </div>
-                          </label>
-                        ))}
+                  {isLiftTest &&
+                    currentTest.testName.toLowerCase().includes("dynamic") && (
+                      <div className="mb-6 p-6 bg-white border-2 border-blue-600 rounded-xl shadow-md">
+                        <h4 className="text-center font-bold text-blue-800 mb-4 text-base">
+                          Dynamic Lift Endpoint
+                        </h4>
+                        <p className="text-xs text-gray-600 text-center mb-4">
+                          Select the criterion used to stop this dynamic lift
+                          test.
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                          {[
+                            {
+                              key: "biomechanical",
+                              label: "Biomechanical",
+                              desc: "Follows the client's biomechanics during the task; encourage proper mechanics, assess capacity as they move in their usual way.",
+                            },
+                            {
+                              key: "physiological",
+                              label: "Physiological",
+                              desc: "Objective responses (HR, BP, RR, pallor). Keep HR < 85% APMHR during testing, recover to 70% APMHR before next test.",
+                            },
+                            {
+                              key: "psychophysical",
+                              label: "Psychophysical",
+                              desc: "Based on client's perceived rate of exertion; terminate when client feels they cannot continue (maximum performance).",
+                            },
+                            {
+                              key: "task-requirement",
+                              label: "Task Requirement",
+                              desc: "Stop when tested ability matches defined job requirement to avoid unnecessary risk.",
+                            },
+                          ].map((opt) => (
+                            <label
+                              key={opt.key}
+                              className={`flex items-start space-x-2 p-3 rounded border cursor-pointer hover:bg-blue-50 ${
+                                currentTest.dynamicEndpointType === opt.key
+                                  ? "border-blue-600"
+                                  : "border-gray-300"
+                              }`}
+                              title={opt.desc}
+                            >
+                              <input
+                                type="radio"
+                                name="dynamic-endpoint"
+                                value={opt.key}
+                                checked={
+                                  currentTest.dynamicEndpointType === opt.key
+                                }
+                                onChange={(e) =>
+                                  updateCurrentTest({
+                                    dynamicEndpointType: e.target.value,
+                                  })
+                                }
+                                className="mt-0.5 text-blue-600"
+                              />
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">
+                                  {opt.label}
+                                </div>
+                                <div className="text-xs text-gray-600">
+                                  {opt.desc}
+                                </div>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
                   {/* Main Measurements Grid */}
                   {isLiftTest ? (

@@ -3739,14 +3739,20 @@ export default function ReviewReport() {
                                             biomechanical: "Biomechanical",
                                             physiological: "Physiological",
                                             psychophysical: "Psychophysical",
-                                            "task-requirement": "Task Requirement",
+                                            "task-requirement":
+                                              "Task Requirement",
                                           };
                                           const key = String(
-                                            (test as any).dynamicEndpointType || "",
+                                            (test as any).dynamicEndpointType ||
+                                              "",
                                           ).toLowerCase();
-                                          return testName.includes("dynamic") && map[key] ? (
+                                          return testName.includes("dynamic") &&
+                                            map[key] ? (
                                             <div className="text-xs mb-2">
-                                              <span className="font-semibold">Endpoint:</span> {map[key]}
+                                              <span className="font-semibold">
+                                                Endpoint:
+                                              </span>{" "}
+                                              {map[key]}
                                             </div>
                                           ) : null;
                                         })()}
@@ -6733,7 +6739,11 @@ export default function ReviewReport() {
                             Biomechanical
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Follows the biomechanics of the person as they perform the activity. Encourage proper mechanics, but assess capacity as performed in their usual way; relies on clinical observation and knowledge of proper body mechanics.
+                            Follows the biomechanics of the person as they
+                            perform the activity. Encourage proper mechanics,
+                            but assess capacity as performed in their usual way;
+                            relies on clinical observation and knowledge of
+                            proper body mechanics.
                           </td>
                         </tr>
                         <tr>
@@ -6741,7 +6751,11 @@ export default function ReviewReport() {
                             Physiological
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Objective responses to testing (heart rate, blood pressure, respiration, pallor). Keep heart rate below 85% of age-predicted maximum during testing, with recovery to 70% before the next test (ACSM guidance).
+                            Objective responses to testing (heart rate, blood
+                            pressure, respiration, pallor). Keep heart rate
+                            below 85% of age-predicted maximum during testing,
+                            with recovery to 70% before the next test (ACSM
+                            guidance).
                           </td>
                         </tr>
                         <tr>
@@ -6749,7 +6763,11 @@ export default function ReviewReport() {
                             Psychophysical
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Based on the client’s perceived rate of exertion (e.g., Borg Scale) or comfort level with the activity. Terminate when the client feels they can no longer continue and has reached maximum performance level.
+                            Based on the client’s perceived rate of exertion
+                            (e.g., Borg Scale) or comfort level with the
+                            activity. Terminate when the client feels they can
+                            no longer continue and has reached maximum
+                            performance level.
                           </td>
                         </tr>
                         <tr>
@@ -6757,7 +6775,10 @@ export default function ReviewReport() {
                             Task Requirement
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            When the client’s tested ability matches the defined job requirement (e.g., RTW testing), stop the test to avoid unnecessary risk from testing beyond the task requirement.
+                            When the client’s tested ability matches the defined
+                            job requirement (e.g., RTW testing), stop the test
+                            to avoid unnecessary risk from testing beyond the
+                            task requirement.
                           </td>
                         </tr>
                       </tbody>

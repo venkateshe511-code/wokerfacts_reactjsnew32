@@ -3942,21 +3942,42 @@ export default function DownloadReport() {
                                         <tbody>
                                             <tr>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.testName}</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${(() => { const unit = String((test.unitMeasure || (test as any).unit || "")).toLowerCase(); const avg = unit === "kg" ? Math.round(leftAvg * 2.20462 * 10) / 10 : Math.round(leftAvg * 10) / 10; return avg.toFixed(1); })()}</td>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${(() => {
+                                                  const unit = String(
+                                                    test.unitMeasure ||
+                                                      (test as any).unit ||
+                                                      "",
+                                                  ).toLowerCase();
+                                                  const avg =
+                                                    unit === "kg"
+                                                      ? Math.round(
+                                                          leftAvg *
+                                                            2.20462 *
+                                                            10,
+                                                        ) / 10
+                                                      : Math.round(
+                                                          leftAvg * 10,
+                                                        ) / 10;
+                                                  return avg.toFixed(1);
+                                                })()}</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${leftCV}%</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${currentDate}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     ${(() => {
-                                      const key = String((test as any).dynamicEndpointType || "").toLowerCase();
+                                      const key = String(
+                                        (test as any).dynamicEndpointType || "",
+                                      ).toLowerCase();
                                       const map: any = {
                                         biomechanical: "Biomechanical",
                                         physiological: "Physiological",
                                         psychophysical: "Psychophysical",
                                         "task-requirement": "Task Requirement",
                                       };
-                                      return (test.testName || "").toLowerCase().includes("dynamic") && map[key]
+                                      return (test.testName || "")
+                                        .toLowerCase()
+                                        .includes("dynamic") && map[key]
                                         ? `<p style="font-size: 11px; margin: 6px 0 8px 0;"><strong>Endpoint:</strong> ${map[key]}</p>`
                                         : "";
                                     })()}
@@ -4041,9 +4062,9 @@ export default function DownloadReport() {
                                     <!-- Trial-by-Trial Measurement Table (FOR NON-CARDIO TESTS) -->
                                     ${
                                       !isCardioTest
-                                        ? (isLiftTest
-                                            ? ""
-                                            : `
+                                        ? isLiftTest
+                                          ? ""
+                                          : `
                                     <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                         <thead>
                                             <tr style="background: #fef3c7;">
@@ -4120,7 +4141,7 @@ export default function DownloadReport() {
                                             </tr>
                                         </tbody>
                                     </table>
-                                            `)
+                                            `
                                         : ""
                                     }
 
@@ -4354,7 +4375,9 @@ export default function DownloadReport() {
                                         }>
                                     </div>
 
-                                    ${!isLiftTest ? `
+                                    ${
+                                      !isLiftTest
+                                        ? `
                                     <!-- Comparison Summary -->
                                     <div style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 8px; margin: 8px 0; text-align: center;">
                                         <div style="font-size: 11px; color: #666;">
@@ -4363,7 +4386,9 @@ export default function DownloadReport() {
                                             <strong>Bilateral Deficiency:</strong> ${bilateralDef.toFixed(1)}%
                                         </div>
                                     </div>
-                                    ` : ""}
+                                    `
+                                        : ""
+                                    }
                                     `
                                         : ""
                                     }
