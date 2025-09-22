@@ -3929,26 +3929,23 @@ export default function DownloadReport() {
                                 ${
                                   isLiftTest
                                     ? `
-                                    <!-- Lift Results - Six Trials (single table) -->
+                                    <!-- Lift Results - Demonstrated Activity (single row, like ReviewReport) -->
                                     <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                         <thead>
                                             <tr style="background: #fef3c7;">
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Value</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Demonstrated Activity</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Avg. Weight (lb)</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">CV%</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Test Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            ${[1, 2, 3, 4, 5, 6]
-                                              .map((n) => {
-                                                const v =
-                                                  (test.leftMeasurements &&
-                                                    test.leftMeasurements[
-                                                      `trial${n}`
-                                                    ]) ||
-                                                  0;
-                                                return `<tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${n}</td><td style=\"border: 1px solid #333; border-right: 1px solid #333; padding: 6px;\">${v}</td></tr>`;
-                                              })
-                                              .join("")}
+                                            <tr>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.testName}</td>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${(() => { const unit = String((test.unitMeasure || (test as any).unit || "")).toLowerCase(); const avg = unit === "kg" ? Math.round(leftAvg * 2.20462 * 10) / 10 : Math.round(leftAvg * 10) / 10; return avg.toFixed(1); })()}</td>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${leftCV}%</td>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${currentDate}</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 `
