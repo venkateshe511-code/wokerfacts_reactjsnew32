@@ -1598,6 +1598,31 @@ export default function TestData() {
                       <BarChart measurements={currentTest.leftMeasurements} side="left" />
                     </div>
                   )}
+                  {isLiftTest && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                      <div className="bg-blue-400 text-white p-3 rounded text-center">
+                        <div className="text-sm">Coefficient Of Variation</div>
+                        <div className="text-xl font-bold">
+                          {calculateCoefficientOfVariation(currentTest.leftMeasurements)}%
+                        </div>
+                      </div>
+                      {(() => {
+                        const rawStr = currentTest?.valueToBeTestedNumber || "";
+                        const raw = parseFloat(rawStr);
+                        const unit = (currentTest?.unitMeasure || "").toLowerCase();
+                        let lbs = 0;
+                        if (!Number.isNaN(raw) && raw > 0) {
+                          lbs = unit === "kg" ? Math.round(raw * 2.20462 * 10) / 10 : unit === "lbs" ? Math.round(raw * 10) / 10 : 0;
+                        }
+                        return lbs > 0 ? (
+                          <div className="bg-blue-400 text-white p-3 rounded text-center">
+                            <div className="text-sm">Norm Weight</div>
+                            <div className="text-xl font-bold">{lbs} lbs</div>
+                          </div>
+                        ) : null;
+                      })()}
+                    </div>
+                  )}
                   {/* Heart Rate Fields - Separated Section */}
                   <div className="mb-6 p-6 bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-800 rounded-xl shadow-lg">
                     <h4 className="text-center font-bold text-gray-800 mb-4 text-base">
