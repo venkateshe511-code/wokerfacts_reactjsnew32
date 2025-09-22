@@ -1585,7 +1585,7 @@ export default function TestData() {
             )}
 
             {/* Center Measurements Input */}
-            <div className="lg:col-span-2">
+            <div className={isLiftTest ? "lg:col-span-2 lg:col-start-2" : "lg:col-span-2"}>
               <Card className="shadow-lg">
                 <CardHeader className="bg-blue-600 text-white">
                   <CardTitle className="text-center">
@@ -1660,7 +1660,6 @@ export default function TestData() {
                                 )
                               }
                               className={`text-center border-2 ${val > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
-                              placeholder={`Trial ${trialNum}`}
                             />
                             {val > 250 && (
                               <div className="text-red-700 text-xs mt-1">
