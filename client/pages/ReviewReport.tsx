@@ -2501,13 +2501,22 @@ export default function ReviewReport() {
                                           } else {
                                             return `F=${leftAvg.toFixed(2)} E=${rightAvg.toFixed(2)}`;
                                           }
-                                        } else if (test.testName?.toLowerCase().includes("lift")) {
+                                        } else if (
+                                          test.testName
+                                            ?.toLowerCase()
+                                            .includes("lift")
+                                        ) {
                                           // Lift tests: show average weight in lbs
-                                          const unit = ((test.unitMeasure as any) || "").toLowerCase();
-                                          const baseAvg = leftAvg > 0 ? leftAvg : rightAvg;
+                                          const unit = (
+                                            (test.unitMeasure as any) || ""
+                                          ).toLowerCase();
+                                          const baseAvg =
+                                            leftAvg > 0 ? leftAvg : rightAvg;
                                           const avgLbs =
                                             unit === "kg"
-                                              ? Math.round(baseAvg * 2.20462 * 10) / 10
+                                              ? Math.round(
+                                                  baseAvg * 2.20462 * 10,
+                                                ) / 10
                                               : Math.round(baseAvg * 10) / 10;
                                           return `${avgLbs.toFixed(1)} lbs`;
                                         } else {
@@ -3660,7 +3669,6 @@ export default function ReviewReport() {
                                     ) : isLiftTest ? (
                                       // Lift Results - Six Trials (single table)
                                       <div>
-
                                         {(() => {
                                           const unit = (
                                             (test.unitMeasure as any) || ""
@@ -5427,7 +5435,9 @@ export default function ReviewReport() {
 
                                   {isLiftTest && (
                                     <div>
-                                      <h4 className="font-semibold mb-3">Graph:</h4>
+                                      <h4 className="font-semibold mb-3">
+                                        Graph:
+                                      </h4>
                                       <div className="border border-gray-300 p-2">
                                         <div className="h-40 bg-white border relative overflow-hidden">
                                           <div className="flex items-end justify-center h-full p-2 space-x-1">
@@ -5448,24 +5458,36 @@ export default function ReviewReport() {
                                                 "#06B6D4",
                                               ];
                                               const maxVal = Math.max(
-                                                test.leftMeasurements?.trial1 || 0,
-                                                test.leftMeasurements?.trial2 || 0,
-                                                test.leftMeasurements?.trial3 || 0,
-                                                test.leftMeasurements?.trial4 || 0,
-                                                test.leftMeasurements?.trial5 || 0,
-                                                test.leftMeasurements?.trial6 || 0,
+                                                test.leftMeasurements?.trial1 ||
+                                                  0,
+                                                test.leftMeasurements?.trial2 ||
+                                                  0,
+                                                test.leftMeasurements?.trial3 ||
+                                                  0,
+                                                test.leftMeasurements?.trial4 ||
+                                                  0,
+                                                test.leftMeasurements?.trial5 ||
+                                                  0,
+                                                test.leftMeasurements?.trial6 ||
+                                                  0,
                                                 1,
                                               );
                                               return (
-                                                <div key={i} className="flex flex-col items-center">
+                                                <div
+                                                  key={i}
+                                                  className="flex flex-col items-center"
+                                                >
                                                   <div
                                                     className="w-4 rounded-t"
                                                     style={{
                                                       height: `${Math.max(((value || 0) / maxVal) * 120, 8)}px`,
-                                                      backgroundColor: trialColors[i],
+                                                      backgroundColor:
+                                                        trialColors[i],
                                                     }}
                                                   ></div>
-                                                  <span className="text-xs mt-1">{i + 1}</span>
+                                                  <span className="text-xs mt-1">
+                                                    {i + 1}
+                                                  </span>
                                                 </div>
                                               );
                                             })}
@@ -5474,9 +5496,15 @@ export default function ReviewReport() {
                                           {/* Y-axis labels */}
                                           <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs py-2">
                                             <span>{leftAvg.toFixed(0)}</span>
-                                            <span>{(leftAvg * 0.75).toFixed(0)}</span>
-                                            <span>{(leftAvg * 0.5).toFixed(0)}</span>
-                                            <span>{(leftAvg * 0.25).toFixed(0)}</span>
+                                            <span>
+                                              {(leftAvg * 0.75).toFixed(0)}
+                                            </span>
+                                            <span>
+                                              {(leftAvg * 0.5).toFixed(0)}
+                                            </span>
+                                            <span>
+                                              {(leftAvg * 0.25).toFixed(0)}
+                                            </span>
                                             <span>0</span>
                                           </div>
                                         </div>
