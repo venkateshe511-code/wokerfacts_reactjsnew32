@@ -4357,6 +4357,29 @@ export default function DownloadReport() {
                                 }
                             </div>
 
+                            <!-- Heart Rate Data if available (general tests) -->
+                            ${(() => {
+                              const pre = Number(
+                                (test.leftMeasurements && test.leftMeasurements.preHeartRate) ||
+                                  (test.rightMeasurements && test.rightMeasurements.preHeartRate) ||
+                                  0,
+                              );
+                              const post = Number(
+                                (test.leftMeasurements && test.leftMeasurements.postHeartRate) ||
+                                  (test.rightMeasurements && test.rightMeasurements.postHeartRate) ||
+                                  0,
+                              );
+                              return pre || post
+                                ? `
+                                  <div style="font-size: 11px; color: #374151; margin: 6px 0;">
+                                    <strong>Heart Rate:</strong>
+                                    ${pre ? ` Pre: ${pre} bpm` : ""}
+                                    ${post ? ` Post: ${post} bpm` : ""}
+                                  </div>
+                                `
+                                : "";
+                            })()}
+
                             <!-- Cardio Test Images -->
                             ${
                               isCardioTest &&
