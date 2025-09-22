@@ -4679,16 +4679,20 @@ export default function DownloadReport() {
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Psychophysical</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Voluntary test termination by the claimant based on complaints of fatigue, excessive discomfort, or inability to complete the required number of movements during the testing interval (cycle).</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Biomechanical</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Follows the biomechanics of the person as they perform the activity. Encourage proper mechanics, but assess capacity as performed in their usual way; relies on clinical observation and knowledge of proper body mechanics.</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Physiological</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Achievement of an age-determined target heart rate (based on a percent of claimant's maximal heart rate - normally 85%, or in excess of 75% continuously for one minute).</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Objective responses to testing (heart rate, blood pressure, respiration, pallor). Keep heart rate below 85% of age-predicted maximum during testing, with recovery to 70% before the next test (ACSM guidance).</td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Safety</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Achievement of a predetermined anthropometric safe lifting limit based on the claimant's adjusted body weight; or intervention by the FACTS evaluator based upon an evaluation of the claimant's signs & symptoms.</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Psychophysical</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Based on the client’s perceived rate of exertion (e.g., Borg Scale) or comfort level with the activity. Terminate when the client feels they can no longer continue and has reached maximum performance level.</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Task Requirement</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">When the client’s tested ability matches the defined job requirement (e.g., RTW testing), stop the test to avoid unnecessary risk from testing beyond the task requirement.</td>
                     </tr>
                 </tbody>
             </table>
