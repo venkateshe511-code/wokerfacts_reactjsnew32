@@ -2030,7 +2030,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Cervical extension ≥45�� for functional neck movement",
+                                  "Cervical extension ��45�� for functional neck movement",
                                 norm: 45, // degrees
                                 functionalMin: 45,
                                 unit: "degrees",
@@ -3682,8 +3682,8 @@ export default function ReviewReport() {
                                             })}
                                           </tbody>
                                         </table>
-                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
-                                          <div className="text-xs">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
+                                          <div className="text-xs sm:col-span-2">
                                             <strong>CV%:</strong> {leftCV}%
                                           </div>
                                           {(() => {
@@ -3722,7 +3722,7 @@ export default function ReviewReport() {
                                                   10
                                                 : Math.round(leftAvg * 10) / 10;
                                             return (
-                                              <div className="text-xs">
+                                              <div className="text-xs sm:col-span-2">
                                                 <strong>Avg Weight:</strong> {avgLbs} lbs
                                               </div>
                                             );
