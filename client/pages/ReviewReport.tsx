@@ -3710,8 +3710,6 @@ export default function ReviewReport() {
                                                 <tr className="bg-yellow-300">
                                                   <th className="border border-gray-400 border-r-gray-400 p-2">Demonstrated Activity</th>
                                                   <th className="border border-gray-400 border-r-gray-400 p-2">Avg. Weight (lb)</th>
-                                                  <th className="border border-gray-400 border-r-gray-400 p-2">Norm (lb)</th>
-                                                  <th className="border border-gray-400 border-r-gray-400 p-2">% of Norm</th>
                                                   <th className="border border-gray-400 border-r-gray-400 p-2">CV%</th>
                                                   <th className="border border-gray-400 border-r-gray-400 p-2">Test Date</th>
                                                 </tr>
@@ -3720,8 +3718,6 @@ export default function ReviewReport() {
                                                 <tr>
                                                   <td className="border border-gray-400 border-r-gray-400 p-2">{test.testName}</td>
                                                   <td className="border border-gray-400 border-r-gray-400 p-2">{avgLbs.toFixed(1)}</td>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">{normLbs ? normLbs.toFixed(1) : ""}</td>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">{pctNorm}%</td>
                                                   <td className="border border-gray-400 border-r-gray-400 p-2">{leftCV}%</td>
                                                   <td className="border border-gray-400 border-r-gray-400 p-2">{currentDate}</td>
                                                 </tr>
