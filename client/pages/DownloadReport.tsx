@@ -4250,6 +4250,7 @@ export default function DownloadReport() {
                                             </div>
                                         </div>
 
+                                        ${!isLiftTest ? `
                                         <!-- Right Side Chart -->
                                         <div style="background: #ffffff; border: 2px solid #10b981; border-radius: 8px; padding: 12px; page-break-inside: avoid; flex: 1; min-width: 250px;">
                                             <div style="background: #10b981; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">Right Side</div>
@@ -4357,7 +4358,8 @@ export default function DownloadReport() {
                                             <div style="text-align: center; font-size: 10px; color: #10b981; margin-top: 8px; font-weight: bold; background: #d1fae5; padding: 4px; border-radius: 4px;">
                                                 Avg: ${rightAvg.toFixed(1)} lbs
                                             </div>
-                                        </div>
+                                        </div
+                                        ` : ""}>
                                     </div>
 
                                     <!-- Comparison Summary -->
