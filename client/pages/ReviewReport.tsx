@@ -2030,7 +2030,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Cervical extension ��45�� for functional neck movement",
+                                  "Cervical extension ≥45�� for functional neck movement",
                                 norm: 45, // degrees
                                 functionalMin: 45,
                                 unit: "degrees",
@@ -3651,37 +3651,6 @@ export default function ReviewReport() {
                                     ) : isLiftTest ? (
                                       // Lift Results - Six Trials (single table)
                                       <div>
-                                        <table className="w-full border border-gray-400 text-xs mb-4">
-                                          <thead>
-                                            <tr className="bg-yellow-300">
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                Trial
-                                              </th>
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                Value
-                                              </th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            {[1, 2, 3, 4, 5, 6].map((n) => {
-                                              const key =
-                                                `trial${n}` as keyof typeof test.leftMeasurements;
-                                              const v =
-                                                test.leftMeasurements?.[key] ??
-                                                0;
-                                              return (
-                                                <tr key={n}>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                    {n}
-                                                  </td>
-                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                    {v}
-                                                  </td>
-                                                </tr>
-                                              );
-                                            })}
-                                          </tbody>
-                                        </table>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
                                           <div className="text-xs sm:col-span-2">
                                             <strong>CV%:</strong> {leftCV}%
