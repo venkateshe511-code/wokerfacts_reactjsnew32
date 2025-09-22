@@ -3648,92 +3648,26 @@ export default function ReviewReport() {
                                           </tr>
                                         </tbody>
                                       </table>
-                                    ) : isLiftTest ? (
-                                      // Lift Test Table
+) : isLiftTest ? (
+                                      // Lift Results - Six Trials (single table)
                                       <table className="w-full border border-gray-400 text-xs mb-4">
                                         <thead>
                                           <tr className="bg-yellow-300">
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Cycle:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Weight:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Reps:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Client Perceived:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              HR Pre/During/Post:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Total Work (METs):
-                                            </th>
+                                            <th className="border border-gray-400 border-r-gray-400 p-2">Trial</th>
+                                            <th className="border border-gray-400 border-r-gray-400 p-2">Value</th>
                                           </tr>
                                         </thead>
                                         <tbody>
-                                          <tr>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              1
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              15
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              4
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              13
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              Norm
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              255
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              2
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              25
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              4
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              15
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              Norm
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              510
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              3
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              35
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              4
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              15
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              Norm
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              1020
-                                            </td>
-                                          </tr>
+                                          {[1, 2, 3, 4, 5, 6].map((n) => {
+                                            const key = `trial${n}` as keyof typeof test.leftMeasurements;
+                                            const v = test.leftMeasurements?.[key] ?? 0;
+                                            return (
+                                              <tr key={n}>
+                                                <td className="border border-gray-400 border-r-gray-400 p-2">{n}</td>
+                                                <td className="border border-gray-400 border-r-gray-400 p-2">{v}</td>
+                                              </tr>
+                                            );
+                                          })}
                                         </tbody>
                                       </table>
                                     ) : isCardioTest ? (
