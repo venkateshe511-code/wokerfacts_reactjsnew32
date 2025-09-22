@@ -596,7 +596,7 @@ export default function ReviewReport() {
                   <div className="ml-2 space-y-1">
                     <p>• Activity Overview</p>
                     <p>• Extremity Strength</p>
-                    <p>• Occupational Tasks</p>
+                    <p>�� Occupational Tasks</p>
                     <p>• Range of Motion (Spine)</p>
                   </div>
                   <p className="mt-4">Appendix One: Reference Charts</p>
@@ -2574,7 +2574,7 @@ export default function ReviewReport() {
                                             jobReq.functionalMin &&
                                             jobReq.norm
                                           ) {
-                                            return `≥${jobReq.functionalMin}° (Min) / ≥${jobReq.norm}° (Normal)`;
+                                            return `≥${jobReq.functionalMin}�� (Min) / ≥${jobReq.norm}° (Normal)`;
                                           } else if (jobReq.norm) {
                                             return `≥${jobReq.norm}°`;
                                           }
@@ -3451,6 +3451,11 @@ export default function ReviewReport() {
                         const isLiftTest =
                           testName.includes("lift") ||
                           testName.includes("carry");
+                        const isStaticLift =
+                          String(test.testId || testName)
+                            .toLowerCase()
+                            .includes("static-lift") ||
+                          testName.includes("static");
                         const isStrengthTest =
                           testName.includes("strength") ||
                           testName.includes("force") ||
@@ -5259,22 +5264,24 @@ export default function ReviewReport() {
                                       </p>
                                     )}
 
-                                    {!test.demonstrated && !isCardioTest && (
-                                      <div className="mb-4">
-                                        <p className="text-sm font-semibold">
-                                          Reason For Incomplete Test:
-                                        </p>
-                                        <p className="text-sm">
-                                          Limited by pain/discomfort
-                                        </p>
-                                        <p className="text-sm font-semibold mt-2">
-                                          Endpoint Condition:
-                                        </p>
-                                        <p className="text-sm">
-                                          Psychophysical
-                                        </p>
-                                      </div>
-                                    )}
+                                    {!test.demonstrated &&
+                                      !isCardioTest &&
+                                      !isStaticLift && (
+                                        <div className="mb-4">
+                                          <p className="text-sm font-semibold">
+                                            Reason For Incomplete Test:
+                                          </p>
+                                          <p className="text-sm">
+                                            Limited by pain/discomfort
+                                          </p>
+                                          <p className="text-sm font-semibold mt-2">
+                                            Endpoint Condition:
+                                          </p>
+                                          <p className="text-sm">
+                                            Psychophysical
+                                          </p>
+                                        </div>
+                                      )}
                                   </div>
 
                                   {/* Graphs Section */}
