@@ -5248,7 +5248,7 @@ export default function ReviewReport() {
                                   </div>
 
                                   {/* Graphs Section */}
-                                  {!isCardioTest && (
+                                  {!isCardioTest && !isLiftTest && (
                                     <div>
                                       <h4 className="font-semibold mb-3">
                                         Graph:
@@ -5421,6 +5421,70 @@ export default function ReviewReport() {
                                             {currentDate} 10:20:36 AM
                                           </p>
                                         </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {isLiftTest && (
+                                    <div>
+                                      <h4 className="font-semibold mb-3">Graph:</h4>
+                                      <div className="border border-gray-300 p-2">
+                                        <div className="h-40 bg-white border relative overflow-hidden">
+                                          <div className="flex items-end justify-center h-full p-2 space-x-1">
+                                            {[
+                                              test.leftMeasurements?.trial1,
+                                              test.leftMeasurements?.trial2,
+                                              test.leftMeasurements?.trial3,
+                                              test.leftMeasurements?.trial4,
+                                              test.leftMeasurements?.trial5,
+                                              test.leftMeasurements?.trial6,
+                                            ].map((value, i) => {
+                                              const trialColors = [
+                                                "#3B82F6",
+                                                "#10B981",
+                                                "#F59E0B",
+                                                "#EF4444",
+                                                "#8B5CF6",
+                                                "#06B6D4",
+                                              ];
+                                              const maxVal = Math.max(
+                                                test.leftMeasurements?.trial1 || 0,
+                                                test.leftMeasurements?.trial2 || 0,
+                                                test.leftMeasurements?.trial3 || 0,
+                                                test.leftMeasurements?.trial4 || 0,
+                                                test.leftMeasurements?.trial5 || 0,
+                                                test.leftMeasurements?.trial6 || 0,
+                                                1,
+                                              );
+                                              return (
+                                                <div key={i} className="flex flex-col items-center">
+                                                  <div
+                                                    className="w-4 rounded-t"
+                                                    style={{
+                                                      height: `${Math.max(((value || 0) / maxVal) * 120, 8)}px`,
+                                                      backgroundColor: trialColors[i],
+                                                    }}
+                                                  ></div>
+                                                  <span className="text-xs mt-1">{i + 1}</span>
+                                                </div>
+                                              );
+                                            })}
+                                          </div>
+
+                                          {/* Y-axis labels */}
+                                          <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs py-2">
+                                            <span>{leftAvg.toFixed(0)}</span>
+                                            <span>{(leftAvg * 0.75).toFixed(0)}</span>
+                                            <span>{(leftAvg * 0.5).toFixed(0)}</span>
+                                            <span>{(leftAvg * 0.25).toFixed(0)}</span>
+                                            <span>0</span>
+                                          </div>
+                                        </div>
+                                        <p className="text-center text-xs mt-2">
+                                          <strong>Trials</strong>
+                                          <br />
+                                          {currentDate} 10:20:36 AM
+                                        </p>
                                       </div>
                                     </div>
                                   )}
