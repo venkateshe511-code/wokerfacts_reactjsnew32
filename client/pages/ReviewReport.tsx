@@ -3651,54 +3651,6 @@ export default function ReviewReport() {
                                     ) : isLiftTest ? (
                                       // Lift Results - Six Trials (single table)
                                       <div>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
-                                          <div className="text-xs sm:col-span-2">
-                                            <strong>CV%:</strong> {leftCV}%
-                                          </div>
-                                          {(() => {
-                                            const raw = parseFloat(
-                                              (test.valueToBeTestedNumber as any) ||
-                                                "",
-                                            );
-                                            const unit = (
-                                              (test.unitMeasure as any) || ""
-                                            ).toLowerCase();
-                                            let normLbs = 0;
-                                            if (!Number.isNaN(raw) && raw > 0) {
-                                              normLbs =
-                                                unit === "kg"
-                                                  ? Math.round(
-                                                      raw * 2.20462 * 10,
-                                                    ) / 10
-                                                  : unit === "lbs"
-                                                    ? Math.round(raw * 10) / 10
-                                                    : 0;
-                                            }
-                                            return normLbs > 0 ? (
-                                              <div className="text-xs">
-                                                <strong>Norm Weight:</strong>{" "}
-                                                {normLbs} lbs
-                                              </div>
-                                            ) : null;
-                                          })()}
-                                          {(() => {
-                                            const unit = (
-                                              (test.unitMeasure as any) || ""
-                                            ).toLowerCase();
-                                            const avgLbs =
-                                              unit === "kg"
-                                                ? Math.round(
-                                                    leftAvg * 2.20462 * 10,
-                                                  ) / 10
-                                                : Math.round(leftAvg * 10) / 10;
-                                            return (
-                                              <div className="text-xs sm:col-span-2">
-                                                <strong>Avg Weight:</strong>{" "}
-                                                {avgLbs} lbs
-                                              </div>
-                                            );
-                                          })()}
-                                        </div>
 
                                         {(() => {
                                           const unit = (
