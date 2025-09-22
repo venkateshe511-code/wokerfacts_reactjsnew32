@@ -5436,19 +5436,25 @@ export default function ReviewReport() {
                                   {/* Heart Rate Data if available for this test */}
                                   {(() => {
                                     const pre = Number(
-                                      (test.leftMeasurements?.preHeartRate as any) ||
-                                        (test.rightMeasurements?.preHeartRate as any) ||
+                                      (test.leftMeasurements
+                                        ?.preHeartRate as any) ||
+                                        (test.rightMeasurements
+                                          ?.preHeartRate as any) ||
                                         0,
                                     );
                                     const post = Number(
-                                      (test.leftMeasurements?.postHeartRate as any) ||
-                                        (test.rightMeasurements?.postHeartRate as any) ||
+                                      (test.leftMeasurements
+                                        ?.postHeartRate as any) ||
+                                        (test.rightMeasurements
+                                          ?.postHeartRate as any) ||
                                         0,
                                     );
                                     if (!pre && !post) return null;
                                     return (
                                       <div className="text-xs text-gray-600 mb-2">
-                                        <span className="font-semibold">Heart Rate:</span>
+                                        <span className="font-semibold">
+                                          Heart Rate:
+                                        </span>
                                         {pre ? ` Pre: ${pre} bpm` : ""}
                                         {post ? ` Post: ${post} bpm` : ""}
                                       </div>

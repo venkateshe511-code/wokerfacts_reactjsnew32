@@ -4360,13 +4360,17 @@ export default function DownloadReport() {
                             <!-- Heart Rate Data if available (general tests) -->
                             ${(() => {
                               const pre = Number(
-                                (test.leftMeasurements && test.leftMeasurements.preHeartRate) ||
-                                  (test.rightMeasurements && test.rightMeasurements.preHeartRate) ||
+                                (test.leftMeasurements &&
+                                  test.leftMeasurements.preHeartRate) ||
+                                  (test.rightMeasurements &&
+                                    test.rightMeasurements.preHeartRate) ||
                                   0,
                               );
                               const post = Number(
-                                (test.leftMeasurements && test.leftMeasurements.postHeartRate) ||
-                                  (test.rightMeasurements && test.rightMeasurements.postHeartRate) ||
+                                (test.leftMeasurements &&
+                                  test.leftMeasurements.postHeartRate) ||
+                                  (test.rightMeasurements &&
+                                    test.rightMeasurements.postHeartRate) ||
                                   0,
                               );
                               return pre || post
