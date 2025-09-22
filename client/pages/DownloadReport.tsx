@@ -3929,28 +3929,58 @@ export default function DownloadReport() {
                                 ${
                                   isLiftTest
                                     ? `
-                                    <!-- Lift Results - Six Trials (single table) -->
+                                    <!-- Lift Results - Demonstrated Activity (single row, like ReviewReport) -->
                                     <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                         <thead>
                                             <tr style="background: #fef3c7;">
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Value</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Demonstrated Activity</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Avg. Weight (lb)</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">CV%</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Test Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            ${[1, 2, 3, 4, 5, 6]
-                                              .map((n) => {
-                                                const v =
-                                                  (test.leftMeasurements &&
-                                                    test.leftMeasurements[
-                                                      `trial${n}`
-                                                    ]) ||
-                                                  0;
-                                                return `<tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${n}</td><td style=\"border: 1px solid #333; border-right: 1px solid #333; padding: 6px;\">${v}</td></tr>`;
-                                              })
-                                              .join("")}
+                                            <tr>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.testName}</td>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${(() => {
+                                                  const unit = String(
+                                                    test.unitMeasure ||
+                                                      (test as any).unit ||
+                                                      "",
+                                                  ).toLowerCase();
+                                                  const avg =
+                                                    unit === "kg"
+                                                      ? Math.round(
+                                                          leftAvg *
+                                                            2.20462 *
+                                                            10,
+                                                        ) / 10
+                                                      : Math.round(
+                                                          leftAvg * 10,
+                                                        ) / 10;
+                                                  return avg.toFixed(1);
+                                                })()}</td>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${leftCV}%</td>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${currentDate}</td>
+                                            </tr>
                                         </tbody>
                                     </table>
+                                    ${(() => {
+                                      const key = String(
+                                        (test as any).dynamicEndpointType || "",
+                                      ).toLowerCase();
+                                      const map: any = {
+                                        biomechanical: "Biomechanical",
+                                        physiological: "Physiological",
+                                        psychophysical: "Psychophysical",
+                                        "task-requirement": "Task Requirement",
+                                      };
+                                      return (test.testName || "")
+                                        .toLowerCase()
+                                        .includes("dynamic") && map[key]
+                                        ? `<p style="font-size: 11px; margin: 6px 0 8px 0;"><strong>Endpoint:</strong> ${map[key]}</p>`
+                                        : "";
+                                    })()}
                                 `
                                     : ""
                                 }
@@ -4033,33 +4063,7 @@ export default function DownloadReport() {
                                     ${
                                       !isCardioTest
                                         ? isLiftTest
-                                          ? `
-                                    <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
-                                        <thead>
-                                            <tr style="background: #fef3c7;">
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Value</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${[1, 2, 3, 4, 5, 6]
-                                              .map((n) => {
-                                                const v =
-                                                  (test.leftMeasurements &&
-                                                    test.leftMeasurements[
-                                                      `trial${n}`
-                                                    ]) ||
-                                                  0;
-                                                return `<tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${n}</td><td style=\"border: 1px solid #333; border-right: 1px solid #333; padding: 6px;\">${v}</td></tr>`;
-                                              })
-                                              .join("")}
-                                            <tr>
-                                              <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; text-align:right;"><strong>Average</strong></td>
-                                              <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${leftAvg.toFixed(1)}</strong></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                            `
+                                          ? ""
                                           : `
                                     <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                         <thead>
@@ -4371,18 +4375,20 @@ export default function DownloadReport() {
                                         }>
                                     </div>
 
+                                    ${
+                                      !isLiftTest
+                                        ? `
                                     <!-- Comparison Summary -->
                                     <div style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 8px; margin: 8px 0; text-align: center;">
                                         <div style="font-size: 11px; color: #666;">
-                                            <strong>Bilateral Difference:</strong> ${Math.abs(
-                                              leftAvg - rightAvg,
-                                            ).toFixed(1)} lbs |
+                                            <strong>Bilateral Difference:</strong> ${Math.abs(leftAvg - rightAvg).toFixed(1)} lbs |
                                             <strong>CV:</strong> L=${leftCV}% R=${rightCV}% |
-                                            <strong>Bilateral Deficiency:</strong> ${bilateralDef.toFixed(
-                                              1,
-                                            )}%
+                                            <strong>Bilateral Deficiency:</strong> ${bilateralDef.toFixed(1)}%
                                         </div>
                                     </div>
+                                    `
+                                        : ""
+                                    }
                                     `
                                         : ""
                                     }
@@ -4698,16 +4704,20 @@ export default function DownloadReport() {
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Psychophysical</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Voluntary test termination by the claimant based on complaints of fatigue, excessive discomfort, or inability to complete the required number of movements during the testing interval (cycle).</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Biomechanical</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Follows the biomechanics of the person as they perform the activity. Encourage proper mechanics, but assess capacity as performed in their usual way; relies on clinical observation and knowledge of proper body mechanics.</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Physiological</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Achievement of an age-determined target heart rate (based on a percent of claimant's maximal heart rate - normally 85%, or in excess of 75% continuously for one minute).</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Objective responses to testing (heart rate, blood pressure, respiration, pallor). Keep heart rate below 85% of age-predicted maximum during testing, with recovery to 70% before the next test (ACSM guidance).</td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Safety</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Achievement of a predetermined anthropometric safe lifting limit based on the claimant's adjusted body weight; or intervention by the FACTS evaluator based upon an evaluation of the claimant's signs & symptoms.</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Psychophysical</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Based on the client’s perceived rate of exertion (e.g., Borg Scale) or comfort level with the activity. Terminate when the client feels they can no longer continue and has reached maximum performance level.</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Task Requirement</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">When the client’s tested ability matches the defined job requirement (e.g., RTW testing), stop the test to avoid unnecessary risk from testing beyond the task requirement.</td>
                     </tr>
                 </tbody>
             </table>

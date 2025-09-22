@@ -3734,6 +3734,28 @@ export default function ReviewReport() {
                                             </table>
                                           );
                                         })()}
+                                        {(() => {
+                                          const map: any = {
+                                            biomechanical: "Biomechanical",
+                                            physiological: "Physiological",
+                                            psychophysical: "Psychophysical",
+                                            "task-requirement":
+                                              "Task Requirement",
+                                          };
+                                          const key = String(
+                                            (test as any).dynamicEndpointType ||
+                                              "",
+                                          ).toLowerCase();
+                                          return testName.includes("dynamic") &&
+                                            map[key] ? (
+                                            <div className="text-xs mb-2">
+                                              <span className="font-semibold">
+                                                Endpoint:
+                                              </span>{" "}
+                                              {map[key]}
+                                            </div>
+                                          ) : null;
+                                        })()}
                                       </div>
                                     ) : isCardioTest ? (
                                       // Cardio Test Results
@@ -6714,13 +6736,14 @@ export default function ReviewReport() {
                       <tbody>
                         <tr>
                           <td className="border border-gray-400 p-2 font-semibold">
-                            Psychophysical
+                            Biomechanical
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Voluntary test termination by the claimant based on
-                            complaints of fatigue, excessive discomfort, or
-                            inability to complete the required number of
-                            movements during the testing interval (cycle).
+                            Follows the biomechanics of the person as they
+                            perform the activity. Encourage proper mechanics,
+                            but assess capacity as performed in their usual way;
+                            relies on clinical observation and knowledge of
+                            proper body mechanics.
                           </td>
                         </tr>
                         <tr>
@@ -6728,22 +6751,34 @@ export default function ReviewReport() {
                             Physiological
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Achievement of an age-determined target heart rate
-                            (based on a percent of claimant's maximal heart rate
-                            - normally 85%, or in excess of 75% continuously for
-                            one minute).
+                            Objective responses to testing (heart rate, blood
+                            pressure, respiration, pallor). Keep heart rate
+                            below 85% of age-predicted maximum during testing,
+                            with recovery to 70% before the next test (ACSM
+                            guidance).
                           </td>
                         </tr>
                         <tr>
                           <td className="border border-gray-400 p-2 font-semibold">
-                            Safety
+                            Psychophysical
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Achievement of a predetermined anthropometric safe
-                            lifting limit based on the claimant's adjusted body
-                            weight; or intervention by the FACTS evaluator based
-                            upon an evaluation of the claimant's signs &amp;
-                            symptoms.
+                            Based on the client’s perceived rate of exertion
+                            (e.g., Borg Scale) or comfort level with the
+                            activity. Terminate when the client feels they can
+                            no longer continue and has reached maximum
+                            performance level.
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-400 p-2 font-semibold">
+                            Task Requirement
+                          </td>
+                          <td className="border border-gray-400 border-r-gray-400 p-2">
+                            When the client’s tested ability matches the defined
+                            job requirement (e.g., RTW testing), stop the test
+                            to avoid unnecessary risk from testing beyond the
+                            task requirement.
                           </td>
                         </tr>
                       </tbody>
