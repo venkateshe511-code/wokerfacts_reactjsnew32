@@ -34,5 +34,10 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 // For Apple Sign-In via Firebase
 const appleProvider = new OAuthProvider("apple.com");
+// Request email and full name on the first sign-in (Apple only returns them once)
+appleProvider.addScope("email");
+appleProvider.addScope("name");
+// Optional: set locale for the Apple sign-in page
+appleProvider.setCustomParameters({ locale: "en" });
 
 export { app, db, auth, googleProvider, appleProvider };
