@@ -9,6 +9,7 @@ import { auth, googleProvider, appleProvider } from "../firebase";
 import {
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
   signOut as firebaseSignOut,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -53,11 +54,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const loginWithGoogle = async () => {
-    await signInWithPopup(auth, googleProvider);
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (e: any) {
+      const code = e?.code as string | undefined;
+      if (
+        code === "auth/popup-blocked" ||
+        code === "auth/cancelled-popup-request" ||
+        code === "auth/operation-not-supported-in-this-environment"
+      ) {
+        await signInWithRedirect(auth, googleProvider);
+      } else {
+        throw e;
+      }
+    }
   };
 
   const loginWithApple = async () => {
-    await signInWithPopup(auth, appleProvider);
+    try {
+      await signInWithPopup(auth, appleProvider);
+    } catch (e: any) {
+      const code = e?.code as string | undefined;
+      if (
+        code === "auth/popup-blocked" ||
+        code === "auth/cancelled-popup-request" ||
+        code === "auth/operation-not-supported-in-this-environment"
+      ) {
+        await signInWithRedirect(auth, appleProvider);
+      } else {
+        throw e;
+      }
+    }
   };
 
   const signInWithEmail = async (email: string, password: string) => {
