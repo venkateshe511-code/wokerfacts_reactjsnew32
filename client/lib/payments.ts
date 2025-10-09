@@ -92,10 +92,9 @@ export async function startCheckout(params: {
     );
   }
 
+  
   const data = (await res.json()) as { url?: string; id?: string };
-  const pk = (import.meta as any)?.env?.VITE_STRIPE_PUBLISHABLE_KEY as
-    | string
-    | undefined;
+  const pk = "pk_live_51S8p0mFL0RRXkupDkZL201I4NCneLLerALw8MdD5H4WtFhfWtpbpEcdsrGUseSETOgjirTq37VDIQoLlrSCJZKmD00K3r73Q4W";
 
   // Prefer Stripe.js redirect when pk and session id are available
   if (pk && data?.id) {

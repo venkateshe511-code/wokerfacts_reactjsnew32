@@ -596,7 +596,7 @@ export default function ReviewReport() {
                   <div className="ml-2 space-y-1">
                     <p>• Activity Overview</p>
                     <p>• Extremity Strength</p>
-                    <p>• Occupational Tasks</p>
+                    <p>�� Occupational Tasks</p>
                     <p>• Range of Motion (Spine)</p>
                   </div>
                   <p className="mt-4">Appendix One: Reference Charts</p>
@@ -2501,6 +2501,24 @@ export default function ReviewReport() {
                                           } else {
                                             return `F=${leftAvg.toFixed(2)} E=${rightAvg.toFixed(2)}`;
                                           }
+                                        } else if (
+                                          test.testName
+                                            ?.toLowerCase()
+                                            .includes("lift")
+                                        ) {
+                                          // Lift tests: show average weight in lbs
+                                          const unit = (
+                                            (test.unitMeasure as any) || ""
+                                          ).toLowerCase();
+                                          const baseAvg =
+                                            leftAvg > 0 ? leftAvg : rightAvg;
+                                          const avgLbs =
+                                            unit === "kg"
+                                              ? Math.round(
+                                                  baseAvg * 2.20462 * 10,
+                                                ) / 10
+                                              : Math.round(baseAvg * 10) / 10;
+                                          return `${avgLbs.toFixed(1)} lbs`;
                                         } else {
                                           // Default format for strength and cardio tests
                                           return `L=${leftAvg.toFixed(1)} R=${rightAvg.toFixed(1)}`;
@@ -2547,7 +2565,7 @@ export default function ReviewReport() {
                                           ) {
                                             return `≥${jobReq.lightWork} ${jobReq.unit} (Light) / ≥${jobReq.mediumWork} ${jobReq.unit} (Medium)`;
                                           } else if (jobReq.norm) {
-                                            return `≥${jobReq.norm} ${jobReq.unit}`;
+                                            return `��${jobReq.norm} ${jobReq.unit}`;
                                           }
                                         }
 
@@ -2556,7 +2574,7 @@ export default function ReviewReport() {
                                             jobReq.functionalMin &&
                                             jobReq.norm
                                           ) {
-                                            return `≥${jobReq.functionalMin}° (Min) / ≥${jobReq.norm}° (Normal)`;
+                                            return `≥${jobReq.functionalMin}�� (Min) / ≥${jobReq.norm}° (Normal)`;
                                           } else if (jobReq.norm) {
                                             return `≥${jobReq.norm}°`;
                                           }
@@ -2903,7 +2921,7 @@ export default function ReviewReport() {
                           applicable: pinchTests.length > 0,
                         });
 
-                        // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high/overhead) shows postHR > preHR
+                        // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high/overhead/frequent) shows postHR > preHR
                         const dynamicLifts = liftTests.filter((test: any) => {
                           const n = (test.testName || "").toLowerCase();
                           return (
@@ -2911,6 +2929,7 @@ export default function ReviewReport() {
                             n.includes("mid") ||
                             n.includes("high") ||
                             n.includes("overhead") ||
+                            n.includes("frequent") ||
                             n.includes("dynamic")
                           );
                         });
@@ -2933,7 +2952,7 @@ export default function ReviewReport() {
                         crosschecks.push({
                           name: "Dynamic lift HR fluctuation",
                           description:
-                            "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, or overhead).",
+                            "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, overhead, or frequent).",
                           pass: hrConsistent,
                           applicable: dynamicLifts.length > 0,
                         });
@@ -3432,6 +3451,11 @@ export default function ReviewReport() {
                         const isLiftTest =
                           testName.includes("lift") ||
                           testName.includes("carry");
+                        const isStaticLift =
+                          String(test.testId || testName)
+                            .toLowerCase()
+                            .includes("static-lift") ||
+                          testName.includes("static");
                         const isStrengthTest =
                           testName.includes("strength") ||
                           testName.includes("force") ||
@@ -3648,93 +3672,96 @@ export default function ReviewReport() {
                                         </tbody>
                                       </table>
                                     ) : isLiftTest ? (
-                                      // Lift Test Table
-                                      <table className="w-full border border-gray-400 text-xs mb-4">
-                                        <thead>
-                                          <tr className="bg-yellow-300">
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Cycle:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Weight:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Reps:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Client Perceived:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              HR Pre/During/Post:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Total Work (METs):
-                                            </th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              1
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              15
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              4
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              13
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              Norm
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              255
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              2
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              25
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              4
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              15
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              Norm
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              510
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              3
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              35
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              4
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              15
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              Norm
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              1020
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
+                                      // Lift Results - Six Trials (single table)
+                                      <div>
+                                        {(() => {
+                                          const unit = (
+                                            (test.unitMeasure as any) || ""
+                                          ).toLowerCase();
+                                          const avgLbs =
+                                            unit === "kg"
+                                              ? Math.round(
+                                                  leftAvg * 2.20462 * 10,
+                                                ) / 10
+                                              : Math.round(leftAvg * 10) / 10;
+                                          const raw = parseFloat(
+                                            (test.valueToBeTestedNumber as any) ||
+                                              "",
+                                          );
+                                          const normLbs =
+                                            !Number.isNaN(raw) && raw > 0
+                                              ? unit === "kg"
+                                                ? Math.round(
+                                                    raw * 2.20462 * 10,
+                                                  ) / 10
+                                                : Math.round(raw * 10) / 10
+                                              : 0;
+                                          const pctNorm =
+                                            normLbs > 0
+                                              ? Math.round(
+                                                  (avgLbs / normLbs) * 100,
+                                                )
+                                              : 0;
+                                          return (
+                                            <table className="w-full border border-gray-400 text-xs mb-4">
+                                              <thead>
+                                                <tr className="bg-yellow-300">
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Demonstrated Activity
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Avg. Weight (lb)
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    CV%
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Test Date
+                                                  </th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {test.testName}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {avgLbs.toFixed(1)}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {leftCV}%
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {currentDate}
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          );
+                                        })()}
+                                        {(() => {
+                                          const map: any = {
+                                            biomechanical: "Biomechanical",
+                                            physiological: "Physiological",
+                                            psychophysical: "Psychophysical",
+                                            "task-requirement":
+                                              "Task Requirement",
+                                          };
+                                          const key = String(
+                                            (test as any).dynamicEndpointType ||
+                                              "",
+                                          ).toLowerCase();
+                                          return testName.includes("dynamic") &&
+                                            map[key] ? (
+                                            <div className="text-xs mb-2">
+                                              <span className="font-semibold">
+                                                Endpoint:
+                                              </span>{" "}
+                                              {map[key]}
+                                            </div>
+                                          ) : null;
+                                        })()}
+                                      </div>
                                     ) : isCardioTest ? (
                                       // Cardio Test Results
                                       <div className="space-y-4">
@@ -5237,26 +5264,28 @@ export default function ReviewReport() {
                                       </p>
                                     )}
 
-                                    {!test.demonstrated && !isCardioTest && (
-                                      <div className="mb-4">
-                                        <p className="text-sm font-semibold">
-                                          Reason For Incomplete Test:
-                                        </p>
-                                        <p className="text-sm">
-                                          Limited by pain/discomfort
-                                        </p>
-                                        <p className="text-sm font-semibold mt-2">
-                                          Endpoint Condition:
-                                        </p>
-                                        <p className="text-sm">
-                                          Psychophysical
-                                        </p>
-                                      </div>
-                                    )}
+                                    {!test.demonstrated &&
+                                      !isCardioTest &&
+                                      !isStaticLift && (
+                                        <div className="mb-4">
+                                          <p className="text-sm font-semibold">
+                                            Reason For Incomplete Test:
+                                          </p>
+                                          <p className="text-sm">
+                                            Limited by pain/discomfort
+                                          </p>
+                                          <p className="text-sm font-semibold mt-2">
+                                            Endpoint Condition:
+                                          </p>
+                                          <p className="text-sm">
+                                            Psychophysical
+                                          </p>
+                                        </div>
+                                      )}
                                   </div>
 
                                   {/* Graphs Section */}
-                                  {!isCardioTest && (
+                                  {!isCardioTest && !isLiftTest && (
                                     <div>
                                       <h4 className="font-semibold mb-3">
                                         Graph:
@@ -5432,6 +5461,118 @@ export default function ReviewReport() {
                                       </div>
                                     </div>
                                   )}
+
+                                  {isLiftTest && (
+                                    <div>
+                                      <h4 className="font-semibold mb-3">
+                                        Graph:
+                                      </h4>
+                                      <div className="border border-gray-300 p-2">
+                                        <div className="h-40 bg-white border relative overflow-hidden">
+                                          <div className="flex items-end justify-center h-full p-2 space-x-1">
+                                            {[
+                                              test.leftMeasurements?.trial1,
+                                              test.leftMeasurements?.trial2,
+                                              test.leftMeasurements?.trial3,
+                                              test.leftMeasurements?.trial4,
+                                              test.leftMeasurements?.trial5,
+                                              test.leftMeasurements?.trial6,
+                                            ].map((value, i) => {
+                                              const trialColors = [
+                                                "#3B82F6",
+                                                "#10B981",
+                                                "#F59E0B",
+                                                "#EF4444",
+                                                "#8B5CF6",
+                                                "#06B6D4",
+                                              ];
+                                              const maxVal = Math.max(
+                                                test.leftMeasurements?.trial1 ||
+                                                  0,
+                                                test.leftMeasurements?.trial2 ||
+                                                  0,
+                                                test.leftMeasurements?.trial3 ||
+                                                  0,
+                                                test.leftMeasurements?.trial4 ||
+                                                  0,
+                                                test.leftMeasurements?.trial5 ||
+                                                  0,
+                                                test.leftMeasurements?.trial6 ||
+                                                  0,
+                                                1,
+                                              );
+                                              return (
+                                                <div
+                                                  key={i}
+                                                  className="flex flex-col items-center"
+                                                >
+                                                  <div
+                                                    className="w-4 rounded-t"
+                                                    style={{
+                                                      height: `${Math.max(((value || 0) / maxVal) * 120, 8)}px`,
+                                                      backgroundColor:
+                                                        trialColors[i],
+                                                    }}
+                                                  ></div>
+                                                  <span className="text-xs mt-1">
+                                                    {i + 1}
+                                                  </span>
+                                                </div>
+                                              );
+                                            })}
+                                          </div>
+
+                                          {/* Y-axis labels */}
+                                          <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs py-2">
+                                            <span>{leftAvg.toFixed(0)}</span>
+                                            <span>
+                                              {(leftAvg * 0.75).toFixed(0)}
+                                            </span>
+                                            <span>
+                                              {(leftAvg * 0.5).toFixed(0)}
+                                            </span>
+                                            <span>
+                                              {(leftAvg * 0.25).toFixed(0)}
+                                            </span>
+                                            <span>0</span>
+                                          </div>
+                                        </div>
+                                        <p className="text-center text-xs mt-2">
+                                          <strong>Trials</strong>
+                                          <br />
+                                          {currentDate} 10:20:36 AM
+                                        </p>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Heart Rate Data if available for this test */}
+                                  {(() => {
+                                    const pre = Number(
+                                      (test.leftMeasurements
+                                        ?.preHeartRate as any) ||
+                                        (test.rightMeasurements
+                                          ?.preHeartRate as any) ||
+                                        0,
+                                    );
+                                    const post = Number(
+                                      (test.leftMeasurements
+                                        ?.postHeartRate as any) ||
+                                        (test.rightMeasurements
+                                          ?.postHeartRate as any) ||
+                                        0,
+                                    );
+                                    if (!pre && !post) return null;
+                                    return (
+                                      <div className="text-xs text-gray-600 mb-2">
+                                        <span className="font-semibold">
+                                          Heart Rate:
+                                        </span>
+                                        {pre ? ` Pre: ${pre} bpm` : ""}
+                                        {post ? ` Post: ${post} bpm` : ""}
+                                      </div>
+                                    );
+                                  })()}
 
                                   {/* Test Comments */}
                                   {test.comments && (
@@ -6602,13 +6743,14 @@ export default function ReviewReport() {
                       <tbody>
                         <tr>
                           <td className="border border-gray-400 p-2 font-semibold">
-                            Psychophysical
+                            Biomechanical
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Voluntary test termination by the claimant based on
-                            complaints of fatigue, excessive discomfort, or
-                            inability to complete the required number of
-                            movements during the testing interval (cycle).
+                            Follows the biomechanics of the person as they
+                            perform the activity. Encourage proper mechanics,
+                            but assess capacity as performed in their usual way;
+                            relies on clinical observation and knowledge of
+                            proper body mechanics.
                           </td>
                         </tr>
                         <tr>
@@ -6616,22 +6758,34 @@ export default function ReviewReport() {
                             Physiological
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Achievement of an age-determined target heart rate
-                            (based on a percent of claimant's maximal heart rate
-                            - normally 85%, or in excess of 75% continuously for
-                            one minute).
+                            Objective responses to testing (heart rate, blood
+                            pressure, respiration, pallor). Keep heart rate
+                            below 85% of age-predicted maximum during testing,
+                            with recovery to 70% before the next test (ACSM
+                            guidance).
                           </td>
                         </tr>
                         <tr>
                           <td className="border border-gray-400 p-2 font-semibold">
-                            Safety
+                            Psychophysical
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Achievement of a predetermined anthropometric safe
-                            lifting limit based on the claimant's adjusted body
-                            weight; or intervention by the FACTS evaluator based
-                            upon an evaluation of the claimant's signs &amp;
-                            symptoms.
+                            Based on the client’s perceived rate of exertion
+                            (e.g., Borg Scale) or comfort level with the
+                            activity. Terminate when the client feels they can
+                            no longer continue and has reached maximum
+                            performance level.
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="border border-gray-400 p-2 font-semibold">
+                            Task Requirement
+                          </td>
+                          <td className="border border-gray-400 border-r-gray-400 p-2">
+                            When the client’s tested ability matches the defined
+                            job requirement (e.g., RTW testing), stop the test
+                            to avoid unnecessary risk from testing beyond the
+                            task requirement.
                           </td>
                         </tr>
                       </tbody>
