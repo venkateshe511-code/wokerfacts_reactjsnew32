@@ -351,6 +351,115 @@ export default function DownloadReport() {
       });
     }
 
+    const normalizedTestArray = Array.isArray(testData?.tests)
+      ? testData.tests
+          .filter((entry: any) => entry && typeof entry === "object")
+          .map((entry: any) => {
+            const leftMeasurements = normalizeMeasurements(
+              entry.leftMeasurements,
+            );
+            const rightMeasurements = normalizeMeasurements(
+              entry.rightMeasurements,
+            );
+            const derivedCategory = inferTestCategory(entry);
+            const unit =
+              entry.unitMeasure ||
+              entry.valueToBeTestedUnit ||
+              "";
+
+            const leftAvg = calculateAverage(leftMeasurements);
+            const rightAvg = calculateAverage(rightMeasurements);
+            const leftCv = calculateCV(leftMeasurements);
+            const rightCv = calculateCV(rightMeasurements);
+            const bilateralDef = calculateBilateralDeficiency(leftAvg, rightAvg);
+
+            const existingResult =
+              typeof entry.result === "string" ? entry.result.trim() : "";
+            const derivedResult = (() => {
+              const segments: string[] = [];
+              if (leftAvg > 0) {
+                segments.push(
+                  `Left Avg: ${leftAvg.toFixed(1)}${unit ? ` ${unit}` : ""}`,
+                );
+              }
+              if (rightAvg > 0) {
+                segments.push(
+                  `Right Avg: ${rightAvg.toFixed(1)}${unit ? ` ${unit}` : ""}`,
+                );
+              }
+              return segments.join(" | ");
+            })();
+
+            const normalizedObservations = Array.isArray(entry.observations)
+              ? entry.observations
+              : typeof entry.observations === "string" &&
+                  entry.observations.trim() !== ""
+                ? [entry.observations.trim()]
+                : [];
+
+            const normalizedDemonstrated = coerceBoolean(entry.demonstrated);
+
+            return {
+              testId: entry.testId,
+              testName: entry.testName,
+              category: entry.category || derivedCategory,
+              testType: entry.testType || derivedCategory,
+              leftMeasurements,
+              rightMeasurements,
+              result: existingResult || derivedResult || "",
+              comments: entry.comments || "",
+              effort: entry.effort || "",
+              observations: normalizedObservations,
+              demonstrated:
+                normalizedDemonstrated !== undefined
+                  ? normalizedDemonstrated
+                  : typeof entry.demonstrated === "boolean"
+                    ? entry.demonstrated
+                    : undefined,
+              perceived: entry.perceived ?? "",
+              jobRequirements: entry.jobRequirements || "",
+              jobMatch: entry.jobMatch || "",
+              jobDemands: entry.jobDemands || "",
+              jobDescription: entry.jobDescription || "",
+              normLevel: entry.normLevel || "",
+              valueToBeTestedNumber: entry.valueToBeTestedNumber || "",
+              valueToBeTestedUnit: entry.valueToBeTestedUnit || unit,
+              unitMeasure: unit,
+              measurements: entry.measurements || undefined,
+              trials: Array.isArray(entry.trials) ? entry.trials : [],
+              clientImages: Array.isArray(entry.clientImages)
+                ? entry.clientImages
+                : [],
+              serializedImages: Array.isArray(entry.serializedImages)
+                ? entry.serializedImages
+                : [],
+              cardioSummary: entry.cardioSummary || undefined,
+              vo2Max: entry.vo2Max || undefined,
+              predictedVo2Max: entry.predictedVo2Max || undefined,
+              classification: entry.classification || undefined,
+              hbr: entry.hbr || undefined,
+              aerobicFitnessScore: entry.aerobicFitnessScore || undefined,
+              leftAverage: leftAvg,
+              rightAverage: rightAvg,
+              leftCoefficientOfVariation: leftCv,
+              rightCoefficientOfVariation: rightCv,
+              bilateralDeficiency: bilateralDef,
+            };
+          })
+          .filter((entry: any) => Boolean(entry.testName))
+      : [];
+
+    const normalizedCurrentIndex =
+      typeof testData?.currentTestIndex === "number"
+        ? testData.currentTestIndex
+        : 0;
+
+    testData = {
+      ...testData,
+      tests: normalizedTestArray,
+      currentTestIndex: normalizedCurrentIndex,
+    };
+
     // Handle digital library data loading (IndexedDB or localStorage)
     const digitalLibraryRawData = localStorage.getItem("digitalLibraryData");
     let digitalLibraryData: any = {};
