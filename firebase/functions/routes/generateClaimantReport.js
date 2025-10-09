@@ -23,7 +23,8 @@ const {
   VerticalAlign,
   ShadingType,
   Alignment,
-  PageNumber
+  PageNumber,
+  Footer
 } = require("docx");
 
 const router = express.Router();

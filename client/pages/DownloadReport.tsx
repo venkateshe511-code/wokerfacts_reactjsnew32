@@ -300,6 +300,7 @@ export default function DownloadReport() {
     if (sampleAccessBackup)
       localStorage.setItem("sampleAccess", sampleAccessBackup);
   };
+
   const generateReportContent = async () => {
     // Load all evaluation data
     const evaluatorData = await getEvaluatorData();
@@ -638,6 +639,7 @@ export default function DownloadReport() {
                 </table>
               </div>
             </div>
+
             <!-- Client Images Section -->
             ${test.serializedImages && test.serializedImages.length > 0
             ? `
@@ -950,6 +952,7 @@ export default function DownloadReport() {
         if (tt > 0 && p > 0) return (tt * (p / 100)).toFixed(1);
         return (tt || 0).toFixed(1);
       };
+
       return `
         <!-- MTM Test Table for ${testName} -->
         <div style="margin-bottom: 15px; border: 1px solid #333; padding: 8px; background-color: #ffffff;">
@@ -1294,6 +1297,7 @@ export default function DownloadReport() {
         .toc-page {
             page: toc;
         }
+
         @page cover {
             @top-right {
                 content: "";
@@ -1537,7 +1541,7 @@ export default function DownloadReport() {
 
             <!-- Data row -->
             <div style="display: flex; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.3;">
-                <div style="width: 70px;">${currentDate}</div>
+                <div style="width: 70px;">04/2011</div>
                 <div style="flex: 1; margin-left: 10px;">${claimantData.claimantHistory ||
       "While working in Cartons assembly area, client noted groin pain and subsequently was diagnosed with a hernia – PT - 4-5 wks – back to work - continued to have pain – lumbar area – cortisone injection (had three injections total) – Sept 10th out of work again – to date no return to duties – last injection was Oct 4th2011."
       }</div>
@@ -1549,9 +1553,9 @@ export default function DownloadReport() {
     <!-- Pain/Symptom Illustration Section -->
     <div style="margin-top: 5px; padding-left: 0;">
     <h3 style="font-weight: bold; margin-bottom: 5px; margin-left: -15px; font-family: Arial, sans-serif; color: #4472C4; font-size: 13px;">Pain/Symptom Illustration</h3>
-    <div style="display: flex; gap: 12px; align-items: center; justify-content: center;">
-        <div style="padding: 0; width: auto; margin: 0 auto;">
-            <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+    <div style="display: flex; gap: 8px; align-items: start;">
+        <div style="padding: 4px; width: 640px; margin-left: 0; float: left;">
+            <div style="display: flex; gap: 2px; justify-content: center; align-items: flex-start;">
                 ${["front", "back", "left", "right"]
         .map((view) => {
           const labelMap = {
@@ -1573,34 +1577,27 @@ export default function DownloadReport() {
           return `
                         <div style="
                             position: relative;
-                            width: 180px;
-                            height: 260px;
+                            width: 150px;
+                            height: 220px;
                             margin: 0;
                             display: inline-block;
                             overflow: visible;
-                            background: #f9f9f9;
-                            border: 1px solid #ddd;
-                            border-radius: 4px;
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            justify-content: center;
                         ">
-                            <h5 style="text-align: center; font-weight: bold; margin-bottom: 6px; color: #1e40af; font-family: Arial, sans-serif; font-size: 11px;">
+                            <h5 style="text-align: center; font-weight: bold; margin-bottom: 4px; color: #1e40af; font-family: Arial, sans-serif; font-size: 10px;">
                                 ${labelMap[view]}
                             </h5>
-                            <div style="position: relative; width: 100%; height: 220px; margin: 0; display: flex; align-items: center; justify-content: center;">
+                            <div style="position: relative; width: 100%; height: 200px; margin: 0;">
                                 <img
                                     src="${imageMap[view]}"
                                     alt="${labelMap[view]}"
                                     style="
                                         width: 100%;
                                         height: 100%;
-                                        object-fit: contain;
+                                        object-fit: cover;
                                         object-position: center;
                                         pointer-events: none;
-                                        background: transparent;
-                                        transform: none;
+                                        background: #f9fafb;
+                                        transform: scale(1.2);
                                     "
                                 />
                                 ${markers
@@ -1625,7 +1622,7 @@ export default function DownloadReport() {
                   symbolText = "x";
                   symbolColor = "#ea580c";
                 } else if (marker.type === "pins-needles") {
-                  symbolText = "•";
+                  symbolText = "��";
                   symbolColor = "#7c3aed";
                 } else if (marker.type === "numbness") {
                   symbolText = "o";
@@ -1705,22 +1702,22 @@ export default function DownloadReport() {
 
         </div>
 
-        <div style="width: 120px; flex-shrink: 0; margin-left: 15px;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 8px; font-family: Arial, sans-serif; border: 1px solid #333; line-height: 1.1; margin-bottom: 1px;">
-                <tr><td style="border: 1px solid #333; background: #FFF2CC; padding: 2px; font-weight: bold; text-align: center; height: 12px;" colspan="2">Area of Primary Concern</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">P1</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Primary</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">P2</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Secondary</td></tr>
-                <tr><td style="border: 1px solid #333; background: #FFF2CC; padding: 2px; font-weight: bold; text-align: center; height: 12px;" colspan="2">Pain Indicator</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">~</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Dull Ache</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">/</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Shooting</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">x</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Burning</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">•</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Pins and Needles</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">o</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Numbness</td></tr>
-                <tr><td style="border: 1px solid #333; background: #FFF2CC; padding: 2px; font-weight: bold; text-align: center; height: 12px;" colspan="2">General</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">T</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Temperature</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">SW</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Swelling</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">S</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Scar</td></tr>
-                <tr><td style="border: 1px solid #333; padding: 1px; text-align: center; font-weight: bold; height: 10px;">C</td><td style="border: 1px solid #333; padding: 1px; height: 10px;">Crepitus</td></tr>
+        <div style="width: 140px; flex-shrink: 0; margin-left: 20px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 2px; font-family: Arial, sans-serif; border: 1px solid #333; line-height: 0.2; margin-bottom: 1px;">
+                <tr><td style="border: 1px solid #333; background: #FFF2CC; padding: 0px; font-weight: bold; text-align: center; height: 1px;" colspan="2">Area of Primary Concern</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">P1</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Primary</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">P2</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Secondary</td></tr>
+                <tr><td style="border: 1px solid #333; background: #FFF2CC; padding: 0px; font-weight: bold; text-align: center; height: 1px;" colspan="2">Pain Indicator</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">~</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Primary</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">/</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Shooting</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">x</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Burning</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">•</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Pins and Needles</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">o</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Numbness</td></tr>
+                <tr><td style="border: 1px solid #333; background: #FFF2CC; padding: 0px; font-weight: bold; text-align: center; height: 1px;" colspan="2">General</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">T</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Temperature</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">SW</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Swelling</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">S</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Scar</td></tr>
+                <tr><td style="border: 1px solid #333; padding: 0px; text-align: center; font-weight: bold; height: 0.8px;">C</td><td style="border: 1px solid #333; padding: 0px; height: 0.8px;">Crepitus</td></tr>
             </table>
         </div>
     </div>
@@ -2253,6 +2250,7 @@ export default function DownloadReport() {
                 type: "weight",
               };
             }
+
             // Range of Motion Norms - Cervical Spine
             if (testNameLower.includes("cervical")) {
               if (testNameLower.includes("flexion")) {
@@ -2302,7 +2300,7 @@ export default function DownloadReport() {
               if (testNameLower.includes("extension")) {
                 return {
                   requirement:
-                    "Lumbar extension ≥20° for postural activities",
+                    "Lumbar extension ��20° for postural activities",
                   norm: 20, // degrees
                   functionalMin: 15,
                   unit: "degrees",
@@ -2602,6 +2600,7 @@ export default function DownloadReport() {
               testsByCategory["Strength"].push(test);
             }
           });
+
           let rows = [];
           let totalSitTime = 45; // Initial interview sit time
           let totalStandTime = 5; // Initial activity overview stand time
@@ -2738,6 +2737,19 @@ export default function DownloadReport() {
                       } else {
                         return `F=${leftAvg.toFixed(2)} E=${rightAvg.toFixed(2)}`;
                       }
+                    } else if (
+                      test.testName?.toLowerCase().includes("lift")
+                    ) {
+                      // Lift tests: show average weight in lbs
+                      const unit = (
+                        test.unitMeasure || ""
+                      ).toLowerCase();
+                      const baseAvg = leftAvg > 0 ? leftAvg : rightAvg;
+                      const avgLbs =
+                        unit === "kg"
+                          ? Math.round(baseAvg * 2.20462 * 10) / 10
+                          : Math.round(baseAvg * 10) / 10;
+                      return `${avgLbs.toFixed(1)} lbs`;
                     } else {
                       // Default format for strength and cardio tests
                       return `L=${leftAvg.toFixed(1)} R=${rightAvg.toFixed(1)}`;
@@ -2919,6 +2931,7 @@ export default function DownloadReport() {
                         </tbody>
                     </table>
                     -->
+
                     <!-- Detailed Effort Analysis (COMMENTED OUT) -->
                     <!--
                     <div style="margin-top: 16px; background: #f8f9fa; border: 1px solid #dee2e6; padding: 12px; border-radius: 4px;">
@@ -3166,7 +3179,7 @@ export default function DownloadReport() {
             applicable: pinchTests.length > 0,
           });
 
-          // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high/overhead) shows postHR > preHR
+          // Dynamic lift HR fluctuation check — pass if any dynamic lift (low/mid/high/overhead/frequent) shows postHR > preHR
           const dynamicLifts = liftTests.filter((test) => {
             const n = (test.testName || "").toLowerCase();
             return (
@@ -3174,6 +3187,7 @@ export default function DownloadReport() {
               n.includes("mid") ||
               n.includes("high") ||
               n.includes("overhead") ||
+              n.includes("frequent") ||
               n.includes("dynamic")
             );
           });
@@ -3196,7 +3210,7 @@ export default function DownloadReport() {
           crosschecks.push({
             name: "Dynamic lift HR fluctuation",
             description:
-              "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, or overhead).",
+              "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, overhead, or frequent).",
             pass: hrConsistent,
             applicable: dynamicLifts.length > 0,
           });
@@ -3855,7 +3869,7 @@ export default function DownloadReport() {
 
                                 ${isLiftTest
                 ? `
-                                    <!-- Lift Test Table -->
+                                    <!-- Lift Results - Demonstrated Activity (single row, like ReviewReport) -->
                                     <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                         <thead>
                                             <tr style="background: #fef3c7;">
@@ -3869,44 +3883,44 @@ export default function DownloadReport() {
                                             <tr>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.testName}</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${(() => {
-                                                  const unit = String(
-                                                    test.unitMeasure ||
-                                                      (test as any).unit ||
-                                                      "",
-                                                  ).toLowerCase();
-                                                  const avg =
-                                                    unit === "kg"
-                                                      ? Math.round(
-                                                          leftAvg *
-                                                            2.20462 *
-                                                            10,
-                                                        ) / 10
-                                                      : Math.round(
-                                                          leftAvg * 10,
-                                                        ) / 10;
-                                                  return avg.toFixed(1);
-                                                })()}</td>
+                  const unit = String(
+                    test.unitMeasure ||
+                    (test as any).unit ||
+                    "",
+                  ).toLowerCase();
+                  const avg =
+                    unit === "kg"
+                      ? Math.round(
+                        leftAvg *
+                        2.20462 *
+                        10,
+                      ) / 10
+                      : Math.round(
+                        leftAvg * 10,
+                      ) / 10;
+                  return avg.toFixed(1);
+                })()}</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${leftCV}%</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${currentDate}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     ${(() => {
-                                      const key = String(
-                                        (test as any).dynamicEndpointType || "",
-                                      ).toLowerCase();
-                                      const map: any = {
-                                        biomechanical: "Biomechanical",
-                                        physiological: "Physiological",
-                                        psychophysical: "Psychophysical",
-                                        "task-requirement": "Task Requirement",
-                                      };
-                                      return (test.testName || "")
-                                        .toLowerCase()
-                                        .includes("dynamic") && map[key]
-                                        ? `<p style="font-size: 11px; margin: 6px 0 8px 0;"><strong>Endpoint:</strong> ${map[key]}</p>`
-                                        : "";
-                                    })()}
+                  const key = String(
+                    (test as any).dynamicEndpointType || "",
+                  ).toLowerCase();
+                  const map: any = {
+                    biomechanical: "Biomechanical",
+                    physiological: "Physiological",
+                    psychophysical: "Psychophysical",
+                    "task-requirement": "Task Requirement",
+                  };
+                  return (test.testName || "")
+                    .toLowerCase()
+                    .includes("dynamic") && map[key]
+                    ? `<p style="font-size: 11px; margin: 6px 0 8px 0;"><strong>Endpoint:</strong> ${map[key]}</p>`
+                    : "";
+                })()}
                                 `
                 : ""
               }
@@ -3918,6 +3932,7 @@ export default function DownloadReport() {
                 )
                 : ""
               }
+
                                 ${!isRangeOfMotion &&
                 !isLiftTest &&
                 !isCardioTest
@@ -3982,7 +3997,9 @@ export default function DownloadReport() {
 
                                     <!-- Trial-by-Trial Measurement Table (FOR NON-CARDIO TESTS) -->
                                     ${!isCardioTest
-                ? `
+                ? isLiftTest
+                  ? ""
+                  : `
                                     <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                         <thead>
                                             <tr style="background: #fef3c7;">
@@ -4000,54 +4017,54 @@ export default function DownloadReport() {
                                             <tr>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>Left</strong></td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                  .trial1 || 0
-                } lbs</td>
+                    .trial1 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                  .trial2 || 0
-                } lbs</td>
+                    .trial2 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                  .trial3 || 0
-                } lbs</td>
+                    .trial3 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                  .trial4 || 0
-                } lbs</td>
+                    .trial4 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                  .trial5 || 0
-                } lbs</td>
+                    .trial5 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                  .trial6 || 0
-                } lbs</td>
+                    .trial6 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${leftAvg.toFixed(
-                  1,
-                )} lbs</strong></td>
+                    1,
+                  )} lbs</strong></td>
                                             </tr>
                                             <tr>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>Right</strong></td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                  .trial1 || 0
-                } lbs</td>
+                    .trial1 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                  .trial2 || 0
-                } lbs</td>
+                    .trial2 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                  .trial3 || 0
-                } lbs</td>
+                    .trial3 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                  .trial4 || 0
-                } lbs</td>
+                    .trial4 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                  .trial5 || 0
-                } lbs</td>
+                    .trial5 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                  .trial6 || 0
-                } lbs</td>
+                    .trial6 || 0
+                  } lbs</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${rightAvg.toFixed(
-                  1,
-                )} lbs</strong></td>
+                    1,
+                  )} lbs</strong></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    `
+                                            `
                 : ""
               }
 
@@ -4152,125 +4169,122 @@ export default function DownloadReport() {
                                             </div>
                                         </div>
 
-                                        ${
-                                          !isLiftTest
-                                            ? `
+                                        ${!isLiftTest
+                  ? `
                                         <!-- Right Side Chart -->
                                         <div style="background: #ffffff; border: 2px solid #10b981; border-radius: 8px; padding: 12px; page-break-inside: avoid; flex: 1; min-width: 250px;">
                                             <div style="background: #10b981; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">Right Side</div>
                                             <div style="display: flex; align-items: end; justify-content: space-between; height: 120px; padding: 3px 0; position: relative; background: #f8fafc; border-radius: 4px;">
                                                 ${(() => {
-                  const maxValue = Math.max(
-                    leftAvg,
-                    rightAvg,
-                    50,
-                  );
-                  return `
+                    const maxValue = Math.max(
+                      leftAvg,
+                      rightAvg,
+                      50,
+                    );
+                    return `
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #1e40af, #3b82f6); width: 100%; height: ${((test
-                      .rightMeasurements
-                      .trial1 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #1e40af;"></div>
+                        .rightMeasurements
+                        .trial1 || 0) /
+                        maxValue) *
+                      100
+                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #1e40af;"></div>
                                                             <span style="font-size: 8px; color: #1e40af; font-weight: bold;">T1</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
-                      .rightMeasurements
-                      .trial1 || 0
-                    }</span>
+                        .rightMeasurements
+                        .trial1 || 0
+                      }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #059669, #10b981); width: 100%; height: ${((test
-                      .rightMeasurements
-                      .trial2 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #059669;"></div>
+                        .rightMeasurements
+                        .trial2 || 0) /
+                        maxValue) *
+                      100
+                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #059669;"></div>
                                                             <span style="font-size: 8px; color: #059669; font-weight: bold;">T2</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
-                      .rightMeasurements
-                      .trial2 || 0
-                    }</span>
+                        .rightMeasurements
+                        .trial2 || 0
+                      }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #d97706, #f59e0b); width: 100%; height: ${((test
-                      .rightMeasurements
-                      .trial3 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #d97706;"></div>
+                        .rightMeasurements
+                        .trial3 || 0) /
+                        maxValue) *
+                      100
+                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #d97706;"></div>
                                                             <span style="font-size: 8px; color: #d97706; font-weight: bold;">T3</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
-                      .rightMeasurements
-                      .trial3 || 0
-                    }</span>
+                        .rightMeasurements
+                        .trial3 || 0
+                      }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #dc2626, #ef4444); width: 100%; height: ${((test
-                      .rightMeasurements
-                      .trial4 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #dc2626;"></div>
+                        .rightMeasurements
+                        .trial4 || 0) /
+                        maxValue) *
+                      100
+                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #dc2626;"></div>
                                                             <span style="font-size: 8px; color: #dc2626; font-weight: bold;">T4</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
-                      .rightMeasurements
-                      .trial4 || 0
-                    }</span>
+                        .rightMeasurements
+                        .trial4 || 0
+                      }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #7c3aed, #a855f7); width: 100%; height: ${((test
-                      .rightMeasurements
-                      .trial5 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #7c3aed;"></div>
+                        .rightMeasurements
+                        .trial5 || 0) /
+                        maxValue) *
+                      100
+                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #7c3aed;"></div>
                                                             <span style="font-size: 8px; color: #7c3aed; font-weight: bold;">T5</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
-                      .rightMeasurements
-                      .trial5 || 0
-                    }</span>
+                        .rightMeasurements
+                        .trial5 || 0
+                      }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #0891b2, #06b6d4); width: 100%; height: ${((test
-                      .rightMeasurements
-                      .trial6 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #0891b2;"></div>
+                        .rightMeasurements
+                        .trial6 || 0) /
+                        maxValue) *
+                      100
+                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #0891b2;"></div>
                                                             <span style="font-size: 8px; color: #0891b2; font-weight: bold;">T6</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
-                      .rightMeasurements
-                      .trial6 || 0
-                    }</span>
+                        .rightMeasurements
+                        .trial6 || 0
+                      }</span>
                                                         </div>
                                                     `;
-                })()}
+                  })()}
                                             </div>
                                             <div style="text-align: center; font-size: 10px; color: #10b981; margin-top: 8px; font-weight: bold; background: #d1fae5; padding: 4px; border-radius: 4px;">
                                                 Avg: ${rightAvg.toFixed(1)} lbs
                                             </div>
                                         </div
                                         `
-                                            : ""
-                                        }>
+                  : ""
+                }>
                                     </div>
 
-                                    ${
-                                      !isLiftTest
-                                        ? `
+                                    ${!isLiftTest
+                  ? `
                                     <!-- Comparison Summary -->
                                     <div style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 8px; margin: 8px 0; text-align: center;">
                                         <div style="font-size: 11px; color: #666;">
-                                            <strong>Bilateral Difference:</strong> ${Math.abs(
-                  leftAvg - rightAvg,
-                ).toFixed(1)} lbs |
+                                            <strong>Bilateral Difference:</strong> ${Math.abs(leftAvg - rightAvg).toFixed(1)} lbs |
                                             <strong>CV:</strong> L=${leftCV}% R=${rightCV}% |
-                                            <strong>Bilateral Deficiency:</strong> ${bilateralDef.toFixed(
-                  1,
-                )}%
+                                            <strong>Bilateral Deficiency:</strong> ${bilateralDef.toFixed(1)}%
                                         </div>
                                     </div>
+                                    `
+                  : ""
+                }
                                     `
                 : ""
               }
@@ -4281,7 +4295,9 @@ export default function DownloadReport() {
                 : ""
               }
 
-                                ${!test.demonstrated && !isCardioTest
+                                ${!test.demonstrated &&
+                !isCardioTest &&
+                !isStaticLift
                 ? `
                                     <div style="margin: 8px 0 12px 0;">
                                         <p style="font-size: 11px; font-weight: bold;">Reason For Incomplete Test:</p>
@@ -4296,30 +4312,30 @@ export default function DownloadReport() {
 
                             <!-- Heart Rate Data if available (general tests) -->
                             ${(() => {
-                              const pre = Number(
-                                (test.leftMeasurements &&
-                                  test.leftMeasurements.preHeartRate) ||
-                                  (test.rightMeasurements &&
-                                    test.rightMeasurements.preHeartRate) ||
-                                  0,
-                              );
-                              const post = Number(
-                                (test.leftMeasurements &&
-                                  test.leftMeasurements.postHeartRate) ||
-                                  (test.rightMeasurements &&
-                                    test.rightMeasurements.postHeartRate) ||
-                                  0,
-                              );
-                              return pre || post
-                                ? `
+                const pre = Number(
+                  (test.leftMeasurements &&
+                    test.leftMeasurements.preHeartRate) ||
+                  (test.rightMeasurements &&
+                    test.rightMeasurements.preHeartRate) ||
+                  0,
+                );
+                const post = Number(
+                  (test.leftMeasurements &&
+                    test.leftMeasurements.postHeartRate) ||
+                  (test.rightMeasurements &&
+                    test.rightMeasurements.postHeartRate) ||
+                  0,
+                );
+                return pre || post
+                  ? `
                                   <div style="font-size: 11px; color: #374151; margin: 6px 0;">
                                     <strong>Heart Rate:</strong>
                                     ${pre ? ` Pre: ${pre} bpm` : ""}
                                     ${post ? ` Post: ${post} bpm` : ""}
                                   </div>
                                 `
-                                : "";
-                            })()}
+                  : "";
+              })()}
 
                             <!-- Cardio Test Images -->
                             ${isCardioTest &&
@@ -4870,6 +4886,7 @@ export default function DownloadReport() {
       });
     }
   };
+
   const handleDownloadReport = async () => {
     setIsDownloading(true);
 
@@ -5052,7 +5069,7 @@ export default function DownloadReport() {
               try {
                 const img = await loadImage(baseUrl);
                 ctx.drawImage(img, 0, 0, width, height);
-              } catch {}
+              } catch { }
 
               const view = views[i];
               const viewMarkers = markers.filter((m) => (m?.view || "").toLowerCase() === view);
@@ -5125,6 +5142,9 @@ export default function DownloadReport() {
             return [];
           }
         }
+
+
+        // Prepare complete data structure for cloud function to match PDF output
         const composedViews = await composePainViews(painIllustrationData, imageUrls);
         const requestData = {
           claimantName:
@@ -5620,6 +5640,7 @@ export default function DownloadReport() {
           },
         };
 
+
         // Debug: Log comprehensive data being sent to cloud function
         console.log("=== DOCX Generation Debug ===");
         console.log("Claimant Name:", requestData.claimantName);
@@ -5744,6 +5765,7 @@ export default function DownloadReport() {
         for (let [key, value] of response.headers.entries()) {
           console.log(`  ${key}: ${value}`);
         }
+
         // Force correct MIME type to help some viewers
         const arrayBuf = await response.arrayBuffer();
         const blob = new Blob([arrayBuf], {
@@ -6014,8 +6036,10 @@ export default function DownloadReport() {
                     DOCX Format
                   </Label>
                 </div>
+
               </RadioGroup>
             </div>
+            
 
             {/* Important Notice */}
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-8">
@@ -6084,6 +6108,7 @@ export default function DownloadReport() {
             </div>
           </CardContent>
         </Card>
+
         {/* Success Dialog */}
         <Dialog open={showSuccessDialog} onOpenChange={() => { }}>
           <DialogContent className="max-w-md">
