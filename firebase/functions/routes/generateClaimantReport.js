@@ -224,6 +224,211 @@ const noBorders = {
   insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "FFFFFF" },
 };
 
+const TRIAL_KEYS = ["trial1", "trial2", "trial3", "trial4", "trial5", "trial6"];
+const LEFT_CHART_COLORS = [
+  "#1E3A8A",
+  "#2563EB",
+  "#3B82F6",
+  "#60A5FA",
+  "#93C5FD",
+  "#BFDBFE",
+];
+const RIGHT_CHART_COLORS = [
+  "#065F46",
+  "#047857",
+  "#10B981",
+  "#34D399",
+  "#6EE7B7",
+  "#A7F3D0",
+];
+
+const stripHash = (color) => {
+  if (!color) return "";
+  return color.startsWith("#") ? color.slice(1) : color;
+};
+
+const parseMeasurementValue = (value) => {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : null;
+  }
+  if (typeof value === "string") {
+    const cleaned = value.replace(/[^0-9.-]/g, "");
+    if (!cleaned) return null;
+    const numeric = Number.parseFloat(cleaned);
+    return Number.isFinite(numeric) ? numeric : null;
+  }
+  return null;
+};
+
+const extractTrialSeries = (measurements = {}) =>
+  TRIAL_KEYS.map((key, index) => {
+    const value = parseMeasurementValue(measurements?.[key]);
+    return { label: `T${index + 1}`, value: value ?? 0 };
+  });
+
+const hasMeaningfulTrialData = (series = []) =>
+  series.some((point) => Number.isFinite(point.value) && point.value > 0);
+
+const computeSuggestedMax = (...seriesGroups) => {
+  const flatValues = seriesGroups
+    .flat()
+    .map((point) => (Number.isFinite(point?.value) ? point.value : 0));
+  const maximum = Math.max(10, ...flatValues);
+  if (!Number.isFinite(maximum) || maximum <= 0) {
+    return 10;
+  }
+  return Math.ceil(maximum * 1.15);
+};
+
+const trialChartBorderPlugin = {
+  id: "trialChartBorder",
+  beforeDraw(chart) {
+    const {
+      ctx,
+      chartArea: { left, top, width, height },
+    } = chart;
+    ctx.save();
+    ctx.strokeStyle = "#d1d5db";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(left, top, width, height);
+    ctx.restore();
+  },
+};
+
+const createTrialChartBuffer = async (
+  sideLabel,
+  series,
+  palette,
+  suggestedMax,
+) => {
+  if (!series.length) return null;
+
+  const chartJSNodeCanvas = new ChartJSNodeCanvas({
+    width: 420,
+    height: 260,
+    backgroundColour: "white",
+    plugins: { modern: [trialChartBorderPlugin] },
+  });
+
+  const labels = series.map((point) => point.label);
+  const dataValues = series.map((point) =>
+    Number.isFinite(point.value) ? point.value : 0,
+  );
+
+  const configuration = {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: `${sideLabel} Trials`,
+          data: dataValues,
+          backgroundColor: dataValues.map(
+            (_, idx) => palette[idx % palette.length],
+          ),
+          borderColor: "#1F2937",
+          borderWidth: 1,
+          borderRadius: 6,
+          barPercentage: 0.9,
+          categoryPercentage: 0.9,
+        },
+      ],
+    },
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        title: { display: false },
+        tooltip: { enabled: false },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 11 } },
+          border: { display: false },
+        },
+        y: {
+          beginAtZero: true,
+          suggestedMax,
+          grid: { color: "#e5e7eb" },
+          ticks: { font: { size: 11 } },
+          border: { color: "#9ca3af" },
+        },
+      },
+      layout: { padding: { top: 12, bottom: 12, left: 12, right: 12 } },
+    },
+  };
+
+  return chartJSNodeCanvas.renderToBuffer(configuration);
+};
+
+const createTrialChartCell = ({
+  title,
+  chartBuffer,
+  headerColor,
+  footerColor,
+  averageValue,
+  unitLabel,
+}) => {
+  if (!chartBuffer) return null;
+
+  const avgText = Number.isFinite(averageValue)
+    ? `Avg: ${averageValue.toFixed(1)}${unitLabel ? ` ${unitLabel}` : ""}`
+    : "Avg: N/A";
+
+  const headerFill = stripHash(headerColor);
+  const footerFill = stripHash(footerColor);
+
+  return new TableCell({
+    borders: noBorders,
+    children: [
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        shading: { type: ShadingType.CLEAR, fill: headerFill },
+        spacing: { before: 80, after: 80 },
+        children: [
+          new TextRun({
+            text: title,
+            bold: true,
+            color: "FFFFFF",
+            size: 20,
+          }),
+        ],
+      }),
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [
+          new ImageRun({
+            data: chartBuffer,
+            transformation: { width: 420, height: 260 },
+          }),
+        ],
+        spacing: { before: 60, after: 60 },
+      }),
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        shading: { type: ShadingType.CLEAR, fill: footerFill },
+        spacing: { before: 60, after: 80 },
+        children: [
+          new TextRun({
+            text: avgText,
+            bold: true,
+            color: headerFill,
+            size: 18,
+          }),
+        ],
+      }),
+    ],
+  });
+};
+
+const formatDisplayValue = (value, digits = 1, suffix = "") => {
+  if (!Number.isFinite(value)) return "N/A";
+  return `${value.toFixed(digits)}${suffix}`;
+};
+
 
 
 // helper functions
@@ -735,7 +940,7 @@ const clientInfoRowsData = [
 
   // Legend Table with red symbols (this table should retain its borders)
   const legendTable = new Table({
-    width: { size: 100, type: WidthType.PERCENTAGE },
+    width: { size: 95, type: WidthType.PERCENTAGE },
     rows: [
       new TableRow({
         indent: { left: 0 },
@@ -1067,7 +1272,7 @@ const clientInfoRowsData = [
             ? [
               new ImageRun({
                 data: buf,
-                transformation: { width: 140, height: 200 },
+                transformation: { width: 130, height: 200 },
               }),
             ]
             : [new TextRun(`Image ${idx + 1} not available`)],
@@ -4303,6 +4508,116 @@ async function addTestDataContent(children, body) {
         },
       });
       children.push(trialTable);
+
+      const measurementUnitRaw =
+        test.unitMeasure ||
+        test.valueToBeTestedUnit ||
+        test.unit ||
+        (isRangeOfMotion ? "deg" : "lbs");
+      const measurementUnit =
+        typeof measurementUnitRaw === "string"
+          ? measurementUnitRaw.trim()
+          : measurementUnitRaw != null
+            ? String(measurementUnitRaw).trim()
+            : "";
+
+      const leftSeries = extractTrialSeries(test.leftMeasurements || {});
+      const rightSeries = extractTrialSeries(test.rightMeasurements || {});
+      const hasLeftSeries = hasMeaningfulTrialData(leftSeries);
+      const hasRightSeries = hasMeaningfulTrialData(rightSeries);
+
+      const chartCells = [];
+      const suggestedMax = computeSuggestedMax(
+        hasLeftSeries ? leftSeries : [],
+        !isLiftTest && hasRightSeries ? rightSeries : [],
+      );
+
+      if (hasLeftSeries) {
+        const leftChartBuffer = await createTrialChartBuffer(
+          "Left",
+          leftSeries,
+          LEFT_CHART_COLORS,
+          suggestedMax,
+        );
+
+        if (leftChartBuffer) {
+          const leftCell = createTrialChartCell({
+            title: "Left Side",
+            chartBuffer: leftChartBuffer,
+            headerColor: "#1E3A8A",
+            footerColor: "#DBEAFE",
+            averageValue: leftAvg,
+            unitLabel: measurementUnit,
+          });
+
+          if (leftCell) {
+            chartCells.push(leftCell);
+          }
+        }
+      }
+
+      if (!isLiftTest && hasRightSeries) {
+        const rightChartBuffer = await createTrialChartBuffer(
+          "Right",
+          rightSeries,
+          RIGHT_CHART_COLORS,
+          suggestedMax,
+        );
+
+        if (rightChartBuffer) {
+          const rightCell = createTrialChartCell({
+            title: "Right Side",
+            chartBuffer: rightChartBuffer,
+            headerColor: "#047857",
+            footerColor: "#D1FAE5",
+            averageValue: rightAvg,
+            unitLabel: measurementUnit,
+          });
+
+          if (rightCell) {
+            chartCells.push(rightCell);
+          }
+        }
+      }
+
+      if (chartCells.length) {
+        const columnWidths =
+          chartCells.length === 2 ? [4800, 4800] : [9600];
+
+        children.push(
+          new Table({
+            width: { size: 100, type: WidthType.PERCENTAGE },
+            layout: TableLayoutType.FIXED,
+            borders: noBorders,
+            columnWidths,
+            rows: [new TableRow({ children: chartCells })],
+          }),
+        );
+      }
+
+      if (!isLiftTest && chartCells.length === 2) {
+        const differenceSuffix = measurementUnit ? ` ${measurementUnit}` : "";
+        const summaryText = [
+          `Bilateral Difference: ${formatDisplayValue(Math.abs(leftAvg - rightAvg), 1, differenceSuffix)}`,
+          `CV: L=${formatDisplayValue(leftCV, 1, "%")} R=${formatDisplayValue(rightCV, 1, "%")}`,
+          `Bilateral Deficiency: ${formatDisplayValue(bilateralDef, 1, "%")}`,
+        ].join("   |   ");
+
+        children.push(
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            shading: { type: ShadingType.CLEAR, fill: "F8F9FA" },
+            spacing: { before: 120, after: 120 },
+            children: [
+              new TextRun({
+                text: summaryText,
+                size: 18,
+                color: "374151",
+              }),
+            ],
+          }),
+        );
+      }
     }
 
     // Add spacing between tests
