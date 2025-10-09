@@ -620,19 +620,17 @@ async function addClientInformation(children, body) {
   const testedBy = body?.evaluatorData.name || "";
 
 
-  const clientInfoRowsData = [
-    ["Name:", fullName || "N/A", "ID:", idDisp || "N/A"],
-    ["Address:", cd.address || "N/A", "DOB (Age):", `${dob || "N/A"}${age !== "" ? ` (${age})` : ""}`],
-    ["Gender:", gender || "N/A"],
-    ["Home Phone:", phone || "N/A", "Height:", heightDisp || "N/A"],
-    ["Work Phone:", workPhone || "N/A", "Weight:", weightDisp || "N/A"],
-    ["Occupation:", occupation || "N/A", "Dominant Hand:", dominant || "N/A"],
-    ["Employer(SIC):", employer || "N/A", "Referred By:", referredBy || "N/A"],
-    ["Insurance:", cd.insurance || "N/A", "Resting Pulse:", restingPulse || ""],
-    ["Physician:", referredBy || "N/A", "BP Sitting:", bpSitting || ""],
-    ["", "", "Tested By:", testedBy || ""],
-  ];
-
+const clientInfoRowsData = [
+  ["Name:", fullName || "N/A", "ID:", idDisp || "N/A"],
+  ["Address:", cd.address || "N/A", "DOB (Age):", `${dob || "N/A"}${age !== "" ? ` (${age})` : ""}`],
+  ["Gender:", gender || "N/A", "Height:", heightDisp || "N/A"], // ✅ moved height beside gender
+  ["Home Phone:", phone || "N/A", "Weight:", weightDisp || "N/A"],
+  ["Work Phone:", workPhone || "N/A", "Dominant Hand:", dominant || "N/A"],
+  ["Occupation:", occupation || "N/A", "Referred By:", referredBy || "N/A"],
+  ["Employer(SIC):", employer || "N/A", "Resting Pulse:", restingPulse || ""],
+  ["Insurance:", cd.insurance || "N/A", "BP Sitting:", bpSitting || ""],
+  ["Physician:", referredBy || "N/A", "Tested By:", testedBy || ""],
+];
 
   // Use the same logo logic as addCoverPage
   let logoBuffer = null;
@@ -797,6 +795,7 @@ async function addClientInformation(children, body) {
                 new TextRun({
                   text: row[1],
                   size: 20,
+                  break: 1,
                 }),
               ],
               spacing: { after: 0 },
@@ -828,6 +827,7 @@ async function addClientInformation(children, body) {
                 new TextRun({
                   text: row[3],
                   size: 20,
+                  break: 1,
                 }),
               ],
               spacing: { after: 0 },
@@ -1069,7 +1069,7 @@ async function addClientInformation(children, body) {
             ? [
               new ImageRun({
                 data: buf,
-                transformation: { width: 120, height: 200 },
+                transformation: { width: 140, height: 200 },
               }),
             ]
             : [new TextRun(`Image ${idx + 1} not available`)],
@@ -3133,23 +3133,33 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
         }
 
         if (category === "Occupational Tasks") {
-          // Calculate percentage for occupational tasks
           const avgResult = (leftAvg + rightAvg) / 2;
           return `%IS=${avgResult.toFixed(1)}`;
-        } else if (category === "ROM Hand/Foot" || category === "ROM Total Spine/Extremity") {
-          // ROM tests: check if it's flexion/extension or left/right
+        }
+
+        if (category === "ROM Hand/Foot" || category === "ROM Total Spine/Extremity") {
           const testNameLower = test.testName.toLowerCase();
           if (testNameLower.includes("flexion") && testNameLower.includes("extension")) {
             return `F=${leftAvg.toFixed(2)} E=${rightAvg.toFixed(2)}`;
-          } else if (testNameLower.includes("lateral")) {
-            return `L=${leftAvg.toFixed(2)} R=${rightAvg.toFixed(2)}`;
-          } else {
-            return `F=${leftAvg.toFixed(2)} E=${rightAvg.toFixed(2)}`;
           }
-        } else {
-          // Default format for strength and cardio tests
-          return `L=${leftAvg.toFixed(1)} R=${rightAvg.toFixed(1)}`;
+          if (testNameLower.includes("lateral")) {
+            return `L=${leftAvg.toFixed(2)} R=${rightAvg.toFixed(2)}`;
+          }
+          return `F=${leftAvg.toFixed(2)} E=${rightAvg.toFixed(2)}`;
         }
+
+        if ((test.testName || "").toLowerCase().includes("lift")) {
+          const unit = (test.unitMeasure || test.valueToBeTestedUnit || jobReq.unit || "").toLowerCase();
+          const baseAvg = leftAvg > 0 ? leftAvg : rightAvg;
+          if (baseAvg > 0) {
+            const avgWeight = unit === "kg"
+              ? Math.round(baseAvg * 2.20462 * 10) / 10
+              : Math.round(baseAvg * 10) / 10;
+            return `${avgWeight.toFixed(1)} lbs`;
+          }
+        }
+
+        return `L=${leftAvg.toFixed(1)} R=${rightAvg.toFixed(1)}`;
       })();
 
       const rowData = [
@@ -3180,6 +3190,70 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
   }
 
   // Build the DOCX Table
+  let finalTotalSitTime = 45;
+  let finalTotalStandTime = 5;
+  for (const test of unifiedTests) {
+    const name = (test.testName || "").toLowerCase();
+    const isStandingTest = name.includes("lumbar") || name.includes("cervical") || name.includes("thoracic") || name.includes("shoulder") || name.includes("elbow") || name.includes("wrist") || name.includes("reach") || name.includes("crouch") || name.includes("stoop") || name.includes("bend") || name.includes("balance") || name.includes("climb") || name.includes("walk") || name.includes("push") || name.includes("pull") || name.includes("carry") || name.includes("lift") || name.includes("overhead");
+    if (isStandingTest) {
+      finalTotalStandTime += 5;
+    } else {
+      finalTotalSitTime += 5;
+    }
+  }
+
+  const totalsData = [
+    "Total Sit / Stand Time",
+    `${finalTotalSitTime} min`,
+    `${finalTotalStandTime} min`,
+    "",
+    "",
+    "",
+    "",
+  ];
+
+  rows.push(
+    new TableRow({
+      children: totalsData.map((text, idx) =>
+        new TableCell({
+          children: [
+            new Paragraph({
+              alignment: idx === 0 ? AlignmentType.LEFT : AlignmentType.CENTER,
+              children: [
+                new TextRun({
+                  text: String(text),
+                  bold: idx <= 2 && String(text).length > 0,
+                  size: 20,
+                }),
+              ],
+            }),
+          ],
+          shading: { fill: "FFFF99" },
+          margins: { top: 50, bottom: 50 },
+          width: idx === 0
+            ? { size: 22, type: WidthType.PERCENTAGE }
+            : idx === 1
+              ? { size: 8, type: WidthType.PERCENTAGE }
+              : idx === 2
+                ? { size: 8, type: WidthType.PERCENTAGE }
+                : idx === 3
+                  ? { size: 12, type: WidthType.PERCENTAGE }
+                  : idx === 4
+                    ? { size: 22, type: WidthType.PERCENTAGE }
+                    : idx === 5
+                      ? { size: 20, type: WidthType.PERCENTAGE }
+                      : { size: 8, type: WidthType.PERCENTAGE },
+          borders: {
+            top: { style: BorderStyle.SINGLE, size: 1 },
+            bottom: { style: BorderStyle.SINGLE, size: 1 },
+            left: { style: BorderStyle.SINGLE, size: 1 },
+            right: { style: BorderStyle.SINGLE, size: 1 },
+          },
+        })
+      ),
+    })
+  );
+
   const table = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
     layout: TableLayoutType.FIXED,
@@ -3188,32 +3262,6 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
   });
 
   children.push(table);
-
-  // Totals row (mirror client)
-  try {
-    let finalTotalSitTime = 45; // Interview
-    let finalTotalStandTime = 5; // Activity Overview
-    for (const test of unifiedTests) {
-      const name = (test.testName || "").toLowerCase();
-      const isStandingTest = name.includes("lumbar") || name.includes("cervical") || name.includes("thoracic") || name.includes("shoulder") || name.includes("elbow") || name.includes("wrist") || name.includes("reach") || name.includes("crouch") || name.includes("stoop") || name.includes("bend") || name.includes("balance") || name.includes("climb") || name.includes("walk") || name.includes("push") || name.includes("pull") || name.includes("carry") || name.includes("lift") || name.includes("overhead");
-      if (isStandingTest) finalTotalStandTime += 5; else finalTotalSitTime += 5;
-    }
-    const totalsRow = new Table({
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      rows: [new TableRow({
-        children: [
-          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Total Sit / Stand Time", bold: true })] })] }),
-          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `${finalTotalSitTime} min`, bold: true })] })] }),
-          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: `${finalTotalStandTime} min`, bold: true })] })] }),
-          new TableCell({ children: [new Paragraph({ children: [] })] }),
-          new TableCell({ children: [new Paragraph({ children: [] })] }),
-          new TableCell({ children: [new Paragraph({ children: [] })] }),
-          new TableCell({ children: [new Paragraph({ children: [] })] }),
-        ],
-      })],
-    });
-    children.push(totalsRow);
-  } catch { }
 
   // Legend
   children.push(
