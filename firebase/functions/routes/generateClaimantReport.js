@@ -735,7 +735,7 @@ const clientInfoRowsData = [
 
   // Legend Table with red symbols (this table should retain its borders)
   const legendTable = new Table({
-    width: { size: 80, type: WidthType.PERCENTAGE },
+    width: { size: 100, type: WidthType.PERCENTAGE },
     rows: [
       new TableRow({
         indent: { left: 0 },
@@ -795,7 +795,6 @@ const clientInfoRowsData = [
                 new TextRun({
                   text: row[1],
                   size: 20,
-                  break: 1,
                 }),
               ],
               spacing: { after: 0 },
@@ -827,7 +826,6 @@ const clientInfoRowsData = [
                 new TextRun({
                   text: row[3],
                   size: 20,
-                  break: 1,
                 }),
               ],
               spacing: { after: 0 },
