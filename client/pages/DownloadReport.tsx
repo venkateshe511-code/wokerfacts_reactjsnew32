@@ -1164,6 +1164,80 @@ export default function DownloadReport() {
       return Math.round(((higher - lower) / higher) * 100);
     };
 
+    const normalizeMeasurements = (
+      measurements: any = {},
+    ): Record<string, number> => {
+      const allowedKeys = [
+        "trial1",
+        "trial2",
+        "trial3",
+        "trial4",
+        "trial5",
+        "trial6",
+        "preHeartRate",
+        "postHeartRate",
+      ];
+
+      return allowedKeys.reduce<Record<string, number>>((acc, key) => {
+        const rawValue = measurements?.[key];
+        if (typeof rawValue === "number" && !Number.isNaN(rawValue)) {
+          acc[key] = rawValue;
+        } else if (
+          typeof rawValue === "string" &&
+          rawValue.trim() !== "" &&
+          !Number.isNaN(Number(rawValue))
+        ) {
+          acc[key] = Number(rawValue);
+        }
+        return acc;
+      }, {});
+    };
+
+    const coerceBoolean = (value: any): boolean | undefined => {
+      if (typeof value === "boolean") return value;
+      if (typeof value === "string") {
+        const normalized = value.trim().toLowerCase();
+        if (normalized === "true") return true;
+        if (normalized === "false") return false;
+      }
+      return undefined;
+    };
+
+    const inferTestCategory = (test: any): string => {
+      const name = `${test?.testName || ""}`.toLowerCase();
+      const id = `${test?.testId || ""}`.toLowerCase();
+      const target = `${name} ${id}`;
+
+      if (/(bruce|treadmill|cardio|mcaft|kasch|step|aerobic|heart|pulse)/.test(target)) {
+        return "Cardio";
+      }
+
+      if (
+        /(fingering|handling|reach|balance|stoop|walk|push|pull|cart|crouch|carry|crawl|climb|kneel|ladder|occupational|task)/.test(
+          target,
+        )
+      ) {
+        return "Occupational Tasks";
+      }
+
+      if (
+        /(hand|foot|finger|thumb|wrist|ankle|digit)/.test(target) &&
+        /(flexion|extension|abduction|adduction|rotation|range|rom)/.test(target)
+      ) {
+        return "ROM Hand/Foot";
+      }
+
+      if (
+        /(flexion|extension|rotation|spine|cervical|lumbar|shoulder|thoracic|range|motion|back)/.test(
+          target,
+        )
+      ) {
+        return "ROM Total Spine/Extremity";
+      }
+
+      return "Strength";
+    };
+
     // Create comprehensive HTML content for PDF generation matching ReviewReport exactly
     const htmlContent = `
 <!DOCTYPE html>
