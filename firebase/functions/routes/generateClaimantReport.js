@@ -2589,7 +2589,7 @@ function buildConsistentCrosschecksTable(crosschecks) {
 
   const makeCheckText = (check, wantPass) => {
     if (!check.applicable || check.pass === null) return "N/A";
-    return wantPass ? (check.pass ? "✓" : "") : !check.pass ? "✓" : "";
+    return wantPass ? (check.pass ? "✓" : "") : !check.pass ? "��" : "";
   };
 
   const rows = [
@@ -4229,9 +4229,9 @@ async function addReferenceChartsContent(children) {
       }),
       new TableRow({
         children: [
-          paddedCell("Psychophysical"),
+          paddedCell("Biomechanical"),
           paddedCell(
-            "Voluntary test termination by the claimant based on complaints of fatigue, excessive discomfort, or inability to complete the required number of movements during the testing interval (cycle).",
+            "The biomechanical stopping point follows the biomechanics of the person as they perform the activity. While you will not be able to teach proper body mechanics during the relatively short duration of an FCE, you should encourage proper body mechanics. Ultimately, you will be assessing the client’s capacity as he or she moves in their usual way to complete each task. The biomechanical stopping point relies on your clinical observation skills and knowledge of proper body mechanics.",
           ),
         ],
       }),
@@ -4239,15 +4239,23 @@ async function addReferenceChartsContent(children) {
         children: [
           paddedCell("Physiological"),
           paddedCell(
-            "Achievement of an age-determined target heart rate (based on a percent of claimant's maximal heart rate - normally 85%, or in excess of 75% continuously for one minute).",
+            "Physiological response to testing refers to the client’s involuntary reactions to the tests. These reactions include heart rate, blood pressure, respiration rate, changes in pallor, and similar markers. The American College of Sports Medicine recommends keeping the client’s heart rate below 85% of age-predicted maximum heart rate (APMHR) during physically demanding testing, with a recovery to 70% APMHR before commencing the next test.",
           ),
         ],
       }),
       new TableRow({
         children: [
-          paddedCell("Safety"),
+          paddedCell("Psychophysical"),
           paddedCell(
-            "Achievement of a predetermined anthropometric safe lifting limit based on the claimant's adjusted body weight; or intervention by the FACTS evaluator based upon an evaluation of the claimant's signs & symptoms.",
+            "The psychophysical ending point is based on the client’s perceived rate of exertion—that is, how the client feels or perceives the difficulty of the task. You can use a scale to rate the perception of difficulty, such as the Borg Scale, or simply ask the client to describe their comfort level with the activity. The test should be terminated at the point where the client feels they can no longer continue and has reached their maximum performance level.",
+          ),
+        ],
+      }),
+      new TableRow({
+        children: [
+          paddedCell("Task Requirement"),
+          paddedCell(
+            "A fourth, but still important, stopping criterion is the task requirement. This applies more to return-to-work (RTW) testing when you know the specific physical demands of the job tasks and are assessing the client’s ability to perform them. When the client’s tested ability matches the defined job requirement, you should stop the test because continuing beyond the task requirement could put the client at unnecessary risk.",
           ),
         ],
       }),
