@@ -623,6 +623,7 @@ export default function ProtocolTests() {
       const cleanedSelectedTests = savedData.selectedTests
         .filter((testId: string) => !testId.includes("mcafi")) // Remove old mcafi tests
         .filter((testId: string) => testId !== "cervical-anterior-obliques")
+        .filter((testId: string) => testId !== "dynamic-lift-frequent")
         .map((testId: string) => {
           // This shouldn't be needed since we're filtering above, but just in case
           return testId.replace("mcafi", "mcaft");
