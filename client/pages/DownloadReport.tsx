@@ -89,6 +89,34 @@ const loadImagesFromDB = async (): Promise<IndexedDBImage[]> => {
   }
 };
 
+const resolveDynamicEndpointLabel = (test: any): string | null => {
+  const rawEndpoint = String(
+    test?.dynamicEndpointType ?? test?.parameters?.dynamicEndpointType ?? "",
+  ).trim();
+
+  if (!rawEndpoint) {
+    return null;
+  }
+
+  const key = rawEndpoint.toLowerCase();
+  const map: Record<string, string> = {
+    biomechanical: "Biomechanical",
+    physiological: "Physiological",
+    psychophysical: "Psychophysical",
+    "task-requirement": "Task Requirement",
+  };
+
+  if (map[key]) {
+    return map[key];
+  }
+
+  return key
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+};
+
 interface ReportSummary {
   evaluatorName: string;
   claimantName: string;
