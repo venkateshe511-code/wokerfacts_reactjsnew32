@@ -364,6 +364,18 @@ export default function ReviewReport() {
     );
   };
 
+  const extractTrialValues = (measurements: any): number[] => {
+    if (!measurements || typeof measurements !== "object") return [];
+    return [
+      measurements.trial1,
+      measurements.trial2,
+      measurements.trial3,
+      measurements.trial4,
+      measurements.trial5,
+      measurements.trial6,
+    ].filter((value) => typeof value === "number" && !Number.isNaN(value));
+  };
+
   const resolveDynamicEndpointLabel = (test: any): string | null => {
     const rawEndpoint = String(
       (test as any)?.dynamicEndpointType ??
