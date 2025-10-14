@@ -5068,19 +5068,19 @@ export default function DownloadReport() {
                 <tbody>
                     <tr>
                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Biomechanical</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Follows the biomechanics of the person as they perform the activity. Encourage proper mechanics, but assess capacity as performed in their usual way; relies on clinical observation and knowledge of proper body mechanics.</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">The biomechanical stopping point follows the biomechanics of the person as they perform the activity. While you will not be able to teach proper body mechanics during the relatively short duration of an FCE, you should encourage proper body mechanics. Ultimately, you will be assessing the client’s capacity as he or she moves in their usual way to complete each task. The biomechanical stopping point relies on your clinical observation skills and knowledge of proper body mechanics.</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Physiological</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Objective responses to testing (heart rate, blood pressure, respiration, pallor). Keep heart rate below 85% of age-predicted maximum during testing, with recovery to 70% before the next test (ACSM guidance).</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Physiological response to testing refers to the client’s involuntary reactions to the tests. These reactions include heart rate, blood pressure, respiration rate, changes in pallor, and similar markers. The American College of Sports Medicine recommends keeping the client’s heart rate below 85% of age-predicted maximum heart rate (APMHR) during physically demanding testing, with a recovery to 70% APMHR before commencing the next test.</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Psychophysical</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">Based on the client’s perceived rate of exertion (e.g., Borg Scale) or comfort level with the activity. Terminate when the client feels they can no longer continue and has reached maximum performance level.</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">The psychophysical ending point is based on the client’s perceived rate of exertion—that is, how the client feels or perceives the difficulty of the task. You can use a scale to rate the perception of difficulty, such as the Borg Scale, or simply ask the client to describe their comfort level with the activity. The test should be terminated at the point where the client feels they can no longer continue and has reached their maximum performance level.</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Task Requirement</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">When the client’s tested ability matches the defined job requirement (e.g., RTW testing), stop the test to avoid unnecessary risk from testing beyond the task requirement.</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">A fourth, but still important, stopping criterion is the task requirement. This applies more to return-to-work (RTW) testing when you know the specific physical demands of the job tasks and are assessing the client’s ability to perform them. When the client’s tested ability matches the defined job requirement, you should stop the test because continuing beyond the task requirement could put the client at unnecessary risk.</td>
                     </tr>
                 </tbody>
             </table>
