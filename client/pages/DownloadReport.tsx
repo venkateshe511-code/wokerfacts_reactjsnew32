@@ -3962,6 +3962,10 @@ export default function DownloadReport() {
             if (!hasLeftTrials && useSingleMeasurementSet) {
               leftAvg = calculateAverage(primaryMeasurements);
               leftCV = calculateCV(primaryMeasurements);
+              rightCV = calculateCV(primaryMeasurements);
+            }
+            if (!hasRightTrials && !hasSeparateSides && !useSingleMeasurementSet) {
+              rightCV = calculateCV(secondaryMeasurements);
             }
             const combinedTrialValues = hasSeparateSides
               ? [...leftTrialValues, ...rightTrialValues]
