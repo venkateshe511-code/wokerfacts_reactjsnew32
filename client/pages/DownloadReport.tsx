@@ -468,6 +468,18 @@ export default function DownloadReport() {
       return Math.round(((higher - lower) / higher) * 100);
     };
 
+    const extractTrialValues = (measurements: any): number[] => {
+      if (!measurements) return [];
+      return [
+        measurements.trial1,
+        measurements.trial2,
+        measurements.trial3,
+        measurements.trial4,
+        measurements.trial5,
+        measurements.trial6,
+      ].filter((value) => typeof value === "number" && !Number.isNaN(value));
+    };
+
 
 
     const coerceBoolean = (value: any): boolean | undefined => {
@@ -3929,6 +3941,10 @@ export default function DownloadReport() {
               leftAvg,
               rightAvg,
             );
+            const leftTrialValues = extractTrialValues(test.leftMeasurements);
+            const rightTrialValues = extractTrialValues(test.rightMeasurements);
+            const hasSeparateSides =
+              leftTrialValues.length > 0 && rightTrialValues.length > 0;
 
             // Determine test category for appropriate illustrations and references
             const testName = test.testName.toLowerCase();
@@ -3954,6 +3970,8 @@ export default function DownloadReport() {
               String(test.testId || testName)
                 .toLowerCase()
                 .includes("static-lift") || testName.includes("static");
+            const leftChartTitle = hasSeparateSides ? "Left Side" : "Trial Results";
+            const showRightChart = !isLiftTest && hasSeparateSides;
 
             // Determine if this test needs a page break
             // Force page breaks for first test, lift tests, range of motion tests, and specific tests
@@ -4270,7 +4288,7 @@ export default function DownloadReport() {
                                     <div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0;">
                                         <!-- Left Side Chart -->
                                         <div style="background: #ffffff; border: 2px solid #3b82f6; border-radius: 8px; padding: 12px; page-break-inside: avoid; flex: 1; min-width: 250px;">
-                                            <div style="background: #3b82f6; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">Left Side</div>
+                                            <div style="background: #3b82f6; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">${leftChartTitle}</div>
                                             <div style="display: flex; align-items: end; justify-content: space-between; height: 120px; padding: 3px 0; position: relative; background: #f8fafc; border-radius: 4px;">
                                                 ${(() => {
                   const maxValue = Math.max(
@@ -4365,7 +4383,7 @@ export default function DownloadReport() {
                                             </div>
                                         </div>
 
-                                        ${!isLiftTest
+                                        ${showRightChart
                   ? `
                                         <!-- Right Side Chart -->
                                         <div style="background: #ffffff; border: 2px solid #10b981; border-radius: 8px; padding: 12px; page-break-inside: avoid; flex: 1; min-width: 250px;">
@@ -4595,7 +4613,7 @@ export default function DownloadReport() {
                           `;
                 } else if (testName.includes("mcaft")) {
                   return `
-                            <p style="margin: 2px 0;">· Weller et al. Prediction of maximal oxygen uptake from a modified Canadian aerobic fitness test. Can. J. Appl. Physiol. 18(2) 175-188, 1993</p>
+                            <p style="margin: 2px 0;">�� Weller et al. Prediction of maximal oxygen uptake from a modified Canadian aerobic fitness test. Can. J. Appl. Physiol. 18(2) 175-188, 1993</p>
                             <p style="margin: 2px 0;">· Weller et al. A study to validate the Canadian aerobic fitness test. Can. J. Appl. Physiol. 20(2) 211-221, 1995</p>
                           `;
                 } else if (
