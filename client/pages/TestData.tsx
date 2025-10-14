@@ -1163,7 +1163,7 @@ export default function TestData() {
                     opacity: trial.value > 0 ? 0.8 : 0.3,
                   }}
                 />
-                <span className="text-xs mt-1 text-gray-600">Trial</span>
+                <span className="text-xs mt-1 text-gray-600">{`Trial ${index + 1}`}</span>
               </div>
             );
           })}
