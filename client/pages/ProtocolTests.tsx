@@ -294,16 +294,25 @@ const testGroups = {
       ],
     },
     {
-      name: "Dynamic Lift",
+      name: "Dynamic Frequent Lift",
       id: "dynamic-lift",
       tests: [
         { id: "dynamic-lift-low", name: "Low" },
         { id: "dynamic-lift-mid", name: "Mid" },
         { id: "dynamic-lift-high", name: "High" },
         { id: "dynamic-lift-overhead", name: "Overhead" },
-        { id: "dynamic-lift-frequent", name: "Dynamic Frequent Lifts" },
       ],
     },
+    {
+      name: "Dynamic Infrequent Lift",
+      id: "dynamic-infrequent-lift",
+      tests: [
+        { id: "dynamic-infrequent-lift-low", name: "Low" },
+        { id: "dynamic-infrequent-lift-mid", name: "Mid" },
+        { id: "dynamic-infrequent-lift-high", name: "High" },
+        { id: "dynamic-infrequent-lift-overhead", name: "Overhead" },
+      ],
+    }
   ],
   "rom-spine": [
     {
