@@ -561,6 +561,10 @@ export default function DownloadReport() {
             comments: entry.comments || "",
             effort: entry.effort || "",
             observations: normalizedObservations,
+            dynamicEndpointType:
+              entry.dynamicEndpointType ||
+              entry.parameters?.dynamicEndpointType ||
+              "",
             demonstrated:
               normalizedDemonstrated !== undefined
                 ? normalizedDemonstrated
@@ -4169,17 +4173,23 @@ export default function DownloadReport() {
                   const key = String(
                     (test as any).dynamicEndpointType || "",
                   ).toLowerCase();
-                  const map: any = {
+                  const map: Record<string, string> = {
                     biomechanical: "Biomechanical",
                     physiological: "Physiological",
                     psychophysical: "Psychophysical",
                     "task-requirement": "Task Requirement",
                   };
-                  return (test.testName || "")
-                    .toLowerCase()
-                    .includes("dynamic") && map[key]
-                    ? `<p style="font-size: 11px; margin: 6px 0 8px 0;"><strong>Endpoint:</strong> ${map[key]}</p>`
-                    : "";
+                  if (!(test.testName || "").toLowerCase().includes("dynamic")) {
+                    return "";
+                  }
+                  if (!key) {
+                    return "";
+                  }
+                  const fallback = key
+                    .replace(/-/g, " ")
+                    .replace(/\b\w/g, (char) => char.toUpperCase());
+                  const label = map[key] || fallback;
+                  return `<p style="font-size: 11px; margin: 6px 0 8px 0;"><strong>Endpoint Condition:</strong> ${label}</p>`;
                 })()}
                                 `
                 : ""
