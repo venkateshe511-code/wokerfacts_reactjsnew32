@@ -4486,7 +4486,7 @@ export default function DownloadReport() {
                 }>
                                     </div>
 
-                                    ${!isLiftTest
+                                    ${showRightChart
                   ? `
                                     <!-- Comparison Summary -->
                                     <div style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 8px; margin: 8px 0; text-align: center;">
@@ -4613,7 +4613,7 @@ export default function DownloadReport() {
                           `;
                 } else if (testName.includes("mcaft")) {
                   return `
-                            <p style="margin: 2px 0;">�� Weller et al. Prediction of maximal oxygen uptake from a modified Canadian aerobic fitness test. Can. J. Appl. Physiol. 18(2) 175-188, 1993</p>
+                            <p style="margin: 2px 0;">· Weller et al. Prediction of maximal oxygen uptake from a modified Canadian aerobic fitness test. Can. J. Appl. Physiol. 18(2) 175-188, 1993</p>
                             <p style="margin: 2px 0;">· Weller et al. A study to validate the Canadian aerobic fitness test. Can. J. Appl. Physiol. 20(2) 211-221, 1995</p>
                           `;
                 } else if (
