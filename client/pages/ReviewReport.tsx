@@ -376,6 +376,76 @@ export default function ReviewReport() {
     ].filter((value) => typeof value === "number" && !Number.isNaN(value));
   };
 
+  const resolveWeightDisplayOptions = (testEntry: any) => {
+    const measureUnit = `${testEntry?.unitMeasure ?? ""}`
+      .trim()
+      .toLowerCase();
+    const targetUnit = `${testEntry?.valueToBeTestedUnit ?? ""}`
+      .trim()
+      .toLowerCase();
+
+    const kgTokens = ["kg", "kgs", "kilogram", "kilograms"];
+    const lbTokens = ["lb", "lbs", "pound", "pounds"];
+
+    const convertToLbs =
+      kgTokens.includes(measureUnit) || kgTokens.includes(targetUnit);
+
+    const displayUnit = convertToLbs
+      ? "lbs"
+      : lbTokens.includes(targetUnit)
+        ? "lbs"
+        : lbTokens.includes(measureUnit)
+          ? "lbs"
+          : targetUnit || "lbs";
+
+    return { convertToLbs, displayUnit };
+  };
+
+  const convertWeightMeasurement = (
+    value: unknown,
+    convertToLbs: boolean,
+  ): number | null => {
+    if (typeof value !== "number" || Number.isNaN(value)) {
+      return null;
+    }
+    const normalized = convertToLbs ? value * 2.20462 : value;
+    return Math.round(normalized * 10) / 10;
+  };
+
+  const formatWeightMeasurement = (
+    value: number | null,
+    unitLabel: string,
+  ): string => {
+    if (value === null) return "—";
+    const formatted = Number.isInteger(value)
+      ? value.toFixed(0)
+      : value.toFixed(1);
+    return unitLabel ? `${formatted} ${unitLabel}` : formatted;
+  };
+
+  const buildTrialDisplayRow = (
+    measurements: any,
+    convertToLbs: boolean,
+    unitLabel: string,
+  ): string[] => {
+    return Array.from({ length: 6 }, (_, index) => {
+      const rawValue = measurements?.[`trial${index + 1}`];
+      const converted = convertWeightMeasurement(rawValue, convertToLbs);
+      return formatWeightMeasurement(converted, unitLabel);
+    });
+  };
+
+  const computeMeasurementsAverage = (
+    measurements: any,
+    convertToLbs: boolean,
+  ): number | null => {
+    const trials = extractTrialValues(measurements);
+    if (trials.length === 0) return null;
+    const avg =
+      trials.reduce((sum, value) => sum + value, 0) / trials.length;
+    return convertWeightMeasurement(avg, convertToLbs);
+  };
+
   const resolveDynamicEndpointLabel = (test: any): string | null => {
     const rawEndpoint = String(
       (test as any)?.dynamicEndpointType ??
@@ -476,6 +546,7 @@ export default function ReviewReport() {
     }
     return age;
   };
+
 
   if (!reportData.evaluatorData || !reportData.claimantData) {
     return (
@@ -3515,6 +3586,43 @@ export default function ReviewReport() {
                         const isDynamicLift =
                           isLiftTest && testName.includes("dynamic");
 
+                        const { convertToLbs, displayUnit } =
+                          resolveWeightDisplayOptions(test);
+                        const leftTrialCells = buildTrialDisplayRow(
+                          test.leftMeasurements,
+                          convertToLbs,
+                          displayUnit,
+                        );
+                        const rightTrialCells = buildTrialDisplayRow(
+                          test.rightMeasurements,
+                          convertToLbs,
+                          displayUnit,
+                        );
+                        const leftAverageDisplay =
+                          formatWeightMeasurement(
+                            computeMeasurementsAverage(
+                              test.leftMeasurements,
+                              convertToLbs,
+                            ) ??
+                            convertWeightMeasurement(
+                              leftAvg,
+                              convertToLbs,
+                            ),
+                            displayUnit,
+                          );
+                        const rightAverageDisplay =
+                          formatWeightMeasurement(
+                            computeMeasurementsAverage(
+                              test.rightMeasurements,
+                              convertToLbs,
+                            ) ??
+                            convertWeightMeasurement(
+                              rightAvg,
+                              convertToLbs,
+                            ),
+                            displayUnit,
+                          );
+
                         return (
                           <div
                             key={testIndex}
@@ -3548,6 +3656,8 @@ export default function ReviewReport() {
                                         `${test.testId || ""} ${test.testName || ""}`.toLowerCase();
                                       return key.includes("mve"); // covers MVE and MMVE
                                     })();
+
+
                                     return (
                                       <div className="grid grid-cols-1 gap-3">
                                         {illos.map((ill, i) => (
@@ -3651,71 +3761,122 @@ export default function ReviewReport() {
 
                                     {isRangeOfMotion ? (
                                       // Range of Motion Table
-                                      <table className="w-full border border-gray-400 text-xs mb-4">
-                                        <thead>
-                                          <tr className="bg-yellow-300">
-                                            <th className="border border-gray-400 p-2 text-left">
-                                              Area Evaluated:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Data:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Valid?
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Norm:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              % of Norm:
-                                            </th>
-                                            <th className="border border-gray-400 border-r-gray-400 p-2">
-                                              Test Date
-                                            </th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              {test.testName}
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              {Math.max(
-                                                leftAvg,
-                                                rightAvg,
-                                              ).toFixed(0)}{" "}
-                                              deg
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              {test.demonstrated
-                                                ? "Pass"
-                                                : "Fail"}
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              {testName.includes("flexion")
-                                                ? "60 deg"
-                                                : testName.includes("extension")
-                                                  ? "25 deg"
-                                                  : "25 deg"}
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              {Math.round(
-                                                (Math.max(leftAvg, rightAvg) /
-                                                  (testName.includes("flexion")
-                                                    ? 60
-                                                    : 25)) *
-                                                100,
-                                              )}
-                                              %
-                                            </td>
-                                            <td className="border border-gray-400 border-r-gray-400 p-2">
-                                              {currentDate}
-                                              <br />
-                                              10:20:36 AM
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
+                                      <>
+                                        <table className="w-full border border-gray-400 text-xs mb-4">
+                                          <thead>
+                                            <tr className="bg-yellow-300">
+                                              <th className="border border-gray-400 p-2 text-left">
+                                                Area Evaluated:
+                                              </th>
+                                              <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                Data:
+                                              </th>
+                                              <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                Valid?
+                                              </th>
+                                              <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                Norm:
+                                              </th>
+                                              <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                % of Norm:
+                                              </th>
+                                              <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                Test Date
+                                              </th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                {test.testName}
+                                              </td>
+                                              <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                {Math.max(
+                                                  leftAvg,
+                                                  rightAvg,
+                                                ).toFixed(0)}{" "}
+                                                deg
+                                              </td>
+                                              <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                {test.demonstrated
+                                                  ? "Pass"
+                                                  : "Fail"}
+                                              </td>
+                                              <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                {testName.includes("flexion")
+                                                  ? "60 deg"
+                                                  : testName.includes("extension")
+                                                    ? "25 deg"
+                                                    : "25 deg"}
+                                              </td>
+                                              <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                {Math.round(
+                                                  (Math.max(leftAvg, rightAvg) /
+                                                    (testName.includes("flexion")
+                                                      ? 60
+                                                      : 25)) *
+                                                  100,
+                                                )}
+                                                %
+                                              </td>
+                                              <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                {currentDate}
+                                                <br />
+                                                10:20:36 AM
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                        <></>
+                                        <table className="w-full border border-black text-xs text-center">
+                                          <thead>
+                                            <tr className="bg-yellow-300">
+                                              <th className="border border-black px-2 py-1 font-bold">Side</th>
+                                              <th className="border border-black px-2 py-1 font-bold">Trial 1</th>
+                                              <th className="border border-black px-2 py-1 font-bold">Trial 2</th>
+                                              <th className="border border-black px-2 py-1 font-bold">Trial 3</th>
+                                              <th className="border border-black px-2 py-1 font-bold">Trial 4</th>
+                                              <th className="border border-black px-2 py-1 font-bold">Trial 5</th>
+                                              <th className="border border-black px-2 py-1 font-bold">Trial 6</th>
+                                              <th className="border border-black px-2 py-1 font-bold">Average</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td className="border border-black px-2 py-1 font-bold text-left">
+                                                Left
+                                              </td>
+                                              {leftTrialCells.map((value, index) => (
+                                                <td
+                                                  key={`left-trial-${index}`}
+                                                  className="border border-black px-2 py-1"
+                                                >
+                                                  {value}
+                                                </td>
+                                              ))}
+                                              <td className="border border-black px-2 py-1 font-bold">
+                                                {leftAverageDisplay}
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td className="border border-black px-2 py-1 font-bold text-left">
+                                                Right
+                                              </td>
+                                              {rightTrialCells.map((value, index) => (
+                                                <td
+                                                  key={`right-trial-${index}`}
+                                                  className="border border-black px-2 py-1"
+                                                >
+                                                  {value}
+                                                </td>
+                                              ))}
+                                              <td className="border border-black px-2 py-1 font-bold">
+                                                {rightAverageDisplay}
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </>
                                     ) : isLiftTest ? (
                                       // Lift Results - Six Trials (single table)
                                       <div>
@@ -3747,6 +3908,39 @@ export default function ReviewReport() {
                                                 (avgLbs / normLbs) * 100,
                                               )
                                               : 0;
+                                          const leftTrialValues =
+                                            extractTrialValues(test.leftMeasurements);
+                                          const rightTrialValues =
+                                            extractTrialValues(test.rightMeasurements);
+                                          const primaryMeasurements =
+                                            leftTrialValues.length > 0
+                                              ? test.leftMeasurements
+                                              : rightTrialValues.length > 0
+                                                ? test.rightMeasurements
+                                                : test.leftMeasurements;
+                                          const { convertToLbs, displayUnit } =
+                                            resolveWeightDisplayOptions(test);
+                                          const trialCells = buildTrialDisplayRow(
+                                            primaryMeasurements,
+                                            convertToLbs,
+                                            displayUnit,
+                                          );
+                                          const trialAverageValue =
+                                            computeMeasurementsAverage(
+                                              primaryMeasurements,
+                                              convertToLbs,
+                                            ) ??
+                                            convertWeightMeasurement(
+                                              leftTrialValues.length > 0
+                                                ? leftAvg
+                                                : rightAvg,
+                                              convertToLbs,
+                                            );
+                                          const trialAverageDisplay =
+                                            formatWeightMeasurement(
+                                              trialAverageValue,
+                                              displayUnit,
+                                            );
                                           return (
                                             <>
                                               <table className="w-full border border-gray-400 text-xs mb-4">
@@ -3798,13 +3992,17 @@ export default function ReviewReport() {
                                                 </thead>
                                                 <tbody>
                                                   <tr>
-                                                    <td className="border border-black px-2 py-1">13 lbs</td>
-                                                    <td className="border border-black px-2 py-1">22 lbs</td>
-                                                    <td className="border border-black px-2 py-1">18 lbs</td>
-                                                    <td className="border border-black px-2 py-1">18 lbs</td>
-                                                    <td className="border border-black px-2 py-1">18 lbs</td>
-                                                    <td className="border border-black px-2 py-1">18 lbs</td>
-                                                    <td className="border border-black px-2 py-1 font-bold">17.8 lbs</td>
+                                                    {trialCells.map((value, index) => (
+                                                      <td
+                                                        key={`lift-trial-${index}`}
+                                                        className="border border-black px-2 py-1"
+                                                      >
+                                                        {value}
+                                                      </td>
+                                                    ))}
+                                                    <td className="border border-black px-2 py-1 font-bold">
+                                                      {trialAverageDisplay}
+                                                    </td>
                                                   </tr>
                                                 </tbody>
                                               </table>
@@ -5227,134 +5425,185 @@ export default function ReviewReport() {
                                         )}
                                       </div>
                                     ) : (
-                                      // Strength/Grip Test Table
-                                      <>
-                                        <table className="w-full border border-gray-400 text-xs mb-4">
-                                          <thead>
-                                            <tr className="bg-yellow-300">
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                Demonstrated Activity
-                                              </th>
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                Avg. Force (lb)
-                                              </th>
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                Norm (lb)
-                                              </th>
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                % age Norm
-                                              </th>
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                % age CV
-                                              </th>
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                Difference
-                                              </th>
-                                              <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                Test Date
-                                              </th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2"></td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                Left | Right
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                L | R
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                L | R
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                L | R
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                Prev | Total
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2"></td>
-                                            </tr>
-                                            <tr>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                {test.testName}
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                {leftAvg.toFixed(1)} |{" "}
-                                                {rightAvg.toFixed(1)}
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                {isGripTest
-                                                  ? "110.5 | 120.8"
-                                                  : "85.0 | 90.0"}
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                {Math.round(
-                                                  (leftAvg /
-                                                    (isGripTest ? 110.5 : 85.0)) *
-                                                  100,
-                                                )}
-                                                % |{" "}
-                                                {Math.round(
-                                                  (rightAvg /
-                                                    (isGripTest ? 120.8 : 90.0)) *
-                                                  100,
-                                                )}
-                                                %
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                {leftCV}% | {rightCV}%
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                {bilateralDef.toFixed(1)}%
-                                              </td>
-                                              <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                {currentDate}
-                                                <br />
-                                                10:05:38 AM
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                        <></>
-                                        <table className="w-full border border-black text-xs text-center">
-                                          <thead>
-                                            <tr className="bg-yellow-300">
-                                              <th className="border border-black px-2 py-1 font-bold">Side</th>
-                                              <th className="border border-black px-2 py-1 font-bold">Trial 1</th>
-                                              <th className="border border-black px-2 py-1 font-bold">Trial 2</th>
-                                              <th className="border border-black px-2 py-1 font-bold">Trial 3</th>
-                                              <th className="border border-black px-2 py-1 font-bold">Trial 4</th>
-                                              <th className="border border-black px-2 py-1 font-bold">Trial 5</th>
-                                              <th className="border border-black px-2 py-1 font-bold">Trial 6</th>
-                                              <th className="border border-black px-2 py-1 font-bold">Average</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <td className="border border-black px-2 py-1 font-bold text-left">Left</td>
-                                              <td className="border border-black px-2 py-1">18 lbs</td>
-                                              <td className="border border-black px-2 py-1">22 lbs</td>
-                                              <td className="border border-black px-2 py-1">16 lbs</td>
-                                              <td className="border border-black px-2 py-1">22 lbs</td>
-                                              <td className="border border-black px-2 py-1">14 lbs</td>
-                                              <td className="border border-black px-2 py-1">23 lbs</td>
-                                              <td className="border border-black px-2 py-1 font-bold">19.2 lbs</td>
-                                            </tr>
-                                            <tr>
-                                              <td className="border border-black px-2 py-1 font-bold text-left">Right</td>
-                                              <td className="border border-black px-2 py-1">19 lbs</td>
-                                              <td className="border border-black px-2 py-1">26 lbs</td>
-                                              <td className="border border-black px-2 py-1">18 lbs</td>
-                                              <td className="border border-black px-2 py-1">26 lbs</td>
-                                              <td className="border border-black px-2 py-1">24 lbs</td>
-                                              <td className="border border-black px-2 py-1">26 lbs</td>
-                                              <td className="border border-black px-2 py-1 font-bold">23.2 lbs</td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
+                                      (() => {
+                                        const { convertToLbs, displayUnit } =
+                                          resolveWeightDisplayOptions(test);
+                                        const leftTrialCells = buildTrialDisplayRow(
+                                          test.leftMeasurements,
+                                          convertToLbs,
+                                          displayUnit,
+                                        );
+                                        const rightTrialCells = buildTrialDisplayRow(
+                                          test.rightMeasurements,
+                                          convertToLbs,
+                                          displayUnit,
+                                        );
+                                        const leftAverageDisplay =
+                                          formatWeightMeasurement(
+                                            computeMeasurementsAverage(
+                                              test.leftMeasurements,
+                                              convertToLbs,
+                                            ) ??
+                                            convertWeightMeasurement(
+                                              leftAvg,
+                                              convertToLbs,
+                                            ),
+                                            displayUnit,
+                                          );
+                                        const rightAverageDisplay =
+                                          formatWeightMeasurement(
+                                            computeMeasurementsAverage(
+                                              test.rightMeasurements,
+                                              convertToLbs,
+                                            ) ??
+                                            convertWeightMeasurement(
+                                              rightAvg,
+                                              convertToLbs,
+                                            ),
+                                            displayUnit,
+                                          );
+                                        return (
+                                          <>
+                                            <table className="w-full border border-gray-400 text-xs mb-4">
+                                              <thead>
+                                                <tr className="bg-yellow-300">
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Demonstrated Activity
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Avg. Force (lb)
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Norm (lb)
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    % age Norm
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    % age CV
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Difference
+                                                  </th>
+                                                  <th className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Test Date
+                                                  </th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2"></td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Left | Right
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    L | R
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    L | R
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    L | R
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    Prev | Total
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2"></td>
+                                                </tr>
+                                                <tr>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {test.testName}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {leftAvg.toFixed(1)} |{" "}
+                                                    {rightAvg.toFixed(1)}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {isGripTest
+                                                      ? "110.5 | 120.8"
+                                                      : "85.0 | 90.0"}
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {Math.round(
+                                                      (leftAvg /
+                                                        (isGripTest ? 110.5 : 85.0)) *
+                                                      100,
+                                                    )}
+                                                    % |{" "}
+                                                    {Math.round(
+                                                      (rightAvg /
+                                                        (isGripTest ? 120.8 : 90.0)) *
+                                                      100,
+                                                    )}
+                                                    %
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {leftCV}% | {rightCV}%
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {bilateralDef.toFixed(1)}%
+                                                  </td>
+                                                  <td className="border border-gray-400 border-r-gray-400 p-2">
+                                                    {currentDate}
+                                                    <br />
+                                                    10:05:38 AM
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                            <></>
+                                            <table className="w-full border border-black text-xs text-center">
+                                              <thead>
+                                                <tr className="bg-yellow-300">
+                                                  <th className="border border-black px-2 py-1 font-bold">Side</th>
+                                                  <th className="border border-black px-2 py-1 font-bold">Trial 1</th>
+                                                  <th className="border border-black px-2 py-1 font-bold">Trial 2</th>
+                                                  <th className="border border-black px-2 py-1 font-bold">Trial 3</th>
+                                                  <th className="border border-black px-2 py-1 font-bold">Trial 4</th>
+                                                  <th className="border border-black px-2 py-1 font-bold">Trial 5</th>
+                                                  <th className="border border-black px-2 py-1 font-bold">Trial 6</th>
+                                                  <th className="border border-black px-2 py-1 font-bold">Average</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr>
+                                                  <td className="border border-black px-2 py-1 font-bold text-left">
+                                                    Left
+                                                  </td>
+                                                  {leftTrialCells.map((value, index) => (
+                                                    <td
+                                                      key={`left-trial-${index}`}
+                                                      className="border border-black px-2 py-1"
+                                                    >
+                                                      {value}
+                                                    </td>
+                                                  ))}
+                                                  <td className="border border-black px-2 py-1 font-bold">
+                                                    {leftAverageDisplay}
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td className="border border-black px-2 py-1 font-bold text-left">
+                                                    Right
+                                                  </td>
+                                                  {rightTrialCells.map((value, index) => (
+                                                    <td
+                                                      key={`right-trial-${index}`}
+                                                      className="border border-black px-2 py-1"
+                                                    >
+                                                      {value}
+                                                    </td>
+                                                  ))}
+                                                  <td className="border border-black px-2 py-1 font-bold">
+                                                    {rightAverageDisplay}
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
 
-                                      </>
+                                          </>
+                                        );
+                                      })()
                                     )}
 
                                     {/* Additional test information */}

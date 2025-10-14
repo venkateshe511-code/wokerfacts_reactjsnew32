@@ -182,25 +182,19 @@ function createHeaderCell(text) {
 }
 
 function createSideTrialTable(test, measurementUnit) {
-  // --- Unit detection (explicitly handle weight) ---
+  // --- Unit detection ---
   const name = (test?.testName || "").toLowerCase();
-
   const unit =
     measurementUnit ||
     test?.unitMeasure ||
     test?.valueToBeTestedUnit ||
     test?.unit ||
     test?.units ||
-    // if test name looks like ROM / degrees
     (name.match(/(rom|range|flexion|extension|deg)/)
       ? "deg"
-      : // if test name looks like weight or strength-based
-      name.match(
-        /(weight|strength|force|pressure|load|grip|resistance|torque)/,
-      )
+      : name.match(/(weight|strength|force|pressure|load|grip|resistance|torque)/)
         ? "lbs"
-        : // fallback default
-        "lbs");
+        : "lbs");
 
   // --- Helpers ---
   const toNumber = (v) => {
@@ -219,9 +213,7 @@ function createSideTrialTable(test, measurementUnit) {
     if (typeof src === "object") {
       const out = [];
       for (let i = 1; i <= 30; i++) {
-        const key = [`trial${i}`, `t${i}`, String(i)].find(
-          (k) => src[k] != null,
-        );
+        const key = [`trial${i}`, `t${i}`, String(i)].find((k) => src[k] != null);
         if (key) out.push(toNumber(src[key]));
       }
       return out;
@@ -242,18 +234,17 @@ function createSideTrialTable(test, measurementUnit) {
   // --- Extract trials ---
   const leftTrials = readTrials(test?.leftMeasurements);
   const rightTrials = readTrials(test?.rightMeasurements);
+  const singleTrials = readTrials(test?.measurements);
 
-  const trialCount = Math.max(leftTrials.length, rightTrials.length);
-  const trialHeaders = Array.from(
-    { length: trialCount },
-    (_, i) => `Trial ${i + 1}`,
-  );
+  const trialCount = Math.max(leftTrials.length, rightTrials.length, singleTrials.length);
+  const trialHeaders = Array.from({ length: trialCount }, (_, i) => `Trial ${i + 1}`);
 
   // --- Averages ---
   const leftAvgNum = average(leftTrials);
   const rightAvgNum = average(rightTrials);
+  const singleAvgNum = average(singleTrials);
 
-  // --- Docx helpers ---
+  // --- DOCX cell helper ---
   const makeCell = (text, options = {}) =>
     new TableCell({
       margins: { top: 100, bottom: 100, left: 150, right: 150 },
@@ -281,52 +272,59 @@ function createSideTrialTable(test, measurementUnit) {
 
   const rows = [];
 
-  // Header
-  rows.push(
-    new TableRow({
-      children: [
-        makeCell("Side", { bold: true, shading: true }),
-        ...trialHeaders.map((h) => makeCell(h, { bold: true, shading: true })),
-        makeCell("Average", { bold: true, shading: true }),
-      ],
-    }),
-  );
+  // --- Header Row ---
+  const headerCells = [
+    ...(leftTrials.length || rightTrials.length ? [makeCell("Side", { bold: true, shading: true })] : []),
+    ...trialHeaders.map((h) => makeCell(h, { bold: true, shading: true })),
+    makeCell("Average", { bold: true, shading: true }),
+  ];
+  rows.push(new TableRow({ children: headerCells }));
 
-  // Left row
-  rows.push(
-    new TableRow({
-      children: [
-        makeCell("Left", { bold: true }),
-        ...trialHeaders.map((_, i) => {
-          const v = leftTrials[i];
-          const txt = v != null ? `${formatVal(v)} ${unit}` : "";
-          return makeCell(txt);
-        }),
-        makeCell(
-          leftAvgNum != null ? `${leftAvgNum.toFixed(1)} ${unit}` : "-",
-          {},
-        ),
-      ],
-    }),
-  );
+  // --- Detect type ---
+  const isSideBased = leftTrials.length || rightTrials.length;
 
-  // Right row
-  rows.push(
-    new TableRow({
-      children: [
-        makeCell("Right", { bold: true }),
-        ...trialHeaders.map((_, i) => {
-          const v = rightTrials[i];
-          const txt = v != null ? `${formatVal(v)} ${unit}` : "";
-          return makeCell(txt);
-        }),
-        makeCell(
-          rightAvgNum != null ? `${rightAvgNum.toFixed(1)} ${unit}` : "-",
-          {},
-        ),
-      ],
-    }),
-  );
+  if (isSideBased) {
+    // ✅ Left Row
+    rows.push(
+      new TableRow({
+        children: [
+          makeCell("Left", { bold: true }),
+          ...trialHeaders.map((_, i) => {
+            const v = leftTrials[i];
+            return makeCell(v != null ? `${formatVal(v)} ${unit}` : "");
+          }),
+          makeCell(leftAvgNum != null ? `${leftAvgNum.toFixed(1)} ${unit}` : "-", { bold: true }),
+        ],
+      })
+    );
+
+    // ✅ Right Row
+    rows.push(
+      new TableRow({
+        children: [
+          makeCell("Right", { bold: true }),
+          ...trialHeaders.map((_, i) => {
+            const v = rightTrials[i];
+            return makeCell(v != null ? `${formatVal(v)} ${unit}` : "");
+          }),
+          makeCell(rightAvgNum != null ? `${rightAvgNum.toFixed(1)} ${unit}` : "-", { bold: true }),
+        ],
+      })
+    );
+  } else {
+    // ✅ Single-line Trial Table (no Left/Right)
+    rows.push(
+      new TableRow({
+        children: [
+          ...trialHeaders.map((_, i) => {
+            const v = singleTrials[i];
+            return makeCell(v != null ? `${formatVal(v)} ${unit}` : "");
+          }),
+          makeCell(singleAvgNum != null ? `${singleAvgNum.toFixed(1)} ${unit}` : "-", { bold: true }),
+        ],
+      })
+    );
+  }
 
   return new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
@@ -415,48 +413,60 @@ const calculateAverage = (measurements) => {
 //  Define all reference texts grouped by category
 const testReferences = {
   "static-lift": [
-    "Refer to ISO 11228-1 standards for manual lifting.",
-    "Compare with NIOSH lifting index for risk evaluation.",
+    "Matheson, L. N., et al. (1995). Development of a database of functional assessment measures related to work disability. *Journal of Occupational Rehabilitation*, 5(4), 191–204.",
+    "Snook, S. H., & Ciriello, V. M. (1991). The design of manual handling tasks: Revised tables of maximum acceptable weights and forces. *Ergonomics*, 34(9), 1197–1213.",
+    "NIOSH (1994). Applications Manual for the Revised NIOSH Lifting Equation. *U.S. Department of Health and Human Services, Cincinnati, OH.*",
   ],
+
   "dynamic-lift": [
-    "Follow ergonomic guidelines for repetitive lifting tasks.",
-    "Consider average force and endurance levels.",
+    "Matheson, L. N., et al. (2002). Reliability and validity of functional capacity evaluation using dynamic lifting tests. *Work*, 19(2), 87–93.",
+    "Waters, T. R., et al. (1993). Revised NIOSH equation for the design and evaluation of manual lifting tasks. *Ergonomics*, 36(7), 749–776.",
+    "Snook, S. H., & Ciriello, V. M. (1991). *Ergonomics*, 34(9), 1197–1213.",
   ],
+
   "hand-strength": [
-    "Normative data: Grip strength varies by age and gender.",
-    "Ensure consistent hand positioning for all trials.",
+    "Mathiowetz, V., et al. (1985). Grip and pinch strength: Normative data for adults. *Archives of Physical Medicine and Rehabilitation*, 66(2), 69–74.",
+    "Innes, E., & Straker, L. (1999). Reliability of work-related assessments. *Work*, 13(2), 107–124.",
   ],
+
   "pinch-strength": [
-    "Pinch strength references based on standard Jamar device data.",
-    "Compare bilateral symmetry for clinical relevance.",
+    "Mathiowetz, V., et al. (1985). Grip and pinch strength: Normative data for adults. *Archives of Physical Medicine and Rehabilitation*, 66(2), 69–74.",
+    "Peters, M. J., & Baldwin, M. L. (2007). Pinch strength measurement considerations in clinical evaluation. *Clinical Biomechanics*, 22(9), 1022–1028.",
   ],
+
   "range-of-motion": [
-    "ROM norms based on AAOS standards.",
-    "Check consistency across both limbs and measure angles accurately.",
+    "American Academy of Orthopaedic Surgeons (AAOS). (1965). *Joint Motion: Method of Measuring and Recording.* Chicago: AAOS.",
+    "Norkin, C. C., & White, D. J. (2016). *Measurement of Joint Motion: A Guide to Goniometry.* F.A. Davis Company.",
   ],
+
   "muscle-test": [
-    "Manual muscle testing based on MRC grading scale (0–5).",
-    "Observe compensatory movements during resistance.",
+    "Kendall, F. P., et al. (2005). *Muscles: Testing and Function with Posture and Pain.* Lippincott Williams & Wilkins.",
+    "Medical Research Council (1978). *Aids to the Examination of the Peripheral Nervous System.* Her Majesty’s Stationery Office.",
   ],
+
   goniometers: [
-    "Follow standard goniometric procedures per AAOS.",
-    "Record end-feel and any pain limitation.",
+    "American Academy of Orthopaedic Surgeons (AAOS). (1965). *Joint Motion: Method of Measuring and Recording.*",
+    "Norkin, C. C., & White, D. J. (2016). *Measurement of Joint Motion: A Guide to Goniometry.*",
   ],
+
   mtm: [
-    "Based on MTM-1 methodology and standard reach analysis.",
-    "Evaluate efficiency and ergonomic feasibility.",
+    "Maynard, W. S., & Stegemerten, G. (1948). *Methods-Time Measurement (MTM-1): The Foundation of Motion Time Systems.* McGraw-Hill.",
+    "Barnes, R. M. (1980). *Motion and Time Study: Design and Measurement of Work.* John Wiley & Sons.",
   ],
+
   "bruce-treadmill": [
-    "Use Bruce protocol stage times for VO₂ max estimation.",
-    "Monitor heart rate response for submaximal effort.",
+    "Bires, A. M., Lawson, D., Wasser, T. E., & Raber-Baer, D. (2013). Comparison of the Bruce and Modified Bruce treadmill protocols. *Journal of Nuclear Medicine Technology*, 41(4), 274–278.",
+    "Bruce, R. A., et al. (1973). Exercise testing in adult normal subjects and cardiac patients. *Annals of Clinical Research*, 3(3), 144–152.",
   ],
+
   mcaft: [
-    "Step test data derived from Canadian Aerobic Fitness Test guidelines.",
-    "Heart rate recovery used for fitness classification.",
+    "Weller, I. M., Thomas, S., Gledhill, N., & Paterson, D. H. (1993). Prediction of maximal oxygen uptake from a modified Canadian Aerobic Fitness Test. *Canadian Journal of Applied Physiology*, 18(2), 175–188.",
+    "Weller, I. M., Thomas, S., Gledhill, N., & Paterson, D. H. (1995). A study to validate the Canadian Aerobic Fitness Test. *Canadian Journal of Applied Physiology*, 20(2), 211–221.",
   ],
+
   kasch: [
-    "Kasch step test norms for cardiac rehabilitation population.",
-    "Adjust step height based on participant’s age and gender.",
+    "Davis, J. A., & Wilmore, J. H. (1979). Validation of a bench stepping test for cardiorespiratory fitness classification of emergency service personnel. *Journal of Occupational Medicine*, 21(6), 501–506.",
+    "Kasch, F. W. (1961). A step test for assessing physical fitness in adults. *Journal of Physical Education*, 58, 37–39.",
   ],
 };
 
@@ -726,6 +736,8 @@ async function loadImageAsUint8(source) {
     } else if (source.startsWith("http")) {
       const res = await fetch(source);
       buffer = Buffer.from(await res.arrayBuffer());
+    } else if (!path.isAbsolute(source)) {
+      filePath = path.join(__dirname, "sample_illustration", source);
     } else {
       // Fallback to sample_illustration directory
       const localPath = path.join(process.cwd(), "sample_illustration", source);
@@ -1668,6 +1680,7 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
     new TableRow({
       children: [
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
           columnSpan: 8,
           borders: {
             top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
@@ -1679,7 +1692,7 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              children: [new TextRun({ text: title, bold: true })],
+              children: [new TextRun({ text: title, bold: true, size: 16 })],
               spacing: { before: 80, after: 80 },
             }),
           ],
@@ -1704,6 +1717,8 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
       children: headers.map(
         (h, idx) =>
           new TableCell({
+            verticalAlign: VerticalAlign.CENTER,
+
             shading: { type: ShadingType.CLEAR, fill: GRID_HEADER_FILL },
             borders: {
               top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
@@ -1755,6 +1770,8 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
         children: cells.map(
           (val, idx) =>
             new TableCell({
+              verticalAlign: VerticalAlign.CENTER,
+
               borders: {
                 top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
                 bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
@@ -1786,6 +1803,8 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
       children: [
         // "Avg."
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
           borders: {
             top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
@@ -1796,63 +1815,77 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              children: [new TextRun({ text: "Avg.", bold: true })],
+              children: [new TextRun({ text: "Avg.", bold: true, size: 16 })],
             }),
           ],
         }),
         // Side
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
           children: [new Paragraph({ children: [new TextRun("")] })],
         }),
         // Weight/Plane
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
           children: [new Paragraph({ children: [new TextRun("")] })],
         }),
         // Distance/Posture
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
           children: [new Paragraph({ children: [new TextRun("")] })],
         }),
         // Reps (avg or common value)
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun(Number.isFinite(avgReps) ? format1(avgReps) : ""),
+                new TextRun({ text: Number.isFinite(avgReps) ? format1(avgReps) : "", size: 16 }),
               ],
             }),
           ],
         }),
         // Time (sec) avg
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun(Number.isFinite(avgTime) ? format2(avgTime) : ""),
+                new TextRun({ text: Number.isFinite(avgTime) ? format2(avgTime) : "", size: 16 }),
               ],
             }),
           ],
         }),
         // %IS avg
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun(Number.isFinite(avgIS) ? format1(avgIS) : ""),
+                new TextRun({ text: Number.isFinite(avgIS) ? format1(avgIS) : "", size: 16 }),
               ],
             }),
           ],
         }),
         // Time Set Completed (total)
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
           borders: { right: border },
           borders: {
@@ -1865,7 +1898,7 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun(Number.isFinite(sumTime) ? format1(sumTime) : ""),
+                new TextRun({ text: Number.isFinite(sumTime) ? format1(sumTime) : "", size: 16 }),
               ],
             }),
           ],
@@ -1879,6 +1912,8 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
     new TableRow({
       children: [
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           columnSpan: 6,
           shading: { type: ShadingType.CLEAR, fill: TOTAL_IS_FILL },
           borders: {
@@ -1889,11 +1924,13 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
           },
           children: [
             new Paragraph({
-              children: [new TextRun({ text: "Total IS%:", bold: true })],
+              children: [new TextRun({ text: "Total IS%:", bold: true, size: 16 })],
             }),
           ],
         }),
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: TOTAL_IS_FILL },
           borders: {
             top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
@@ -1905,12 +1942,14 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun(Number.isFinite(avgIS) ? `${format1(avgIS)}%` : ""),
+                new TextRun({ text: Number.isFinite(avgIS) ? `${format1(avgIS)}%` : "", size: 16 }),
               ],
             }),
           ],
         }),
         new TableCell({
+          verticalAlign: VerticalAlign.CENTER,
+
           shading: { type: ShadingType.CLEAR, fill: TOTAL_IS_FILL },
           borders: {
             top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
@@ -2097,9 +2136,10 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
     rightCol.push(
       new Paragraph({
         children: [
-          new TextRun({ text: "Comments: ", bold: true }),
+          new TextRun({ text: "Comments: ", bold: true, size: 16 }),
           new TextRun({
             text: commentText || "No additional comments provided.",
+            size: 16
           }),
         ],
         spacing: { after: 220 },
@@ -2149,14 +2189,21 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
       rows: [
         new TableRow({
           children: [
-            new TableCell({ borders: noBorders, children: leftCol }),
             new TableCell({
+              verticalAlign: VerticalAlign.CENTER,
+              borders: noBorders, children: leftCol
+            }),
+            new TableCell({
+              verticalAlign: VerticalAlign.CENTER,
               borders: {
                 left: { style: BorderStyle.SINGLE, size: 8, color: "000000" },
               },
               children: [],
             }),
-            new TableCell({ borders: noBorders, children: rightCol }),
+            new TableCell({
+              verticalAlign: VerticalAlign.CENTER,
+              borders: noBorders, children: rightCol
+            }),
           ],
         }),
       ],
@@ -2660,69 +2707,53 @@ function buildConsistentCrosschecksTable(crosschecks) {
   });
 }
 
-function createLiftTrialTable(trials = [], measurementUnit = "lbs") {
-  if (!trials || trials.length === 0) return null;
+// Detect "dynamic lift" robustly
+function isDynamicLiftTest(test, testNameLower, isLiftTest) {
+  const haystack = [
+    testNameLower,
+    test?.testId,
+    test?.testType,
+    test?.category,
+    test?.type,
+    test?.liftType,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
 
-  const headers = ["Trial 1", "Trial 2", "Trial 3", "Trial 4", "Trial 5", "Trial 6", "Average"];
-  const validTrials = trials.slice(0, 6); // Only up to 6 trials
+  return (
+    isLiftTest &&
+    (haystack.includes("dynamic") || test?.isDynamic === true)
+  );
+}
 
-  // Calculate average (only numeric trials)
-  const numericTrials = validTrials
-    .map((t) => parseFloat(t))
-    .filter((v) => !isNaN(v));
-  const avg =
-    numericTrials.length > 0
-      ? (numericTrials.reduce((a, b) => a + b, 0) / numericTrials.length).toFixed(1)
-      : "-";
+// Best-effort read of endpoint condition from various shapes
+function getEndpointConditionText(test) {
+  const candidates = [
+    test?.dynamicEndpointType ?? test?.parameters?.dynamicEndpointType ?? "",
+    test?.endPointCondition,
+    test?.endpoint,
+    test?.endPoint,
+    test?.terminationReason,
+    test?.termination,
+    test?.stopReason,
+    test?.reasonForStop,
+    test?.endCondition,
+    test?.endReason,
+  ];
 
-  const trialValues = [...validTrials.map((v) => `${v || "-"} ${measurementUnit}`)];
-  while (trialValues.length < 6) trialValues.push("-"); // fill missing trials
-  trialValues.push(`${avg} ${measurementUnit}`);
-
-  // Build DOCX table
-  return new Table({
-    width: { size: 100, type: "pct" },
-    borders: {
-      top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-      bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-      left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-      right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-      insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-      insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-    },
-    rows: [
-      // Header row
-      new TableRow({
-        children: headers.map(
-          (text) =>
-            new TableCell({
-              margins: { top: 100, bottom: 100, left: 150, right: 150 },
-              children: [
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  children: [new TextRun({ text, bold: true, size: 20 })],
-                }),
-              ],
-            })
-        ),
-      }),
-      // Values row
-      new TableRow({
-        children: trialValues.map(
-          (val) =>
-            new TableCell({
-              margins: { top: 100, bottom: 100, left: 150, right: 150 },
-              children: [
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  children: [new TextRun({ text: val, size: 20 })],
-                }),
-              ],
-            })
-        ),
-      }),
-    ],
-  });
+  for (const v of candidates) {
+    if (v == null) continue;
+    if (typeof v === "string" && v.trim()) return v.trim();
+    if (typeof v === "number" && Number.isFinite(v)) return String(v);
+    if (typeof v === "object") {
+      const o = v;
+      const s =
+        o.condition || o.reason || o.label || o.name || o.value || o.text || o.title;
+      if (s) return String(s);
+    }
+  }
+  return "";
 }
 
 
@@ -4260,34 +4291,34 @@ async function addReferenceChartsContent(children) {
       }),
       new TableRow({
         children: [
-          paddedCell("Biomechanical"),
+          paddedCell("Biomechanical", { size: 16 }),
           paddedCell(
             "The biomechanical stopping point follows the biomechanics of the person as they perform the activity. While you will not be able to teach proper body mechanics during the relatively short duration of an FCE, you should encourage proper body mechanics. Ultimately, you will be assessing the client’s capacity as he or she moves in their usual way to complete each task. The biomechanical stopping point relies on your clinical observation skills and knowledge of proper body mechanics.",
-          ),
+            { size: 16 }),
         ],
       }),
       new TableRow({
         children: [
-          paddedCell("Physiological"),
+          paddedCell("Physiological", { size: 16 }),
           paddedCell(
             "Physiological response to testing refers to the client’s involuntary reactions to the tests. These reactions include heart rate, blood pressure, respiration rate, changes in pallor, and similar markers. The American College of Sports Medicine recommends keeping the client’s heart rate below 85% of age-predicted maximum heart rate (APMHR) during physically demanding testing, with a recovery to 70% APMHR before commencing the next test.",
-          ),
+            { size: 16 }),
         ],
       }),
       new TableRow({
         children: [
-          paddedCell("Psychophysical"),
+          paddedCell("Psychophysical", { size: 16 }),
           paddedCell(
             "The psychophysical ending point is based on the client’s perceived rate of exertion—that is, how the client feels or perceives the difficulty of the task. You can use a scale to rate the perception of difficulty, such as the Borg Scale, or simply ask the client to describe their comfort level with the activity. The test should be terminated at the point where the client feels they can no longer continue and has reached their maximum performance level.",
-          ),
+            { size: 16 }),
         ],
       }),
       new TableRow({
         children: [
-          paddedCell("Task Requirement"),
+          paddedCell("Task Requirement", { size: 16 }),
           paddedCell(
             "A fourth, but still important, stopping criterion is the task requirement. This applies more to return-to-work (RTW) testing when you know the specific physical demands of the job tasks and are assessing the client’s ability to perform them. When the client’s tested ability matches the defined job requirement, you should stop the test because continuing beyond the task requirement could put the client at unnecessary risk.",
-          ),
+            { size: 16 }),
         ],
       }),
     ],
@@ -6334,7 +6365,7 @@ async function addTestDataContent(children, body) {
         rightCol.push(
           new Paragraph({
             children: [
-              new TextRun({ text: description, italics: true, size: 16 }),
+              new TextRun({ text: description, size: 16 }),
             ],
             spacing: { after: 100 },
           }),
@@ -6571,7 +6602,14 @@ async function addTestDataContent(children, body) {
             rightCol.push(
               new Paragraph({ spacing: { before: 100, after: 50 } }),
             );
-            // rightCol.push(createLiftTrialTable(test.trials, test.unit || "lbs"));
+            // Add side-by-trial breakdown table (below the main summary)
+            rightCol.push(
+              new Paragraph({ spacing: { before: 100, after: 50 } }),
+            );
+            rightCol.push(createSideTrialTable(test, measurementUnit));
+            rightCol.push(
+              new Paragraph({ spacing: { before: 100, after: 50 } }),
+            );
 
           } else {
             rightCol.push(
@@ -6769,25 +6807,27 @@ async function addTestDataContent(children, body) {
             averageValue,
             unitLabel,
             imgWidthPx,
-            trialLabels = [], // e.g. ['T1', 'T2', 'T3']
-            trialValues = [], // e.g. [12.4, 15.2, 13.9]
+            trialLabels = [],
+            trialValues = [],
           }) {
-            const {
-              buffer,
-              width: srcW = 640,
-              height: srcH = 200,
-            } = chartImage || {};
-            if (!buffer)
-              return new TableCell({ borders: noBorders, children: [] });
+            const { buffer, width: srcW = 640, height: srcH = 200 } = chartImage || {};
+            if (!buffer) return new TableCell({ borders: noBorders, children: [] });
 
             const aspect = srcH / srcW;
             const imgHeightPx = Math.round(imgWidthPx * aspect);
 
-            // Build label and value lines dynamically
-            const labelLine = trialLabels.join("      "); // spaces to separate evenly
+            const labelLine = trialLabels.join("      ");
             const valueLine = trialValues
               .map((v) => (Number.isFinite(v) ? v.toFixed(1) : "n/a"))
               .join("      ");
+
+            const titleNode = title
+              ? new Paragraph({
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 80 },
+                children: [new TextRun({ text: title, bold: true, size: 16 })],
+              })
+              : null;
 
             return new TableCell({
               borders: noBorders,
@@ -6798,64 +6838,32 @@ async function addTestDataContent(children, body) {
                 bottom: 40,
               },
               children: [
-                // === Title above chart ===
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  spacing: { after: 80 },
-                  children: [
-                    new TextRun({ text: title + "4443434", bold: true, size: 16 }),
-                  ],
-                }),
-
-                // === Chart Image ===
+                ...(titleNode ? [titleNode] : []), // no title paragraph (and no gap) when title is empty
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
                   children: [
                     new ImageRun({
                       data: buffer,
-                      transformation: {
-                        width: imgWidthPx,
-                        height: imgHeightPx,
-                      },
+                      transformation: { width: imgWidthPx, height: imgHeightPx },
                     }),
                   ],
                 }),
-
-                // === T1, T2, T3 labels ===
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
                   spacing: { before: 120, after: 20 },
-                  children: [
-                    new TextRun({
-                      text: labelLine,
-                      bold: true,
-                      size: 14,
-                    }),
-                  ],
+                  children: [new TextRun({ text: labelLine, bold: true, size: 14 })],
                 }),
-
-                // === Corresponding values ===
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
                   spacing: { after: 60 },
-                  children: [
-                    new TextRun({
-                      text: valueLine,
-                      size: 14,
-                      color: "444444",
-                    }),
-                  ],
+                  children: [new TextRun({ text: valueLine, size: 14, color: "444444" })],
                 }),
-
-                // === Average value below all ===
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
                   spacing: { before: 80 },
                   children: [
                     new TextRun({
-                      text: `Average: ${Number.isFinite(averageValue)
-                        ? averageValue.toFixed(1)
-                        : "n/a"
+                      text: `Average: ${Number.isFinite(averageValue) ? averageValue.toFixed(1) : "n/a"
                         }${unitLabel ? ` ${unitLabel}` : ""}`,
                       color: "444444",
                       size: 16,
@@ -6953,7 +6961,7 @@ async function addTestDataContent(children, body) {
                 labels,
                 datasets: [
                   {
-                    label: title === "Trials" ? "" : title,
+                    label: title,
                     data: values,
                     backgroundColor: bg,
                     borderColor: border,
@@ -7053,7 +7061,8 @@ async function addTestDataContent(children, body) {
           const nCharts = hasSingleSeries
             ? 1
             : (hasLeftSeries ? 1 : 0) + (canShowRight ? 1 : 0);
-
+          // Only show "Left Side"/"Right Side" when both charts are present
+          const showSideTitles = nCharts === 2;
           // Available inner content width per cell (px), account for the 80 twip margins on both sides
           const sideContentPx =
             Math.floor(
@@ -7113,8 +7122,7 @@ async function addTestDataContent(children, body) {
                   const trialValues = leftSeries;
                   chartCells.push(
                     createTrialChartCell({
-                      title: "Left Side",
-                      chartImage: img,
+                      title: showSideTitles ? "Left Side" : "", chartImage: img,
                       averageValue: leftAvg,
                       unitLabel: measurementUnit,
                       imgWidthPx: chartImgWidthPx,
@@ -7136,7 +7144,7 @@ async function addTestDataContent(children, body) {
 
                   chartCells.push(
                     createTrialChartCell({
-                      title: "Right Side",
+                      title: showSideTitles ? "Right Side" : "", // hide when only 1 chart
                       chartImage: img,
                       averageValue: rightAvg,
                       unitLabel: measurementUnit,
@@ -7204,6 +7212,19 @@ async function addTestDataContent(children, body) {
                   }),
                 ],
                 spacing: { before: 80, after: 80 },
+              }),
+            );
+          }
+          const isDynamicLift = isDynamicLiftTest(test, testNameLower, isLiftTest);
+          if (isDynamicLift) {
+            const endpointText = getEndpointConditionText(test) || "Not recorded.";
+            rightCol.push(
+              new Paragraph({
+                children: [
+                  new TextRun({ text: "Endpoint condition: ", bold: true, size: 16 }),
+                  new TextRun({ text: endpointText, size: 16 }),
+                ],
+                spacing: { before: 160, after: 80 },
               }),
             );
           }

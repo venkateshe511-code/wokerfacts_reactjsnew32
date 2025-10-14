@@ -385,7 +385,8 @@ export default function Login() {
                 )}
               </button>
             </div>
-            <Button type="submit" disabled={isLoading} className="w-full">
+            <Button type="submit" disabled={isLoading} className="w-full bg-blue-500 text-white hover:bg-blue-600"
+            >
               {loadingEmail ? (
                 <Loader2 className="animate-spin" />
               ) : mode === "signin" ? (

@@ -1,4 +1,4 @@
-const functions = require("firebase-functions");
+const { onRequest } = require("firebase-functions/v2/https");
 const express = require("express");
 const cors = require("cors");
 
@@ -10,6 +10,7 @@ const stripeWebhookRoute = require("./routes/stripeWebhook");
 const app1 = express();
 const app2 = express();
 const app3 = express();
+
 const corsOptions = {
   origin: true,
   methods: ["GET", "POST", "OPTIONS"],
@@ -18,8 +19,8 @@ const corsOptions = {
 };
 
 app1.use(cors(corsOptions));
-app1.use(express.json({ limit: "300mb" }));
-app1.use(express.urlencoded({ extended: true, limit: "300mb" }));
+app1.use(express.json({ limit: "400mb" }));
+app1.use(express.urlencoded({ extended: true, limit: "400mb" }));
 app1.use("/", generateDocxRoute);
 
 app2.use(cors(corsOptions));
@@ -27,11 +28,33 @@ app2.use(express.json({ limit: "20mb" }));
 app2.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app2.use("/", createCheckoutSessionRoute);
 
-// Webhook app must NOT use express.json() before the route; stripe requires raw body
+// Webhook app must NOT use express.json() before the route
 app3.use(cors(corsOptions));
 app3.use("/", stripeWebhookRoute);
 
-// Export multiple functions
-exports.generateClaimantReportApi = functions.https.onRequest(app1);
-exports.createCheckoutSessionApi = functions.https.onRequest(app2);
-exports.stripeWebhookApi = functions.https.onRequest(app3);
+// Export Gen 2 functions
+exports.generateClaimantReportApi = onRequest(
+  {
+    memory: "1GiB",  // Note: Gen 2 uses "GiB" not "GB"
+    timeoutSeconds: 540,
+    cpu: 1,  // Now you can set CPU (0.08 to 2)
+    maxInstances: 100,
+  },
+  app1
+);
+
+exports.createCheckoutSessionApi = onRequest(
+  {
+    memory: "256MiB",
+    timeoutSeconds: 60,
+  },
+  app2
+);
+
+exports.stripeWebhookApi = onRequest(
+  {
+    memory: "256MiB",
+    timeoutSeconds: 60,
+  },
+  app3
+);
