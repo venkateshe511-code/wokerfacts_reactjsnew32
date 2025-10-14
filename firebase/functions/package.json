@@ -17,6 +17,7 @@
     "axios": "^1.12.2",
     "chart.js": "^4.5.0",
     "chartjs-node-canvas": "^5.0.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "cors": "^2.8.5",
     "docx": "^9.5.1",
     "docxtemplater": "^3.66.2",

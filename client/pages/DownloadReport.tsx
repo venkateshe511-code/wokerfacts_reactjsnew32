@@ -5132,6 +5132,9 @@ export default function DownloadReport() {
         const mtmTestData = JSON.parse(
           localStorage.getItem("mtmTestData") || "{}",
         );
+        const cardioTestData = JSON.parse(
+          localStorage.getItem("cardioTestData") || "{}",
+        );
 
         // Handle digital library data loading (IndexedDB or localStorage)
         const digitalLibraryRawData =
@@ -5662,180 +5665,7 @@ export default function DownloadReport() {
                   ],
           },
           // Enhanced test data with comprehensive results - MUST have enough tests to trigger all DOCX sections
-          testData: {
-            tests: false // Force use of comprehensive fallback data for complete DOCX
-              ? Object.entries(testData).map(
-                ([testName, testResult]: [string, any]) => ({
-                  testName: testName.replace(/([A-Z])/g, " $1").trim(),
-                  result: testResult.measurements
-                    ? `Average: ${calculateAverage(
-                      testResult.measurements,
-                    )} ${testResult.unit || "lbs"}`
-                    : testResult.result || "Test completed successfully",
-                  comments:
-                    testResult.comments ||
-                    "Test performed within normal parameters with good effort and consistent performance throughout evaluation.",
-                  effort: testResult.effort || "Good",
-                  demonstrated:
-                    testResult.demonstrated !== undefined
-                      ? testResult.demonstrated
-                      : true,
-                  perceived:
-                    testResult.perceived !== undefined
-                      ? testResult.perceived
-                      : true,
-                  jobRequirements:
-                    testResult.jobRequirements ||
-                    "Meets typical job requirements for this activity based on demonstrated performance and safety standards.",
-                  measurements: testResult.measurements || {},
-                  unit: testResult.unit || "lbs",
-                  consistency: testResult.consistency || "Good",
-                  limitations:
-                    testResult.limitations || "None noted during assessment",
-                }),
-              )
-              : [
-                // Comprehensive test data to ensure ALL DOCX sections are generated
-                {
-                  testName: "Floor to Waist Lift",
-                  result: "25 lbs average over 6 trials",
-                  comments:
-                    "Client demonstrated good form and technique throughout all trials. Maintained consistent performance with appropriate pacing. No signs of symptom magnification observed. Safety awareness was excellent.",
-                  effort: "Good",
-                  demonstrated: true,
-                  perceived: true,
-                  jobRequirements:
-                    "Adequate for light to medium duty work requirements involving occasional lifting from floor level. Meets OSHA guidelines for safe lifting practices.",
-                  measurements: {
-                    trial1: 24,
-                    trial2: 26,
-                    trial3: 25,
-                    trial4: 24,
-                    trial5: 27,
-                    trial6: 25,
-                  },
-                  unit: "lbs",
-                  consistency: "Good",
-                  limitations: "None noted during assessment",
-                },
-                {
-                  testName: "Waist to Shoulder Lift",
-                  result: "20 lbs average over 6 trials",
-                  comments:
-                    "Client showed some hesitation on higher repetitions but maintained good form and safety awareness. Demonstrated understanding of proper lifting mechanics and body positioning.",
-                  effort: "Good",
-                  demonstrated: true,
-                  perceived: true,
-                  jobRequirements:
-                    "Meets overhead lifting requirements for most positions with occasional overhead work. Suitable for warehouse and construction activities.",
-                  measurements: {
-                    trial1: 19,
-                    trial2: 21,
-                    trial3: 20,
-                    trial4: 19,
-                    trial5: 22,
-                    trial6: 20,
-                  },
-                  unit: "lbs",
-                  consistency: "Good",
-                  limitations:
-                    "Slight limitations with repetitive overhead activities over extended periods",
-                },
-                {
-                  testName: "Carrying Test",
-                  result: "20 lbs for 50 feet",
-                  comments:
-                    "Completed without difficulty, maintained good posture throughout test. Demonstrated appropriate body mechanics for carrying activities with proper grip and stance.",
-                  effort: "Good",
-                  demonstrated: true,
-                  perceived: true,
-                  jobRequirements:
-                    "Meets carrying requirements for most positions involving transportation of materials. Appropriate for delivery and material handling roles.",
-                  measurements: {},
-                  unit: "lbs",
-                  consistency: "Excellent",
-                  limitations: "None noted during assessment",
-                },
-                {
-                  testName: "Walking Endurance Test",
-                  result: "Completed 1000 feet in 8 minutes",
-                  comments:
-                    "Client maintained steady pace throughout test with no significant fatigue or discomfort reported. Good cardiovascular endurance demonstrated with appropriate recovery time.",
-                  effort: "Good",
-                  demonstrated: true,
-                  perceived: true,
-                  jobRequirements:
-                    "Adequate for jobs requiring walking and mobility throughout the workday. Suitable for roles involving patrol, inspection, or extended walking activities.",
-                  measurements: {},
-                  unit: "feet",
-                  consistency: "Excellent",
-                  limitations: "None noted during assessment",
-                },
-                {
-                  testName: "Static Standing Test",
-                  result: "Maintained position for 15 minutes",
-                  comments:
-                    "Client was able to maintain standing position with minimal weight shifting. Reported mild discomfort at end of test period but remained in position without support.",
-                  effort: "Good",
-                  demonstrated: true,
-                  perceived: true,
-                  jobRequirements:
-                    "Appropriate for jobs requiring prolonged standing with occasional position changes. Suitable for assembly line and retail positions.",
-                  measurements: {},
-                  unit: "minutes",
-                  consistency: "Good",
-                  limitations:
-                    "May need periodic position changes during prolonged standing activities",
-                },
-                {
-                  testName: "Postural Tolerance Assessment",
-                  result:
-                    "Maintained various positions for required duration",
-                  comments:
-                    "Client demonstrated ability to assume and maintain work-related postures including bending, kneeling, and crouching positions. Good flexibility and balance observed.",
-                  effort: "Good",
-                  demonstrated: true,
-                  perceived: true,
-                  jobRequirements:
-                    "Meets postural requirements for varied work activities. Appropriate for construction, maintenance, and technical positions requiring varied postures.",
-                  measurements: {},
-                  unit: "positions",
-                  consistency: "Good",
-                  limitations:
-                    "Mild difficulty with prolonged crouching but can perform for required work durations",
-                },
-                {
-                  testName: "Grip Strength Test",
-                  result: "Right: 45 lbs, Left: 42 lbs average",
-                  comments:
-                    "Client demonstrated adequate grip strength bilaterally with good consistency across trials. No significant difference between dominant and non-dominant hands.",
-                  effort: "Good",
-                  demonstrated: true,
-                  perceived: true,
-                  jobRequirements:
-                    "Meets grip strength requirements for tool use and material handling. Adequate for precision work and power grip activities.",
-                  measurements: { rightHand: 45, leftHand: 42 },
-                  unit: "lbs",
-                  consistency: "Good",
-                  limitations: "None noted during assessment",
-                },
-                {
-                  testName: "Distraction Test",
-                  result: "No significant variance with distraction",
-                  comments:
-                    "Client maintained consistent performance when distracted, indicating genuine effort and no symptom magnification. Attention remained focused on task completion.",
-                  effort: "Good",
-                  demonstrated: true,
-                  perceived: true,
-                  jobRequirements:
-                    "Demonstrates ability to maintain performance in workplace environments with typical distractions and noise levels.",
-                  measurements: {},
-                  unit: "consistency",
-                  consistency: "Excellent",
-                  limitations: "None noted during assessment",
-                },
-              ],
-          },
+          testData: testData,
 
           // Enhanced digital library data - provide fallback to ensure section is included
           digitalLibraryData: {
@@ -5871,7 +5701,7 @@ export default function DownloadReport() {
 
           // MTM Test Data
           mtmTestData: mtmTestData,
-
+          cardioTestData: cardioTestData,
           // Additional data for comprehensive report
           paymentData: {
             amount: reportSummary.paymentAmount || 0,
