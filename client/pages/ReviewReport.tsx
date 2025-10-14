@@ -2606,7 +2606,7 @@ export default function ReviewReport() {
                                             jobReq.functionalMin &&
                                             jobReq.norm
                                           ) {
-                                            return `≥${jobReq.functionalMin}�� (Min) / ≥${jobReq.norm}° (Normal)`;
+                                            return `≥${jobReq.functionalMin}° (Min) / ≥${jobReq.norm}° (Normal)`;
                                           } else if (jobReq.norm) {
                                             return `≥${jobReq.norm}°`;
                                           }
