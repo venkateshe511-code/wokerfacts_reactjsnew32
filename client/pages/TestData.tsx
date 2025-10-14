@@ -221,6 +221,13 @@ const mtmTestConfigs: Record<string, MTMTestConfig> = {
   },
 };
 
+const normalizeWeightUnit = (unit?: string): string => {
+  const normalized = (unit || "").toLowerCase();
+  return ["lbs", "kg", "oz", "g"].includes(normalized)
+    ? normalized
+    : "lbs";
+};
+
 // List of occupational test IDs
 const occupationalTestIds = [
   "fingering",
@@ -908,6 +915,7 @@ export default function TestData() {
   const isBalanceTest =
     testName.includes("balance") || testName.includes("coordination");
   const isLiftTest = testName.includes("lift") || testName.includes("carry");
+  const liftUnit = normalizeWeightUnit(currentTest?.unitMeasure);
 
   // Determine ROM paired labels (e.g., Flexion/Extension) if applicable
   const getRomPairLabels = (): [string, string] | null => {
@@ -1790,35 +1798,63 @@ export default function TestData() {
 
                   {/* Main Measurements Grid */}
                   {isLiftTest ? (
-                    // Single table/column for Static & Dynamic lifts (six trials)
-                    <div className="grid grid-cols-1 gap-2 sm:gap-3 items-center text-xs sm:text-sm">
-                      <div className="text-center font-semibold">Value</div>
-                      {[1, 2, 3, 4, 5, 6].map((trialNum) => {
-                        const key = `trial${trialNum}` as keyof TestMeasurement;
-                        const val = currentTest.leftMeasurements[key];
-                        return (
-                          <div key={trialNum} className="flex flex-col">
-                            <Input
-                              type="number"
-                              value={val || ""}
-                              onChange={(e) =>
-                                updateMeasurement(
-                                  "left",
-                                  key,
-                                  parseFloat(e.target.value) || 0,
-                                )
-                              }
-                              className={`text-center border-2 ${val > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
-                            />
-                            {val > 250 && (
-                              <div className="text-red-700 text-xs mt-1">
-                                Value exceeds maximum of 250
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
+                    <>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 sm:gap-3 mb-2">
+                        <Label className="text-sm font-medium text-gray-700">
+                          Weight Metric
+                        </Label>
+                        <Select
+                          value={liftUnit}
+                          onValueChange={(value) =>
+                            updateCurrentTest({
+                              unitMeasure: value,
+                              valueToBeTestedUnit:
+                                currentTest.valueToBeTestedUnit || "Weight",
+                            })
+                          }
+                        >
+                          <SelectTrigger className="w-32 border-2 border-gray-800 focus:border-blue-600 focus:ring-0 h-10 bg-white">
+                            <SelectValue placeholder="Select unit" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="lbs">lbs</SelectItem>
+                            <SelectItem value="kg">kg</SelectItem>
+                            <SelectItem value="oz">oz</SelectItem>
+                            <SelectItem value="g">g</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="grid grid-cols-1 gap-2 sm:gap-3 items-center text-xs sm:text-sm">
+                        <div className="text-center font-semibold">
+                          Value ({liftUnit})
+                        </div>
+                        {[1, 2, 3, 4, 5, 6].map((trialNum) => {
+                          const key = `trial${trialNum}` as keyof TestMeasurement;
+                          const val = currentTest.leftMeasurements[key];
+                          return (
+                            <div key={trialNum} className="flex flex-col">
+                              <Input
+                                type="number"
+                                value={val || ""}
+                                onChange={(e) =>
+                                  updateMeasurement(
+                                    "left",
+                                    key,
+                                    parseFloat(e.target.value) || 0,
+                                  )
+                                }
+                                className={`text-center border-2 ${val > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
+                              />
+                              {val > 250 && (
+                                <div className="text-red-700 text-xs mt-1">
+                                  Value exceeds maximum of 250
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </>
                   ) : (
                     <div className="grid grid-cols-2 gap-2 sm:gap-4 items-center text-xs sm:text-sm">
                       <div className="text-center font-semibold">
