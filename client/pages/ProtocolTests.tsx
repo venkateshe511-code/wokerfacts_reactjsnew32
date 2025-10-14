@@ -304,7 +304,7 @@ const testGroups = {
       ],
     },
     {
-      name: "Dynamic Infrequent Lift",
+      name: "Dynamic Infrequent Lift (occasional)",
       id: "dynamic-infrequent-lift",
       tests: [
         { id: "dynamic-infrequent-lift-low", name: "Low" },
