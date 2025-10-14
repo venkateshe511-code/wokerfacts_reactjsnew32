@@ -4234,15 +4234,14 @@ export default function DownloadReport() {
                                         </tbody>
                                     </table>
                                     ${(() => {
-                                      const key = String(
-                                        (test as any).dynamicEndpointType || "",
-                                      ).toLowerCase();
-                                      const map: Record<string, string> = {
-                                        biomechanical: "Biomechanical",
-                                        physiological: "Physiological",
-                                        psychophysical: "Psychophysical",
-                                        "task-requirement": "Task Requirement",
-                                      };
+                                      const rawEndpoint = String(
+                                        (test as any).dynamicEndpointType ||
+                                          (test as any).parameters?.dynamicEndpointType ||
+                                          "",
+                                      ).trim();
+                                      if (!rawEndpoint) {
+                                        return "";
+                                      }
                                       if (
                                         !(test.testName || "")
                                           .toLowerCase()
@@ -4250,11 +4249,16 @@ export default function DownloadReport() {
                                       ) {
                                         return "";
                                       }
-                                      if (!key) {
-                                        return "";
-                                      }
+                                      const key = rawEndpoint.toLowerCase();
+                                      const map: Record<string, string> = {
+                                        biomechanical: "Biomechanical",
+                                        physiological: "Physiological",
+                                        psychophysical: "Psychophysical",
+                                        "task-requirement": "Task Requirement",
+                                      };
                                       const fallback = key
                                         .replace(/-/g, " ")
+                                        .replace(/_/g, " ")
                                         .replace(/\b\w/g, (char) =>
                                           char.toUpperCase(),
                                         );
