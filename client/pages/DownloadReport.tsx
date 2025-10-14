@@ -4069,15 +4069,24 @@ export default function DownloadReport() {
               String(test.testId || testName)
                 .toLowerCase()
                 .includes("static-lift") || testName.includes("static");
-            const leftChartTitle = hasSeparateSides
-              ? "Left Side"
-              : useSingleMeasurementSet
-                ? ""
-                : hasLeftTrials
-                  ? "Left Side"
-                  : hasRightTrials
-                    ? "Right Side"
-                    : "";
+            const leftChartTitle = (() => {
+              if (isLiftTest) {
+                return "";
+              }
+              if (hasSeparateSides) {
+                return "Left Side";
+              }
+              if (useSingleMeasurementSet) {
+                return "";
+              }
+              if (hasLeftTrials) {
+                return "Left Side";
+              }
+              if (hasRightTrials) {
+                return "Right Side";
+              }
+              return "";
+            })();
             const showRightChart = !isLiftTest && hasSeparateSides;
 
             // Determine if this test needs a page break
@@ -4233,34 +4242,6 @@ export default function DownloadReport() {
                                             </tr>
                                         </tbody>
                                     </table>
-                                    ${(() => {
-                                      const key = String(
-                                        (test as any).dynamicEndpointType || "",
-                                      ).toLowerCase();
-                                      const map: Record<string, string> = {
-                                        biomechanical: "Biomechanical",
-                                        physiological: "Physiological",
-                                        psychophysical: "Psychophysical",
-                                        "task-requirement": "Task Requirement",
-                                      };
-                                      if (
-                                        !(test.testName || "")
-                                          .toLowerCase()
-                                          .includes("dynamic")
-                                      ) {
-                                        return "";
-                                      }
-                                      if (!key) {
-                                        return "";
-                                      }
-                                      const fallback = key
-                                        .replace(/-/g, " ")
-                                        .replace(/\b\w/g, (char) =>
-                                          char.toUpperCase(),
-                                        );
-                                      const label = map[key] || fallback;
-                                      return `<p style="font-size: 11px; margin: 6px 0 8px 0;"><strong>Endpoint Condition:</strong> ${label}</p>`;
-                                    })()}
                                 `
                                     : ""
                                 }
@@ -4342,101 +4323,176 @@ export default function DownloadReport() {
                                     <!-- Trial-by-Trial Measurement Table (FOR NON-CARDIO TESTS) -->
                                     ${
                                       !isCardioTest
-                                        ? isLiftTest
-                                          ? ""
-                                          : (() => {
-                                              const hasAnyTrials =
-                                                hasSeparateSides ||
-                                                useSingleMeasurementSet ||
-                                                hasLeftTrials ||
-                                                hasRightTrials;
-
-                                              if (!hasAnyTrials) {
-                                                return "";
+                                        ? (() => {
+                                            const hasAnyTrials =
+                                              hasSeparateSides ||
+                                              useSingleMeasurementSet ||
+                                              hasLeftTrials ||
+                                              hasRightTrials;
+                                            const liftTrialSource = (() => {
+                                              if (!isLiftTest) {
+                                                return null;
                                               }
+                                              const leftCount =
+                                                leftTrialValues.length;
+                                              const rightCount =
+                                                rightTrialValues.length;
+                                              if (
+                                                leftCount === 0 &&
+                                                rightCount === 0
+                                              ) {
+                                                return null;
+                                              }
+                                              if (leftCount >= rightCount) {
+                                                return {
+                                                  measurements:
+                                                    primaryMeasurements,
+                                                  average: leftAvg,
+                                                };
+                                              }
+                                              return {
+                                                measurements:
+                                                  secondaryMeasurements,
+                                                average: rightAvg,
+                                              };
+                                            })();
 
-                                              const headerLabel =
-                                                useSingleMeasurementSet
-                                                  ? ""
-                                                  : "Side";
-                                              const headerCells = Array.from(
+                                            if (
+                                              !hasAnyTrials &&
+                                              !liftTrialSource
+                                            ) {
+                                              return "";
+                                            }
+
+                                            const buildTrialCells = (
+                                              source: Record<string, number>,
+                                            ) =>
+                                              Array.from(
                                                 { length: 6 },
                                                 (_, idx) => {
-                                                  return `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`;
+                                                  const key =
+                                                    `trial${idx + 1}` as keyof typeof source;
+                                                  const rawValue = Number(
+                                                    source?.[key] ?? 0,
+                                                  );
+                                                  const displayValue =
+                                                    Number.isFinite(rawValue) &&
+                                                    rawValue > 0
+                                                      ? rawValue
+                                                      : 0;
+                                                  return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue} lbs</td>`;
                                                 },
                                               ).join("");
 
-                                              const buildRow = (
-                                                label: string,
-                                                source: Record<string, number>,
-                                                averageValue: number,
-                                              ) => {
-                                                const valueCells = Array.from(
-                                                  { length: 6 },
-                                                  (_, idx) => {
-                                                    const key =
-                                                      `trial${idx + 1}` as keyof typeof source;
-                                                    const rawValue = Number(
-                                                      source?.[key] ?? 0,
-                                                    );
-                                                    const displayValue =
-                                                      Number.isFinite(rawValue)
-                                                        ? rawValue
-                                                        : 0;
-                                                    return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue} lbs</td>`;
-                                                  },
-                                                ).join("");
-                                                const labelContent = label
-                                                  ? `<strong>${label}</strong>`
-                                                  : "&nbsp;";
-                                                return `<tr>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${labelContent}</td>
+                                            const headerCells = Array.from(
+                                              { length: 6 },
+                                              (_, idx) =>
+                                                `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`,
+                                            ).join("");
+
+                                            if (isLiftTest && liftTrialSource) {
+                                              const valueCells =
+                                                buildTrialCells(
+                                                  liftTrialSource.measurements,
+                                                );
+                                              const avgValue = Number.isFinite(
+                                                liftTrialSource.average,
+                                              )
+                                                ? liftTrialSource.average
+                                                : 0;
+                                              return `
+                                            <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
+                                                <thead>
+                                                    <tr style="background: #fef3c7;">
+                                                        ${headerCells}
+                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        ${valueCells}
+                                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${avgValue.toFixed(
+                                                          1,
+                                                        )} lbs</strong></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        `;
+                                            }
+
+                                            if (useSingleMeasurementSet) {
+                                              const valueCells =
+                                                buildTrialCells(
+                                                  primaryMeasurements,
+                                                );
+
+                                              return `
+                                            <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
+                                                <thead>
+                                                    <tr style="background: #fef3c7;">
+                                                        ${headerCells}
+                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        ${valueCells}
+                                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${leftAvg.toFixed(
+                                                          1,
+                                                        )} lbs</strong></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        `;
+                                            }
+
+                                            const headerLabel = "Side";
+
+                                            const buildRow = (
+                                              label: string,
+                                              source: Record<string, number>,
+                                              averageValue: number,
+                                            ) => {
+                                              const valueCells =
+                                                buildTrialCells(source);
+                                              return `<tr>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${label}</strong></td>
                                                 ${valueCells}
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${averageValue.toFixed(
                                                   1,
                                                 )} lbs</strong></td>
                                             </tr>`;
-                                              };
+                                            };
 
-                                              const rows: string[] = [];
+                                            const rows: string[] = [];
 
-                                              if (useSingleMeasurementSet) {
-                                                rows.push(
-                                                  buildRow(
-                                                    "",
-                                                    primaryMeasurements,
-                                                    leftAvg,
-                                                  ),
-                                                );
-                                              } else {
-                                                if (hasLeftTrials) {
-                                                  rows.push(
-                                                    buildRow(
-                                                      "Left",
-                                                      primaryMeasurements,
-                                                      leftAvg,
-                                                    ),
-                                                  );
-                                                }
-                                                if (
-                                                  hasSeparateSides ||
-                                                  hasRightTrials
-                                                ) {
-                                                  rows.push(
-                                                    buildRow(
-                                                      "Right",
-                                                      secondaryMeasurements,
-                                                      rightAvg,
-                                                    ),
-                                                  );
-                                                }
-                                              }
+                                            if (hasLeftTrials) {
+                                              rows.push(
+                                                buildRow(
+                                                  "Left",
+                                                  primaryMeasurements,
+                                                  leftAvg,
+                                                ),
+                                              );
+                                            }
+                                            if (
+                                              hasSeparateSides ||
+                                              hasRightTrials
+                                            ) {
+                                              rows.push(
+                                                buildRow(
+                                                  "Right",
+                                                  secondaryMeasurements,
+                                                  rightAvg,
+                                                ),
+                                              );
+                                            }
 
-                                              if (!rows.length) {
-                                                return "";
-                                              }
+                                            if (!rows.length) {
+                                              return "";
+                                            }
 
-                                              return `
+                                            return `
                                             <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                                 <thead>
                                                     <tr style="background: #fef3c7;">
@@ -4450,7 +4506,7 @@ export default function DownloadReport() {
                                                 </tbody>
                                             </table>
                                         `;
-                                            })()
+                                          })()
                                         : ""
                                     }
 
@@ -4459,9 +4515,14 @@ export default function DownloadReport() {
                                       !isCardioTest
                                         ? `
                                     <div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0;">
-                                        <!-- Left Side Chart -->
+                                        <!-- Primary Chart -->
                                         <div style="background: #ffffff; border: 2px solid #3b82f6; border-radius: 8px; padding: 12px; page-break-inside: avoid; flex: 1; min-width: 250px;">
-                                            <div style="background: #3b82f6; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">${leftChartTitle}</div>
+                                            ${(() => {
+                                              if (!leftChartTitle) {
+                                                return "";
+                                              }
+                                              return `<div style="background: #3b82f6; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">${leftChartTitle}</div>`;
+                                            })()}
                                             <div style="display: flex; align-items: end; justify-content: space-between; height: 120px; padding: 3px 0; position: relative; background: #f8fafc; border-radius: 4px;">
                                                 ${(() => {
                                                   const maxValue =
@@ -4703,6 +4764,45 @@ export default function DownloadReport() {
                                   </div>
                                 `
                                 : "";
+                            })()}
+
+                            ${(() => {
+                              if (!isLiftTest) {
+                                return "";
+                              }
+                              const testNameLower = (
+                                test.testName || ""
+                              ).toLowerCase();
+                              const isDynamicLift =
+                                testNameLower.includes("dynamic frequent") ||
+                                testNameLower.includes("dynamic infrequent") ||
+                                testNameLower.includes("dynamic");
+                              if (!isDynamicLift) {
+                                return "";
+                              }
+                              const rawEndpoint = String(
+                                (test as any).dynamicEndpointType ||
+                                  (test as any).parameters
+                                    ?.dynamicEndpointType ||
+                                  "",
+                              ).trim();
+                              if (!rawEndpoint) {
+                                return "";
+                              }
+                              const key = rawEndpoint.toLowerCase();
+                              const map: Record<string, string> = {
+                                biomechanical: "Biomechanical",
+                                physiological: "Physiological",
+                                psychophysical: "Psychophysical",
+                                "task-requirement": "Task Requirement",
+                              };
+                              const fallback = key
+                                .replace(/[-_]/g, " ")
+                                .replace(/\b\w/g, (char) => char.toUpperCase());
+                              const label = map[key] || fallback;
+                              return `<div style="font-size: 11px; color: #374151; margin: 6px 0;">
+                                <strong>Endpoint Condition:</strong> ${label}
+                              </div>`;
                             })()}
 
                             <!-- Cardio Test Images -->
