@@ -4333,42 +4333,56 @@ export default function DownloadReport() {
                                               if (!isLiftTest) {
                                                 return null;
                                               }
-                                              const leftCount = leftTrialValues.length;
-                                              const rightCount = rightTrialValues.length;
-                                              if (leftCount === 0 && rightCount === 0) {
+                                              const leftCount =
+                                                leftTrialValues.length;
+                                              const rightCount =
+                                                rightTrialValues.length;
+                                              if (
+                                                leftCount === 0 &&
+                                                rightCount === 0
+                                              ) {
                                                 return null;
                                               }
                                               if (leftCount >= rightCount) {
                                                 return {
-                                                  measurements: primaryMeasurements,
+                                                  measurements:
+                                                    primaryMeasurements,
                                                   average: leftAvg,
                                                 };
                                               }
                                               return {
-                                                measurements: secondaryMeasurements,
+                                                measurements:
+                                                  secondaryMeasurements,
                                                 average: rightAvg,
                                               };
                                             })();
 
-                                            if (!hasAnyTrials && !liftTrialSource) {
+                                            if (
+                                              !hasAnyTrials &&
+                                              !liftTrialSource
+                                            ) {
                                               return "";
                                             }
 
                                             const buildTrialCells = (
                                               source: Record<string, number>,
                                             ) =>
-                                              Array.from({ length: 6 }, (_, idx) => {
-                                                const key =
-                                                  `trial${idx + 1}` as keyof typeof source;
-                                                const rawValue = Number(
-                                                  source?.[key] ?? 0,
-                                                );
-                                                const displayValue =
-                                                  Number.isFinite(rawValue) && rawValue > 0
-                                                    ? rawValue
-                                                    : 0;
-                                                return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue} lbs</td>`;
-                                              }).join("");
+                                              Array.from(
+                                                { length: 6 },
+                                                (_, idx) => {
+                                                  const key =
+                                                    `trial${idx + 1}` as keyof typeof source;
+                                                  const rawValue = Number(
+                                                    source?.[key] ?? 0,
+                                                  );
+                                                  const displayValue =
+                                                    Number.isFinite(rawValue) &&
+                                                    rawValue > 0
+                                                      ? rawValue
+                                                      : 0;
+                                                  return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue} lbs</td>`;
+                                                },
+                                              ).join("");
 
                                             const headerCells = Array.from(
                                               { length: 6 },
@@ -4377,9 +4391,10 @@ export default function DownloadReport() {
                                             ).join("");
 
                                             if (isLiftTest && liftTrialSource) {
-                                              const valueCells = buildTrialCells(
-                                                liftTrialSource.measurements,
-                                              );
+                                              const valueCells =
+                                                buildTrialCells(
+                                                  liftTrialSource.measurements,
+                                                );
                                               const avgValue = Number.isFinite(
                                                 liftTrialSource.average,
                                               )
@@ -4406,9 +4421,10 @@ export default function DownloadReport() {
                                             }
 
                                             if (useSingleMeasurementSet) {
-                                              const valueCells = buildTrialCells(
-                                                primaryMeasurements,
-                                              );
+                                              const valueCells =
+                                                buildTrialCells(
+                                                  primaryMeasurements,
+                                                );
 
                                               return `
                                             <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
@@ -4437,9 +4453,8 @@ export default function DownloadReport() {
                                               source: Record<string, number>,
                                               averageValue: number,
                                             ) => {
-                                              const valueCells = buildTrialCells(
-                                                source,
-                                              );
+                                              const valueCells =
+                                                buildTrialCells(source);
                                               return `<tr>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${label}</strong></td>
                                                 ${valueCells}
@@ -4460,7 +4475,10 @@ export default function DownloadReport() {
                                                 ),
                                               );
                                             }
-                                            if (hasSeparateSides || hasRightTrials) {
+                                            if (
+                                              hasSeparateSides ||
+                                              hasRightTrials
+                                            ) {
                                               rows.push(
                                                 buildRow(
                                                   "Right",
@@ -4752,7 +4770,9 @@ export default function DownloadReport() {
                               if (!isLiftTest) {
                                 return "";
                               }
-                              const testNameLower = (test.testName || "").toLowerCase();
+                              const testNameLower = (
+                                test.testName || ""
+                              ).toLowerCase();
                               const isDynamicLift =
                                 testNameLower.includes("dynamic frequent") ||
                                 testNameLower.includes("dynamic infrequent") ||
@@ -4762,7 +4782,8 @@ export default function DownloadReport() {
                               }
                               const rawEndpoint = String(
                                 (test as any).dynamicEndpointType ||
-                                  (test as any).parameters?.dynamicEndpointType ||
+                                  (test as any).parameters
+                                    ?.dynamicEndpointType ||
                                   "",
                               ).trim();
                               if (!rawEndpoint) {
