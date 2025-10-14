@@ -4755,14 +4755,27 @@ export default function DownloadReport() {
                                   !test.demonstrated &&
                                   !isCardioTest &&
                                   !isStaticLift
-                                    ? `
+                                    ? (() => {
+                                        const endpointLabel =
+                                          resolveDynamicEndpointLabel(test);
+                                        const isDynamicLift = (
+                                          test.testName || ""
+                                        )
+                                          .toLowerCase()
+                                          .includes("dynamic");
+                                        const endpointMarkup =
+                                          isDynamicLift && endpointLabel
+                                            ? `<p style="font-size: 11px; font-weight: bold; margin-top: 8px;">Endpoint Condition:</p>
+                                        <p style="font-size: 11px;">${endpointLabel}</p>`
+                                            : "";
+                                        return `
                                     <div style="margin: 8px 0 12px 0;">
                                         <p style="font-size: 11px; font-weight: bold;">Reason For Incomplete Test:</p>
                                         <p style="font-size: 11px;">Limited by pain/discomfort</p>
-                                        <p style="font-size: 11px; font-weight: bold; margin-top: 8px;">Endpoint Condition:</p>
-                                        <p style="font-size: 11px;">Psychophysical</p>
+                                        ${endpointMarkup}
                                     </div>
-                                `
+                                `;
+                                      })()
                                     : ""
                                 }
                             </div>
