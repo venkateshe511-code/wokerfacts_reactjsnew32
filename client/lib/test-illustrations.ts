@@ -283,6 +283,30 @@ const map = {
   "dynamic-lift-frequent": [
     { src: `${BASE}/Dynamic_Lift_Mid.jpg`, label: "Dynamic Frequent Lifts" },
   ],
+  "dynamic-infrequent-lift-low": [
+    {
+      src: `${BASE}/Dynamic_Lift_Low.jpg`,
+      label: "Dynamic Infrequent Lift Low",
+    },
+  ],
+  "dynamic-infrequent-lift-mid": [
+    {
+      src: `${BASE}/Dynamic_Lift_Mid.jpg`,
+      label: "Dynamic Infrequent Lift Mid",
+    },
+  ],
+  "dynamic-infrequent-lift-high": [
+    {
+      src: `${BASE}/Dynamic_Lift_High.jpg`,
+      label: "Dynamic Infrequent Lift High",
+    },
+  ],
+  "dynamic-infrequent-lift-overhead": [
+    {
+      src: `${BASE}/Dynamic_Lift_Overhead.jpg`,
+      label: "Dynamic Infrequent Lift Overhead",
+    },
+  ],
 
   // ROM - Total Spine
   "cervical-spine-flexion-extension": [
@@ -664,6 +688,14 @@ export function getSampleIllustrations(testIdOrName: string): Illustration[] {
     if (idKey.includes("high")) return map["static-lift-high"];
     if (idKey.includes("mid")) return map["static-lift-mid"];
     if (idKey.includes("low")) return map["static-lift-low"];
+  }
+
+  if (idKey.includes("dynamic-infrequent-lift")) {
+    if (idKey.includes("overhead"))
+      return map["dynamic-infrequent-lift-overhead"];
+    if (idKey.includes("high")) return map["dynamic-infrequent-lift-high"];
+    if (idKey.includes("mid")) return map["dynamic-infrequent-lift-mid"];
+    if (idKey.includes("low")) return map["dynamic-infrequent-lift-low"];
   }
 
   if (idKey.includes("dynamic-lift")) {
