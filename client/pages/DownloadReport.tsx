@@ -89,6 +89,34 @@ const loadImagesFromDB = async (): Promise<IndexedDBImage[]> => {
   }
 };
 
+const resolveDynamicEndpointLabel = (test: any): string | null => {
+  const rawEndpoint = String(
+    test?.dynamicEndpointType ?? test?.parameters?.dynamicEndpointType ?? "",
+  ).trim();
+
+  if (!rawEndpoint) {
+    return null;
+  }
+
+  const key = rawEndpoint.toLowerCase();
+  const map: Record<string, string> = {
+    biomechanical: "Biomechanical",
+    physiological: "Physiological",
+    psychophysical: "Psychophysical",
+    "task-requirement": "Task Requirement",
+  };
+
+  if (map[key]) {
+    return map[key];
+  }
+
+  return key
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(" ");
+};
+
 interface ReportSummary {
   evaluatorName: string;
   claimantName: string;
@@ -2556,7 +2584,7 @@ export default function DownloadReport() {
                       if (testNameLower.includes("extension")) {
                         return {
                           requirement:
-                            "Lumbar extension ��20° for postural activities",
+                            "Lumbar extension ≥20° for postural activities",
                           norm: 20, // degrees
                           functionalMin: 15,
                           unit: "degrees",
@@ -4727,14 +4755,27 @@ export default function DownloadReport() {
                                   !test.demonstrated &&
                                   !isCardioTest &&
                                   !isStaticLift
-                                    ? `
+                                    ? (() => {
+                                        const endpointLabel =
+                                          resolveDynamicEndpointLabel(test);
+                                        const isDynamicLift = (
+                                          test.testName || ""
+                                        )
+                                          .toLowerCase()
+                                          .includes("dynamic");
+                                        const endpointMarkup =
+                                          isDynamicLift && endpointLabel
+                                            ? `<p style="font-size: 11px; font-weight: bold; margin-top: 8px;">Endpoint Condition:</p>
+                                        <p style="font-size: 11px;">${endpointLabel}</p>`
+                                            : "";
+                                        return `
                                     <div style="margin: 8px 0 12px 0;">
                                         <p style="font-size: 11px; font-weight: bold;">Reason For Incomplete Test:</p>
                                         <p style="font-size: 11px;">Limited by pain/discomfort</p>
-                                        <p style="font-size: 11px; font-weight: bold; margin-top: 8px;">Endpoint Condition:</p>
-                                        <p style="font-size: 11px;">Psychophysical</p>
+                                        ${endpointMarkup}
                                     </div>
-                                `
+                                `;
+                                      })()
                                     : ""
                                 }
                             </div>
@@ -4780,26 +4821,10 @@ export default function DownloadReport() {
                               if (!isDynamicLift) {
                                 return "";
                               }
-                              const rawEndpoint = String(
-                                (test as any).dynamicEndpointType ||
-                                  (test as any).parameters
-                                    ?.dynamicEndpointType ||
-                                  "",
-                              ).trim();
-                              if (!rawEndpoint) {
+                              const label = resolveDynamicEndpointLabel(test);
+                              if (!label) {
                                 return "";
                               }
-                              const key = rawEndpoint.toLowerCase();
-                              const map: Record<string, string> = {
-                                biomechanical: "Biomechanical",
-                                physiological: "Physiological",
-                                psychophysical: "Psychophysical",
-                                "task-requirement": "Task Requirement",
-                              };
-                              const fallback = key
-                                .replace(/[-_]/g, " ")
-                                .replace(/\b\w/g, (char) => char.toUpperCase());
-                              const label = map[key] || fallback;
                               return `<div style="font-size: 11px; color: #374151; margin: 6px 0;">
                                 <strong>Endpoint Condition:</strong> ${label}
                               </div>`;
