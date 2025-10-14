@@ -23,23 +23,24 @@ const {
   VerticalAlign,
   ShadingType,
   PageNumber,
-  Footer
+  Footer,
 } = require("docx");
-const { getSampleIllustrations, illustrationsToHtml } = require("../test-illustrations");
+const {
+  getSampleIllustrations,
+  illustrationsToHtml,
+} = require("../test-illustrations");
 const router = express.Router();
 const BRAND_COLOR = "1E3A8A";
 const NARROW_FONT = "Arial Narrow";
 const DEFAULT_FONT = "Arial";
-const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
 
 // Helper functions for table cells
 function createTableCellForPain(text, bold = false, background = "") {
   return new TableCell({
     children: [
       new Paragraph({
-        children: [
-          new TextRun({ text, bold, size: 16 }),
-        ],
+        children: [new TextRun({ text, bold, size: 16 })],
         spacing: { before: 0, after: 0 },
       }),
     ],
@@ -49,7 +50,6 @@ function createTableCellForPain(text, bold = false, background = "") {
 }
 
 let globalSampleImageBuffer = null;
-
 
 async function fetchImageBuffer(url) {
   try {
@@ -64,7 +64,9 @@ async function fetchImageBuffer(url) {
 
 async function getSampleImageBuffer() {
   if (!globalSampleImageBuffer) {
-    globalSampleImageBuffer = await fetchImageBuffer("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWK1bi8ireVtN4jstd8ciOgk1AhSSeuB5lkw&s");
+    globalSampleImageBuffer = await fetchImageBuffer(
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWK1bi8ireVtN4jstd8ciOgk1AhSSeuB5lkw&s",
+    );
   }
   return globalSampleImageBuffer;
 }
@@ -98,7 +100,8 @@ const calculateCV = (measurements = {}) => {
   if (vals.length < 2) return 0;
 
   const avg = vals.reduce((s, v) => s + v, 0) / vals.length;
-  const variance = vals.reduce((s, v) => s + Math.pow(v - avg, 2), 0) / vals.length;
+  const variance =
+    vals.reduce((s, v) => s + Math.pow(v - avg, 2), 0) / vals.length;
   const stdDev = Math.sqrt(variance);
   const cv = (stdDev / avg) * 100;
   return Math.round(cv * 10) / 10; // Round to 1 decimal place
@@ -133,7 +136,7 @@ const getImageBuffer = async (src) => {
       try {
         const tmpPath = path.join(os.tmpdir(), `docx_img_${Date.now()}.bin`);
         fs.writeFileSync(tmpPath, buffer);
-      } catch { }
+      } catch {}
     }
 
     return buffer;
@@ -168,7 +171,7 @@ function createHeaderCell(text) {
         ],
       }),
     ],
-    shading: { fill: "FFFF99", }, // light yellow header fill
+    shading: { fill: "FFFF99" }, // light yellow header fill
     margins: {
       top: 150, // padding inside the cell (in twips)
       bottom: 150,
@@ -192,10 +195,12 @@ function createSideTrialTable(test, measurementUnit) {
     (name.match(/(rom|range|flexion|extension|deg)/)
       ? "deg"
       : // if test name looks like weight or strength-based
-      name.match(/(weight|strength|force|pressure|load|grip|resistance|torque)/)
+        name.match(
+            /(weight|strength|force|pressure|load|grip|resistance|torque)/,
+          )
         ? "lbs"
         : // fallback default
-        "lbs");
+          "lbs");
 
   // --- Helpers ---
   const toNumber = (v) => {
@@ -214,7 +219,9 @@ function createSideTrialTable(test, measurementUnit) {
     if (typeof src === "object") {
       const out = [];
       for (let i = 1; i <= 30; i++) {
-        const key = [`trial${i}`, `t${i}`, String(i)].find((k) => src[k] != null);
+        const key = [`trial${i}`, `t${i}`, String(i)].find(
+          (k) => src[k] != null,
+        );
         if (key) out.push(toNumber(src[key]));
       }
       return out;
@@ -237,7 +244,10 @@ function createSideTrialTable(test, measurementUnit) {
   const rightTrials = readTrials(test?.rightMeasurements);
 
   const trialCount = Math.max(leftTrials.length, rightTrials.length);
-  const trialHeaders = Array.from({ length: trialCount }, (_, i) => `Trial ${i + 1}`);
+  const trialHeaders = Array.from(
+    { length: trialCount },
+    (_, i) => `Trial ${i + 1}`,
+  );
 
   // --- Averages ---
   const leftAvgNum = average(leftTrials);
@@ -257,7 +267,13 @@ function createSideTrialTable(test, measurementUnit) {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: text ?? "", bold: options.bold || false, size: 16 })],
+          children: [
+            new TextRun({
+              text: text ?? "",
+              bold: options.bold || false,
+              size: 16,
+            }),
+          ],
         }),
       ],
     });
@@ -272,7 +288,7 @@ function createSideTrialTable(test, measurementUnit) {
         ...trialHeaders.map((h) => makeCell(h, { bold: true, shading: true })),
         makeCell("Average", { bold: true, shading: true }),
       ],
-    })
+    }),
   );
 
   // Left row
@@ -285,10 +301,12 @@ function createSideTrialTable(test, measurementUnit) {
           const txt = v != null ? `${formatVal(v)} ${unit}` : "";
           return makeCell(txt);
         }),
-        makeCell(leftAvgNum != null ? `${leftAvgNum.toFixed(1)} ${unit}` : "-", {
-        }),
+        makeCell(
+          leftAvgNum != null ? `${leftAvgNum.toFixed(1)} ${unit}` : "-",
+          {},
+        ),
       ],
-    })
+    }),
   );
 
   // Right row
@@ -301,10 +319,12 @@ function createSideTrialTable(test, measurementUnit) {
           const txt = v != null ? `${formatVal(v)} ${unit}` : "";
           return makeCell(txt);
         }),
-        makeCell(rightAvgNum != null ? `${rightAvgNum.toFixed(1)} ${unit}` : "-", {
-        }),
+        makeCell(
+          rightAvgNum != null ? `${rightAvgNum.toFixed(1)} ${unit}` : "-",
+          {},
+        ),
       ],
-    })
+    }),
   );
 
   return new Table({
@@ -320,7 +340,6 @@ function createSideTrialTable(test, measurementUnit) {
     rows,
   });
 }
-
 
 function createDataRow(values) {
   return new TableRow({
@@ -339,7 +358,7 @@ function createDataRow(values) {
               children: [new TextRun({ text: val, size: 16 })],
             }),
           ],
-        })
+        }),
     ),
   });
 }
@@ -387,11 +406,9 @@ const currentDate = new Date().toLocaleDateString("en-US", {
 const calculateAverage = (measurements) => {
   if (!measurements || typeof measurements !== "object") return 0;
   const values = Object.values(measurements).filter(
-    (v) => typeof v === "number" && !isNaN(v)
+    (v) => typeof v === "number" && !isNaN(v),
   );
-  return values.length
-    ? values.reduce((a, b) => a + b, 0) / values.length
-    : 0;
+  return values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
 };
 
 // ✅ Define all reference texts grouped by category
@@ -420,11 +437,11 @@ const testReferences = {
     "Manual muscle testing based on MRC grading scale (0–5).",
     "Observe compensatory movements during resistance.",
   ],
-  "goniometers": [
+  goniometers: [
     "Follow standard goniometric procedures per AAOS.",
     "Record end-feel and any pain limitation.",
   ],
-  "mtm": [
+  mtm: [
     "Based on MTM-1 methodology and standard reach analysis.",
     "Evaluate efficiency and ergonomic feasibility.",
   ],
@@ -432,11 +449,11 @@ const testReferences = {
     "Use Bruce protocol stage times for VO₂ max estimation.",
     "Monitor heart rate response for submaximal effort.",
   ],
-  "mcaft": [
+  mcaft: [
     "Step test data derived from Canadian Aerobic Fitness Test guidelines.",
     "Heart rate recovery used for fitness classification.",
   ],
-  "kasch": [
+  kasch: [
     "Kasch step test norms for cardiac rehabilitation population.",
     "Adjust step height based on participant’s age and gender.",
   ],
@@ -456,6 +473,10 @@ const getReferencesForTest = (testId) => {
     "dynamic-lift-high": "dynamic-lift",
     "dynamic-lift-overhead": "dynamic-lift",
     "dynamic-lift-frequent": "dynamic-lift",
+    "dynamic-infrequent-lift-low": "dynamic-lift",
+    "dynamic-infrequent-lift-mid": "dynamic-lift",
+    "dynamic-infrequent-lift-high": "dynamic-lift",
+    "dynamic-infrequent-lift-overhead": "dynamic-lift",
 
     // Hand Strength Tests
     "hand-strength-standard": "hand-strength",
@@ -574,7 +595,6 @@ const getReferencesForTest = (testId) => {
   return category ? testReferences[category] || [] : [];
 };
 
-
 // Build the "References" block as docx.Paragraph[].
 function buildReferenceParagraphs(test, opts = {}) {
   const {
@@ -604,7 +624,9 @@ function buildReferenceParagraphs(test, opts = {}) {
     return new Paragraph({
       children: [run],
       spacing: { after: options.after != null ? options.after : spacingAfter },
-      ...(options.bullet || (bullet && !options.noBullet) ? { bullet: { level: 0 } } : {}),
+      ...(options.bullet || (bullet && !options.noBullet)
+        ? { bullet: { level: 0 } }
+        : {}),
     });
   };
 
@@ -613,7 +635,13 @@ function buildReferenceParagraphs(test, opts = {}) {
     if (ref && typeof ref === "object") {
       if (typeof formatReference === "function") return formatReference(ref);
       // default object formatting
-      const parts = [ref.author, ref.title, ref.journal, ref.year, ref.pages].filter(Boolean);
+      const parts = [
+        ref.author,
+        ref.title,
+        ref.journal,
+        ref.year,
+        ref.pages,
+      ].filter(Boolean);
       return parts.join(". ");
     }
     return "";
@@ -628,7 +656,7 @@ function buildReferenceParagraphs(test, opts = {}) {
         sizePt: headingSizePt,
         after: 120,
         noBullet: true,
-      })
+      }),
     );
   }
 
@@ -636,26 +664,40 @@ function buildReferenceParagraphs(test, opts = {}) {
 
   if (testName.includes("kasch")) {
     out.push(
-      para("Validation of a bench stepping test for cardiorespiratory fitness classification of emergency service personnel J A Davis, J H Wilmore, PMID: 501456")
+      para(
+        "Validation of a bench stepping test for cardiorespiratory fitness classification of emergency service personnel J A Davis, J H Wilmore, PMID: 501456",
+      ),
     );
   } else if (testName.includes("mcaft")) {
     out.push(
-      para("Weller et al. Prediction of maximal oxygen uptake from a modified Canadian aerobic fitness test. Can. J. Appl. Physiol. 18(2) 175-188, 1993"),
-      para("Weller et al. A study to validate the Canadian aerobic fitness test. Can. J. Appl. Physiol. 20(2) 211-221, 1995")
+      para(
+        "Weller et al. Prediction of maximal oxygen uptake from a modified Canadian aerobic fitness test. Can. J. Appl. Physiol. 18(2) 175-188, 1993",
+      ),
+      para(
+        "Weller et al. A study to validate the Canadian aerobic fitness test. Can. J. Appl. Physiol. 20(2) 211-221, 1995",
+      ),
     );
   } else if (testName.includes("bruce") || testName.includes("treadmill")) {
     out.push(
-      para("Bires AM, Lawson D, Wasser TE, Raber-Baer D. ... J Nucl Med Technol. 2013 Dec;41(4):274-8"),
-      para("Poehling CP, Llewellyn TL. ... Int J Exerc Sci. 2019;12(2):9-14.")
+      para(
+        "Bires AM, Lawson D, Wasser TE, Raber-Baer D. ... J Nucl Med Technol. 2013 Dec;41(4):274-8",
+      ),
+      para("Poehling CP, Llewellyn TL. ... Int J Exerc Sci. 2019;12(2):9-14."),
     );
   } else {
     const refs = getReferencesForTest(test?.testId) ?? [];
 
     if (!refs.length) {
       out.push(
-        para("Innes, E., & Straker, L. (1999). Reliability of work-related assessments. Work, 13(2), 107-124."),
-        para("Matheson, L.N., et al. (1995). Development of a database of functional assessment measures related to work disability. Journal of Occupational Rehabilitation, 5(4), 191-204."),
-        para("Reneman, M.F., et al. (2002). Reliability of a functional capacity evaluation in patients with chronic low back pain. Journal of Occupational Rehabilitation, 12(4), 277-286.")
+        para(
+          "Innes, E., & Straker, L. (1999). Reliability of work-related assessments. Work, 13(2), 107-124.",
+        ),
+        para(
+          "Matheson, L.N., et al. (1995). Development of a database of functional assessment measures related to work disability. Journal of Occupational Rehabilitation, 5(4), 191-204.",
+        ),
+        para(
+          "Reneman, M.F., et al. (2002). Reliability of a functional capacity evaluation in patients with chronic low back pain. Journal of Occupational Rehabilitation, 12(4), 277-286.",
+        ),
       );
     } else {
       refs.forEach((ref) => {
@@ -678,15 +720,12 @@ async function loadImageAsUint8(source) {
     if (source.startsWith("/")) {
       const localPath = path.join(process.cwd(), source);
       buffer = fs.readFileSync(localPath);
-    }
-    else if (fs.existsSync(source)) {
+    } else if (fs.existsSync(source)) {
       buffer = fs.readFileSync(source);
-    }
-    else if (source.startsWith("http")) {
+    } else if (source.startsWith("http")) {
       const res = await fetch(source);
       buffer = Buffer.from(await res.arrayBuffer());
-    }
-    else {
+    } else {
       // Fallback to sample_illustration directory
       const localPath = path.join(process.cwd(), "sample_illustration", source);
       buffer = fs.readFileSync(localPath);
@@ -716,7 +755,8 @@ async function appendImageGrid(children, images, opts) {
     const name = img?.name || `Image ${i + 1}`;
 
     const isHandStrengthM =
-      name?.includes("Hand Strength MVE") || name?.includes("Hand Strength MMVE");
+      name?.includes("Hand Strength MVE") ||
+      name?.includes("Hand Strength MMVE");
     const imageHeight = isHandStrengthM ? baseHeight + 300 : baseHeight;
     const imageWidth = baseWidth; // keep same width
 
@@ -727,13 +767,13 @@ async function appendImageGrid(children, images, opts) {
             alignment: AlignmentType.START,
             children: data
               ? [
-                new ImageRun({
-                  data,
-                  transformation: { width: imageWidth, height: imageHeight },
-                }),
-                new TextRun({ text: "\n" }),
-                new TextRun({ text: name, size: 16, color: "6B7280" }),
-              ]
+                  new ImageRun({
+                    data,
+                    transformation: { width: imageWidth, height: imageHeight },
+                  }),
+                  new TextRun({ text: "\n" }),
+                  new TextRun({ text: name, size: 16, color: "6B7280" }),
+                ]
               : [new TextRun({ text: name })],
           }),
         ],
@@ -752,11 +792,18 @@ async function appendImageGrid(children, images, opts) {
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
       borders: noBorders,
-      rows: rows.length ? rows : [new TableRow({ children: [new TableCell({ children: [new Paragraph("No images")] })] })],
+      rows: rows.length
+        ? rows
+        : [
+            new TableRow({
+              children: [
+                new TableCell({ children: [new Paragraph("No images")] }),
+              ],
+            }),
+          ],
     }),
   );
 }
-
 
 // Append “Sample Illustration” block using getSampleIllustrations
 async function appendSampleIllustrationsForTest(children, test) {
@@ -767,7 +814,7 @@ async function appendSampleIllustrationsForTest(children, test) {
     console.debug("Illustrations picked", {
       test: idOrName,
       count: illos?.length ?? 0,
-      files: (illos || []).map(i => i?.src || i),
+      files: (illos || []).map((i) => i?.src || i),
     });
   } catch {
     illos = [];
@@ -775,16 +822,22 @@ async function appendSampleIllustrationsForTest(children, test) {
 
   if (!Array.isArray(illos) || illos.length === 0) return;
 
-  const isMTMTest = test.testName?.toLowerCase().match(
-    /(fingering|handling|reach|balance|stoop|walk|push|pull|cart|crouch|carry|crawl|climb|kneel)/i
-  );
+  const isMTMTest = test.testName
+    ?.toLowerCase()
+    .match(
+      /(fingering|handling|reach|balance|stoop|walk|push|pull|cart|crouch|carry|crawl|climb|kneel)/i,
+    );
 
   if (!isMTMTest) {
     children.push(
       new Paragraph({
         alignment: AlignmentType.LEFT,
         children: [
-          new TextRun({ text: "Sample Illustration:", underline: {}, size: 16 }),
+          new TextRun({
+            text: "Sample Illustration:",
+            underline: {},
+            size: 16,
+          }),
           new TextRun({ text: " " }),
         ],
         spacing: { before: 0, after: 80 },
@@ -796,7 +849,7 @@ async function appendSampleIllustrationsForTest(children, test) {
   const normalized = illos.map((x) =>
     typeof x === "string"
       ? { src: x, label: "Illustration", name: "Illustration" }
-      : { ...x, name: x.name ?? x.label }
+      : { ...x, name: x.name ?? x.label },
   );
   const isSingle = normalized.length === 1;
   const cols = isSingle ? 1 : 1; // 1 per row
@@ -810,13 +863,13 @@ async function appendSampleIllustrationsForTest(children, test) {
 function appendHeartRateLine(children, test) {
   const pre = Number(
     test.leftMeasurements?.preHeartRate ||
-    test.rightMeasurements?.preHeartRate ||
-    0,
+      test.rightMeasurements?.preHeartRate ||
+      0,
   );
   const post = Number(
     test.leftMeasurements?.postHeartRate ||
-    test.rightMeasurements?.postHeartRate ||
-    0,
+      test.rightMeasurements?.postHeartRate ||
+      0,
   );
   if (!pre && !post) return;
 
@@ -844,7 +897,9 @@ async function appendTestImages(children, test, title = "Test Images") {
         ? test.clientImages
         : []) || [];
 
-  const filtered = images.filter((i) => !!(i?.dataUrl || i?.data || i?.src || i?.url || i instanceof Blob));
+  const filtered = images.filter(
+    (i) => !!(i?.dataUrl || i?.data || i?.src || i?.url || i instanceof Blob),
+  );
   if (filtered.length === 0) return;
 
   children.push(
@@ -853,7 +908,11 @@ async function appendTestImages(children, test, title = "Test Images") {
       spacing: { before: 200, after: 160 },
     }),
   );
-  await appendImageGrid(children, filtered, { cols: 4, width: 100, height: 75 });
+  await appendImageGrid(children, filtered, {
+    cols: 4,
+    width: 100,
+    height: 75,
+  });
 }
 
 // Cardio: Bruce
@@ -863,8 +922,7 @@ function addBruceDocxContent(children, test) {
     new Paragraph({
       children: [
         new TextRun({
-          text:
-            "The Bruce protocol involves getting on a treadmill and increasing speed and incline every three minutes (in stages). The test stops when you've hit 85% of your maximum heart rate, your heart rate exceeds 115 beats per minute for two stages, or the test is otherwise terminated.",
+          text: "The Bruce protocol involves getting on a treadmill and increasing speed and incline every three minutes (in stages). The test stops when you've hit 85% of your maximum heart rate, your heart rate exceeds 115 beats per minute for two stages, or the test is otherwise terminated.",
           size: 16,
         }),
       ],
@@ -874,14 +932,17 @@ function addBruceDocxContent(children, test) {
 
   // VO2 max explanation
   children.push(
-    new Paragraph({ children: [new TextRun({ text: "Measuring VO2 Max:", bold: true, size: 16 })] }),
+    new Paragraph({
+      children: [
+        new TextRun({ text: "Measuring VO2 Max:", bold: true, size: 16 }),
+      ],
+    }),
   );
   children.push(
     new Paragraph({
       children: [
         new TextRun({
-          text:
-            "VO2 max refers to the maximum amount of oxygen an individual can use during intense exercise (ml/kg/min). The Bruce test estimates VO2 max from total treadmill time (T, in minutes).",
+          text: "VO2 max refers to the maximum amount of oxygen an individual can use during intense exercise (ml/kg/min). The Bruce test estimates VO2 max from total treadmill time (T, in minutes).",
           size: 16,
         }),
       ],
@@ -892,13 +953,19 @@ function addBruceDocxContent(children, test) {
     new Paragraph({
       children: [
         new TextRun({ text: "Men: ", bold: true, size: 16 }),
-        new TextRun({ text: "14.8 - (1.379 × T) + (0.451 × T²) - (0.012 × T³)", size: 16 }),
+        new TextRun({
+          text: "14.8 - (1.379 × T) + (0.451 × T²) - (0.012 × T³)",
+          size: 16,
+        }),
       ],
     }),
   );
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: "Women: ", bold: true, size: 16 }), new TextRun({ text: "4.38 × T - 3.9", size: 16 })],
+      children: [
+        new TextRun({ text: "Women: ", bold: true, size: 16 }),
+        new TextRun({ text: "4.38 × T - 3.9", size: 16 }),
+      ],
       spacing: { after: 160 },
     }),
   );
@@ -914,14 +981,27 @@ function addBruceDocxContent(children, test) {
     ["7", "6.0 mph", "22% grade"],
   ];
   children.push(
-    new Paragraph({ children: [new TextRun({ text: "Bruce Treadmill Test Stages, Speeds, and Inclines:", bold: true, size: 16 })], spacing: { after: 80 } }),
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "Bruce Treadmill Test Stages, Speeds, and Inclines:",
+          bold: true,
+          size: 16,
+        }),
+      ],
+      spacing: { after: 80 },
+    }),
   );
   children.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
       rows: [
         new TableRow({
-          children: [createHeaderCell("Stage"), createHeaderCell("Treadmill Speed"), createHeaderCell("Treadmill Incline")],
+          children: [
+            createHeaderCell("Stage"),
+            createHeaderCell("Treadmill Speed"),
+            createHeaderCell("Treadmill Incline"),
+          ],
         }),
         ...rows.map(
           (r) =>
@@ -929,7 +1009,12 @@ function addBruceDocxContent(children, test) {
               children: r.map(
                 (c) =>
                   new TableCell({
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [new TextRun({ text: c, size: 16 })],
+                      }),
+                    ],
                     verticalAlign: VerticalAlign.CENTER,
                   }),
               ),
@@ -941,7 +1026,11 @@ function addBruceDocxContent(children, test) {
         bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        insideHorizontal: {
+          style: BorderStyle.SINGLE,
+          size: 1,
+          color: "000000",
+        },
         insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
       },
     }),
@@ -953,10 +1042,18 @@ function addBruceDocxContent(children, test) {
       spacing: { before: 160, after: 80 },
       children: [
         new TextRun({ text: "CLASSIFICATION: ", bold: true, size: 16 }),
-        new TextRun({ text: (test.classification || "").toString(), underline: {}, size: 16 }),
+        new TextRun({
+          text: (test.classification || "").toString(),
+          underline: {},
+          size: 16,
+        }),
         new TextRun({ text: "    " }),
         new TextRun({ text: "VO2 MAX: ", bold: true, size: 16 }),
-        new TextRun({ text: (test.vo2Max || "").toString(), underline: {}, size: 16 }),
+        new TextRun({
+          text: (test.vo2Max || "").toString(),
+          underline: {},
+          size: 16,
+        }),
       ],
     }),
   );
@@ -965,7 +1062,14 @@ function addBruceDocxContent(children, test) {
   children.push(
     new Paragraph({
       alignment: AlignmentType.CENTER,
-      children: [new TextRun({ text: "VO2 Max Norms for Men as Measured in ml/kg/min", bold: true, size: 16, color: BRAND_COLOR })],
+      children: [
+        new TextRun({
+          text: "VO2 Max Norms for Men as Measured in ml/kg/min",
+          bold: true,
+          size: 16,
+          color: BRAND_COLOR,
+        }),
+      ],
       spacing: { before: 160, after: 80 },
     }),
   );
@@ -993,19 +1097,34 @@ function addBruceDocxContent(children, test) {
             createHeaderCell("Very Poor"),
           ],
         }),
-        ...menNorms.map((r) => new TableRow({
-          children: r.map((c) => new TableCell({
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
-            verticalAlign: VerticalAlign.CENTER,
-          }))
-        })),
+        ...menNorms.map(
+          (r) =>
+            new TableRow({
+              children: r.map(
+                (c) =>
+                  new TableCell({
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [new TextRun({ text: c, size: 16 })],
+                      }),
+                    ],
+                    verticalAlign: VerticalAlign.CENTER,
+                  }),
+              ),
+            }),
+        ),
       ],
       borders: {
         top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        insideHorizontal: {
+          style: BorderStyle.SINGLE,
+          size: 1,
+          color: "000000",
+        },
         insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
       },
     }),
@@ -1015,7 +1134,14 @@ function addBruceDocxContent(children, test) {
   children.push(
     new Paragraph({
       alignment: AlignmentType.CENTER,
-      children: [new TextRun({ text: "VO2 Max Norms for Women as Measured in ml/kg/min", bold: true, size: 16, color: BRAND_COLOR })],
+      children: [
+        new TextRun({
+          text: "VO2 Max Norms for Women as Measured in ml/kg/min",
+          bold: true,
+          size: 16,
+          color: BRAND_COLOR,
+        }),
+      ],
       spacing: { before: 160, after: 80 },
     }),
   );
@@ -1043,24 +1169,38 @@ function addBruceDocxContent(children, test) {
             createHeaderCell("Very Poor"),
           ],
         }),
-        ...womenNorms.map((r) => new TableRow({
-          children: r.map((c) => new TableCell({
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
-            verticalAlign: VerticalAlign.CENTER,
-          }))
-        })),
+        ...womenNorms.map(
+          (r) =>
+            new TableRow({
+              children: r.map(
+                (c) =>
+                  new TableCell({
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [new TextRun({ text: c, size: 16 })],
+                      }),
+                    ],
+                    verticalAlign: VerticalAlign.CENTER,
+                  }),
+              ),
+            }),
+        ),
       ],
       borders: {
         top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        insideHorizontal: {
+          style: BorderStyle.SINGLE,
+          size: 1,
+          color: "000000",
+        },
         insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
       },
     }),
   );
-
 }
 
 // Cardio: mCAFT
@@ -1069,8 +1209,7 @@ function addMCAFTDocxContent(children, test) {
     new Paragraph({
       children: [
         new TextRun({
-          text:
-            "mCAFT estimates aerobic fitness with a step test at age/gender-based cadences. VO2 max is predicted using the O2 cost of the last completed stage, body mass, and age.",
+          text: "mCAFT estimates aerobic fitness with a step test at age/gender-based cadences. VO2 max is predicted using the O2 cost of the last completed stage, body mass, and age.",
           size: 16,
         }),
       ],
@@ -1079,12 +1218,31 @@ function addMCAFTDocxContent(children, test) {
   );
 
   // Starting stage table
-  children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Starting stepping stage by gender", bold: true, size: 16, color: BRAND_COLOR })], spacing: { after: 80 } }));
+  children.push(
+    new Paragraph({
+      alignment: AlignmentType.CENTER,
+      children: [
+        new TextRun({
+          text: "Starting stepping stage by gender",
+          bold: true,
+          size: 16,
+          color: BRAND_COLOR,
+        }),
+      ],
+      spacing: { after: 80 },
+    }),
+  );
   children.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
       rows: [
-        new TableRow({ children: [createHeaderCell("Age"), createHeaderCell("Males"), createHeaderCell("Females")] }),
+        new TableRow({
+          children: [
+            createHeaderCell("Age"),
+            createHeaderCell("Males"),
+            createHeaderCell("Females"),
+          ],
+        }),
         ...[
           ["15-19", "4", "3"],
           ["20-29", "4", "3"],
@@ -1098,7 +1256,12 @@ function addMCAFTDocxContent(children, test) {
               children: r.map(
                 (c) =>
                   new TableCell({
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [new TextRun({ text: c, size: 16 })],
+                      }),
+                    ],
                     verticalAlign: VerticalAlign.CENTER,
                   }),
               ),
@@ -1110,14 +1273,31 @@ function addMCAFTDocxContent(children, test) {
         bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        insideHorizontal: {
+          style: BorderStyle.SINGLE,
+          size: 1,
+          color: "000000",
+        },
         insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
       },
     }),
   );
 
   // Oxygen cost table
-  children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Oxygen cost in ml/kg/min", bold: true, size: 16, color: BRAND_COLOR })], spacing: { before: 160, after: 80 } }));
+  children.push(
+    new Paragraph({
+      alignment: AlignmentType.CENTER,
+      children: [
+        new TextRun({
+          text: "Oxygen cost in ml/kg/min",
+          bold: true,
+          size: 16,
+          color: BRAND_COLOR,
+        }),
+      ],
+      spacing: { before: 160, after: 80 },
+    }),
+  );
   children.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1143,7 +1323,12 @@ function addMCAFTDocxContent(children, test) {
               children: r.map(
                 (c) =>
                   new TableCell({
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [new TextRun({ text: c, size: 16 })],
+                      }),
+                    ],
                     verticalAlign: VerticalAlign.CENTER,
                   }),
               ),
@@ -1155,7 +1340,11 @@ function addMCAFTDocxContent(children, test) {
         bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        insideHorizontal: {
+          style: BorderStyle.SINGLE,
+          size: 1,
+          color: "000000",
+        },
         insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
       },
     }),
@@ -1167,10 +1356,9 @@ function addMCAFTDocxContent(children, test) {
       spacing: { before: 160, after: 80 },
       children: [
         new TextRun({
-          text:
-            "VO2 max (ml/kg/min) = 17.2 + (1.29 × O2 cost of the last completed stage) - (0.09 × mass in kg) - (0.18 × age in years)\nVO2 max (ml/kg/min) = 17.2 + (1.29 × _____) - (0.09 × _____ kg) - (0.18 × _____ )\nNote: O2 cost is provided in Table 2 on the back of this worksheet",
+          text: "VO2 max (ml/kg/min) = 17.2 + (1.29 × O2 cost of the last completed stage) - (0.09 × mass in kg) - (0.18 × age in years)\nVO2 max (ml/kg/min) = 17.2 + (1.29 × _____) - (0.09 × _____ kg) - (0.18 × _____ )\nNote: O2 cost is provided in Table 2 on the back of this worksheet",
           bold: true,
-          size: 12
+          size: 12,
         }),
       ],
     }),
@@ -1182,11 +1370,19 @@ function addMCAFTDocxContent(children, test) {
       spacing: { after: 120 },
       children: [
         new TextRun({ text: "Predicted VO2 max: ", bold: true, size: 16 }),
-        new TextRun({ text: (test.predictedVo2Max || "").toString(), underline: {}, size: 16 }),
+        new TextRun({
+          text: (test.predictedVo2Max || "").toString(),
+          underline: {},
+          size: 16,
+        }),
         new TextRun({ text: " (ml/kg/min)", size: 16 }),
         new TextRun({ text: "    " }),
         new TextRun({ text: "HBR: ", bold: true, size: 16 }),
-        new TextRun({ text: (test.hbr || "").toString(), underline: {}, size: 16 }),
+        new TextRun({
+          text: (test.hbr || "").toString(),
+          underline: {},
+          size: 16,
+        }),
       ],
     }),
   );
@@ -1199,8 +1395,7 @@ function addKaschDocxContent(children, test) {
     new Paragraph({
       children: [
         new TextRun({
-          text:
-            "Kasch Pulse Recovery Test (KPR Test) is a 3-minute step test used to assess cardiorespiratory fitness. Participants step up and down on a 12-inch (0.305 m) step at 24 steps per minute for three minutes, followed by one-minute seated heart rate recovery.",
+          text: "Kasch Pulse Recovery Test (KPR Test) is a 3-minute step test used to assess cardiorespiratory fitness. Participants step up and down on a 12-inch (0.305 m) step at 24 steps per minute for three minutes, followed by one-minute seated heart rate recovery.",
           size: 16,
         }),
       ],
@@ -1213,9 +1408,8 @@ function addKaschDocxContent(children, test) {
     new Paragraph({
       children: [
         new TextRun({
-          text:
-            "The KASCH step test, officially the Kasch Pulse Recovery Test (KPR Test), measures aerobic fitness based on post-exercise heart rate recovery. A faster recovery rate indicates better cardiorespiratory fitness.",
-          size: 16
+          text: "The KASCH step test, officially the Kasch Pulse Recovery Test (KPR Test), measures aerobic fitness based on post-exercise heart rate recovery. A faster recovery rate indicates better cardiorespiratory fitness.",
+          size: 16,
         }),
       ],
       spacing: { after: 160 },
@@ -1225,7 +1419,14 @@ function addKaschDocxContent(children, test) {
   // === How the Test Works ===
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: "How the Kasch Pulse Recovery Test (KPR Test) Works", bold: true, color: "1E3A8A", size: 16 })],
+      children: [
+        new TextRun({
+          text: "How the Kasch Pulse Recovery Test (KPR Test) Works",
+          bold: true,
+          color: "1E3A8A",
+          size: 16,
+        }),
+      ],
       spacing: { after: 80 },
     }),
   );
@@ -1251,10 +1452,18 @@ function addKaschDocxContent(children, test) {
     new Paragraph({
       children: [
         new TextRun({ text: "CLASSIFICATION: ", bold: true, size: 16 }),
-        new TextRun({ text: (test.classification || "Average").toString(), underline: {}, size: 16 }),
+        new TextRun({
+          text: (test.classification || "Average").toString(),
+          underline: {},
+          size: 16,
+        }),
         new TextRun({ text: "    " }),
         new TextRun({ text: "AEROBIC FITNESS SCORE: ", bold: true, size: 16 }),
-        new TextRun({ text: (test.aerobicFitnessScore || "81").toString(), underline: {}, size: 16 }),
+        new TextRun({
+          text: (test.aerobicFitnessScore || "81").toString(),
+          underline: {},
+          size: 16,
+        }),
       ],
       spacing: { after: 120 },
     }),
@@ -1264,9 +1473,33 @@ function addKaschDocxContent(children, test) {
   const women = [
     ["Excellent", "52-81", "58-80", "63-91", "60-92", "70-92", "73-86"],
     ["Good", "85-93", "85-92", "89-96", "95-101", "97-103", "96-101"],
-    ["Above Average", "96-102", "96-101", "100-104", "106-111", "104-111", "103-115"],
-    ["Average", "104-110", "104-110", "107-112", "113-118", "113-118", "116-121"],
-    ["Below Average", "113-120", "113-119", "115-120", "120-124", "119-127", "123-126"],
+    [
+      "Above Average",
+      "96-102",
+      "96-101",
+      "100-104",
+      "106-111",
+      "104-111",
+      "103-115",
+    ],
+    [
+      "Average",
+      "104-110",
+      "104-110",
+      "107-112",
+      "113-118",
+      "113-118",
+      "116-121",
+    ],
+    [
+      "Below Average",
+      "113-120",
+      "113-119",
+      "115-120",
+      "120-124",
+      "119-127",
+      "123-126",
+    ],
     ["Poor", "122-131", "122-129", "124-132", "126-132", "129-135", "128-133"],
     ["Very Poor", "135+", "132+", "137+", "137+", "141+", "139+"],
   ];
@@ -1276,30 +1509,68 @@ function addKaschDocxContent(children, test) {
     ["Good", "79-89", "79-85", "80-88", "87-94", "86-94", "87-92"],
     ["Above Average", "88-93", "88-94", "92-96", "97-100", "97-100", "94-102"],
     ["Average", "95-100", "96-102", "98-105", "103-111", "103-109", "104-113"],
-    ["Below Average", "102-107", "104-110", "108-113", "113-119", "111-119", "116-124"],
+    [
+      "Below Average",
+      "102-107",
+      "104-110",
+      "108-113",
+      "113-119",
+      "111-119",
+      "116-124",
+    ],
     ["Poor", "111-119", "114-121", "116-124", "121-126", "122-128", "126-132"],
     ["Very Poor", "124+", "126+", "128+", "131+", "131+", "137+"],
   ];
 
   function createRatingsTable(title, headerAges, rows) {
-    children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: title, bold: true, size: 16, color: BRAND_COLOR })], spacing: { before: 100, after: 40 } }));
+    children.push(
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [
+          new TextRun({
+            text: title,
+            bold: true,
+            size: 16,
+            color: BRAND_COLOR,
+          }),
+        ],
+        spacing: { before: 100, after: 40 },
+      }),
+    );
 
     children.push(
       new Table({
         width: { size: 100, type: WidthType.PERCENTAGE },
         rows: [
-          new TableRow({ children: [createHeaderCell(""), ...headerAges.map(createHeaderCell)] }),
+          new TableRow({
+            children: [
+              createHeaderCell(""),
+              ...headerAges.map(createHeaderCell),
+            ],
+          }),
           ...rows.map(
             (r) =>
               new TableRow({
                 children: r.map((c, idx) =>
                   idx === 0
                     ? new TableCell({
-                      children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, bold: true, size: 16 })] })],
-                    })
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({ text: c, bold: true, size: 16 }),
+                            ],
+                          }),
+                        ],
+                      })
                     : new TableCell({
-                      children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
-                    }),
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [new TextRun({ text: c, size: 16 })],
+                          }),
+                        ],
+                      }),
                 ),
               }),
           ),
@@ -1309,15 +1580,31 @@ function addKaschDocxContent(children, test) {
           bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
           left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
           right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-          insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-          insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+          insideHorizontal: {
+            style: BorderStyle.SINGLE,
+            size: 1,
+            color: "000000",
+          },
+          insideVertical: {
+            style: BorderStyle.SINGLE,
+            size: 1,
+            color: "000000",
+          },
         },
       }),
     );
   }
 
-  createRatingsTable("Ratings for Women, Based on Age", ["18-25", "26-35", "36-45", "46-55", "56-65", "65+"], women);
-  createRatingsTable("Ratings for Men, Based on Age", ["18-25", "26-35", "36-45", "46-55", "56-65", "65+"], men);
+  createRatingsTable(
+    "Ratings for Women, Based on Age",
+    ["18-25", "26-35", "36-45", "46-55", "56-65", "65+"],
+    women,
+  );
+  createRatingsTable(
+    "Ratings for Men, Based on Age",
+    ["18-25", "26-35", "36-45", "46-55", "56-65", "65+"],
+    men,
+  );
 
   // === Heart Rate Section ===
   children.push(
@@ -1325,7 +1612,10 @@ function addKaschDocxContent(children, test) {
       spacing: { before: 160, after: 80 },
       children: [
         new TextRun({ text: "Heart Rate: ", bold: true, size: 16 }),
-        new TextRun({ text: `Pre: ${test.hrPre || "71"} bpm   Post: ${test.hrPost || "76"} bpm`, size: 16 }),
+        new TextRun({
+          text: `Pre: ${test.hrPre || "71"} bpm   Post: ${test.hrPost || "76"} bpm`,
+          size: 16,
+        }),
       ],
     }),
   );
@@ -1346,8 +1636,7 @@ async function addCardioDocxContent(children, test) {
       new Paragraph({
         children: [
           new TextRun({
-            text:
-              "The client was tested in our facility using standardized cardiovascular assessment protocols.",
+            text: "The client was tested in our facility using standardized cardiovascular assessment protocols.",
           }),
         ],
       }),
@@ -1360,10 +1649,10 @@ async function addCardioDocxContent(children, test) {
 function buildMTMTestBlockTable(testName, testData, trials = []) {
   // Colors/styling similar to screenshot
   const PANEL_HEADER_FILL = "FFFF99"; // pale yellow
-  const GRID_HEADER_FILL = "F3F4F6";  // light gray
-  const AVG_ROW_FILL = "F9FAFB";      // extra light gray
-  const TOTAL_IS_FILL = "DBEAFE";     // light blue
-  const GRID_COLOR = "CBD5E1";        // slate border
+  const GRID_HEADER_FILL = "F3F4F6"; // light gray
+  const AVG_ROW_FILL = "F9FAFB"; // extra light gray
+  const TOTAL_IS_FILL = "DBEAFE"; // light blue
+  const GRID_COLOR = "CBD5E1"; // slate border
 
   const border = { style: BorderStyle.SINGLE, size: 4, color: GRID_COLOR };
 
@@ -1395,31 +1684,41 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
           ],
         }),
       ],
-    })
+    }),
   );
 
   // Grid header
-  const headers = ["Trial", "Side", "Weight/Plane", "Distance/Posture", "Reps", "Time (sec)", "%IS", "Time Set Completed"];
+  const headers = [
+    "Trial",
+    "Side",
+    "Weight/Plane",
+    "Distance/Posture",
+    "Reps",
+    "Time (sec)",
+    "%IS",
+    "Time Set Completed",
+  ];
   rows.push(
     new TableRow({
-      children: headers.map((h, idx) =>
-        new TableCell({
-          shading: { type: ShadingType.CLEAR, fill: GRID_HEADER_FILL },
-          borders: {
-            top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-            bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-            left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-            right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-          },
-          children: [
-            new Paragraph({
-              alignment: AlignmentType.CENTER,
-              children: [new TextRun({ text: h, bold: true, size: 16 })],
-            }),
-          ],
-        })
+      children: headers.map(
+        (h, idx) =>
+          new TableCell({
+            shading: { type: ShadingType.CLEAR, fill: GRID_HEADER_FILL },
+            borders: {
+              top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+            },
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [new TextRun({ text: h, bold: true, size: 16 })],
+              }),
+            ],
+          }),
       ),
-    })
+    }),
   );
 
   // Trial rows
@@ -1428,8 +1727,12 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
   const repsVals = [];
   trials.forEach((trial, i) => {
     const t = getMTMTime(trial);
-    const is = typeof trial.percentIS === "number" ? trial.percentIS : Number(trial.percentIS || 0);
-    const reps = typeof trial.reps === "number" ? trial.reps : Number(trial.reps || 0);
+    const is =
+      typeof trial.percentIS === "number"
+        ? trial.percentIS
+        : Number(trial.percentIS || 0);
+    const reps =
+      typeof trial.reps === "number" ? trial.reps : Number(trial.reps || 0);
 
     times.push(Number.isFinite(t) ? t : 0);
     isVals.push(Number.isFinite(is) ? is : 0);
@@ -1448,23 +1751,25 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
 
     rows.push(
       new TableRow({
-        children: cells.map((val, idx) =>
-          new TableCell({
-            borders: {
-              top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-              bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-              left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-              right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-            },
-            children: [
-              new Paragraph({
-                alignment: idx === 0 ? AlignmentType.CENTER : AlignmentType.CENTER,
-                children: [new TextRun({ text: String(val), size: 16 })],
-              }),
-            ],
-          })
+        children: cells.map(
+          (val, idx) =>
+            new TableCell({
+              borders: {
+                top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              },
+              children: [
+                new Paragraph({
+                  alignment:
+                    idx === 0 ? AlignmentType.CENTER : AlignmentType.CENTER,
+                  children: [new TextRun({ text: String(val), size: 16 })],
+                }),
+              ],
+            }),
         ),
-      })
+      }),
     );
   });
 
@@ -1487,7 +1792,12 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
             left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
             right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
           },
-          children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Avg.", bold: true })] })],
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [new TextRun({ text: "Avg.", bold: true })],
+            }),
+          ],
         }),
         // Side
         new TableCell({
@@ -1507,30 +1817,60 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
         // Reps (avg or common value)
         new TableCell({
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
-          children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(Number.isFinite(avgReps) ? format1(avgReps) : "")] })],
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [
+                new TextRun(Number.isFinite(avgReps) ? format1(avgReps) : ""),
+              ],
+            }),
+          ],
         }),
         // Time (sec) avg
         new TableCell({
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
-          children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(Number.isFinite(avgTime) ? format2(avgTime) : "")] })],
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [
+                new TextRun(Number.isFinite(avgTime) ? format2(avgTime) : ""),
+              ],
+            }),
+          ],
         }),
         // %IS avg
         new TableCell({
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
-          children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(Number.isFinite(avgIS) ? format1(avgIS) : "")] })],
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [
+                new TextRun(Number.isFinite(avgIS) ? format1(avgIS) : ""),
+              ],
+            }),
+          ],
         }),
         // Time Set Completed (total)
         new TableCell({
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
-          borders: { right: border }, borders: {
+          borders: { right: border },
+          borders: {
             top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
             bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
             left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
             right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-          }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(Number.isFinite(sumTime) ? format1(sumTime) : "")] })],
+          },
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [
+                new TextRun(Number.isFinite(sumTime) ? format1(sumTime) : ""),
+              ],
+            }),
+          ],
         }),
       ],
-    })
+    }),
   );
 
   // Total IS% row (label spans first 6 cols; value in %IS column)
@@ -1563,7 +1903,9 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
           children: [
             new Paragraph({
               alignment: AlignmentType.CENTER,
-              children: [new TextRun(Number.isFinite(avgIS) ? `${format1(avgIS)}%` : "")],
+              children: [
+                new TextRun(Number.isFinite(avgIS) ? `${format1(avgIS)}%` : ""),
+              ],
             }),
           ],
         }),
@@ -1578,7 +1920,7 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
           children: [new Paragraph({ children: [new TextRun("")] })],
         }),
       ],
-    })
+    }),
   );
 
   return new Table({
@@ -1606,7 +1948,10 @@ function extractHeartRateForMTM(testData, correspondingTest) {
     correspondingTest?.heartRatePost ??
     correspondingTest?.heartRate?.post;
 
-  return { preHR: isFiniteNum(pre) ? Math.round(pre) : null, postHR: isFiniteNum(post) ? Math.round(post) : null };
+  return {
+    preHR: isFiniteNum(pre) ? Math.round(pre) : null,
+    postHR: isFiniteNum(post) ? Math.round(post) : null,
+  };
 }
 
 function getMTMTime(trial) {
@@ -1627,10 +1972,18 @@ function sum(arr) {
   return vals.reduce((a, b) => a + b, 0);
 }
 
-function format1(n) { return Number.isFinite(n) ? n.toFixed(1) : ""; }
-function format2(n) { return Number.isFinite(n) ? n.toFixed(2) : ""; }
-function isFiniteNum(n) { return typeof n === "number" && Number.isFinite(n); }
-function capitalize(s) { return (s || "").charAt(0).toUpperCase() + (s || "").slice(1); }
+function format1(n) {
+  return Number.isFinite(n) ? n.toFixed(1) : "";
+}
+function format2(n) {
+  return Number.isFinite(n) ? n.toFixed(2) : "";
+}
+function isFiniteNum(n) {
+  return typeof n === "number" && Number.isFinite(n);
+}
+function capitalize(s) {
+  return (s || "").charAt(0).toUpperCase() + (s || "").slice(1);
+}
 
 async function generateMTMContentDocx(mtmData, mainTestData) {
   if (!mtmData || Object.keys(mtmData).length === 0) return [];
@@ -1651,7 +2004,7 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
         }),
       ],
       spacing: { after: 120 },
-    })
+    }),
   );
 
   // === References (added later for last test) ===
@@ -1677,7 +2030,7 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
         new TextRun({ text: " " }),
       ],
       spacing: { before: 0, after: 80 },
-    })
+    }),
   );
 
   // 🧠 Add the intro text only once
@@ -1685,14 +2038,13 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
     new Paragraph({
       children: [
         new TextRun({
-          text:
-            "The client was tested in our facility using MTM. The test results were compared to industrial standards.",
+          text: "The client was tested in our facility using MTM. The test results were compared to industrial standards.",
           italics: true,
           size: 16,
         }),
       ],
       spacing: { after: 200 },
-    })
+    }),
   );
 
   // === Loop through tests ===
@@ -1722,18 +2074,21 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
     rightCol.push(buildMTMTestBlockTable(testName, testData, trials));
 
     // Heart Rate
-    const { preHR, postHR } = extractHeartRateForMTM(testData, correspondingTest);
+    const { preHR, postHR } = extractHeartRateForMTM(
+      testData,
+      correspondingTest,
+    );
     rightCol.push(
       new Paragraph({
         children: [
           new TextRun({ text: `Heart Rate: `, bold: true, size: 16 }),
           new TextRun({
             text: `Pre: ${preHR ?? "N/A"} bpm  Post: ${postHR ?? "N/A"} bpm`,
-            size: 16
+            size: 16,
           }),
         ],
         spacing: { before: 120, after: 80 },
-      })
+      }),
     );
 
     // Comments
@@ -1747,16 +2102,18 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
           }),
         ],
         spacing: { after: 220 },
-      })
+      }),
     );
 
     // Add references only for last test
     if (isLast) {
       rightCol.push(
         new Paragraph({
-          children: [new TextRun({ text: "References:", bold: true, size: 16 })],
+          children: [
+            new TextRun({ text: "References:", bold: true, size: 16 }),
+          ],
           spacing: { before: 200, after: 60 },
-        })
+        }),
       );
 
       refs.forEach((line) => {
@@ -1764,7 +2121,7 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
           new Paragraph({
             children: [new TextRun({ text: line, size: 16 })],
             spacing: { after: 40 },
-          })
+          }),
         );
       });
     }
@@ -1780,7 +2137,11 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
         bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
         right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-        insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+        insideHorizontal: {
+          style: BorderStyle.SINGLE,
+          size: 1,
+          color: "000000",
+        },
         insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
       },
       columnWidths: [2000, 100, 6900],
@@ -1789,14 +2150,16 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
           children: [
             new TableCell({ borders: noBorders, children: leftCol }),
             new TableCell({
-              borders: { left: { style: BorderStyle.SINGLE, size: 8, color: "000000" } },
+              borders: {
+                left: { style: BorderStyle.SINGLE, size: 8, color: "000000" },
+              },
               children: [],
             }),
             new TableCell({ borders: noBorders, children: rightCol }),
           ],
         }),
       ],
-    })
+    }),
   );
 
   return children;
@@ -1830,7 +2193,10 @@ function paddedCell(text, options = {}) {
 }
 
 // ===== Dynamic crosschecks (JS, no types) =====
-function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData) {
+function computeCrosschecksFromUnifiedTests(
+  unifiedTests,
+  referralQuestionsData,
+) {
   const allTests = Array.isArray(unifiedTests) ? unifiedTests : [];
   const normalize = (s) => (s ? String(s).toLowerCase() : "");
 
@@ -1858,7 +2224,8 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
     if (!values.length) return 0;
     const mean = values.reduce((s, v) => s + v, 0) / values.length;
     if (mean === 0) return 0;
-    const variance = values.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / values.length;
+    const variance =
+      values.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / values.length;
     const stdDev = Math.sqrt(variance);
     return Math.round((stdDev / mean) * 100);
   };
@@ -1874,11 +2241,20 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
     const n = normalize(t.testName);
     return n.includes("grip") || n.includes("hand");
   });
-  const pinchTests = allTests.filter((t) => normalize(t.testName).includes("pinch"));
-  const liftTests = allTests.filter((t) => normalize(t.testName).includes("lift"));
+  const pinchTests = allTests.filter((t) =>
+    normalize(t.testName).includes("pinch"),
+  );
+  const liftTests = allTests.filter((t) =>
+    normalize(t.testName).includes("lift"),
+  );
   const romTests = allTests.filter((t) => {
     const n = normalize(t.testName);
-    return n.includes("range") || n.includes("motion") || n.includes("flexion") || n.includes("extension");
+    return (
+      n.includes("range") ||
+      n.includes("motion") ||
+      n.includes("flexion") ||
+      n.includes("extension")
+    );
   });
 
   // Hand grip rapid exchange
@@ -1887,18 +2263,36 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
 
     const rapidTests = allTests.filter((t) => {
       const n = normalize(t.testName);
-      return n.includes("rapid") || n.includes("exchange") || n.includes("rapid-exchange") || n.includes("rapid exchange");
+      return (
+        n.includes("rapid") ||
+        n.includes("exchange") ||
+        n.includes("rapid-exchange") ||
+        n.includes("rapid exchange")
+      );
     });
 
     let standardTest = gripTests.find((t) => {
       const n = normalize(t.testName);
-      return n.includes("position 2") || n.includes("pos 2") || n.includes("position2") || n.includes("std position") || n.includes("standard") || n.includes("p2");
+      return (
+        n.includes("position 2") ||
+        n.includes("pos 2") ||
+        n.includes("position2") ||
+        n.includes("std position") ||
+        n.includes("standard") ||
+        n.includes("p2")
+      );
     });
 
     if (!standardTest && gripTests.length > 0) {
       standardTest = gripTests.reduce((best, cur) => {
-        const bestAvg = (_calcAverage(best.leftMeasurements) + _calcAverage(best.rightMeasurements)) / 2;
-        const curAvg = (_calcAverage(cur.leftMeasurements) + _calcAverage(cur.rightMeasurements)) / 2;
+        const bestAvg =
+          (_calcAverage(best.leftMeasurements) +
+            _calcAverage(best.rightMeasurements)) /
+          2;
+        const curAvg =
+          (_calcAverage(cur.leftMeasurements) +
+            _calcAverage(cur.rightMeasurements)) /
+          2;
         return curAvg > bestAvg ? cur : best;
       }, gripTests[0]);
     }
@@ -1907,7 +2301,11 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
 
     const avgAcross = (tests, side) => {
       const vals = tests
-        .map((t) => _calcAverage(side === "left" ? t.leftMeasurements : t.rightMeasurements))
+        .map((t) =>
+          _calcAverage(
+            side === "left" ? t.leftMeasurements : t.rightMeasurements,
+          ),
+        )
         .filter((v) => v > 0);
       if (!vals.length) return 0;
       return vals.reduce((s, v) => s + v, 0) / vals.length;
@@ -1919,8 +2317,10 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
     const stdRightAvg = _calcAverage(standardTest.rightMeasurements);
 
     const comparisons = [];
-    if (stdLeftAvg > 0 && rapidLeftAvg > 0) comparisons.push(rapidLeftAvg <= stdLeftAvg * 0.85);
-    if (stdRightAvg > 0 && rapidRightAvg > 0) comparisons.push(rapidRightAvg <= stdRightAvg * 0.85);
+    if (stdLeftAvg > 0 && rapidLeftAvg > 0)
+      comparisons.push(rapidLeftAvg <= stdLeftAvg * 0.85);
+    if (stdRightAvg > 0 && rapidRightAvg > 0)
+      comparisons.push(rapidRightAvg <= stdRightAvg * 0.85);
     if (!comparisons.length) return null;
     return comparisons.every(Boolean);
   })();
@@ -1928,54 +2328,83 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
   // Hand grip MVE
   const gripMVEValid = gripTests.length
     ? gripTests.every((test) => {
-      const leftAvg = _calcAverage(test.leftMeasurements);
-      const rightAvg = _calcAverage(test.rightMeasurements);
-      const bilateralDiff = _bilateralDeficiency(leftAvg, rightAvg);
-      return bilateralDiff <= 20;
-    })
+        const leftAvg = _calcAverage(test.leftMeasurements);
+        const rightAvg = _calcAverage(test.rightMeasurements);
+        const bilateralDiff = _bilateralDeficiency(leftAvg, rightAvg);
+        return bilateralDiff <= 20;
+      })
     : null;
 
   // Pinch grip CV
   const pinchValid = pinchTests.length
     ? pinchTests.every((test) => {
-      const leftCV = _calcCV(test.leftMeasurements);
-      const rightCV = _calcCV(test.rightMeasurements);
-      return leftCV <= 15 && rightCV <= 15;
-    })
+        const leftCV = _calcCV(test.leftMeasurements);
+        const rightCV = _calcCV(test.rightMeasurements);
+        return leftCV <= 15 && rightCV <= 15;
+      })
     : null;
 
   // Dynamic lift HR fluctuation
   const dynamicLifts = liftTests.filter((t) => {
     const n = normalize(t.testName);
-    return n.includes("low") || n.includes("mid") || n.includes("high") || n.includes("overhead") || n.includes("frequent") || n.includes("dynamic");
+    return (
+      n.includes("low") ||
+      n.includes("mid") ||
+      n.includes("high") ||
+      n.includes("overhead") ||
+      n.includes("frequent") ||
+      n.includes("dynamic")
+    );
   });
 
   const hrConsistent = dynamicLifts.length
     ? dynamicLifts.some((test) => {
-      const preHR = (test.leftMeasurements && Number(test.leftMeasurements.preHeartRate)) || (test.rightMeasurements && Number(test.rightMeasurements.preHeartRate)) || 0;
-      const postHR = (test.leftMeasurements && Number(test.leftMeasurements.postHeartRate)) || (test.rightMeasurements && Number(test.rightMeasurements.postHeartRate)) || 0;
-      return postHR > preHR;
-    })
+        const preHR =
+          (test.leftMeasurements &&
+            Number(test.leftMeasurements.preHeartRate)) ||
+          (test.rightMeasurements &&
+            Number(test.rightMeasurements.preHeartRate)) ||
+          0;
+        const postHR =
+          (test.leftMeasurements &&
+            Number(test.leftMeasurements.postHeartRate)) ||
+          (test.rightMeasurements &&
+            Number(test.rightMeasurements.postHeartRate)) ||
+          0;
+        return postHR > preHR;
+      })
     : null;
 
   // ROM consistency
   const romValid = romTests.length
     ? romTests.every((test) => {
-      const leftTrials = _getTrialValues(test.leftMeasurements);
-      const rightTrials = _getTrialValues(test.rightMeasurements);
-      const all = [...leftTrials, ...rightTrials].filter((v) => Number.isFinite(v));
-      if (all.length < 6) return false;
+        const leftTrials = _getTrialValues(test.leftMeasurements);
+        const rightTrials = _getTrialValues(test.rightMeasurements);
+        const all = [...leftTrials, ...rightTrials].filter((v) =>
+          Number.isFinite(v),
+        );
+        if (all.length < 6) return false;
 
-      for (let i = 0; i <= all.length - 3; i++) {
-        const t1 = all[i], t2 = all[i + 1], t3 = all[i + 2];
-        const maxDiff = Math.max(Math.abs(t1 - t2), Math.abs(t2 - t3), Math.abs(t1 - t3));
-        const avg = (t1 + t2 + t3) / 3;
-        const denom = avg === 0 ? 1 : avg;
-        const maxPerc = Math.max(Math.abs(t1 - avg) / denom * 100, Math.abs(t2 - avg) / denom * 100, Math.abs(t3 - avg) / denom * 100);
-        if (maxDiff <= 5 && maxPerc <= 10) return true;
-      }
-      return false;
-    })
+        for (let i = 0; i <= all.length - 3; i++) {
+          const t1 = all[i],
+            t2 = all[i + 1],
+            t3 = all[i + 2];
+          const maxDiff = Math.max(
+            Math.abs(t1 - t2),
+            Math.abs(t2 - t3),
+            Math.abs(t1 - t3),
+          );
+          const avg = (t1 + t2 + t3) / 3;
+          const denom = avg === 0 ? 1 : avg;
+          const maxPerc = Math.max(
+            (Math.abs(t1 - avg) / denom) * 100,
+            (Math.abs(t2 - avg) / denom) * 100,
+            (Math.abs(t3 - avg) / denom) * 100,
+          );
+          if (maxDiff <= 5 && maxPerc <= 10) return true;
+        }
+        return false;
+      })
     : null;
 
   // Test/retest trial consistency
@@ -1984,7 +2413,9 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
     const rightCV = _calcCV(test.rightMeasurements);
     return leftCV <= 15 && rightCV <= 15;
   });
-  const similarValues = allTests.length ? validCVTests.length / allTests.length >= 0.8 : null;
+  const similarValues = allTests.length
+    ? validCVTests.length / allTests.length >= 0.8
+    : null;
 
   let consistentDeficiency = true;
   if (allTests.length > 1) {
@@ -2001,31 +2432,46 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
       }
     }
   }
-  const overallValid = allTests.length ? Boolean(similarValues && consistentDeficiency) : null;
+  const overallValid = allTests.length
+    ? Boolean(similarValues && consistentDeficiency)
+    : null;
 
   // Dominant side monitoring
   const dominantSideValid = allTests.length
     ? allTests.every((test) => {
-      const l = _calcAverage(test.leftMeasurements);
-      const r = _calcAverage(test.rightMeasurements);
-      if (Math.min(l, r) === 0) return true; // avoid divide-by-zero
-      const ratio = Math.max(l, r) / Math.min(l, r);
-      return ratio <= 1.1; // ~10%
-    })
+        const l = _calcAverage(test.leftMeasurements);
+        const r = _calcAverage(test.rightMeasurements);
+        if (Math.min(l, r) === 0) return true; // avoid divide-by-zero
+        const ratio = Math.max(l, r) / Math.min(l, r);
+        return ratio <= 1.1; // ~10%
+      })
     : null;
 
   // Distraction test (6b) and diagnosis consistency (6c)
-  const rq = referralQuestionsData && referralQuestionsData.questions ? referralQuestionsData.questions : [];
+  const rq =
+    referralQuestionsData && referralQuestionsData.questions
+      ? referralQuestionsData.questions
+      : [];
   let distractionPass = null;
   let diagnosisPass = null;
 
   if (Array.isArray(rq) && rq.length) {
-    const dQ = rq.find((q) => q && q.question && q.question.includes("6b) Distraction test consistency"));
+    const dQ = rq.find(
+      (q) =>
+        q &&
+        q.question &&
+        q.question.includes("6b) Distraction test consistency"),
+    );
     if (dQ) {
       const status = ((dQ.answer || "").split("|")[0] || "").toUpperCase();
       distractionPass = status.includes("PASS");
     }
-    const cQ = rq.find((q) => q && q.question && q.question.includes("6c) Consistency with diagnosis"));
+    const cQ = rq.find(
+      (q) =>
+        q &&
+        q.question &&
+        q.question.includes("6c) Consistency with diagnosis"),
+    );
     if (cQ) {
       const status = ((cQ.answer || "").split("|")[0] || "").toUpperCase();
       diagnosisPass = status.includes("PASS");
@@ -2038,67 +2484,87 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
     const rcv = _calcCV(test.rightMeasurements);
     return lcv < 15 && rcv < 15;
   });
-  const cvValid = allTests.length ? validCVForSummary.length / allTests.length >= 0.7 : null;
+  const cvValid = allTests.length
+    ? validCVForSummary.length / allTests.length >= 0.7
+    : null;
 
   const crosschecks = [
     {
       name: "Hand grip rapid exchange",
-      description: "Rapid Exchange Grip was 15% less to equal that of the Std position 2 Hand Grip measure.",
+      description:
+        "Rapid Exchange Grip was 15% less to equal that of the Std position 2 Hand Grip measure.",
       pass: rapidExchangeValid,
       applicable: rapidExchangeValid !== null,
     },
     {
       name: "Hand grip MVE",
-      description: "Position 1 through 5 displayed a bell curve showing greatest strength in position 2-3.",
+      description:
+        "Position 1 through 5 displayed a bell curve showing greatest strength in position 2-3.",
       pass: gripMVEValid,
       applicable: gripTests.length > 0,
     },
     {
       name: "Pinch grip key/tip/palmar ratio",
-      description: "Key grip was greater than palmar which was greater than tip grip.",
+      description:
+        "Key grip was greater than palmar which was greater than tip grip.",
       pass: pinchValid,
       applicable: pinchTests.length > 0,
     },
     {
       name: "Dynamic lift HR fluctuation",
-      description: "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, overhead, or frequent).",
+      description:
+        "Client displayed an increase in heart rate when weight and/or repetitions were increased (any dynamic lift: low, mid, high, overhead, or frequent).",
       pass: hrConsistent,
       applicable: dynamicLifts.length > 0,
     },
     {
       name: "ROM consistency check",
-      description: "During total spine ROM, the client provided three consecutive trials between 5 degrees and 10% of each other in a six-trial session.",
+      description:
+        "During total spine ROM, the client provided three consecutive trials between 5 degrees and 10% of each other in a six-trial session.",
       pass: romValid,
       applicable: romTests.length > 0,
     },
     {
       name: "Test/retest trial consistency",
-      description: "When tests were repeated the client displayed similar values and left/right deficiency.",
+      description:
+        "When tests were repeated the client displayed similar values and left/right deficiency.",
       pass: overallValid,
       applicable: allTests.length > 0,
     },
     {
       name: "Dominant side monitoring",
-      description: "It is expected that if the client is Right-Handed, he/she will demonstrate approx.10% greater values on the dominant side – if Left-Handed then the values would be close to the same.",
+      description:
+        "It is expected that if the client is Right-Handed, he/she will demonstrate approx.10% greater values on the dominant side – if Left-Handed then the values would be close to the same.",
       pass: dominantSideValid,
       applicable: allTests.length > 0,
     },
     // Only include rows that exist in referral questions
-    ...(distractionPass === null ? [] : [{
-      name: "Distraction test consistency",
-      description: "When performing distraction tests for sustained posture the client should demonstrate similar limitations and or abilities.",
-      pass: distractionPass,
-      applicable: true,
-    }]),
-    ...(diagnosisPass === null ? [] : [{
-      name: "Consistency with diagnosis",
-      description: "Based on the diagnosis and complaints of the individual it is expected that those issues would relate to a similar function performance pattern during testing.",
-      pass: diagnosisPass,
-      applicable: true,
-    }]),
+    ...(distractionPass === null
+      ? []
+      : [
+          {
+            name: "Distraction test consistency",
+            description:
+              "When performing distraction tests for sustained posture the client should demonstrate similar limitations and or abilities.",
+            pass: distractionPass,
+            applicable: true,
+          },
+        ]),
+    ...(diagnosisPass === null
+      ? []
+      : [
+          {
+            name: "Consistency with diagnosis",
+            description:
+              "Based on the diagnosis and complaints of the individual it is expected that those issues would relate to a similar function performance pattern during testing.",
+            pass: diagnosisPass,
+            applicable: true,
+          },
+        ]),
     {
       name: "Coefficient of Variation (CV)",
-      description: "We would expect to see a CV less than 15% for a client that is deemed to be consistent.",
+      description:
+        "We would expect to see a CV less than 15% for a client that is deemed to be consistent.",
       pass: cvValid,
       applicable: allTests.length > 0,
     },
@@ -2123,7 +2589,7 @@ function buildConsistentCrosschecksTable(crosschecks) {
 
   const makeCheckText = (check, wantPass) => {
     if (!check.applicable || check.pass === null) return "N/A";
-    return wantPass ? (check.pass ? "✓" : "") : (!check.pass ? "✓" : "");
+    return wantPass ? (check.pass ? "✓" : "") : !check.pass ? "✓" : "";
   };
 
   const rows = [
@@ -2136,29 +2602,52 @@ function buildConsistentCrosschecksTable(crosschecks) {
         headerCell("Fail"),
       ],
     }),
-    ...crosschecks.map((ch) =>
-      new TableRow({
-        children: [
-          new TableCell({
-            margins: { top: 100, bottom: 100, left: 150, right: 150 },
-            children: [new Paragraph({ children: [new TextRun({ text: ch.name, size: 16 })] })]
-          }),
-          new TableCell({
-            margins: { top: 100, bottom: 100, left: 150, right: 150 },
-            children: [new Paragraph({ children: [new TextRun({ text: ch.description, size: 16 })] })]
-          }),
-          new TableCell({
-            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+    ...crosschecks.map(
+      (ch) =>
+        new TableRow({
+          children: [
+            new TableCell({
+              margins: { top: 100, bottom: 100, left: 150, right: 150 },
+              children: [
+                new Paragraph({
+                  children: [new TextRun({ text: ch.name, size: 16 })],
+                }),
+              ],
+            }),
+            new TableCell({
+              margins: { top: 100, bottom: 100, left: 150, right: 150 },
+              children: [
+                new Paragraph({
+                  children: [new TextRun({ text: ch.description, size: 16 })],
+                }),
+              ],
+            }),
+            new TableCell({
+              margins: { top: 100, bottom: 100, left: 150, right: 150 },
 
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, true), size: 16 })] })],
-          }),
-          new TableCell({
-            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({ text: makeCheckText(ch, true), size: 16 }),
+                  ],
+                }),
+              ],
+            }),
+            new TableCell({
+              margins: { top: 100, bottom: 100, left: 150, right: 150 },
 
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, false), size: 16 })] })],
-          }),
-        ],
-      })
+              children: [
+                new Paragraph({
+                  alignment: AlignmentType.CENTER,
+                  children: [
+                    new TextRun({ text: makeCheckText(ch, false), size: 16 }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
     ),
   ];
 
@@ -2192,17 +2681,17 @@ async function addCoverPage(children, body) {
   // Debug: log incoming logo sources (only short preview)
   try {
     const preview = (s) =>
-      typeof s === "string" ? `${s.slice(0, 48)}... (len=${s.length})` : String(s);
-    if (body?.logoPath)
-      console.log("[DOCX] logoPath:", preview(body.logoPath));
+      typeof s === "string"
+        ? `${s.slice(0, 48)}... (len=${s.length})`
+        : String(s);
+    if (body?.logoPath) console.log("[DOCX] logoPath:", preview(body.logoPath));
     if (body?.evaluatorData?.clinicLogo)
       console.log(
         "[DOCX] evaluatorData.clinicLogo:",
         preview(body.evaluatorData.clinicLogo),
       );
-    if (body?.logoUrl)
-      console.log("[DOCX] logoUrl:", preview(body.logoUrl));
-  } catch { }
+    if (body?.logoUrl) console.log("[DOCX] logoUrl:", preview(body.logoUrl));
+  } catch {}
 
   let logoBuffer = null;
   const logoSources = [
@@ -2215,8 +2704,11 @@ async function addCoverPage(children, body) {
     logoBuffer = await getImageBuffer(src);
     if (logoBuffer) {
       try {
-        console.log("[DOCX] Loaded logo buffer from src prefix:", src.slice(0, 24));
-      } catch { }
+        console.log(
+          "[DOCX] Loaded logo buffer from src prefix:",
+          src.slice(0, 24),
+        );
+      } catch {}
     }
     if (logoBuffer) break;
   }
@@ -2226,7 +2718,7 @@ async function addCoverPage(children, body) {
     );
     try {
       console.log("[DOCX] Using fallback logo image (React icon)");
-    } catch { }
+    } catch {}
   }
 
   // Large top spacer to vertically center cover content area
@@ -2276,7 +2768,8 @@ async function addCoverPage(children, body) {
 
   // Left-indented label/value rows
   const displayClaimNumber = claimNumber || "N/A";
-  const displayEvalDate = evaluationDate || new Date().toISOString().split("T")[0];
+  const displayEvalDate =
+    evaluationDate || new Date().toISOString().split("T")[0];
 
   // Revert to non-table rows, positioned directly under the title
   const coverRow = (label, val) =>
@@ -2284,9 +2777,9 @@ async function addCoverPage(children, body) {
       indent: { left: 4000 },
       spacing: { after: 80 },
       children: [
-        new TextRun({ text: `${label}:`, bold: true, size: 16, }),
-        new TextRun({ text: "  ", size: 16, }),
-        new TextRun({ text: val || "", size: 16, }),
+        new TextRun({ text: `${label}:`, bold: true, size: 16 }),
+        new TextRun({ text: "  ", size: 16 }),
+        new TextRun({ text: val || "", size: 16 }),
       ],
     });
 
@@ -2295,8 +2788,9 @@ async function addCoverPage(children, body) {
   children.push(coverRow("Date of Evaluation(s)", displayEvalDate));
 
   // Return footer content so caller can place at page bottom
-  const phoneFax = `Phone: ${clinicPhone || ""}${clinicPhone && clinicFax ? "    " : ""
-    }${clinicFax ? `Fax: ${clinicFax}` : ""}`.trim();
+  const phoneFax = `Phone: ${clinicPhone || ""}${
+    clinicPhone && clinicFax ? "    " : ""
+  }${clinicFax ? `Fax: ${clinicFax}` : ""}`.trim();
 
   const footerChildren = [];
   footerChildren.push(
@@ -2307,7 +2801,7 @@ async function addCoverPage(children, body) {
           text: "CONFIDENTIAL INFORMATION ENCLOSED",
           bold: true,
           color: "808080",
-          size: 20
+          size: 20,
         }),
       ],
     }),
@@ -2340,7 +2834,6 @@ async function addCoverPage(children, body) {
 }
 
 async function addContentsOfReport(children) {
-
   const contentChildren = [
     new Paragraph({
       children: [
@@ -2360,7 +2853,9 @@ async function addContentsOfReport(children) {
       indent: { left: 300 },
     }),
     new Paragraph({
-      children: [new TextRun({ text: "Pain & Symptom Illustration", size: 18 })],
+      children: [
+        new TextRun({ text: "Pain & Symptom Illustration", size: 18 }),
+      ],
       spacing: { after: 260 },
       indent: { left: 300 },
     }),
@@ -2375,7 +2870,12 @@ async function addContentsOfReport(children) {
       indent: { left: 300 },
     }),
     new Paragraph({
-      children: [new TextRun({ text: "Functional Abilities Determination and Job Match Results", size: 18 })],
+      children: [
+        new TextRun({
+          text: "Functional Abilities Determination and Job Match Results",
+          size: 18,
+        }),
+      ],
       spacing: { after: 300 },
       indent: { left: 300 },
     }),
@@ -2419,12 +2919,16 @@ async function addContentsOfReport(children) {
     }),
     // --- END BULLETS ---
     new Paragraph({
-      children: [new TextRun({ text: "Appendix One: Reference Charts", size: 18 })],
+      children: [
+        new TextRun({ text: "Appendix One: Reference Charts", size: 18 }),
+      ],
       spacing: { before: 160, after: 260 },
       indent: { left: 300 },
     }),
     new Paragraph({
-      children: [new TextRun({ text: "Appendix Two: Digital Library", size: 18 })],
+      children: [
+        new TextRun({ text: "Appendix Two: Digital Library", size: 18 }),
+      ],
       spacing: { after: 260 },
       indent: { left: 300 },
     }),
@@ -2457,7 +2961,6 @@ async function addContentsOfReport(children) {
 }
 
 async function addClientInformation(children, body) {
-
   children.push(new Paragraph({ children: [new PageBreak()] }));
 
   const headerLines = [
@@ -2470,9 +2973,17 @@ async function addClientInformation(children, body) {
   const cd = body?.claimantData || {};
   const fullName = `${cd.firstName || ""} ${cd.lastName || ""}`.trim();
   const dob = cd.dateOfBirth || "";
-  const age = dob ? (() => {
-    try { const d = new Date(dob); const diff = Date.now() - d.getTime(); return Math.max(0, Math.floor(diff / (365.25 * 24 * 3600 * 1000))); } catch { return ""; }
-  })() : "";
+  const age = dob
+    ? (() => {
+        try {
+          const d = new Date(dob);
+          const diff = Date.now() - d.getTime();
+          return Math.max(0, Math.floor(diff / (365.25 * 24 * 3600 * 1000)));
+        } catch {
+          return "";
+        }
+      })()
+    : "";
   const heightDisp = `${cd.height || ""} ${cd.heightUnit || ""}`.trim();
   const weightDisp = `${cd.weight || ""} ${cd.weightUnit || ""}`.trim();
   const idDisp = cd.claimantId || body?.claimNumber || "";
@@ -2487,10 +2998,14 @@ async function addClientInformation(children, body) {
   const bpSitting = cd.bpSitting || "";
   const testedBy = body?.evaluatorData.name || "";
 
-
   const clientInfoRowsData = [
     ["Name:", fullName || "N/A", "ID:", idDisp || "N/A"],
-    ["Address:", cd.address || "N/A", "DOB (Age):", `${dob || "N/A"}${age !== "" ? ` (${age})` : ""}`],
+    [
+      "Address:",
+      cd.address || "N/A",
+      "DOB (Age):",
+      `${dob || "N/A"}${age !== "" ? ` (${age})` : ""}`,
+    ],
     ["Gender:", gender || "N/A", "Height:", heightDisp || "N/A"], // ✅ moved height beside gender
     ["Home Phone:", phone || "N/A", "Weight:", weightDisp || "N/A"],
     ["Work Phone:", workPhone || "N/A", "Dominant Hand:", dominant || "N/A"],
@@ -2514,8 +3029,11 @@ async function addClientInformation(children, body) {
     logoBuffer = await getImageBuffer(src);
     if (logoBuffer) {
       try {
-        console.log("[DOCX] Loaded logo buffer from src prefix:", src.slice(0, 24));
-      } catch { }
+        console.log(
+          "[DOCX] Loaded logo buffer from src prefix:",
+          src.slice(0, 24),
+        );
+      } catch {}
     }
     if (logoBuffer) break;
   }
@@ -2526,7 +3044,7 @@ async function addClientInformation(children, body) {
     );
     try {
       console.log("[DOCX] Using fallback logo image (React icon)");
-    } catch { }
+    } catch {}
   }
 
   if (logoBuffer) {
@@ -2540,7 +3058,7 @@ async function addClientInformation(children, body) {
         ],
         alignment: AlignmentType.CENTER,
         spacing: { after: 200 },
-      })
+      }),
     );
   }
 
@@ -2552,25 +3070,29 @@ async function addClientInformation(children, body) {
             text: line,
             bold: true,
             color: line.startsWith("Functional") ? BRAND_COLOR : "000000",
-            size: idx === 0 ? 24 : (idx === 1 ? 20 : 18),
+            size: idx === 0 ? 24 : idx === 1 ? 20 : 18,
           }),
         ],
         alignment: AlignmentType.CENTER,
         spacing: { after: idx === headerLines.length - 1 ? 10 : 5 },
-      })
+      }),
     );
   });
   children.push(new Paragraph({ text: "", spacing: { after: 300 } }));
 
-
-  const bodyImageUrl = "https://images.pexels.com/photos/5155762/pexels-photo-5155762.jpeg?auto=compress&cs=tinysrgb&w=600";
+  const bodyImageUrl =
+    "https://images.pexels.com/photos/5155762/pexels-photo-5155762.jpeg?auto=compress&cs=tinysrgb&w=600";
 
   // Prefer dynamically provided pain illustration image; fall back to sample
   let bodyDiagramBackBuffer = null;
   if (body?.painIllustrationData?.compositedViews) {
-    bodyDiagramBackBuffer = await getImageBuffer(body.painIllustrationData.compositedViews);
+    bodyDiagramBackBuffer = await getImageBuffer(
+      body.painIllustrationData.compositedViews,
+    );
   }
-  console.log(`body?.painIllustrationData?.compositedViews ==${body?.painIllustrationData?.compositedViews}`);
+  console.log(
+    `body?.painIllustrationData?.compositedViews ==${body?.painIllustrationData?.compositedViews}`,
+  );
   if (!bodyDiagramBackBuffer) {
     bodyDiagramBackBuffer = await fetchImageBuffer(bodyImageUrl);
   }
@@ -2579,10 +3101,15 @@ async function addClientInformation(children, body) {
 
   // Collect up to THREE relevant images from pain step only (support {dataUrl,name} or plain strings)
   const extraImages = [];
-  if (Array.isArray(body?.painIllustrationData?.savedImageData) && body.painIllustrationData.savedImageData.length) {
+  if (
+    Array.isArray(body?.painIllustrationData?.savedImageData) &&
+    body.painIllustrationData.savedImageData.length
+  ) {
     for (const item of body.painIllustrationData.savedImageData.slice(0, 3)) {
-      const dataUrl = typeof item === "string" ? item : (item?.dataUrl || item?.src || "");
-      const label = typeof item === "object" ? (item?.name || item?.title || "") : "";
+      const dataUrl =
+        typeof item === "string" ? item : item?.dataUrl || item?.src || "";
+      const label =
+        typeof item === "object" ? item?.name || item?.title || "" : "";
       if (!dataUrl) continue;
       // eslint-disable-next-line no-await-in-loop
       const buf = await getImageBuffer(dataUrl);
@@ -2594,7 +3121,9 @@ async function addClientInformation(children, body) {
   const compositedViewsInput = body?.painIllustrationData?.compositedViews;
   const painViews = Array.isArray(compositedViewsInput)
     ? compositedViewsInput
-    : (Array.isArray(compositedViewsInput?.imageUrls) ? compositedViewsInput.imageUrls : []);
+    : Array.isArray(compositedViewsInput?.imageUrls)
+      ? compositedViewsInput.imageUrls
+      : [];
   const painViewBuffers = [];
   for (const url of painViews) {
     const buf = await getImageBuffer(url);
@@ -2607,21 +3136,62 @@ async function addClientInformation(children, body) {
     rows: [
       new TableRow({
         indent: { left: 0 },
-        children: [createTableCellForPain("Area of Primary Concern", true, "FFFF99")],
+        children: [
+          createTableCellForPain("Area of Primary Concern", true, "FFFF99"),
+        ],
       }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("P1    Primary")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("P2    Secondary")] }),
-      new TableRow({ indent: { left: 0 }, children: [createTableCellForPain("Pain Indicator", true, "FFFF99")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("~    Primary")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("/    Shooting")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("x    Burning")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("•    Pins and Needles")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("o    Numbness")] }),
-      new TableRow({ indent: { left: 0 }, children: [createTableCellForPain("General", true, "FFFF99")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("T    Temperature")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("SW   Swelling")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("S    Scar")] }),
-      new TableRow({ indent: { left: 0 }, children: [createColoredSymbolCell("C    Crepitus")] }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("P1    Primary")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("P2    Secondary")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createTableCellForPain("Pain Indicator", true, "FFFF99")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("~    Primary")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("/    Shooting")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("x    Burning")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("•    Pins and Needles")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("o    Numbness")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createTableCellForPain("General", true, "FFFF99")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("T    Temperature")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("SW   Swelling")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("S    Scar")],
+      }),
+      new TableRow({
+        indent: { left: 0 },
+        children: [createColoredSymbolCell("C    Crepitus")],
+      }),
     ],
     borders: {
       top: { style: BorderStyle.SINGLE, size: 2, color: "000000" },
@@ -2633,76 +3203,78 @@ async function addClientInformation(children, body) {
     },
   });
 
-
   const clientInfoTable = new Table({
     borders: noBorders,
     width: { size: 100, type: WidthType.PERCENTAGE },
-    rows: clientInfoRowsData.map((row) => new TableRow({
-      children: [
-        // Column 1 (Label)
-        new TableCell({
+    rows: clientInfoRowsData.map(
+      (row) =>
+        new TableRow({
           children: [
-            new Paragraph({
+            // Column 1 (Label)
+            new TableCell({
               children: [
-                new TextRun({
-                  text: row[0],
-                  bold: true,
-                  size: 20,
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: row[0],
+                      bold: true,
+                      size: 20,
+                    }),
+                  ],
+                  spacing: { after: 0 },
                 }),
               ],
-              spacing: { after: 0 },
+              borders: noBorders,
             }),
-          ],
-          borders: noBorders,
-        }),
-        // Column 2 (Value)
-        new TableCell({
-          children: [
-            new Paragraph({
+            // Column 2 (Value)
+            new TableCell({
               children: [
-                new TextRun({
-                  text: row[1],
-                  size: 20,
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: row[1],
+                      size: 20,
+                    }),
+                  ],
+                  spacing: { after: 0 },
                 }),
               ],
-              spacing: { after: 0 },
+              borders: noBorders,
             }),
-          ],
-          borders: noBorders,
-        }),
-        // Column 3 (Label)
-        new TableCell({
-          children: [
-            new Paragraph({
+            // Column 3 (Label)
+            new TableCell({
               children: [
-                new TextRun({
-                  text: row[2],
-                  bold: true,
-                  size: 20,
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: row[2],
+                      bold: true,
+                      size: 20,
+                    }),
+                  ],
+                  spacing: { after: 0 },
                 }),
               ],
-              spacing: { after: 0 },
+              borders: noBorders,
             }),
-          ],
-          borders: noBorders,
-        }),
-        // Column 4 (Value)
-        new TableCell({
-          children: [
-            new Paragraph({
+            // Column 4 (Value)
+            new TableCell({
               children: [
-                new TextRun({
-                  text: row[3],
-                  size: 20,
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: row[3],
+                      size: 20,
+                    }),
+                  ],
+                  spacing: { after: 0 },
                 }),
               ],
-              spacing: { after: 0 },
+              borders: noBorders,
             }),
           ],
-          borders: noBorders,
         }),
-      ],
-    })),
+    ),
     layout: TableLayoutType.AUTOFIT,
     borders: {
       ...noBorders,
@@ -2713,8 +3285,11 @@ async function addClientInformation(children, body) {
   });
 
   // Prefer a real claimant photo if provided
-  const claimantPhotoSrc = cd.profilePhoto || body?.profilePhoto || body?.photoUrl;
-  const sampleImageBuffer = claimantPhotoSrc ? await getImageBuffer(claimantPhotoSrc) : await getSampleImageBuffer();
+  const claimantPhotoSrc =
+    cd.profilePhoto || body?.profilePhoto || body?.photoUrl;
+  const sampleImageBuffer = claimantPhotoSrc
+    ? await getImageBuffer(claimantPhotoSrc)
+    : await getSampleImageBuffer();
   const claimantName =
     body.claimantName ||
     `${body?.claimantData?.lastName || ""}, ${body?.claimantData?.firstName || ""}`.trim() ||
@@ -2723,7 +3298,7 @@ async function addClientInformation(children, body) {
   children.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
-      layout: TableLayoutType.FIXED,   // <-- FIXED width layout (important!)
+      layout: TableLayoutType.FIXED, // <-- FIXED width layout (important!)
       columnWidths: [2500, 6500],
       borders: noBorders,
       rows: [
@@ -2746,26 +3321,42 @@ async function addClientInformation(children, body) {
                 }),
                 sampleImageBuffer
                   ? new Paragraph({
-                    children: [
-                      new ImageRun({
-                        data: sampleImageBuffer,
-                        transformation: { width: 120, height: 120 },
-                      }),
-                    ],
-                    alignment: AlignmentType.CENTER,
-                    spacing: { after: 10 },
-                  })
+                      children: [
+                        new ImageRun({
+                          data: sampleImageBuffer,
+                          transformation: { width: 120, height: 120 },
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                      spacing: { after: 10 },
+                    })
                   : new Paragraph({
-                    text: "[Photo Placeholder]",
-                    alignment: AlignmentType.START,
-                    spacing: { after: 10 },
-                    border: {
-                      top: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
-                      bottom: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
-                      left: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
-                      right: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
-                    },
-                  }),
+                      text: "[Photo Placeholder]",
+                      alignment: AlignmentType.START,
+                      spacing: { after: 10 },
+                      border: {
+                        top: {
+                          style: BorderStyle.SINGLE,
+                          size: 1,
+                          color: "CCCCCC",
+                        },
+                        bottom: {
+                          style: BorderStyle.SINGLE,
+                          size: 1,
+                          color: "CCCCCC",
+                        },
+                        left: {
+                          style: BorderStyle.SINGLE,
+                          size: 1,
+                          color: "CCCCCC",
+                        },
+                        right: {
+                          style: BorderStyle.SINGLE,
+                          size: 1,
+                          color: "CCCCCC",
+                        },
+                      },
+                    }),
 
                 new Paragraph({
                   children: [
@@ -2777,7 +3368,6 @@ async function addClientInformation(children, body) {
                   alignment: AlignmentType.CENTER,
                   spacing: { after: 20 },
                 }),
-
               ],
               verticalAlign: "top",
             }),
@@ -2795,7 +3385,12 @@ async function addClientInformation(children, body) {
               children: [
                 new Paragraph({
                   children: [
-                    new TextRun({ text: "Client Information", bold: true, color: BRAND_COLOR, size: 18 }),
+                    new TextRun({
+                      text: "Client Information",
+                      bold: true,
+                      color: BRAND_COLOR,
+                      size: 18,
+                    }),
                   ],
                   spacing: { after: 80 },
                 }),
@@ -2823,11 +3418,31 @@ async function addClientInformation(children, body) {
                     new TableRow({
                       children: [
                         new TableCell({
-                          children: [new Paragraph({ children: [new TextRun({ text: "Date", bold: true, size: 16 })] })],
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({
+                                  text: "Date",
+                                  bold: true,
+                                  size: 16,
+                                }),
+                              ],
+                            }),
+                          ],
                           borders: noBorders,
                         }),
                         new TableCell({
-                          children: [new Paragraph({ children: [new TextRun({ text: "Description", bold: true, size: 16 })] })],
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({
+                                  text: "Description",
+                                  bold: true,
+                                  size: 16,
+                                }),
+                              ],
+                            }),
+                          ],
                           borders: noBorders,
                         }),
                       ],
@@ -2835,16 +3450,24 @@ async function addClientInformation(children, body) {
                     new TableRow({
                       children: [
                         new TableCell({
-                          children: [new Paragraph({ children: [new TextRun({ text: currentDate, size: 16 })] })],
+                          children: [
+                            new Paragraph({
+                              children: [
+                                new TextRun({ text: currentDate, size: 16 }),
+                              ],
+                            }),
+                          ],
                           borders: noBorders,
                         }),
                         new TableCell({
                           children: [
                             new Paragraph({
-                              children: [new TextRun({
-                                text: cd.claimantHistory || "",
-                                size: 16,
-                              })],
+                              children: [
+                                new TextRun({
+                                  text: cd.claimantHistory || "",
+                                  size: 16,
+                                }),
+                              ],
                             }),
                           ],
                           borders: noBorders,
@@ -2858,7 +3481,7 @@ async function addClientInformation(children, body) {
           ],
         }),
       ],
-    })
+    }),
   );
 
   // Separate section for Pain/Symptom Illustration (without vertical divider)
@@ -2873,9 +3496,8 @@ async function addClientInformation(children, body) {
         }),
       ],
       spacing: { before: 150, after: 150 },
-    })
+    }),
   );
-
 
   // Prepare up to 4 images for a 2x2 grid with robust fallbacks
   const defaultDiagramUrls = [
@@ -2885,16 +3507,20 @@ async function addClientInformation(children, body) {
     "https://firebasestorage.googleapis.com/v0/b/workerfacts-60c02.firebasestorage.app/o/human_anatomy_bodies%2Fright_view.png?alt=media&token=f513bcfb-f6d8-4466-a0bd-18368908d1aa",
   ];
 
-  const providedViews = Array.isArray(body?.painIllustrationData?.compositedViews)
+  const providedViews = Array.isArray(
+    body?.painIllustrationData?.compositedViews,
+  )
     ? body.painIllustrationData.compositedViews
     : [];
 
   const diagramSources = [...providedViews, ...defaultDiagramUrls].slice(0, 4);
 
   const diagramBuffers = await Promise.all(
-    diagramSources.map(async (src) => (await fetchImageBuffer(src)) || (await getImageBuffer(src)))
+    diagramSources.map(
+      async (src) =>
+        (await fetchImageBuffer(src)) || (await getImageBuffer(src)),
+    ),
   );
-
 
   let bodyDiagramBuffers = [];
 
@@ -2922,28 +3548,27 @@ async function addClientInformation(children, body) {
     bodyDiagramBuffers = (diagramBuffers || []).filter(Boolean);
   }
 
-
-  const diagramCells = bodyDiagramBuffers.map((buf, idx) =>
-    new TableCell({
-      borders: noBorders,
-      verticalAlign: VerticalAlign.CENTER, // ensures content inside cell centers vertically
-      children: [
-        new Paragraph({
-          alignment: AlignmentType.CENTER, // horizontal centering
-          spacing: { before: 0, after: 0 },
-          children: buf
-            ? [
-              new ImageRun({
-                data: buf,
-                transformation: { width: 130, height: 200 },
-              }),
-            ]
-            : [new TextRun(`Image ${idx + 1} not available`)],
-        }),
-      ],
-    })
+  const diagramCells = bodyDiagramBuffers.map(
+    (buf, idx) =>
+      new TableCell({
+        borders: noBorders,
+        verticalAlign: VerticalAlign.CENTER, // ensures content inside cell centers vertically
+        children: [
+          new Paragraph({
+            alignment: AlignmentType.CENTER, // horizontal centering
+            spacing: { before: 0, after: 0 },
+            children: buf
+              ? [
+                  new ImageRun({
+                    data: buf,
+                    transformation: { width: 130, height: 200 },
+                  }),
+                ]
+              : [new TextRun(`Image ${idx + 1} not available`)],
+          }),
+        ],
+      }),
   );
-
 
   // Side-by-side diagram and legend
   children.push(
@@ -2969,14 +3594,14 @@ async function addClientInformation(children, body) {
                     new TableRow({
                       tableHeader: false,
                       children: [
-                        ...(diagramCells.length ? diagramCells.slice(0, 4) : []),
+                        ...(diagramCells.length
+                          ? diagramCells.slice(0, 4)
+                          : []),
                       ],
                       height: { value: 1800, rule: HeightRule.ATLEAST }, // ensures vertical space for centering
                     }),
                   ],
-                })
-
-
+                }),
               ],
             }),
 
@@ -2989,7 +3614,7 @@ async function addClientInformation(children, body) {
           ],
         }),
       ],
-    })
+    }),
   );
 
   children.push(
@@ -3000,18 +3625,20 @@ async function addClientInformation(children, body) {
         }),
       ],
       spacing: { before: 0, after: 200 },
-    })
+    }),
   );
   // After your existing 4-image layout table
-  if (body?.painIllustrationData?.savedImageData && body?.painIllustrationData?.savedImageData?.length > 0) {
-
+  if (
+    body?.painIllustrationData?.savedImageData &&
+    body?.painIllustrationData?.savedImageData?.length > 0
+  ) {
     // Create table for reference images
     const referenceImageCells = [];
 
     body?.painIllustrationData?.savedImageData?.forEach((ref) => {
       const imgCellChildren = [];
 
-      const title = typeof ref === "object" ? (ref.title || ref.name || "") : "";
+      const title = typeof ref === "object" ? ref.title || ref.name || "" : "";
       if (title) {
         imgCellChildren.push(
           new Paragraph({
@@ -3025,11 +3652,14 @@ async function addClientInformation(children, body) {
                 size: 18,
               }),
             ],
-          })
+          }),
         );
       }
 
-      const dataUrl = typeof ref === "object" ? (ref.dataUrl || ref.src || ref.url || "") : String(ref || "");
+      const dataUrl =
+        typeof ref === "object"
+          ? ref.dataUrl || ref.src || ref.url || ""
+          : String(ref || "");
       if (dataUrl) {
         imgCellChildren.push(
           new Paragraph({
@@ -3040,7 +3670,7 @@ async function addClientInformation(children, body) {
               }),
             ],
             alignment: AlignmentType.CENTER,
-          })
+          }),
         );
       }
 
@@ -3049,7 +3679,7 @@ async function addClientInformation(children, body) {
           children: imgCellChildren,
           borders: noBorders,
           verticalAlign: VerticalAlign.CENTER,
-        })
+        }),
       );
     });
 
@@ -3060,13 +3690,12 @@ async function addClientInformation(children, body) {
         layout: TableLayoutType.FIXED,
         borders: noBorders,
         columnWidths: Array(referenceImageCells.length).fill(
-          9000 / referenceImageCells.length
+          9000 / referenceImageCells.length,
         ),
         rows: [new TableRow({ children: referenceImageCells })],
-      })
+      }),
     );
   }
-
 }
 
 async function addReferenceChartsContent(children) {
@@ -3085,7 +3714,7 @@ async function addReferenceChartsContent(children) {
           size: 16,
         }),
       ],
-    })
+    }),
   );
 
   children.push(
@@ -3099,7 +3728,7 @@ async function addReferenceChartsContent(children) {
           size: 16,
         }),
       ],
-    })
+    }),
   );
 
   // === Activity Rating Table ===
@@ -3116,11 +3745,27 @@ async function addReferenceChartsContent(children) {
     rows: [
       new TableRow({
         children: [
-          paddedCell("Perceived Exertion", { bold: true, size: 16, fill: "FFFF99" }),
+          paddedCell("Perceived Exertion", {
+            bold: true,
+            size: 16,
+            fill: "FFFF99",
+          }),
           paddedCell("Rating (RPE)", { bold: true, size: 16, fill: "FFFF99" }),
-          paddedCell("Minimal Heart Rate", { bold: true, size: 16, fill: "FFFF99" }),
-          paddedCell("Mean Heart Rate", { bold: true, size: 16, fill: "FFFF99" }),
-          paddedCell("Maximal Heart Rate", { bold: true, size: 16, fill: "FFFF99" }),
+          paddedCell("Minimal Heart Rate", {
+            bold: true,
+            size: 16,
+            fill: "FFFF99",
+          }),
+          paddedCell("Mean Heart Rate", {
+            bold: true,
+            size: 16,
+            fill: "FFFF99",
+          }),
+          paddedCell("Maximal Heart Rate", {
+            bold: true,
+            size: 16,
+            fill: "FFFF99",
+          }),
         ],
       }),
       new TableRow({
@@ -3223,7 +3868,6 @@ async function addReferenceChartsContent(children) {
         ],
       }),
 
-
       new TableRow({
         children: [
           paddedCell("Very hard"),
@@ -3274,7 +3918,7 @@ async function addReferenceChartsContent(children) {
           size: 14,
         }),
       ],
-    })
+    }),
   );
   // === Add space before next table ===
   children.push(new Paragraph({ spacing: { after: 300 } }));
@@ -3291,7 +3935,7 @@ async function addReferenceChartsContent(children) {
           size: 16,
         }),
       ],
-    })
+    }),
   );
 
   // === Physical Demand Table ===
@@ -3308,10 +3952,12 @@ async function addReferenceChartsContent(children) {
     rows: [
       new TableRow({
         children: [
-          paddedCell(
-            "Physical Demand Characteristics of Work",
-            { bold: true, size: 16, fill: "FFFF99", align: AlignmentType.CENTER }
-          ),
+          paddedCell("Physical Demand Characteristics of Work", {
+            bold: true,
+            size: 16,
+            fill: "FFFF99",
+            align: AlignmentType.CENTER,
+          }),
         ],
         tableCellMargin: { left: 150, right: 150 },
         cantSplit: true,
@@ -3321,7 +3967,12 @@ async function addReferenceChartsContent(children) {
         children: [
           paddedCell(
             "(Dictionary of Occupational Titles - Volume II, Fourth Edition, Revised 1991)",
-            { bold: true, size: 16, fill: "FFFF99", align: AlignmentType.CENTER }
+            {
+              bold: true,
+              size: 16,
+              fill: "FFFF99",
+              align: AlignmentType.CENTER,
+            },
           ),
         ],
         tableCellMargin: { left: 150, right: 150 },
@@ -3393,7 +4044,7 @@ async function addReferenceChartsContent(children) {
         }),
       ],
       spacing: { before: 200, after: 200 },
-    })
+    }),
   );
 
   const pdcTable = new Table({
@@ -3411,7 +4062,12 @@ async function addReferenceChartsContent(children) {
         children: [
           paddedCell(
             "PDC Categories based on Sustainable Energy Level (Energy Cost) over an 8-hour workday",
-            { bold: true, size: 16, fill: "FFFF99", align: AlignmentType.CENTER }
+            {
+              bold: true,
+              size: 16,
+              fill: "FFFF99",
+              align: AlignmentType.CENTER,
+            },
           ),
         ],
         tableCellMargin: { left: 150, right: 150 },
@@ -3429,28 +4085,16 @@ async function addReferenceChartsContent(children) {
         ],
       }),
       new TableRow({
-        children: [
-          paddedCell("Sedentary"),
-          paddedCell("< 1.7 Kcal/min"),
-        ],
+        children: [paddedCell("Sedentary"), paddedCell("< 1.7 Kcal/min")],
       }),
       new TableRow({
-        children: [
-          paddedCell("Light"),
-          paddedCell("1.7 to 3.2 Kcal/min"),
-        ],
+        children: [paddedCell("Light"), paddedCell("1.7 to 3.2 Kcal/min")],
       }),
       new TableRow({
-        children: [
-          paddedCell("Medium"),
-          paddedCell("3.3 to 5.7 Kcal/min"),
-        ],
+        children: [paddedCell("Medium"), paddedCell("3.3 to 5.7 Kcal/min")],
       }),
       new TableRow({
-        children: [
-          paddedCell("Heavy"),
-          paddedCell("5.8 to 8.2 Kcal/min"),
-        ],
+        children: [paddedCell("Heavy"), paddedCell("5.8 to 8.2 Kcal/min")],
       }),
       new TableRow({
         children: [
@@ -3475,30 +4119,34 @@ async function addReferenceChartsContent(children) {
         }),
       ],
       spacing: { before: 400, after: 200 },
-    })
+    }),
   );
 
   // Activity descriptors
   const descriptors = [
     {
       title: "(S) Sedentary Work",
-      description: "Exerting up to 10 lbs of force occasionally and/or a negligible amount of force frequently to lift, carry, push, pull, or otherwise move objects, including the human body. Sedentary work involves sitting most of the time but may involve walking or standing for brief periods of time. Jobs are sedentary if walking and standing are required occasionally and all other sedentary criteria are met."
+      description:
+        "Exerting up to 10 lbs of force occasionally and/or a negligible amount of force frequently to lift, carry, push, pull, or otherwise move objects, including the human body. Sedentary work involves sitting most of the time but may involve walking or standing for brief periods of time. Jobs are sedentary if walking and standing are required occasionally and all other sedentary criteria are met.",
     },
     {
       title: "(L) Light Work",
-      description: "Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated Light Work: (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting"
+      description:
+        "Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated Light Work: (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting",
     },
     {
       title: "(M) Medium Work",
-      description: "Exerting 20 to 50 lbs of force occasionally, and/or 10 to 25 lbs of force frequently, and/or greater than negligible up to 10 lbs of force constantly to move objects.Physical demand requirements are in excess of those for light work."
+      description:
+        "Exerting 20 to 50 lbs of force occasionally, and/or 10 to 25 lbs of force frequently, and/or greater than negligible up to 10 lbs of force constantly to move objects.Physical demand requirements are in excess of those for light work.",
     },
     {
       title: "(H) Heavy Work",
-      description: "Exerting 50 to 100 lbs of force occasionally, and/or 25 to 50 lbs of force frequently, and/or 10 to 20 lbs of force constantly to move objects. Physical demand requirements are in excess of those for medium work."
-    }
+      description:
+        "Exerting 50 to 100 lbs of force occasionally, and/or 25 to 50 lbs of force frequently, and/or 10 to 20 lbs of force constantly to move objects. Physical demand requirements are in excess of those for medium work.",
+    },
   ];
 
-  descriptors.forEach(desc => {
+  descriptors.forEach((desc) => {
     children.push(
       new Paragraph({
         children: [
@@ -3509,7 +4157,7 @@ async function addReferenceChartsContent(children) {
           }),
         ],
         spacing: { before: 200, after: 100 },
-      })
+      }),
     );
 
     children.push(
@@ -3521,7 +4169,7 @@ async function addReferenceChartsContent(children) {
           }),
         ],
         spacing: { after: 200 },
-      })
+      }),
     );
   });
 
@@ -3534,7 +4182,7 @@ async function addReferenceChartsContent(children) {
         }),
       ],
       spacing: { after: 100 },
-    })
+    }),
   );
 
   // === Dynamic Lift Test End Point Conditions ===
@@ -3549,7 +4197,7 @@ async function addReferenceChartsContent(children) {
         }),
       ],
       spacing: { before: 400, after: 200 },
-    })
+    }),
   );
 
   const endPointTable = new Table({
@@ -3583,7 +4231,7 @@ async function addReferenceChartsContent(children) {
         children: [
           paddedCell("Psychophysical"),
           paddedCell(
-            "Voluntary test termination by the claimant based on complaints of fatigue, excessive discomfort, or inability to complete the required number of movements during the testing interval (cycle)."
+            "Voluntary test termination by the claimant based on complaints of fatigue, excessive discomfort, or inability to complete the required number of movements during the testing interval (cycle).",
           ),
         ],
       }),
@@ -3591,7 +4239,7 @@ async function addReferenceChartsContent(children) {
         children: [
           paddedCell("Physiological"),
           paddedCell(
-            "Achievement of an age-determined target heart rate (based on a percent of claimant's maximal heart rate - normally 85%, or in excess of 75% continuously for one minute)."
+            "Achievement of an age-determined target heart rate (based on a percent of claimant's maximal heart rate - normally 85%, or in excess of 75% continuously for one minute).",
           ),
         ],
       }),
@@ -3599,7 +4247,7 @@ async function addReferenceChartsContent(children) {
         children: [
           paddedCell("Safety"),
           paddedCell(
-            "Achievement of a predetermined anthropometric safe lifting limit based on the claimant's adjusted body weight; or intervention by the FACTS evaluator based upon an evaluation of the claimant's signs & symptoms."
+            "Achievement of a predetermined anthropometric safe lifting limit based on the claimant's adjusted body weight; or intervention by the FACTS evaluator based upon an evaluation of the claimant's signs & symptoms.",
           ),
         ],
       }),
@@ -3607,7 +4255,6 @@ async function addReferenceChartsContent(children) {
   });
 
   children.push(endPointTable);
-
 }
 
 async function addDigitalLibraryContent(children, body) {
@@ -3626,15 +4273,17 @@ async function addDigitalLibraryContent(children, body) {
       ],
       alignment: AlignmentType.LEFT,
       spacing: { after: 50 },
-    })
+    }),
   );
 
   const savedFiles = body?.digitalLibraryData?.savedFileData || [];
   if (savedFiles.length === 0) {
     children.push(
       new Paragraph({
-        children: [new TextRun({ text: "No images found.", italics: true, size: 16 })],
-      })
+        children: [
+          new TextRun({ text: "No images found.", italics: true, size: 16 }),
+        ],
+      }),
     );
     return;
   }
@@ -3658,9 +4307,7 @@ async function addDigitalLibraryContent(children, body) {
           const base64 = file.dataUrl.split(",")[1];
           imageBuffer = Buffer.from(base64, "base64");
         } else if (file.url || file.path || file.src) {
-          imageBuffer = await getImageBuffer(
-            file.url || file.path || file.src
-          );
+          imageBuffer = await getImageBuffer(file.url || file.path || file.src);
         } else if (file.data) {
           imageBuffer = Buffer.from(file.data, "base64");
         }
@@ -3672,9 +4319,9 @@ async function addDigitalLibraryContent(children, body) {
                 children: [
                   imageBuffer
                     ? new ImageRun({
-                      data: imageBuffer,
-                      transformation: { width: 120, height: 120 },
-                    })
+                        data: imageBuffer,
+                        transformation: { width: 120, height: 120 },
+                      })
                     : new TextRun({ text: "[Image Missing]", size: 16 }),
                 ],
                 alignment: AlignmentType.CENTER,
@@ -3682,14 +4329,14 @@ async function addDigitalLibraryContent(children, body) {
             ],
             borders: noBorders,
             margins: { top: 0, bottom: 0, left: 10, right: 10 },
-          })
+          }),
         );
       } else {
         rowChildren.push(
           new TableCell({
             children: [new Paragraph("")],
             borders: noBorders,
-          })
+          }),
         );
       }
     }
@@ -3704,7 +4351,7 @@ async function addDigitalLibraryContent(children, body) {
             columnSpan: imagesPerRow,
           }),
         ],
-      })
+      }),
     );
   }
 
@@ -3718,7 +4365,7 @@ async function addDigitalLibraryContent(children, body) {
         left: { style: BorderStyle.NONE },
         right: { style: BorderStyle.NONE },
       },
-    })
+    }),
   );
 
   children.push(new Paragraph({ children: [new PageBreak()] }));
@@ -3739,16 +4386,16 @@ async function addReferralQuestionsContent(children, body) {
         new TableRow({
           children: [
             new TableCell({
-              shading: { fill: "FFFF99", }, // light yellow
+              shading: { fill: "FFFF99" }, // light yellow
               margins: { top: 100, bottom: 100, left: 150, right: 150 },
               children: [
                 new Paragraph({
                   children: [
                     new TextRun({
                       text: "Referral Questions",
-                      bold: true, size: 16
+                      bold: true,
+                      size: 16,
                     }),
-
                   ],
                 }),
               ],
@@ -3756,10 +4403,8 @@ async function addReferralQuestionsContent(children, body) {
           ],
         }),
       ],
-    })
+    }),
   );
-
-
 
   // Helper: remove question numbering like "6a)" or "6b)"
   const cleanQuestion = (q) => q.replace(/^\d+[a-zA-Z]?\)?\s*/, "").trim();
@@ -3793,7 +4438,6 @@ async function addReferralQuestionsContent(children, body) {
     },
   };
 
-
   // Loop through all referral questions dynamically
   for (const [index, q] of questions.entries()) {
     let question = q.question || `Question ${index + 1}`;
@@ -3809,9 +4453,16 @@ async function addReferralQuestionsContent(children, body) {
     // Question Title
     children.push(
       new Paragraph({
-        children: [new TextRun({ text: question, color: BRAND_COLOR, bold: true, size: 16 })],
+        children: [
+          new TextRun({
+            text: question,
+            color: BRAND_COLOR,
+            bold: true,
+            size: 16,
+          }),
+        ],
         spacing: { before: 300, after: 150 },
-      })
+      }),
     );
 
     // Handle “Physical Demand Classification” type answer (PDC:)
@@ -3835,16 +4486,15 @@ async function addReferralQuestionsContent(children, body) {
               }),
             ],
             spacing: { before: 150, after: 50 },
-          })
+          }),
         );
 
         children.push(
           new Paragraph({
             children: [new TextRun({ text: info.description, size: 16 })],
             spacing: { after: 100 },
-          })
+          }),
         );
-
 
         // === Physical Demand Table ===
         const physicalDemandTable = new Table({
@@ -3854,16 +4504,26 @@ async function addReferralQuestionsContent(children, body) {
             bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
             left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
             right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-            insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-            insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+            insideHorizontal: {
+              style: BorderStyle.SINGLE,
+              size: 1,
+              color: "000000",
+            },
+            insideVertical: {
+              style: BorderStyle.SINGLE,
+              size: 1,
+              color: "000000",
+            },
           },
           rows: [
             new TableRow({
               children: [
-                paddedCell(
-                  "Physical Demand Characteristics of Work",
-                  { bold: true, size: 16, fill: "FFFF99", align: AlignmentType.CENTER }
-                ),
+                paddedCell("Physical Demand Characteristics of Work", {
+                  bold: true,
+                  size: 16,
+                  fill: "FFFF99",
+                  align: AlignmentType.CENTER,
+                }),
               ],
               tableCellMargin: { left: 150, right: 150 },
               cantSplit: true,
@@ -3873,7 +4533,12 @@ async function addReferralQuestionsContent(children, body) {
               children: [
                 paddedCell(
                   "(Dictionary of Occupational Titles - Volume II, Fourth Edition, Revised 1991)",
-                  { bold: true, size: 16, fill: "FFFF99", align: AlignmentType.CENTER }
+                  {
+                    bold: true,
+                    size: 16,
+                    fill: "FFFF99",
+                    align: AlignmentType.CENTER,
+                  },
                 ),
               ],
               tableCellMargin: { left: 150, right: 150 },
@@ -3882,10 +4547,19 @@ async function addReferralQuestionsContent(children, body) {
             }),
             new TableRow({
               children: [
-                paddedCell("Physical Demand Level", { bold: true, fill: "FFFF99" }),
-                paddedCell("Occasional (0–33%)", { bold: true, fill: "FFFF99" }),
+                paddedCell("Physical Demand Level", {
+                  bold: true,
+                  fill: "FFFF99",
+                }),
+                paddedCell("Occasional (0–33%)", {
+                  bold: true,
+                  fill: "FFFF99",
+                }),
                 paddedCell("Frequent (34–66%)", { bold: true, fill: "FFFF99" }),
-                paddedCell("Constant (67–100%)", { bold: true, fill: "FFFF99" }),
+                paddedCell("Constant (67–100%)", {
+                  bold: true,
+                  fill: "FFFF99",
+                }),
               ],
             }),
             new TableRow({
@@ -3943,11 +4617,10 @@ async function addReferralQuestionsContent(children, body) {
                 }),
               ],
               spacing: { after: 100 },
-            })
+            }),
           );
         }
       }
-
 
       continue; // skip to next question
     }
@@ -3961,7 +4634,7 @@ async function addReferralQuestionsContent(children, body) {
         new Paragraph({
           children: [new TextRun({ text: answer, size: 16 })],
           spacing: { before: 100, after: 150 },
-        })
+        }),
       );
     }
 
@@ -3976,14 +4649,18 @@ async function addReferralQuestionsContent(children, body) {
           // --- Resolve image source ---
           if (typeof item === "string") {
             if (/^data:image\//i.test(item)) {
-              const base64 = item.split(",")[1] || item.replace(/^data:image\/\w+;base64,/, "");
+              const base64 =
+                item.split(",")[1] ||
+                item.replace(/^data:image\/\w+;base64,/, "");
               buffer = base64 ? Buffer.from(base64, "base64") : null;
             } else {
               buffer = await getImageBuffer(item);
             }
           } else if (item && typeof item === "object") {
             if (item.dataUrl && /^data:image\//i.test(item.dataUrl)) {
-              const base64 = String(item.dataUrl).split(",")[1] || String(item.dataUrl).replace(/^data:image\/\w+;base64,/, "");
+              const base64 =
+                String(item.dataUrl).split(",")[1] ||
+                String(item.dataUrl).replace(/^data:image\/\w+;base64,/, "");
               buffer = base64 ? Buffer.from(base64, "base64") : null;
             } else if (item.url || item.path || item.src) {
               buffer = await getImageBuffer(item.url || item.path || item.src);
@@ -4014,9 +4691,8 @@ async function addReferralQuestionsContent(children, body) {
                 }),
               ],
               margins: { top: 100, bottom: 100, left: 100, right: 100 },
-            })
+            }),
           );
-
         } catch (e) {
           console.warn("[DOCX] Failed to insert image:", e);
         }
@@ -4033,11 +4709,10 @@ async function addReferralQuestionsContent(children, body) {
             ],
             width: { size: 10000, type: WidthType.DXA },
             alignment: AlignmentType.CENTER,
-          })
+          }),
         );
       }
     }
-
   }
 }
 
@@ -4045,11 +4720,10 @@ async function addConclusionContent(children, body) {
   const referralData = body.referralQuestionsData || {};
   const questions = referralData.questions || [];
 
-
   children.push(
     new Paragraph({
       spacing: { after: 300 },
-    })
+    }),
   );
 
   // === Conclusions Header Box ===
@@ -4067,7 +4741,8 @@ async function addConclusionContent(children, body) {
                   children: [
                     new TextRun({
                       text: "Conclusions",
-                      bold: true, size: 16
+                      bold: true,
+                      size: 16,
                     }),
                   ],
                 }),
@@ -4076,7 +4751,7 @@ async function addConclusionContent(children, body) {
           ],
         }),
       ],
-    })
+    }),
   );
 
   // Small space after header
@@ -4084,7 +4759,7 @@ async function addConclusionContent(children, body) {
     new Paragraph({
       children: [],
       spacing: { before: 100, after: 200 },
-    })
+    }),
   );
 
   // === Find Conclusion Question ===
@@ -4092,7 +4767,7 @@ async function addConclusionContent(children, body) {
     (q) =>
       q?.question &&
       q.question.toLowerCase().includes("conclusion") &&
-      (q.answer || (q.savedImageData && q.savedImageData.length > 0))
+      (q.answer || (q.savedImageData && q.savedImageData.length > 0)),
   );
 
   // Show nothing if no conclusion data
@@ -4110,7 +4785,7 @@ async function addConclusionContent(children, body) {
           }),
         ],
         spacing: { before: 100, after: 200 },
-      })
+      }),
     );
   }
 
@@ -4134,7 +4809,7 @@ async function addConclusionContent(children, body) {
               }),
             ],
             spacing: { before: 100, after: 100 },
-          })
+          }),
         );
       } catch (e) {
         console.warn("Invalid image data for conclusion section.");
@@ -4147,7 +4822,7 @@ async function addConclusionContent(children, body) {
     new Paragraph({
       spacing: { before: 400, after: 200 },
       children: [],
-    })
+    }),
   );
 
   children.push(
@@ -4166,7 +4841,7 @@ async function addConclusionContent(children, body) {
                       text: "Signature of Evaluator",
                       bold: true,
                       color: "000000",
-                      size: 16
+                      size: 16,
                     }),
                   ],
                 }),
@@ -4175,7 +4850,7 @@ async function addConclusionContent(children, body) {
           ],
         }),
       ],
-    })
+    }),
   );
 
   // === Signature Details (Date, Name, License) ===
@@ -4183,16 +4858,14 @@ async function addConclusionContent(children, body) {
     new Paragraph({
       text: "__________________________________________",
       spacing: { before: 300, after: 150 },
-    })
+    }),
   );
 
   children.push(
     new Paragraph({
-      children: [
-        new TextRun({ text: `Date: ${currentDate}`, size: 16 }),
-      ],
+      children: [new TextRun({ text: `Date: ${currentDate}`, size: 16 })],
       spacing: { after: 100 },
-    })
+    }),
   );
 
   children.push(
@@ -4205,7 +4878,7 @@ async function addConclusionContent(children, body) {
         }),
       ],
       spacing: { after: 50 },
-    })
+    }),
   );
 
   children.push(
@@ -4217,14 +4890,12 @@ async function addConclusionContent(children, body) {
           color: "444444",
         }),
       ],
-    })
+    }),
   );
 }
 
 async function addFunctionalAbilitiesDeterminationContent(children, body) {
-
   children.push(new Paragraph({ children: [new PageBreak()] }));
-
 
   // Define job requirements by test name (mirror client PDF logic)
   const getJobRequirements = (testName) => {
@@ -4241,53 +4912,167 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
       };
     }
     if (testNameLower.includes("key") && testNameLower.includes("pinch")) {
-      return { requirement: "Key pinch ≥4.3 kg (Light) / ≥7.0 kg (Medium work)", lightWork: 4.3, mediumWork: 7.0, unit: "kg", type: "weight" };
+      return {
+        requirement: "Key pinch ≥4.3 kg (Light) / ≥7.0 kg (Medium work)",
+        lightWork: 4.3,
+        mediumWork: 7.0,
+        unit: "kg",
+        type: "weight",
+      };
     }
     if (testNameLower.includes("tip") && testNameLower.includes("pinch")) {
-      return { requirement: "Tip pinch ≥1.8 kg (Light) / ≥3.7 kg (Medium work)", lightWork: 1.8, mediumWork: 3.7, unit: "kg", type: "weight" };
+      return {
+        requirement: "Tip pinch ≥1.8 kg (Light) / ≥3.7 kg (Medium work)",
+        lightWork: 1.8,
+        mediumWork: 3.7,
+        unit: "kg",
+        type: "weight",
+      };
     }
     if (testNameLower.includes("palmar") && testNameLower.includes("pinch")) {
-      return { requirement: "Palmar pinch ≥2.1 kg (Light) / ≥4.3 kg (Medium work)", lightWork: 2.1, mediumWork: 4.3, unit: "kg", type: "weight" };
+      return {
+        requirement: "Palmar pinch ≥2.1 kg (Light) / ≥4.3 kg (Medium work)",
+        lightWork: 2.1,
+        mediumWork: 4.3,
+        unit: "kg",
+        type: "weight",
+      };
     }
 
     // ROM - Cervical
     if (testNameLower.includes("cervical")) {
-      if (testNameLower.includes("flexion")) return { requirement: "Cervical flexion ≥45°", norm: 45, functionalMin: 45, unit: "degrees", type: "degrees" };
-      if (testNameLower.includes("extension")) return { requirement: "Cervical extension ≥45°", norm: 45, functionalMin: 45, unit: "degrees", type: "degrees" };
-      if (testNameLower.includes("lateral")) return { requirement: "Cervical lateral flexion ≥35°", norm: 35, functionalMin: 35, unit: "degrees", type: "degrees" };
+      if (testNameLower.includes("flexion"))
+        return {
+          requirement: "Cervical flexion ≥45°",
+          norm: 45,
+          functionalMin: 45,
+          unit: "degrees",
+          type: "degrees",
+        };
+      if (testNameLower.includes("extension"))
+        return {
+          requirement: "Cervical extension ≥45°",
+          norm: 45,
+          functionalMin: 45,
+          unit: "degrees",
+          type: "degrees",
+        };
+      if (testNameLower.includes("lateral"))
+        return {
+          requirement: "Cervical lateral flexion ≥35°",
+          norm: 35,
+          functionalMin: 35,
+          unit: "degrees",
+          type: "degrees",
+        };
     }
 
     // ROM - Lumbar
     if (testNameLower.includes("lumbar")) {
-      if (testNameLower.includes("flexion")) return { requirement: "Lumbar flexion ≥80°", norm: 80, functionalMin: 60, unit: "degrees", type: "degrees" };
-      if (testNameLower.includes("extension")) return { requirement: "Lumbar extension ≥20°", norm: 20, functionalMin: 15, unit: "degrees", type: "degrees" };
+      if (testNameLower.includes("flexion"))
+        return {
+          requirement: "Lumbar flexion ≥80°",
+          norm: 80,
+          functionalMin: 60,
+          unit: "degrees",
+          type: "degrees",
+        };
+      if (testNameLower.includes("extension"))
+        return {
+          requirement: "Lumbar extension ≥20°",
+          norm: 20,
+          functionalMin: 15,
+          unit: "degrees",
+          type: "degrees",
+        };
     }
 
     // ROM - Shoulder
     if (testNameLower.includes("shoulder")) {
-      if (testNameLower.includes("flexion")) return { requirement: "Shoulder flexion ≥150°", norm: 150, functionalMin: 120, unit: "degrees", type: "degrees" };
-      if (testNameLower.includes("abduction")) return { requirement: "Shoulder abduction ≥150°", norm: 150, functionalMin: 120, unit: "degrees", type: "degrees" };
-      if (testNameLower.includes("extension")) return { requirement: "Shoulder extension ≥45°", norm: 45, functionalMin: 30, unit: "degrees", type: "degrees" };
+      if (testNameLower.includes("flexion"))
+        return {
+          requirement: "Shoulder flexion ≥150°",
+          norm: 150,
+          functionalMin: 120,
+          unit: "degrees",
+          type: "degrees",
+        };
+      if (testNameLower.includes("abduction"))
+        return {
+          requirement: "Shoulder abduction ≥150°",
+          norm: 150,
+          functionalMin: 120,
+          unit: "degrees",
+          type: "degrees",
+        };
+      if (testNameLower.includes("extension"))
+        return {
+          requirement: "Shoulder extension ≥45°",
+          norm: 45,
+          functionalMin: 30,
+          unit: "degrees",
+          type: "degrees",
+        };
     }
 
     // ROM - Hip
     if (testNameLower.includes("hip")) {
-      if (testNameLower.includes("flexion")) return { requirement: "Hip flexion ≥90°", norm: 90, functionalMin: 80, unit: "degrees", type: "degrees" };
-      if (testNameLower.includes("extension")) return { requirement: "Hip extension ≥20°", norm: 20, functionalMin: 15, unit: "degrees", type: "degrees" };
-      if (testNameLower.includes("abduction")) return { requirement: "Hip abduction ≥35°", norm: 35, functionalMin: 25, unit: "degrees", type: "degrees" };
+      if (testNameLower.includes("flexion"))
+        return {
+          requirement: "Hip flexion ≥90°",
+          norm: 90,
+          functionalMin: 80,
+          unit: "degrees",
+          type: "degrees",
+        };
+      if (testNameLower.includes("extension"))
+        return {
+          requirement: "Hip extension ≥20°",
+          norm: 20,
+          functionalMin: 15,
+          unit: "degrees",
+          type: "degrees",
+        };
+      if (testNameLower.includes("abduction"))
+        return {
+          requirement: "Hip abduction ≥35°",
+          norm: 35,
+          functionalMin: 25,
+          unit: "degrees",
+          type: "degrees",
+        };
     }
 
     // Lifting
     if (testNameLower.includes("lift")) {
-      return { requirement: "Lifting capacity ≥10 kg (Light) / ≥25 kg (Medium work)", lightWork: 10, mediumWork: 25, unit: "kg", type: "weight" };
+      return {
+        requirement: "Lifting capacity ≥10 kg (Light) / ≥25 kg (Medium work)",
+        lightWork: 10,
+        mediumWork: 25,
+        unit: "kg",
+        type: "weight",
+      };
     }
 
     // Cardio
-    if (testNameLower.includes("step") || testNameLower.includes("cardio") || testNameLower.includes("treadmill")) {
-      return { requirement: "Cardiovascular endurance within normal limits for work demands", norm: null, unit: "bpm", type: "cardio" };
+    if (
+      testNameLower.includes("step") ||
+      testNameLower.includes("cardio") ||
+      testNameLower.includes("treadmill")
+    ) {
+      return {
+        requirement:
+          "Cardiovascular endurance within normal limits for work demands",
+        norm: null,
+        unit: "bpm",
+        type: "cardio",
+      };
     }
 
-    return { requirement: "Functional capacity within normal work demands", type: "general" };
+    return {
+      requirement: "Functional capacity within normal work demands",
+      type: "general",
+    };
   };
 
   // Evaluate Job Match (mirror client PDF logic priorities)
@@ -4354,13 +5139,14 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
     // Primary array from testData.tests if provided
     if (Array.isArray(body.testData?.tests) && body.testData.tests.length > 0) {
       // Use the comprehensive test data from client
-      body.testData.tests.forEach(test => {
+      body.testData.tests.forEach((test) => {
         list.push({
           testName: test.testName || "",
           category: test.category || test.testType || "",
           leftMeasurements: test.leftMeasurements || {},
           rightMeasurements: test.rightMeasurements || {},
-          valueToBeTestedNumber: test.valueToBeTestedNumber || test.target || undefined,
+          valueToBeTestedNumber:
+            test.valueToBeTestedNumber || test.target || undefined,
           valueToBeTestedUnit: test.valueToBeTestedUnit || "",
           result: test.result || "",
           comments: test.comments || test.description || "",
@@ -4386,9 +5172,20 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
     for (const item of mtmValues) {
       if (!item) continue;
       const testName = item.testName || item.name || item.id || "Test";
-      const leftMeasurements = item.leftMeasurements || item.measurementsLeft || item.measurements?.left || item.left || {};
-      const rightMeasurements = item.rightMeasurements || item.measurementsRight || item.measurements?.right || item.right || {};
-      const valueToBeTestedNumber = item.valueToBeTestedNumber || item.target || undefined;
+      const leftMeasurements =
+        item.leftMeasurements ||
+        item.measurementsLeft ||
+        item.measurements?.left ||
+        item.left ||
+        {};
+      const rightMeasurements =
+        item.rightMeasurements ||
+        item.measurementsRight ||
+        item.measurements?.right ||
+        item.right ||
+        {};
+      const valueToBeTestedNumber =
+        item.valueToBeTestedNumber || item.target || undefined;
       list.push({
         testName,
         category: item.mtmCategory || item.category || item.testType || "",
@@ -4417,10 +5214,18 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
   const unifiedTests = gatherTests();
 
   // Group tests by category (mirror client)
-  const categories = { "Cardio": [], "Strength": [], "ROM Total Spine/Extremity": [], "ROM Hand/Foot": [], "Occupational Tasks": [] };
+  const categories = {
+    Cardio: [],
+    Strength: [],
+    "ROM Total Spine/Extremity": [],
+    "ROM Hand/Foot": [],
+    "Occupational Tasks": [],
+  };
   for (const test of unifiedTests) {
     const testName = (test.testName || "").toLowerCase();
-    const originalCategory = (test.category || test.testType || "").toLowerCase().trim();
+    const originalCategory = (test.category || test.testType || "")
+      .toLowerCase()
+      .trim();
 
     // Prefer exact category names if provided by client
     if (test.category === "ROM Hand/Foot") {
@@ -4459,11 +5264,19 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
 
     // ROM Hand/Foot detection
     if (
-      originalCategory.includes("rom") && (originalCategory.includes("hand") || originalCategory.includes("foot")) ||
-      (
-        (testName.includes("hand") || testName.includes("foot") || testName.includes("finger") || testName.includes("wrist") || testName.includes("ankle") || testName.includes("thumb")) &&
-        (testName.includes("flexion") || testName.includes("extension") || testName.includes("abduction") || testName.includes("adduction"))
-      )
+      (originalCategory.includes("rom") &&
+        (originalCategory.includes("hand") ||
+          originalCategory.includes("foot"))) ||
+      ((testName.includes("hand") ||
+        testName.includes("foot") ||
+        testName.includes("finger") ||
+        testName.includes("wrist") ||
+        testName.includes("ankle") ||
+        testName.includes("thumb")) &&
+        (testName.includes("flexion") ||
+          testName.includes("extension") ||
+          testName.includes("abduction") ||
+          testName.includes("adduction")))
     ) {
       categories["ROM Hand/Foot"].push(test);
       continue;
@@ -4525,9 +5338,8 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
       ],
       alignment: AlignmentType.LEFT,
       spacing: { after: 200 },
-    })
+    }),
   );
-
 
   // Table Header Row (yellow like other tables) with tighter column widths
   const headerRow = new TableRow({
@@ -4558,7 +5370,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
             left: { style: BorderStyle.SINGLE, size: 1 },
             right: { style: BorderStyle.SINGLE, size: 1 },
           },
-        })
+        }),
     ),
   });
 
@@ -4590,7 +5402,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
               left: { style: BorderStyle.SINGLE, size: 1 },
               right: { style: BorderStyle.SINGLE, size: 1 },
             },
-          })
+          }),
       ),
     }),
     // Mirror client: Activity Overview static row
@@ -4619,7 +5431,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
               left: { style: BorderStyle.SINGLE, size: 1 },
               right: { style: BorderStyle.SINGLE, size: 1 },
             },
-          })
+          }),
       ),
     }),
   ];
@@ -4645,7 +5457,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
                   }),
                 ],
                 alignment: AlignmentType.LEFT,
-              })
+              }),
             ],
             shading: { fill: "DBEAFE" },
             margins: { top: 50, bottom: 50, left: 80 },
@@ -4657,7 +5469,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
             },
           }),
         ],
-      })
+      }),
     );
 
     // Each test row
@@ -4669,7 +5481,25 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
 
       // Determine sit/stand based on test name (mirror client)
       const tn = (test.testName || "").toLowerCase();
-      const isStandingTest = tn.includes("lumbar") || tn.includes("cervical") || tn.includes("thoracic") || tn.includes("shoulder") || tn.includes("elbow") || tn.includes("wrist") || tn.includes("reach") || tn.includes("crouch") || tn.includes("stoop") || tn.includes("bend") || tn.includes("balance") || tn.includes("climb") || tn.includes("walk") || tn.includes("push") || tn.includes("pull") || tn.includes("carry") || tn.includes("lift") || tn.includes("overhead");
+      const isStandingTest =
+        tn.includes("lumbar") ||
+        tn.includes("cervical") ||
+        tn.includes("thoracic") ||
+        tn.includes("shoulder") ||
+        tn.includes("elbow") ||
+        tn.includes("wrist") ||
+        tn.includes("reach") ||
+        tn.includes("crouch") ||
+        tn.includes("stoop") ||
+        tn.includes("bend") ||
+        tn.includes("balance") ||
+        tn.includes("climb") ||
+        tn.includes("walk") ||
+        tn.includes("push") ||
+        tn.includes("pull") ||
+        tn.includes("carry") ||
+        tn.includes("lift") ||
+        tn.includes("overhead");
       const sitTime = isStandingTest ? "" : "5 min";
       const standTime = isStandingTest ? "5 min" : "";
 
@@ -4720,9 +5550,10 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
           const rightPreHR = test.rightMeasurements?.preHeartRate || 0;
           const rightPostHR = test.rightMeasurements?.postHeartRate || 0;
 
-          const hrData = leftPreHR > 0 || leftPostHR > 0 || rightPreHR > 0 || rightPostHR > 0
-            ? `${Math.max(leftPreHR, rightPreHR)}//${Math.max(leftPostHR, rightPostHR)}`
-            : "Norm";
+          const hrData =
+            leftPreHR > 0 || leftPostHR > 0 || rightPreHR > 0 || rightPostHR > 0
+              ? `${Math.max(leftPreHR, rightPreHR)}//${Math.max(leftPostHR, rightPostHR)}`
+              : "Norm";
           return hrData;
         }
 
@@ -4731,9 +5562,15 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
           return `%IS=${avgResult.toFixed(1)}`;
         }
 
-        if (category === "ROM Hand/Foot" || category === "ROM Total Spine/Extremity") {
+        if (
+          category === "ROM Hand/Foot" ||
+          category === "ROM Total Spine/Extremity"
+        ) {
           const testNameLower = test.testName.toLowerCase();
-          if (testNameLower.includes("flexion") && testNameLower.includes("extension")) {
+          if (
+            testNameLower.includes("flexion") &&
+            testNameLower.includes("extension")
+          ) {
             return `F=${leftAvg.toFixed(2)} E=${rightAvg.toFixed(2)}`;
           }
           if (testNameLower.includes("lateral")) {
@@ -4743,12 +5580,18 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
         }
 
         if ((test.testName || "").toLowerCase().includes("lift")) {
-          const unit = (test.unitMeasure || test.valueToBeTestedUnit || jobReq.unit || "").toLowerCase();
+          const unit = (
+            test.unitMeasure ||
+            test.valueToBeTestedUnit ||
+            jobReq.unit ||
+            ""
+          ).toLowerCase();
           const baseAvg = leftAvg > 0 ? leftAvg : rightAvg;
           if (baseAvg > 0) {
-            const avgWeight = unit === "kg"
-              ? Math.round(baseAvg * 2.20462 * 10) / 10
-              : Math.round(baseAvg * 10) / 10;
+            const avgWeight =
+              unit === "kg"
+                ? Math.round(baseAvg * 2.20462 * 10) / 10
+                : Math.round(baseAvg * 10) / 10;
             return `${avgWeight.toFixed(1)} lbs`;
           }
         }
@@ -4766,20 +5609,42 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
         jobMatch,
       ];
 
-      rows.push(new TableRow({
-        children: rowData.map((text, idx) => new TableCell({
-          children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: String(text), size: 16 })] })],
-          margins: { top: 40, bottom: 40 },
-          width: idx === 0 ? { size: 22, type: WidthType.PERCENTAGE }
-            : idx === 1 ? { size: 8, type: WidthType.PERCENTAGE }
-              : idx === 2 ? { size: 8, type: WidthType.PERCENTAGE }
-                : idx === 3 ? { size: 12, type: WidthType.PERCENTAGE }
-                  : idx === 4 ? { size: 22, type: WidthType.PERCENTAGE }
-                    : idx === 5 ? { size: 20, type: WidthType.PERCENTAGE }
-                      : { size: 8, type: WidthType.PERCENTAGE }, // Yes/No compact
-          borders: { top: { style: BorderStyle.SINGLE, size: 1 }, bottom: { style: BorderStyle.SINGLE, size: 1 }, left: { style: BorderStyle.SINGLE, size: 1 }, right: { style: BorderStyle.SINGLE, size: 1 } },
-        })),
-      }));
+      rows.push(
+        new TableRow({
+          children: rowData.map(
+            (text, idx) =>
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    children: [new TextRun({ text: String(text), size: 16 })],
+                  }),
+                ],
+                margins: { top: 40, bottom: 40 },
+                width:
+                  idx === 0
+                    ? { size: 22, type: WidthType.PERCENTAGE }
+                    : idx === 1
+                      ? { size: 8, type: WidthType.PERCENTAGE }
+                      : idx === 2
+                        ? { size: 8, type: WidthType.PERCENTAGE }
+                        : idx === 3
+                          ? { size: 12, type: WidthType.PERCENTAGE }
+                          : idx === 4
+                            ? { size: 22, type: WidthType.PERCENTAGE }
+                            : idx === 5
+                              ? { size: 20, type: WidthType.PERCENTAGE }
+                              : { size: 8, type: WidthType.PERCENTAGE }, // Yes/No compact
+                borders: {
+                  top: { style: BorderStyle.SINGLE, size: 1 },
+                  bottom: { style: BorderStyle.SINGLE, size: 1 },
+                  left: { style: BorderStyle.SINGLE, size: 1 },
+                  right: { style: BorderStyle.SINGLE, size: 1 },
+                },
+              }),
+          ),
+        }),
+      );
     }
   }
 
@@ -4788,7 +5653,25 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
   let finalTotalStandTime = 5;
   for (const test of unifiedTests) {
     const name = (test.testName || "").toLowerCase();
-    const isStandingTest = name.includes("lumbar") || name.includes("cervical") || name.includes("thoracic") || name.includes("shoulder") || name.includes("elbow") || name.includes("wrist") || name.includes("reach") || name.includes("crouch") || name.includes("stoop") || name.includes("bend") || name.includes("balance") || name.includes("climb") || name.includes("walk") || name.includes("push") || name.includes("pull") || name.includes("carry") || name.includes("lift") || name.includes("overhead");
+    const isStandingTest =
+      name.includes("lumbar") ||
+      name.includes("cervical") ||
+      name.includes("thoracic") ||
+      name.includes("shoulder") ||
+      name.includes("elbow") ||
+      name.includes("wrist") ||
+      name.includes("reach") ||
+      name.includes("crouch") ||
+      name.includes("stoop") ||
+      name.includes("bend") ||
+      name.includes("balance") ||
+      name.includes("climb") ||
+      name.includes("walk") ||
+      name.includes("push") ||
+      name.includes("pull") ||
+      name.includes("carry") ||
+      name.includes("lift") ||
+      name.includes("overhead");
     if (isStandingTest) {
       finalTotalStandTime += 5;
     } else {
@@ -4808,44 +5691,47 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
 
   rows.push(
     new TableRow({
-      children: totalsData.map((text, idx) =>
-        new TableCell({
-          children: [
-            new Paragraph({
-              alignment: idx === 0 ? AlignmentType.LEFT : AlignmentType.CENTER,
-              children: [
-                new TextRun({
-                  text: String(text),
-                  bold: idx <= 2 && String(text).length > 0,
-                  size: 16,
-                }),
-              ],
-            }),
-          ],
-          shading: { fill: "FFFF99" },
-          margins: { top: 50, bottom: 50 },
-          width: idx === 0
-            ? { size: 22, type: WidthType.PERCENTAGE }
-            : idx === 1
-              ? { size: 8, type: WidthType.PERCENTAGE }
-              : idx === 2
-                ? { size: 8, type: WidthType.PERCENTAGE }
-                : idx === 3
-                  ? { size: 12, type: WidthType.PERCENTAGE }
-                  : idx === 4
-                    ? { size: 22, type: WidthType.PERCENTAGE }
-                    : idx === 5
-                      ? { size: 20, type: WidthType.PERCENTAGE }
-                      : { size: 8, type: WidthType.PERCENTAGE },
-          borders: {
-            top: { style: BorderStyle.SINGLE, size: 1 },
-            bottom: { style: BorderStyle.SINGLE, size: 1 },
-            left: { style: BorderStyle.SINGLE, size: 1 },
-            right: { style: BorderStyle.SINGLE, size: 1 },
-          },
-        })
+      children: totalsData.map(
+        (text, idx) =>
+          new TableCell({
+            children: [
+              new Paragraph({
+                alignment:
+                  idx === 0 ? AlignmentType.LEFT : AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: String(text),
+                    bold: idx <= 2 && String(text).length > 0,
+                    size: 16,
+                  }),
+                ],
+              }),
+            ],
+            shading: { fill: "FFFF99" },
+            margins: { top: 50, bottom: 50 },
+            width:
+              idx === 0
+                ? { size: 22, type: WidthType.PERCENTAGE }
+                : idx === 1
+                  ? { size: 8, type: WidthType.PERCENTAGE }
+                  : idx === 2
+                    ? { size: 8, type: WidthType.PERCENTAGE }
+                    : idx === 3
+                      ? { size: 12, type: WidthType.PERCENTAGE }
+                      : idx === 4
+                        ? { size: 22, type: WidthType.PERCENTAGE }
+                        : idx === 5
+                          ? { size: 20, type: WidthType.PERCENTAGE }
+                          : { size: 8, type: WidthType.PERCENTAGE },
+            borders: {
+              top: { style: BorderStyle.SINGLE, size: 1 },
+              bottom: { style: BorderStyle.SINGLE, size: 1 },
+              left: { style: BorderStyle.SINGLE, size: 1 },
+              right: { style: BorderStyle.SINGLE, size: 1 },
+            },
+          }),
       ),
-    })
+    }),
   );
 
   const table = new Table({
@@ -4872,7 +5758,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
         }),
       ],
       spacing: { before: 200 },
-    })
+    }),
   );
 
   // ----------------------------
@@ -4882,7 +5768,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
   children.push(
     new Paragraph({
       spacing: { after: 200 },
-    })
+    }),
   );
   children.push(
     new Paragraph({
@@ -4896,7 +5782,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
       ],
       alignment: AlignmentType.LEFT,
       spacing: { after: 50 },
-    })
+    }),
   );
 
   // Calculate actual effort counts from unified tests
@@ -4953,7 +5839,8 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
                 children: [
                   new TextRun({
                     text: "Observed Effort During Testing",
-                    bold: true, size: 16
+                    bold: true,
+                    size: 16,
                   }),
                 ],
               }),
@@ -4970,7 +5857,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
                   new TextRun({
                     text: "Total Noted for all Tested Activities",
                     bold: true,
-                    size: 16
+                    size: 16,
                   }),
                 ],
               }),
@@ -5013,7 +5900,9 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
           new TableCell({
             children: [
               new Paragraph({
-                children: [new TextRun({ text: "Fair to Average effort", size: 16 })],
+                children: [
+                  new TextRun({ text: "Fair to Average effort", size: 16 }),
+                ],
               }),
             ],
           }),
@@ -5057,25 +5946,27 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
           }),
         ],
       }),
-
     ],
   });
-
 
   children.push(consistencyOverviewTable);
 
   children.push(
     new Paragraph({
       spacing: { after: 200 },
-    })
+    }),
   );
 
   // Build dynamic Consistent Crosschecks table (no TS types)
-  const referralQuestionsData = body.referralQuestionsData || body.referralQuestions || {};
-  const crosschecks = computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData);
-  const consistentCrosschecksTable = buildConsistentCrosschecksTable(crosschecks);
+  const referralQuestionsData =
+    body.referralQuestionsData || body.referralQuestions || {};
+  const crosschecks = computeCrosschecksFromUnifiedTests(
+    unifiedTests,
+    referralQuestionsData,
+  );
+  const consistentCrosschecksTable =
+    buildConsistentCrosschecksTable(crosschecks);
   children.push(consistentCrosschecksTable);
-
 }
 
 async function addActivityRatingChart(children, body) {
@@ -5095,7 +5986,7 @@ async function addActivityRatingChart(children, body) {
       ],
       alignment: AlignmentType.LEFT,
       spacing: { after: 50 },
-    })
+    }),
   );
 
   // === Description ===
@@ -5109,24 +6000,23 @@ async function addActivityRatingChart(children, body) {
         }),
       ],
       spacing: { before: 100, after: 300 },
-    })
+    }),
   );
 
   // === Chart Settings (Reduced width) ===
-  const width = 700;  // decreased from 900 → 700
+  const width = 700; // decreased from 900 → 700
   const height = 470; // slightly reduced to keep proportion
-
 
   // Custom plugin for chart border
   const chartAreaBorder = {
-    id: 'chartAreaBorder',
+    id: "chartAreaBorder",
     beforeDraw(chart) {
       const {
         ctx,
         chartArea: { left, top, width, height },
       } = chart;
       ctx.save();
-      ctx.strokeStyle = '#d1d5db'; // light gray border
+      ctx.strokeStyle = "#d1d5db"; // light gray border
       ctx.lineWidth = 1;
       ctx.strokeRect(left, top, width, height);
       ctx.restore();
@@ -5136,7 +6026,7 @@ async function addActivityRatingChart(children, body) {
   const chartJSNodeCanvas = new ChartJSNodeCanvas({
     width,
     height,
-    backgroundColour: 'white',
+    backgroundColour: "white",
     plugins: { modern: [chartAreaBorder] },
   });
 
@@ -5144,7 +6034,7 @@ async function addActivityRatingChart(children, body) {
   const ratings = body.activityRatingData.activities.map((d) => d.rating);
 
   const configuration = {
-    type: 'bar',
+    type: "bar",
     data: {
       labels,
       datasets: [
@@ -5167,7 +6057,7 @@ async function addActivityRatingChart(children, body) {
             "#A1887F", // Brown
             "#90A4AE", // Blue grey
           ],
-          borderColor: '#9ca3af',
+          borderColor: "#9ca3af",
           borderWidth: 1,
           barPercentage: 0.95,
           categoryPercentage: 0.95,
@@ -5175,7 +6065,7 @@ async function addActivityRatingChart(children, body) {
       ],
     },
     options: {
-      indexAxis: 'y', // horizontal bars
+      indexAxis: "y", // horizontal bars
       responsive: false,
       maintainAspectRatio: false,
       plugins: {
@@ -5187,7 +6077,7 @@ async function addActivityRatingChart(children, body) {
           beginAtZero: true,
           max: 10,
           grid: {
-            color: '#e5e7eb',
+            color: "#e5e7eb",
             lineWidth: 1,
           },
           ticks: {
@@ -5195,7 +6085,7 @@ async function addActivityRatingChart(children, body) {
             font: { size: 11 },
             color: "#000000",
           },
-          border: { display: true, color: '#000000' },
+          border: { display: true, color: "#000000" },
         },
         y: {
           grid: { display: false },
@@ -5229,7 +6119,7 @@ async function addActivityRatingChart(children, body) {
         }),
       ],
       spacing: { before: 100, after: 100 },
-    })
+    }),
   );
 
   children.push(
@@ -5237,22 +6127,20 @@ async function addActivityRatingChart(children, body) {
       alignment: AlignmentType.CENTER,
       children: [
         new TextRun({
-          text: new Date().toLocaleString('en-IN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
+          text: new Date().toLocaleString("en-IN", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
             hour12: true,
           }),
           size: 16,
         }),
       ],
       spacing: { before: 100, after: 300 },
-    })
+    }),
   );
-
-
 }
 
 async function addTestDataContent(children, body) {
@@ -5264,30 +6152,56 @@ async function addTestDataContent(children, body) {
 
   // 1) Show individual tests (do not return; we will append MTM after)
   if (testData.length === 0) {
-    children.push(new Paragraph({
-      children: [new TextRun({ text: "No test data available.", size: 16 })],
-      spacing: { after: 100 },
-    }));
+    children.push(
+      new Paragraph({
+        children: [new TextRun({ text: "No test data available.", size: 16 })],
+        spacing: { after: 100 },
+      }),
+    );
   } else {
     const occupationalTestIds = [
-      "fingering", "bi-manual-fingering", "handling", "bi-manual-handling", "reach-immediate", "reach-overhead",
-      "reach-with-weight", "balance", "stoop", "walk", "push-pull-cart", "crouch", "carry", "crawl", "climb-stairs",
-      "kneel", "climb-ladder"
+      "fingering",
+      "bi-manual-fingering",
+      "handling",
+      "bi-manual-handling",
+      "reach-immediate",
+      "reach-overhead",
+      "reach-with-weight",
+      "balance",
+      "stoop",
+      "walk",
+      "push-pull-cart",
+      "crouch",
+      "carry",
+      "crawl",
+      "climb-stairs",
+      "kneel",
+      "climb-ladder",
     ];
 
     const filteredTests = testData.filter((test) => {
-      const isOccupational = occupationalTestIds.includes(test.testId) ||
-        test.testName?.toLowerCase().match(
-          /(fingering|handling|reach|balance|stoop|walk|push|pull|cart|crouch|carry|crawl|climb|kneel)/i
-        );
+      const isOccupational =
+        occupationalTestIds.includes(test.testId) ||
+        test.testName
+          ?.toLowerCase()
+          .match(
+            /(fingering|handling|reach|balance|stoop|walk|push|pull|cart|crouch|carry|crawl|climb|kneel)/i,
+          );
       return !isOccupational;
     });
 
     if (filteredTests.length === 0) {
-      children.push(new Paragraph({
-        children: [new TextRun({ text: "No individual test data available.", size: 16 })],
-        spacing: { after: 100 },
-      }));
+      children.push(
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: "No individual test data available.",
+              size: 16,
+            }),
+          ],
+          spacing: { after: 100 },
+        }),
+      );
     } else {
       // Existing per-test rendering (unchanged)
       for (const test of filteredTests) {
@@ -5308,27 +6222,41 @@ async function addTestDataContent(children, body) {
           testNameLower.includes("flexion") ||
           testNameLower.includes("extension") ||
           testNameLower.includes("range");
-        const isGripTest = testNameLower.includes("grip") || testNameLower.includes("pinch");
-        const isLiftTest = testNameLower.includes("lift") || testNameLower.includes("carry");
-        const isCardioTest = testNameLower.match(/(bruce|treadmill|mcaft|kasch|step|cardio|cardiovascular)/);
+        const isGripTest =
+          testNameLower.includes("grip") || testNameLower.includes("pinch");
+        const isLiftTest =
+          testNameLower.includes("lift") || testNameLower.includes("carry");
+        const isCardioTest = testNameLower.match(
+          /(bruce|treadmill|mcaft|kasch|step|cardio|cardiovascular)/,
+        );
 
         function safeUnitLabel(raw, fallback = "") {
           const str =
-            typeof raw === "string"
-              ? raw.trim()
-              : String(raw ?? "").trim();
+            typeof raw === "string" ? raw.trim() : String(raw ?? "").trim();
           return str || fallback;
         }
         // Unit
         const measurementUnit = safeUnitLabel(
-          test.unitMeasure || test.valueToBeTestedUnit || test.unit || (isRangeOfMotion ? "deg" : "lbs"),
-          isRangeOfMotion ? "deg" : "lbs"
+          test.unitMeasure ||
+            test.valueToBeTestedUnit ||
+            test.unit ||
+            (isRangeOfMotion ? "deg" : "lbs"),
+          isRangeOfMotion ? "deg" : "lbs",
         );
         // Header
-        children.push(new Paragraph({
-          children: [new TextRun({ text: safeName, bold: true, color: BRAND_COLOR, size: 16 })],
-          spacing: { before: 200, after: 200 },
-        }));
+        children.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: safeName,
+                bold: true,
+                color: BRAND_COLOR,
+                size: 16,
+              }),
+            ],
+            spacing: { before: 200, after: 200 },
+          }),
+        );
 
         // Build left and right columns
         const leftCol = [];
@@ -5339,118 +6267,191 @@ async function addTestDataContent(children, body) {
         let description =
           "The client was tested in our facility using standardized assessment protocols. The test results were compared to normative data when available.";
         if (isRangeOfMotion) {
-          description = "The client was tested using range of motion inclinometers. Results were compared to normative data.";
+          description =
+            "The client was tested using range of motion inclinometers. Results were compared to normative data.";
         } else if (isGripTest) {
-          description = "The client was tested using a hand grip evaluation device. It is expected that the dominant hand will display 10% greater values than the non-dominant hand.";
+          description =
+            "The client was tested using a hand grip evaluation device. It is expected that the dominant hand will display 10% greater values than the non-dominant hand.";
         } else if (isLiftTest) {
-          description = "The client was tested using a dynamic lift evaluation apparatus. Results were compared to normative data.";
+          description =
+            "The client was tested using a dynamic lift evaluation apparatus. Results were compared to normative data.";
         } else if (isCardioTest) {
-          if (testNameLower.includes("bruce") || testNameLower.includes("treadmill"))
-            description = "The Bruce Treadmill Test measures aerobic endurance by estimating VO₂ max.";
+          if (
+            testNameLower.includes("bruce") ||
+            testNameLower.includes("treadmill")
+          )
+            description =
+              "The Bruce Treadmill Test measures aerobic endurance by estimating VO₂ max.";
           else if (testNameLower.includes("mcaft"))
-            description = "mCAFT evaluates aerobic fitness using step cadence protocols.";
+            description =
+              "mCAFT evaluates aerobic fitness using step cadence protocols.";
           else if (testNameLower.includes("kasch"))
-            description = "Kasch Step Test assesses post-exercise heart-rate recovery over 3 minutes.";
+            description =
+              "Kasch Step Test assesses post-exercise heart-rate recovery over 3 minutes.";
         }
 
-        rightCol.push(new Paragraph({
-          children: [new TextRun({ text: description, italics: true, size: 16 })],
-          spacing: { after: 100 },
-        }));
-        rightCol.push(new Paragraph({ children: [new TextRun({ text: "Results:", bold: true, size: 16 })], spacing: { after: 50 } }));
+        rightCol.push(
+          new Paragraph({
+            children: [
+              new TextRun({ text: description, italics: true, size: 16 }),
+            ],
+            spacing: { after: 100 },
+          }),
+        );
+        rightCol.push(
+          new Paragraph({
+            children: [new TextRun({ text: "Results:", bold: true, size: 16 })],
+            spacing: { after: 50 },
+          }),
+        );
 
         if (isCardioTest) {
           await addCardioDocxContent(rightCol, test);
-          rightCol.push(new Paragraph({
-            children: [
-              new TextRun({ text: "Comments: ", bold: true, size: 16 }),
-              new TextRun({ text: test.comments || "No additional comments provided.", size: 16 }),
-            ],
-            spacing: { before: 200, after: 100 },
-          }));
+          rightCol.push(
+            new Paragraph({
+              children: [
+                new TextRun({ text: "Comments: ", bold: true, size: 16 }),
+                new TextRun({
+                  text: test.comments || "No additional comments provided.",
+                  size: 16,
+                }),
+              ],
+              spacing: { before: 200, after: 100 },
+            }),
+          );
           rightCol.push(...buildReferenceParagraphs(test));
         } else {
           // ROM / LIFT / STRENGTH tables (unchanged)
           if (isRangeOfMotion) {
             const romNorm = testNameLower.includes("flexion") ? 60 : 25;
-            rightCol.push(new Table({
-              width: { size: 100, type: WidthType.PERCENTAGE },
-              borders: {
-                top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-              },
-              rows: [
-                new TableRow({
-                  children: ["Area Evaluated", "Data", "Valid?", "Norm", "% of Norm", "Test Date"].map(createHeaderCell),
-                }),
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: safeName, size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: `${Math.max(leftAvg, rightAvg).toFixed(0)} deg`, size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: test.demonstrated ? "Pass" : "Fail", size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: `${romNorm} deg`, size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: `${Math.round((Math.max(leftAvg, rightAvg) / romNorm) * 100)}%`, size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: currentDate, size: 16 })],
-                        }),
-                      ],
-                    }),
-                  ],
-                }),
-              ],
-            }));
+            rightCol.push(
+              new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                borders: {
+                  top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                  bottom: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                  left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                  right: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                  insideHorizontal: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                  insideVertical: {
+                    style: BorderStyle.SINGLE,
+                    size: 1,
+                    color: "000000",
+                  },
+                },
+                rows: [
+                  new TableRow({
+                    children: [
+                      "Area Evaluated",
+                      "Data",
+                      "Valid?",
+                      "Norm",
+                      "% of Norm",
+                      "Test Date",
+                    ].map(createHeaderCell),
+                  }),
+                  new TableRow({
+                    children: [
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({ text: safeName, size: 16 }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({
+                                text: `${Math.max(leftAvg, rightAvg).toFixed(0)} deg`,
+                                size: 16,
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({
+                                text: test.demonstrated ? "Pass" : "Fail",
+                                size: 16,
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({ text: `${romNorm} deg`, size: 16 }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({
+                                text: `${Math.round((Math.max(leftAvg, rightAvg) / romNorm) * 100)}%`,
+                                size: 16,
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({ text: currentDate, size: 16 }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            );
             // Add side-by-trial breakdown table (below the main summary)
-            rightCol.push(new Paragraph({ spacing: { before: 100, after: 50 } }));
+            rightCol.push(
+              new Paragraph({ spacing: { before: 100, after: 50 } }),
+            );
             rightCol.push(createSideTrialTable(test, measurementUnit));
-            rightCol.push(new Paragraph({ spacing: { before: 100, after: 50 } }));
+            rightCol.push(
+              new Paragraph({ spacing: { before: 100, after: 50 } }),
+            );
 
             // ==== LIFT TEST SECTION (updated) ====
           } else if (isLiftTest) {
@@ -5471,14 +6472,24 @@ async function addTestDataContent(children, body) {
                 shading: shaded ? { fill: "FFFF99" } : undefined, // header background
                 borders: {
                   top: { style: BorderStyle.SINGLE, size: 2, color: "000000" },
-                  bottom: { style: BorderStyle.SINGLE, size: 2, color: "000000" },
+                  bottom: {
+                    style: BorderStyle.SINGLE,
+                    size: 2,
+                    color: "000000",
+                  },
                   left: { style: BorderStyle.SINGLE, size: 2, color: "000000" },
-                  right: { style: BorderStyle.SINGLE, size: 2, color: "000000" },
+                  right: {
+                    style: BorderStyle.SINGLE,
+                    size: 2,
+                    color: "000000",
+                  },
                 },
                 children: [
                   new Paragraph({
                     alignment: AlignmentType.CENTER,
-                    children: [new TextRun({ text: text ?? "", bold, size: 16 })],
+                    children: [
+                      new TextRun({ text: text ?? "", bold, size: 16 }),
+                    ],
                   }),
                 ],
               });
@@ -5491,8 +6502,14 @@ async function addTestDataContent(children, body) {
                   // Header
                   new TableRow({
                     children: [
-                      makeCell("Demonstrated Activity", { bold: true, shaded: true }),
-                      makeCell("Avg. Weight (lb)", { bold: true, shaded: true }),
+                      makeCell("Demonstrated Activity", {
+                        bold: true,
+                        shaded: true,
+                      }),
+                      makeCell("Avg. Weight (lb)", {
+                        bold: true,
+                        shaded: true,
+                      }),
                       makeCell("CV%", { bold: true, shaded: true }),
                       makeCell("Test Date", { bold: true, shaded: true }),
                     ],
@@ -5507,106 +6524,150 @@ async function addTestDataContent(children, body) {
                     ],
                   }),
                 ],
-              })
+              }),
             );
-
-
-          }
-
-          else {
-            rightCol.push(new Table({
-              width: { size: 100, type: WidthType.PERCENTAGE },
-              rows: [
-                new TableRow({
-                  children: ["Demonstrated Activity", "Avg. Force", "Norm", "% of Norm", "%CV", "Difference", "Date"].map(createHeaderCell),
-                }),
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: safeName, size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: `${leftAvg.toFixed(1)} | ${rightAvg.toFixed(1)}`, size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: isGripTest ? "110.5 | 120.8" : "85.0 | 90.0", size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [
-                            new TextRun(
-                              { text: `${Math.round((leftAvg / (isGripTest ? 110.5 : 85)) * 100)}% | ${Math.round((rightAvg / (isGripTest ? 120.8 : 90)) * 100)}%`, size: 16 }
-                            ),
-                          ],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: `${leftCV}% | ${rightCV}%`, size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: `${bilateralDef.toFixed(1)}%`, size: 16 })],
-                        }),
-                      ],
-                    }),
-                    new TableCell({
-                      verticalAlign: VerticalAlign.CENTER,
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: currentDate, size: 16 })],
-                        }),
-                      ],
-                    }),
-                  ],
-                })
-              ],
-            }));
+          } else {
+            rightCol.push(
+              new Table({
+                width: { size: 100, type: WidthType.PERCENTAGE },
+                rows: [
+                  new TableRow({
+                    children: [
+                      "Demonstrated Activity",
+                      "Avg. Force",
+                      "Norm",
+                      "% of Norm",
+                      "%CV",
+                      "Difference",
+                      "Date",
+                    ].map(createHeaderCell),
+                  }),
+                  new TableRow({
+                    children: [
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({ text: safeName, size: 16 }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({
+                                text: `${leftAvg.toFixed(1)} | ${rightAvg.toFixed(1)}`,
+                                size: 16,
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({
+                                text: isGripTest
+                                  ? "110.5 | 120.8"
+                                  : "85.0 | 90.0",
+                                size: 16,
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({
+                                text: `${Math.round((leftAvg / (isGripTest ? 110.5 : 85)) * 100)}% | ${Math.round((rightAvg / (isGripTest ? 120.8 : 90)) * 100)}%`,
+                                size: 16,
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({
+                                text: `${leftCV}% | ${rightCV}%`,
+                                size: 16,
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({
+                                text: `${bilateralDef.toFixed(1)}%`,
+                                size: 16,
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      new TableCell({
+                        verticalAlign: VerticalAlign.CENTER,
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({ text: currentDate, size: 16 }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            );
             // Add side-by-trial breakdown table (below the main summary)
-            rightCol.push(new Paragraph({ spacing: { before: 100, after: 50 } }));
+            rightCol.push(
+              new Paragraph({ spacing: { before: 100, after: 50 } }),
+            );
             rightCol.push(createSideTrialTable(test, measurementUnit));
-            rightCol.push(new Paragraph({ spacing: { before: 100, after: 50 } }));
-
+            rightCol.push(
+              new Paragraph({ spacing: { before: 100, after: 50 } }),
+            );
           }
 
           // ==== CHARTS SECTION (robust, single or dual bar charts) ====
 
-
           // Local helpers and defaults used by the charts section
-          const LEFT_CHART_COLORS = { fill: "rgba(30,58,138,0.5)", border: "#1E3A8A" };    // blue
-          const RIGHT_CHART_COLORS = { fill: "rgba(4,120,87,0.5)", border: "#047857" };    // green
-          const SINGLE_CHART_COLORS = { fill: "rgba(17,24,39,0.5)", border: "#111827" };   // gray
+          const LEFT_CHART_COLORS = {
+            fill: "rgba(30,58,138,0.5)",
+            border: "#1E3A8A",
+          }; // blue
+          const RIGHT_CHART_COLORS = {
+            fill: "rgba(4,120,87,0.5)",
+            border: "#047857",
+          }; // green
+          const SINGLE_CHART_COLORS = {
+            fill: "rgba(17,24,39,0.5)",
+            border: "#111827",
+          }; // gray
 
           // Try to extract trial values (unchanged) ...
           function extractTrialSeries(src) {
@@ -5651,8 +6712,6 @@ async function addTestDataContent(children, body) {
             return Math.max(1, Math.ceil(maxVal + headroom));
           }
 
-
-
           // Use a constant to match the margin you use in the chart cell
           const CHART_CELL_MARGIN_TWIPS = 80;
 
@@ -5666,8 +6725,13 @@ async function addTestDataContent(children, body) {
             trialLabels = [], // e.g. ['T1', 'T2', 'T3']
             trialValues = [], // e.g. [12.4, 15.2, 13.9]
           }) {
-            const { buffer, width: srcW = 640, height: srcH = 200 } = chartImage || {};
-            if (!buffer) return new TableCell({ borders: noBorders, children: [] });
+            const {
+              buffer,
+              width: srcW = 640,
+              height: srcH = 200,
+            } = chartImage || {};
+            if (!buffer)
+              return new TableCell({ borders: noBorders, children: [] });
 
             const aspect = srcH / srcW;
             const imgHeightPx = Math.round(imgWidthPx * aspect);
@@ -5675,7 +6739,7 @@ async function addTestDataContent(children, body) {
             // Build label and value lines dynamically
             const labelLine = trialLabels.join("      "); // spaces to separate evenly
             const valueLine = trialValues
-              .map(v => (Number.isFinite(v) ? v.toFixed(1) : "n/a"))
+              .map((v) => (Number.isFinite(v) ? v.toFixed(1) : "n/a"))
               .join("      ");
 
             return new TableCell({
@@ -5691,7 +6755,9 @@ async function addTestDataContent(children, body) {
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
                   spacing: { after: 80 },
-                  children: [new TextRun({ text: title, bold: true, size: 16 })],
+                  children: [
+                    new TextRun({ text: title, bold: true, size: 16 }),
+                  ],
                 }),
 
                 // === Chart Image ===
@@ -5700,7 +6766,10 @@ async function addTestDataContent(children, body) {
                   children: [
                     new ImageRun({
                       data: buffer,
-                      transformation: { width: imgWidthPx, height: imgHeightPx },
+                      transformation: {
+                        width: imgWidthPx,
+                        height: imgHeightPx,
+                      },
                     }),
                   ],
                 }),
@@ -5737,10 +6806,13 @@ async function addTestDataContent(children, body) {
                   spacing: { before: 80 },
                   children: [
                     new TextRun({
-                      text: `Average: ${Number.isFinite(averageValue) ? averageValue.toFixed(1) : "n/a"
-                        }${unitLabel ? ` ${unitLabel}` : ""}`,
+                      text: `Average: ${
+                        Number.isFinite(averageValue)
+                          ? averageValue.toFixed(1)
+                          : "n/a"
+                      }${unitLabel ? ` ${unitLabel}` : ""}`,
                       color: "444444",
-                      size: 16
+                      size: 16,
                     }),
                   ],
                 }),
@@ -5748,9 +6820,15 @@ async function addTestDataContent(children, body) {
             });
           }
 
-
           // Palette for bars (unchanged)
-          const TRIAL_BAR_COLORS = ["#1E3A8A", "#059669", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4"];
+          const TRIAL_BAR_COLORS = [
+            "#1E3A8A",
+            "#059669",
+            "#F59E0B",
+            "#EF4444",
+            "#8B5CF6",
+            "#06B6D4",
+          ];
           function hexToRgba(hex, alpha = 0.5) {
             const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
             if (!m) return hex;
@@ -5767,11 +6845,15 @@ async function addTestDataContent(children, body) {
             for (let i = 0; i < len; i++) {
               const base = TRIAL_BAR_COLORS[i % TRIAL_BAR_COLORS.length];
               bg[i] = hexToRgba(base, 0.5); // semi-transparent fill
-              border[i] = base;             // solid border
+              border[i] = base; // solid border
             }
             return { bg, border };
           }
-          async function createTrialChartBuffer(title, dataSeries, suggestedMax) {
+          async function createTrialChartBuffer(
+            title,
+            dataSeries,
+            suggestedMax,
+          ) {
             const count = Array.isArray(dataSeries) ? dataSeries.length : 0;
             // Keep your current canvas sizing; we’ll scale in Word
             const width = Math.max(320, Math.min(900, count * 56));
@@ -5784,19 +6866,38 @@ async function addTestDataContent(children, body) {
               devicePixelRatio: 3,
               chartCallback: (ChartJS) => {
                 try {
-                  const { BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title } = require("chart.js");
+                  const {
+                    BarElement,
+                    CategoryScale,
+                    LinearScale,
+                    Tooltip,
+                    Legend,
+                    Title,
+                  } = require("chart.js");
                   const ChartDataLabels = require("chartjs-plugin-datalabels");
-                  ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title, ChartDataLabels);
+                  ChartJS.register(
+                    BarElement,
+                    CategoryScale,
+                    LinearScale,
+                    Tooltip,
+                    Legend,
+                    Title,
+                    ChartDataLabels,
+                  );
                   ChartJS.defaults.font.family = "Arial";
                   ChartJS.defaults.font.size = 12;
                   ChartJS.defaults.color = "#333";
-                } catch { }
+                } catch {}
               },
             });
             const labels = dataSeries.map((_, i) => `T${i + 1}`);
-            const values = dataSeries.map((v) => (Number.isFinite(v) ? v : null));
+            const values = dataSeries.map((v) =>
+              Number.isFinite(v) ? v : null,
+            );
             const maxVal = values.reduce((m, v) => Math.max(m, v ?? 0), 0);
-            const yMax = Number.isFinite(suggestedMax) ? suggestedMax : niceMax(maxVal);
+            const yMax = Number.isFinite(suggestedMax)
+              ? suggestedMax
+              : niceMax(maxVal);
 
             const { bg, border } = buildBarColors(values.length);
 
@@ -5813,7 +6914,7 @@ async function addTestDataContent(children, body) {
                     borderWidth: 1,
                     borderRadius: 6,
                     categoryPercentage: 0.55,
-                    barPercentage: 0.80,
+                    barPercentage: 0.8,
                     maxBarThickness: 26,
                   },
                 ],
@@ -5834,19 +6935,33 @@ async function addTestDataContent(children, body) {
                     align: "top",
                     offset: 2,
                     clamp: true,
-                    formatter: (val) => (Number.isFinite(val) ? `${Math.round(val)}` : ""),
+                    formatter: (val) =>
+                      Number.isFinite(val) ? `${Math.round(val)}` : "",
                     font: { size: 12, weight: "bold" },
                   },
                 },
                 scales: {
-                  x: { display: false, grid: { display: false }, ticks: { display: false, maxRotation: 0 } },
-                  y: { display: false, grid: { display: false }, beginAtZero: true, max: yMax, grace: "5%" },
+                  x: {
+                    display: false,
+                    grid: { display: false },
+                    ticks: { display: false, maxRotation: 0 },
+                  },
+                  y: {
+                    display: false,
+                    grid: { display: false },
+                    beginAtZero: true,
+                    max: yMax,
+                    grace: "5%",
+                  },
                 },
               },
             };
 
             try {
-              const buffer = await chartJSNodeCanvas.renderToBuffer(config, "image/png");
+              const buffer = await chartJSNodeCanvas.renderToBuffer(
+                config,
+                "image/png",
+              );
               return { buffer, width, height };
             } catch (e) {
               console.error("Chart render error", e);
@@ -5854,16 +6969,26 @@ async function addTestDataContent(children, body) {
             }
           }
 
-          function niceMax(v) { /* ... your same implementation ... */ }
-
-
+          function niceMax(v) {
+            /* ... your same implementation ... */
+          }
 
           // Extract series
           const leftSeries = extractTrialSeries(test.leftMeasurements || {});
           const rightSeries = extractTrialSeries(test.rightMeasurements || {});
           let singleSeries = [];
-          if (!hasMeaningfulTrialData(leftSeries) && !hasMeaningfulTrialData(rightSeries)) {
-            singleSeries = extractTrialSeries(test.measurements || test.trials || test.series || test.results || test.data || []);
+          if (
+            !hasMeaningfulTrialData(leftSeries) &&
+            !hasMeaningfulTrialData(rightSeries)
+          ) {
+            singleSeries = extractTrialSeries(
+              test.measurements ||
+                test.trials ||
+                test.series ||
+                test.results ||
+                test.data ||
+                [],
+            );
           }
 
           // What do we actually have?
@@ -5873,79 +6998,107 @@ async function addTestDataContent(children, body) {
           const canShowRight = !isLiftTest && hasRightSeries;
 
           // Compute widths AFTER you know how many charts you’ll render
-          const RIGHT_COL_TWIPS = 6900;     // must match the right column in the outer 3-col table [2000,100,6900]
+          const RIGHT_COL_TWIPS = 6900; // must match the right column in the outer 3-col table [2000,100,6900]
           const PX_PER_TWIP = 96 / 1440;
           const twoColWidth = Math.floor(RIGHT_COL_TWIPS / 2);
           const oneColWidth = RIGHT_COL_TWIPS;
 
           // How many charts?
-          const nCharts = hasSingleSeries ? 1 : (hasLeftSeries ? 1 : 0) + (canShowRight ? 1 : 0);
+          const nCharts = hasSingleSeries
+            ? 1
+            : (hasLeftSeries ? 1 : 0) + (canShowRight ? 1 : 0);
 
           // Available inner content width per cell (px), account for the 80 twip margins on both sides
-          const sideContentPx = Math.floor((twoColWidth - CHART_CELL_MARGIN_TWIPS * 2) * PX_PER_TWIP) - 8;
-          const singleContentPx = Math.floor((oneColWidth - CHART_CELL_MARGIN_TWIPS * 2) * PX_PER_TWIP) - 8;
+          const sideContentPx =
+            Math.floor(
+              (twoColWidth - CHART_CELL_MARGIN_TWIPS * 2) * PX_PER_TWIP,
+            ) - 8;
+          const singleContentPx =
+            Math.floor(
+              (oneColWidth - CHART_CELL_MARGIN_TWIPS * 2) * PX_PER_TWIP,
+            ) - 8;
 
           // Final width we’ll force onto every chart image
-          const chartImgWidthPx = nCharts === 2 ? sideContentPx : Math.min(620, singleContentPx);
+          const chartImgWidthPx =
+            nCharts === 2 ? sideContentPx : Math.min(620, singleContentPx);
 
           // Suggested axis max across whatever we will plot
           const suggestedMax = computeSuggestedMax(
             hasLeftSeries ? leftSeries : [],
             canShowRight ? rightSeries : [],
-            hasSingleSeries ? singleSeries : []
+            hasSingleSeries ? singleSeries : [],
           );
 
           const chartCells = [];
 
           try {
             if (hasSingleSeries) {
-              const img = await createTrialChartBuffer("Trials", singleSeries, suggestedMax);
+              const img = await createTrialChartBuffer(
+                "Trials",
+                singleSeries,
+                suggestedMax,
+              );
               if (img?.buffer) {
                 const trialLabels = singleSeries.map((_, i) => `T${i + 1}`);
-                const trialValues = singleSeries
-                chartCells.push(createTrialChartCell({
-                  title: " ",
-                  chartImage: img,
-                  averageValue: (singleSeries.reduce((a, b) => a + b, 0) / singleSeries.length) || 0,
-                  unitLabel: measurementUnit,
-                  imgWidthPx: chartImgWidthPx,
-                  trialLabels,
-                  trialValues,
-                }));
-              }
-            }
-            else {
-              if (hasLeftSeries) {
-                const img = await createTrialChartBuffer("Left", leftSeries, suggestedMax);
-                if (img?.buffer) {
-                  const trialLabels = leftSeries.map((_, i) => `T${i + 1}`);
-                  const trialValues = leftSeries;
-                  chartCells.push(createTrialChartCell({
-                    title: "Left Side",
+                const trialValues = singleSeries;
+                chartCells.push(
+                  createTrialChartCell({
+                    title: " ",
                     chartImage: img,
-                    averageValue: leftAvg,
+                    averageValue:
+                      singleSeries.reduce((a, b) => a + b, 0) /
+                        singleSeries.length || 0,
                     unitLabel: measurementUnit,
                     imgWidthPx: chartImgWidthPx,
                     trialLabels,
                     trialValues,
-                  }));
+                  }),
+                );
+              }
+            } else {
+              if (hasLeftSeries) {
+                const img = await createTrialChartBuffer(
+                  "Left",
+                  leftSeries,
+                  suggestedMax,
+                );
+                if (img?.buffer) {
+                  const trialLabels = leftSeries.map((_, i) => `T${i + 1}`);
+                  const trialValues = leftSeries;
+                  chartCells.push(
+                    createTrialChartCell({
+                      title: "Left Side",
+                      chartImage: img,
+                      averageValue: leftAvg,
+                      unitLabel: measurementUnit,
+                      imgWidthPx: chartImgWidthPx,
+                      trialLabels,
+                      trialValues,
+                    }),
+                  );
                 }
               }
               if (canShowRight) {
-                const img = await createTrialChartBuffer("Right", rightSeries, suggestedMax);
+                const img = await createTrialChartBuffer(
+                  "Right",
+                  rightSeries,
+                  suggestedMax,
+                );
                 if (img?.buffer) {
                   const trialLabels = rightSeries.map((_, i) => `T${i + 1}`);
                   const trialValues = rightSeries;
 
-                  chartCells.push(createTrialChartCell({
-                    title: "Right Side",
-                    chartImage: img,
-                    averageValue: rightAvg,
-                    unitLabel: measurementUnit,
-                    imgWidthPx: chartImgWidthPx,
-                    trialLabels,
-                    trialValues,
-                  }));
+                  chartCells.push(
+                    createTrialChartCell({
+                      title: "Right Side",
+                      chartImage: img,
+                      averageValue: rightAvg,
+                      unitLabel: measurementUnit,
+                      imgWidthPx: chartImgWidthPx,
+                      trialLabels,
+                      trialValues,
+                    }),
+                  );
                 }
               }
             }
@@ -5953,19 +7106,18 @@ async function addTestDataContent(children, body) {
             // console.error("Chart section error:", e?.message || e);
           }
 
-
-
           // Insert charts into the right column
           if (chartCells.length) {
-            const columnWidths = nCharts === 2 ? [twoColWidth, twoColWidth] : [oneColWidth];
+            const columnWidths =
+              nCharts === 2 ? [twoColWidth, twoColWidth] : [oneColWidth];
             rightCol.push(
               new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
-                layout: TableLayoutType.FIXED,  // important so Word does not auto-resize
+                layout: TableLayoutType.FIXED, // important so Word does not auto-resize
                 borders: noBorders,
                 columnWidths,
                 rows: [new TableRow({ children: chartCells })],
-              })
+              }),
             );
           }
 
@@ -5984,8 +7136,10 @@ async function addTestDataContent(children, body) {
               new Paragraph({
                 alignment: AlignmentType.CENTER,
                 spacing: { before: 80, after: 80 },
-                children: [new TextRun({ text: summaryText, size: 16, color: "374151" })],
-              })
+                children: [
+                  new TextRun({ text: summaryText, size: 16, color: "374151" }),
+                ],
+              }),
             );
           }
           // ==== END CHARTS SECTION ====
@@ -5996,18 +7150,29 @@ async function addTestDataContent(children, body) {
           if (test.effort || test.perceived) {
             rightCol.push(
               new Paragraph({
-                children: [new TextRun({ text: `Rating of Perceived Effort = ${test.perceived || test.effort}`, size: 16, italics: true })],
+                children: [
+                  new TextRun({
+                    text: `Rating of Perceived Effort = ${test.perceived || test.effort}`,
+                    size: 16,
+                    italics: true,
+                  }),
+                ],
                 spacing: { before: 80, after: 80 },
               }),
             );
           }
-          rightCol.push(new Paragraph({
-            children: [
-              new TextRun({ text: "Comments: ", bold: true, size: 16 }),
-              new TextRun({ text: test.comments || "No additional comments provided.", size: 16 }),
-            ],
-            spacing: { before: 200, after: 100 },
-          }));
+          rightCol.push(
+            new Paragraph({
+              children: [
+                new TextRun({ text: "Comments: ", bold: true, size: 16 }),
+                new TextRun({
+                  text: test.comments || "No additional comments provided.",
+                  size: 16,
+                }),
+              ],
+              spacing: { before: 200, after: 100 },
+            }),
+          );
           rightCol.push(...buildReferenceParagraphs(test));
         }
 
@@ -6021,13 +7186,26 @@ async function addTestDataContent(children, body) {
             rows: [
               new TableRow({
                 children: [
-                  new TableCell({ borders: noBorders, children: leftCol, verticalAlign: VerticalAlign.TOP }),
-                  new TableCell({ borders: { left: { style: BorderStyle.SINGLE, size: 8, color: "000000" } }, children: [] }),
+                  new TableCell({
+                    borders: noBorders,
+                    children: leftCol,
+                    verticalAlign: VerticalAlign.TOP,
+                  }),
+                  new TableCell({
+                    borders: {
+                      left: {
+                        style: BorderStyle.SINGLE,
+                        size: 8,
+                        color: "000000",
+                      },
+                    },
+                    children: [],
+                  }),
                   new TableCell({ borders: noBorders, children: rightCol }),
                 ],
               }),
             ],
-          })
+          }),
         );
 
         children.push(new Paragraph({ children: [], spacing: { after: 300 } }));
@@ -6153,8 +7331,8 @@ router.post("/", async (req, res) => {
                     }),
                   ],
                 }),
-              ]
-            })
+              ],
+            }),
           },
           footers: {
             default: new Footer({
@@ -6181,7 +7359,8 @@ router.post("/", async (req, res) => {
       )
       .set(
         "Content-Disposition",
-        `attachment; filename=FCE_Report_${claimantName.replace(/[^a-zA-Z0-9]/g, "_")}_${new Date().toISOString().split("T")[0]
+        `attachment; filename=FCE_Report_${claimantName.replace(/[^a-zA-Z0-9]/g, "_")}_${
+          new Date().toISOString().split("T")[0]
         }.docx`,
       )
       .send(buffer);

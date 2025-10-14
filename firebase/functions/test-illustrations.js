@@ -277,6 +277,30 @@ const map = {
   "dynamic-lift-frequent": [
     { src: `${BASE}/Dynamic_Lift_Mid.jpg`, label: "Dynamic Frequent Lifts" },
   ],
+  "dynamic-infrequent-lift-low": [
+    {
+      src: `${BASE}/Dynamic_Lift_Low.jpg`,
+      label: "Dynamic Infrequent Lift Low",
+    },
+  ],
+  "dynamic-infrequent-lift-mid": [
+    {
+      src: `${BASE}/Dynamic_Lift_Mid.jpg`,
+      label: "Dynamic Infrequent Lift Mid",
+    },
+  ],
+  "dynamic-infrequent-lift-high": [
+    {
+      src: `${BASE}/Dynamic_Lift_High.jpg`,
+      label: "Dynamic Infrequent Lift High",
+    },
+  ],
+  "dynamic-infrequent-lift-overhead": [
+    {
+      src: `${BASE}/Dynamic_Lift_Overhead.jpg`,
+      label: "Dynamic Infrequent Lift Overhead",
+    },
+  ],
 
   // ROM - Total Spine
   "cervical-spine-flexion-extension": [
@@ -552,7 +576,7 @@ const map = {
   ],
 
   // Occupational (MTM)
-  "fingering": [
+  fingering: [
     { src: `${BASE}/MTM_Test_Battery_Fingering.jpg`, label: "Fingering" },
   ],
   "bi-manual-fingering": [
@@ -561,7 +585,7 @@ const map = {
       label: "Bi-manual Fingering",
     },
   ],
-  "handling": [
+  handling: [
     { src: `${BASE}/MTM_Test_Battery_Handling.jpg`, label: "Handling" },
   ],
   "bi-manual-handling": [
@@ -588,22 +612,22 @@ const map = {
       label: "Reach With Weight",
     },
   ],
-  "stoop": [{ src: `${BASE}/MTM_Test_Battery_Stoop.jpg`, label: "Stoop" }],
-  "walk": [{ src: `${BASE}/MTM_Test_Battery_Walk.jpg`, label: "Walk" }],
+  stoop: [{ src: `${BASE}/MTM_Test_Battery_Stoop.jpg`, label: "Stoop" }],
+  walk: [{ src: `${BASE}/MTM_Test_Battery_Walk.jpg`, label: "Walk" }],
   "push-pull-cart": [
     {
       src: `${BASE}/MTM_Test_Battery_Push_Pull_Cart.jpg`,
       label: "Push/Pull Cart",
     },
   ],
-  "crouch": [{ src: `${BASE}/MTM_Test_Battery_Crouch.jpg`, label: "Crouch" }],
-  "carry": [{ src: `${BASE}/MTM_Test_Battery_Carry.jpg`, label: "Carry" }],
-  "crawl": [{ src: `${BASE}/MTM_Test_Battery_Crawl.jpg`, label: "Crawl" }],
+  crouch: [{ src: `${BASE}/MTM_Test_Battery_Crouch.jpg`, label: "Crouch" }],
+  carry: [{ src: `${BASE}/MTM_Test_Battery_Carry.jpg`, label: "Carry" }],
+  crawl: [{ src: `${BASE}/MTM_Test_Battery_Crawl.jpg`, label: "Crawl" }],
   "climb-stairs": [
     { src: `${BASE}/MTM_Test_Battery_Climb_Stairs.jpg`, label: "Climb Stairs" },
   ],
-  "balance": [{ src: `${BASE}/MTM_Test_Battery_Balance.jpg`, label: "Balance" }],
-  "kneel": [{ src: `${BASE}/MTM_Test_Battery_Kneel.jpg`, label: "Kneel" }],
+  balance: [{ src: `${BASE}/MTM_Test_Battery_Balance.jpg`, label: "Balance" }],
+  kneel: [{ src: `${BASE}/MTM_Test_Battery_Kneel.jpg`, label: "Kneel" }],
   "climb-ladder": [
     { src: `${BASE}/MTM_Test_Battery_Climb_Ladder.jpg`, label: "Climb Ladder" },
   ],
@@ -658,6 +682,14 @@ export function getSampleIllustrations(testIdOrName) {
     if (idKey.includes("low")) return map["static-lift-low"];
   }
 
+  if (idKey.includes("dynamic-infrequent-lift")) {
+    if (idKey.includes("overhead"))
+      return map["dynamic-infrequent-lift-overhead"];
+    if (idKey.includes("high")) return map["dynamic-infrequent-lift-high"];
+    if (idKey.includes("mid")) return map["dynamic-infrequent-lift-mid"];
+    if (idKey.includes("low")) return map["dynamic-infrequent-lift-low"];
+  }
+
   if (idKey.includes("dynamic-lift")) {
     if (idKey.includes("overhead")) return map["dynamic-lift-overhead"];
     if (idKey.includes("high")) return map["dynamic-lift-high"];
@@ -688,52 +720,45 @@ export function getSampleIllustrations(testIdOrName) {
     return map["hand-strength-mve"] || [];
   }
   // Cardio first
-  if (idKey.includes("bruce") || idKey.includes("treadmill")) return map["bruce-treadmill-test"] || [];
+  if (idKey.includes("bruce") || idKey.includes("treadmill"))
+    return map["bruce-treadmill-test"] || [];
   if (idKey.includes("mcaft")) return map["mcaft-step-test"] || [];
   if (idKey.includes("kasch")) return map["kasch-step-test"] || [];
-  if (idKey.includes("step") || idKey.includes("cardio") || idKey.includes("cardiovascular")) {
+  if (
+    idKey.includes("step") ||
+    idKey.includes("cardio") ||
+    idKey.includes("cardiovascular")
+  ) {
     return map["mcaft-step-test"] || [];
   }
-
 
   // --- MTM / Occupational Tests ---
   if (idKey.includes("mtm") || idKey.includes("occupational")) {
     if (idKey.includes("fingering") && idKey.includes("bi"))
       return map["bi-manual-fingering"];
-    if (idKey.includes("fingering"))
-      return map["fingering"];
+    if (idKey.includes("fingering")) return map["fingering"];
     if (idKey.includes("handling") && idKey.includes("bi"))
       return map["bi-manual-handling"];
-    if (idKey.includes("handling"))
-      return map["handling"];
+    if (idKey.includes("handling")) return map["handling"];
     if (idKey.includes("reach") && idKey.includes("overhead"))
       return map["reach-overhead"];
     if (idKey.includes("reach") && idKey.includes("weight"))
       return map["reach-with-weight"];
-    if (idKey.includes("reach"))
-      return map["reach-immediate"];
-    if (idKey.includes("walk"))
-      return map["walk"];
-    if (idKey.includes("stoop"))
-      return map["stoop"];
+    if (idKey.includes("reach")) return map["reach-immediate"];
+    if (idKey.includes("walk")) return map["walk"];
+    if (idKey.includes("stoop")) return map["stoop"];
     if (idKey.includes("push") || idKey.includes("pull"))
       return map["push-pull-cart"];
-    if (idKey.includes("carry"))
-      return map["carry"];
-    if (idKey.includes("crouch"))
-      return map["crouch"];
-    if (idKey.includes("crawl"))
-      return map["crawl"];
+    if (idKey.includes("carry")) return map["carry"];
+    if (idKey.includes("crouch")) return map["crouch"];
+    if (idKey.includes("crawl")) return map["crawl"];
     if (idKey.includes("climb") && idKey.includes("stairs"))
       return map["climb-stairs"];
     if (idKey.includes("climb") && idKey.includes("ladder"))
       return map["climb-ladder"];
-    if (idKey.includes("kneel"))
-      return map["kneel"];
-    if (idKey.includes("balance"))
-      return map["balance"];
+    if (idKey.includes("kneel")) return map["kneel"];
+    if (idKey.includes("balance")) return map["balance"];
   }
-
 
   return [];
 }

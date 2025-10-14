@@ -294,14 +294,23 @@ const testGroups = {
       ],
     },
     {
-      name: "Dynamic Lift",
+      name: "Dynamic Frequent Lift",
       id: "dynamic-lift",
       tests: [
         { id: "dynamic-lift-low", name: "Low" },
         { id: "dynamic-lift-mid", name: "Mid" },
         { id: "dynamic-lift-high", name: "High" },
         { id: "dynamic-lift-overhead", name: "Overhead" },
-        { id: "dynamic-lift-frequent", name: "Dynamic Frequent Lifts" },
+      ],
+    },
+    {
+      name: "Dynamic Infrequent Lift",
+      id: "dynamic-infrequent-lift",
+      tests: [
+        { id: "dynamic-infrequent-lift-low", name: "Low" },
+        { id: "dynamic-infrequent-lift-mid", name: "Mid" },
+        { id: "dynamic-infrequent-lift-high", name: "High" },
+        { id: "dynamic-infrequent-lift-overhead", name: "Overhead" },
       ],
     },
   ],
@@ -614,6 +623,7 @@ export default function ProtocolTests() {
       const cleanedSelectedTests = savedData.selectedTests
         .filter((testId: string) => !testId.includes("mcafi")) // Remove old mcafi tests
         .filter((testId: string) => testId !== "cervical-anterior-obliques")
+        .filter((testId: string) => testId !== "dynamic-lift-frequent")
         .map((testId: string) => {
           // This shouldn't be needed since we're filtering above, but just in case
           return testId.replace("mcafi", "mcaft");
