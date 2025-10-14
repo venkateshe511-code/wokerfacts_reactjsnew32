@@ -364,6 +364,38 @@ export default function ReviewReport() {
     );
   };
 
+  const resolveDynamicEndpointLabel = (test: any): string | null => {
+    const rawEndpoint = String(
+      (test as any)?.dynamicEndpointType ??
+        (test as any)?.parameters?.dynamicEndpointType ??
+        "",
+    ).trim();
+
+    if (!rawEndpoint) {
+      return null;
+    }
+
+    const key = rawEndpoint.toLowerCase();
+    const map: Record<string, string> = {
+      biomechanical: "Biomechanical",
+      physiological: "Physiological",
+      psychophysical: "Psychophysical",
+      "task-requirement": "Task Requirement",
+    };
+
+    if (map[key]) {
+      return map[key];
+    }
+
+    return key
+      .split(/[-_]/)
+      .filter(Boolean)
+      .map(
+        (segment) => segment.charAt(0).toUpperCase() + segment.slice(1),
+      )
+      .join(" ");
+  };
+
   const getPhysicalDemandLevel = (activities: any[]): string => {
     if (!activities || activities.length === 0) return "Not Assessed";
 
@@ -3469,6 +3501,10 @@ export default function ReviewReport() {
                           testName.includes("bruce") ||
                           testName.includes("cardiovascular") ||
                           testName.includes("aerobic");
+                        const endpointConditionLabel =
+                          resolveDynamicEndpointLabel(test);
+                        const isDynamicLift =
+                          isLiftTest && testName.includes("dynamic");
 
                         return (
                           <div
@@ -3739,28 +3775,15 @@ export default function ReviewReport() {
                                             </table>
                                           );
                                         })()}
-                                        {(() => {
-                                          const map: any = {
-                                            biomechanical: "Biomechanical",
-                                            physiological: "Physiological",
-                                            psychophysical: "Psychophysical",
-                                            "task-requirement":
-                                              "Task Requirement",
-                                          };
-                                          const key = String(
-                                            (test as any).dynamicEndpointType ||
-                                              "",
-                                          ).toLowerCase();
-                                          return testName.includes("dynamic") &&
-                                            map[key] ? (
-                                            <div className="text-xs mb-2">
-                                              <span className="font-semibold">
-                                                Endpoint:
-                                              </span>{" "}
-                                              {map[key]}
-                                            </div>
-                                          ) : null;
-                                        })()}
+                                        {isDynamicLift &&
+                                        endpointConditionLabel ? (
+                                          <div className="text-xs mb-2">
+                                            <span className="font-semibold">
+                                              Endpoint Condition:
+                                            </span>{" "}
+                                            {endpointConditionLabel}
+                                          </div>
+                                        ) : null}
                                       </div>
                                     ) : isCardioTest ? (
                                       // Cardio Test Results
@@ -5274,12 +5297,17 @@ export default function ReviewReport() {
                                           <p className="text-sm">
                                             Limited by pain/discomfort
                                           </p>
-                                          <p className="text-sm font-semibold mt-2">
-                                            Endpoint Condition:
-                                          </p>
-                                          <p className="text-sm">
-                                            Psychophysical
-                                          </p>
+                                          {isDynamicLift &&
+                                          endpointConditionLabel ? (
+                                            <>
+                                              <p className="text-sm font-semibold mt-2">
+                                                Endpoint Condition:
+                                              </p>
+                                              <p className="text-sm">
+                                                {endpointConditionLabel}
+                                              </p>
+                                            </>
+                                          ) : null}
                                         </div>
                                       )}
                                   </div>
