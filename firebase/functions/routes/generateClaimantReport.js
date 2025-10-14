@@ -287,7 +287,6 @@ function createSideTrialTable(test, measurementUnit) {
           return makeCell(txt);
         }),
         makeCell(leftAvgNum != null ? `${leftAvgNum.toFixed(1)} ${unit}` : "-", {
-          bold: true,
         }),
       ],
     })
@@ -304,7 +303,6 @@ function createSideTrialTable(test, measurementUnit) {
           return makeCell(txt);
         }),
         makeCell(rightAvgNum != null ? `${rightAvgNum.toFixed(1)} ${unit}` : "-", {
-          bold: true,
         }),
       ],
     })
@@ -832,7 +830,7 @@ function appendHeartRateLine(children, test) {
     new Paragraph({
       children: [
         new TextRun({ text: "Heart Rate:", bold: true, size: 16 }),
-        new TextRun({ text: " " + parts.join("   ") }),
+        new TextRun({ text: " " + parts.join("   "), size: 16 }),
       ],
       spacing: { before: 80, after: 80 },
     }),
@@ -869,7 +867,7 @@ function addBruceDocxContent(children, test) {
         new TextRun({
           text:
             "The Bruce protocol involves getting on a treadmill and increasing speed and incline every three minutes (in stages). The test stops when you've hit 85% of your maximum heart rate, your heart rate exceeds 115 beats per minute for two stages, or the test is otherwise terminated.",
-          size: 18,
+          size: 16,
         }),
       ],
       spacing: { after: 120 },
@@ -878,7 +876,7 @@ function addBruceDocxContent(children, test) {
 
   // VO2 max explanation
   children.push(
-    new Paragraph({ children: [new TextRun({ text: "Measuring VO2 Max:", bold: true })] }),
+    new Paragraph({ children: [new TextRun({ text: "Measuring VO2 Max:", bold: true,size:16 })] }),
   );
   children.push(
     new Paragraph({
@@ -886,7 +884,7 @@ function addBruceDocxContent(children, test) {
         new TextRun({
           text:
             "VO2 max refers to the maximum amount of oxygen an individual can use during intense exercise (ml/kg/min). The Bruce test estimates VO2 max from total treadmill time (T, in minutes).",
-          size: 18,
+          size: 16,
         }),
       ],
       spacing: { after: 80 },
@@ -895,14 +893,14 @@ function addBruceDocxContent(children, test) {
   children.push(
     new Paragraph({
       children: [
-        new TextRun({ text: "Men: ", bold: true }),
-        new TextRun({ text: "14.8 - (1.379 × T) + (0.451 × T²) - (0.012 × T³)" }),
+        new TextRun({ text: "Men: ", bold: true,size:16 }),
+        new TextRun({ text: "14.8 - (1.379 × T) + (0.451 × T²) - (0.012 × T³)",size:16 }),
       ],
     }),
   );
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: "Women: ", bold: true }), new TextRun({ text: "4.38 × T - 3.9" })],
+      children: [new TextRun({ text: "Women: ", bold: true,size:16 }), new TextRun({ text: "4.38 × T - 3.9",size:16 })],
       spacing: { after: 160 },
     }),
   );
@@ -918,7 +916,7 @@ function addBruceDocxContent(children, test) {
     ["7", "6.0 mph", "22% grade"],
   ];
   children.push(
-    new Paragraph({ children: [new TextRun({ text: "Bruce Treadmill Test Stages, Speeds, and Inclines:", bold: true })], spacing: { after: 80 } }),
+    new Paragraph({ children: [new TextRun({ text: "Bruce Treadmill Test Stages, Speeds, and Inclines:", bold: true ,size:16})], spacing: { after: 80 } }),
   );
   children.push(
     new Table({
@@ -933,7 +931,7 @@ function addBruceDocxContent(children, test) {
               children: r.map(
                 (c) =>
                   new TableCell({
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c })] })],
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c,size:16 })] })],
                     verticalAlign: VerticalAlign.CENTER,
                   }),
               ),
@@ -956,11 +954,11 @@ function addBruceDocxContent(children, test) {
     new Paragraph({
       spacing: { before: 160, after: 80 },
       children: [
-        new TextRun({ text: "CLASSIFICATION: ", bold: true }),
-        new TextRun({ text: (test.classification || "").toString(), underline: {} }),
+        new TextRun({ text: "CLASSIFICATION: ", bold: true,size:16 }),
+        new TextRun({ text: (test.classification || "").toString(), underline: {} ,size:16}),
         new TextRun({ text: "    " }),
-        new TextRun({ text: "VO2 MAX: ", bold: true }),
-        new TextRun({ text: (test.vo2Max || "").toString(), underline: {} }),
+        new TextRun({ text: "VO2 MAX: ", bold: true,size:16 }),
+        new TextRun({ text: (test.vo2Max || "").toString(), underline: {} ,size:16}),
       ],
     }),
   );
@@ -968,7 +966,7 @@ function addBruceDocxContent(children, test) {
   // VO2 Max Norms for Men
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: "VO2 Max Norms for Men as Measured in ml/kg/min", bold: true })],
+      children: [new TextRun({ text: "VO2 Max Norms for Men as Measured in ml/kg/min", bold: true ,size:16})],
       spacing: { before: 160, after: 80 },
     }),
   );
@@ -998,7 +996,7 @@ function addBruceDocxContent(children, test) {
         }),
         ...menNorms.map((r) => new TableRow({
           children: r.map((c) => new TableCell({
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c })] })],
+            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c ,size:16})] })],
             verticalAlign: VerticalAlign.CENTER,
           }))
         })),
@@ -1017,7 +1015,7 @@ function addBruceDocxContent(children, test) {
   // VO2 Max Norms for Women
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: "VO2 Max Norms for Women as Measured in ml/kg/min", bold: true })],
+      children: [new TextRun({ text: "VO2 Max Norms for Women as Measured in ml/kg/min", bold: true,size:16 })],
       spacing: { before: 160, after: 80 },
     }),
   );
@@ -1073,7 +1071,7 @@ function addMCAFTDocxContent(children, test) {
         new TextRun({
           text:
             "mCAFT estimates aerobic fitness with a step test at age/gender-based cadences. VO2 max is predicted using the O2 cost of the last completed stage, body mass, and age.",
-          size: 18,
+          size: 16,
         }),
       ],
       spacing: { after: 120 },
@@ -1081,7 +1079,7 @@ function addMCAFTDocxContent(children, test) {
   );
 
   // Starting stage table
-  children.push(new Paragraph({ children: [new TextRun({ text: "Starting stepping stage by gender", bold: true })], spacing: { after: 80 } }));
+  children.push(new Paragraph({ children: [new TextRun({ text: "Starting stepping stage by gender", bold: true,size:16 })], spacing: { after: 80 } }));
   children.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1100,7 +1098,7 @@ function addMCAFTDocxContent(children, test) {
               children: r.map(
                 (c) =>
                   new TableCell({
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c })] })],
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c,size:16 })] })],
                     verticalAlign: VerticalAlign.CENTER,
                   }),
               ),
@@ -1119,7 +1117,7 @@ function addMCAFTDocxContent(children, test) {
   );
 
   // Oxygen cost table
-  children.push(new Paragraph({ children: [new TextRun({ text: "Oxygen cost in ml/kg/min", bold: true })], spacing: { before: 160, after: 80 } }));
+  children.push(new Paragraph({ children: [new TextRun({ text: "Oxygen cost in ml/kg/min", bold: true,size:16 })], spacing: { before: 160, after: 80 } }));
   children.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1145,7 +1143,7 @@ function addMCAFTDocxContent(children, test) {
               children: r.map(
                 (c) =>
                   new TableCell({
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c })] })],
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c ,size:16})] })],
                     verticalAlign: VerticalAlign.CENTER,
                   }),
               ),
@@ -1183,12 +1181,12 @@ function addMCAFTDocxContent(children, test) {
     new Paragraph({
       spacing: { after: 120 },
       children: [
-        new TextRun({ text: "Predicted VO2 max: ", bold: true }),
-        new TextRun({ text: (test.predictedVo2Max || "").toString(), underline: {} }),
-        new TextRun({ text: " (ml/kg/min)" }),
+        new TextRun({ text: "Predicted VO2 max: ", bold: true,size:16 }),
+        new TextRun({ text: (test.predictedVo2Max || "").toString(), underline: {} ,size:16}),
+        new TextRun({ text: " (ml/kg/min)",size:16 }),
         new TextRun({ text: "    " }),
-        new TextRun({ text: "HBR: ", bold: true }),
-        new TextRun({ text: (test.hbr || "").toString(), underline: {} }),
+        new TextRun({ text: "HBR: ", bold: true,size:16 }),
+        new TextRun({ text: (test.hbr || "").toString(), underline: {} ,size:16}),
       ],
     }),
   );
@@ -1203,7 +1201,7 @@ function addKaschDocxContent(children, test) {
         new TextRun({
           text:
             "Kasch Pulse Recovery Test (KPR Test) is a 3-minute step test used to assess cardiorespiratory fitness. Participants step up and down on a 12-inch (0.305 m) step at 24 steps per minute for three minutes, followed by one-minute seated heart rate recovery.",
-          size: 18,
+          size: 16,
         }),
       ],
       spacing: { after: 120 },
@@ -1524,8 +1522,12 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
         // Time Set Completed (total)
         new TableCell({
           shading: { type: ShadingType.CLEAR, fill: AVG_ROW_FILL },
-          borders: { right: border },
-          children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(Number.isFinite(sumTime) ? format1(sumTime) : "")] })],
+          borders: { right: border }, borders: {
+            top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+            bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+            left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+            right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+          }, children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun(Number.isFinite(sumTime) ? format1(sumTime) : "")] })],
         }),
       ],
     })
@@ -1926,20 +1928,20 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
   // Hand grip MVE
   const gripMVEValid = gripTests.length
     ? gripTests.every((test) => {
-        const leftAvg = _calcAverage(test.leftMeasurements);
-        const rightAvg = _calcAverage(test.rightMeasurements);
-        const bilateralDiff = _bilateralDeficiency(leftAvg, rightAvg);
-        return bilateralDiff <= 20;
-      })
+      const leftAvg = _calcAverage(test.leftMeasurements);
+      const rightAvg = _calcAverage(test.rightMeasurements);
+      const bilateralDiff = _bilateralDeficiency(leftAvg, rightAvg);
+      return bilateralDiff <= 20;
+    })
     : null;
 
   // Pinch grip CV
   const pinchValid = pinchTests.length
     ? pinchTests.every((test) => {
-        const leftCV = _calcCV(test.leftMeasurements);
-        const rightCV = _calcCV(test.rightMeasurements);
-        return leftCV <= 15 && rightCV <= 15;
-      })
+      const leftCV = _calcCV(test.leftMeasurements);
+      const rightCV = _calcCV(test.rightMeasurements);
+      return leftCV <= 15 && rightCV <= 15;
+    })
     : null;
 
   // Dynamic lift HR fluctuation
@@ -1950,30 +1952,30 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
 
   const hrConsistent = dynamicLifts.length
     ? dynamicLifts.some((test) => {
-        const preHR = (test.leftMeasurements && Number(test.leftMeasurements.preHeartRate)) || (test.rightMeasurements && Number(test.rightMeasurements.preHeartRate)) || 0;
-        const postHR = (test.leftMeasurements && Number(test.leftMeasurements.postHeartRate)) || (test.rightMeasurements && Number(test.rightMeasurements.postHeartRate)) || 0;
-        return postHR > preHR;
-      })
+      const preHR = (test.leftMeasurements && Number(test.leftMeasurements.preHeartRate)) || (test.rightMeasurements && Number(test.rightMeasurements.preHeartRate)) || 0;
+      const postHR = (test.leftMeasurements && Number(test.leftMeasurements.postHeartRate)) || (test.rightMeasurements && Number(test.rightMeasurements.postHeartRate)) || 0;
+      return postHR > preHR;
+    })
     : null;
 
   // ROM consistency
   const romValid = romTests.length
     ? romTests.every((test) => {
-        const leftTrials = _getTrialValues(test.leftMeasurements);
-        const rightTrials = _getTrialValues(test.rightMeasurements);
-        const all = [...leftTrials, ...rightTrials].filter((v) => Number.isFinite(v));
-        if (all.length < 6) return false;
+      const leftTrials = _getTrialValues(test.leftMeasurements);
+      const rightTrials = _getTrialValues(test.rightMeasurements);
+      const all = [...leftTrials, ...rightTrials].filter((v) => Number.isFinite(v));
+      if (all.length < 6) return false;
 
-        for (let i = 0; i <= all.length - 3; i++) {
-          const t1 = all[i], t2 = all[i + 1], t3 = all[i + 2];
-          const maxDiff = Math.max(Math.abs(t1 - t2), Math.abs(t2 - t3), Math.abs(t1 - t3));
-          const avg = (t1 + t2 + t3) / 3;
-          const denom = avg === 0 ? 1 : avg;
-          const maxPerc = Math.max(Math.abs(t1 - avg) / denom * 100, Math.abs(t2 - avg) / denom * 100, Math.abs(t3 - avg) / denom * 100);
-          if (maxDiff <= 5 && maxPerc <= 10) return true;
-        }
-        return false;
-      })
+      for (let i = 0; i <= all.length - 3; i++) {
+        const t1 = all[i], t2 = all[i + 1], t3 = all[i + 2];
+        const maxDiff = Math.max(Math.abs(t1 - t2), Math.abs(t2 - t3), Math.abs(t1 - t3));
+        const avg = (t1 + t2 + t3) / 3;
+        const denom = avg === 0 ? 1 : avg;
+        const maxPerc = Math.max(Math.abs(t1 - avg) / denom * 100, Math.abs(t2 - avg) / denom * 100, Math.abs(t3 - avg) / denom * 100);
+        if (maxDiff <= 5 && maxPerc <= 10) return true;
+      }
+      return false;
+    })
     : null;
 
   // Test/retest trial consistency
@@ -2004,12 +2006,12 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
   // Dominant side monitoring
   const dominantSideValid = allTests.length
     ? allTests.every((test) => {
-        const l = _calcAverage(test.leftMeasurements);
-        const r = _calcAverage(test.rightMeasurements);
-        if (Math.min(l, r) === 0) return true; // avoid divide-by-zero
-        const ratio = Math.max(l, r) / Math.min(l, r);
-        return ratio <= 1.1; // ~10%
-      })
+      const l = _calcAverage(test.leftMeasurements);
+      const r = _calcAverage(test.rightMeasurements);
+      if (Math.min(l, r) === 0) return true; // avoid divide-by-zero
+      const ratio = Math.max(l, r) / Math.min(l, r);
+      return ratio <= 1.1; // ~10%
+    })
     : null;
 
   // Distraction test (6b) and diagnosis consistency (6c)
@@ -2108,6 +2110,8 @@ function computeCrosschecksFromUnifiedTests(unifiedTests, referralQuestionsData)
 function buildConsistentCrosschecksTable(crosschecks) {
   const headerCell = (text) =>
     new TableCell({
+      margins: { top: 100, bottom: 100, left: 150, right: 150 },
+
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
@@ -2135,13 +2139,23 @@ function buildConsistentCrosschecksTable(crosschecks) {
     ...crosschecks.map((ch) =>
       new TableRow({
         children: [
-          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: ch.name })] })] }),
-          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: ch.description })] })] }),
           new TableCell({
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, true) })] })],
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+            children: [new Paragraph({ children: [new TextRun({ text: ch.name,size:16 })] })]
           }),
           new TableCell({
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, false) })] })],
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+            children: [new Paragraph({ children: [new TextRun({ text: ch.description ,size:16})] })]
+          }),
+          new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+
+            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, true),size:16 })] })],
+          }),
+          new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+
+            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, false),size:16 })] })],
           }),
         ],
       })
@@ -3257,8 +3271,7 @@ async function addReferenceChartsContent(children) {
         new TextRun({
           text: "*Borg G. Borg's Perceived Exertion and Pain Scales. Human Kinetics. 1998.",
           bold: true,
-          color: BRAND_COLOR,
-          size: 16,
+          size: 14,
         }),
       ],
     })
@@ -4932,6 +4945,8 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
         tableHeader: true,
         children: [
           new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+
             children: [
               new Paragraph({
                 alignment: AlignmentType.CENTER,
@@ -4946,6 +4961,8 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
             shading: { fill: "FFFF99" },
           }),
           new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+
             children: [
               new Paragraph({
                 alignment: AlignmentType.CENTER,
@@ -4967,60 +4984,80 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
       new TableRow({
         children: [
           new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
             children: [
               new Paragraph({
-                text: "Poor effort",
+                children: [new TextRun({ text: "Poor effort", size: 16 })], // 16pt = 32 half-points
               }),
             ],
           }),
           new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
             children: [
               new Paragraph({
-                text: `${effortCounts.poor} out of ${totalTests} Tests`,
                 alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: `${effortCounts.poor} out of ${totalTests} Tests`,
+                    size: 16,
+                  }),
+                ],
               }),
             ],
           }),
         ],
       }),
       new TableRow({
+        margins: { top: 100, bottom: 100, left: 150, right: 150 },
         children: [
           new TableCell({
             children: [
               new Paragraph({
-                text: "Fair to Average effort",
+                children: [new TextRun({ text: "Fair to Average effort", size: 16 })],
               }),
             ],
           }),
           new TableCell({
             children: [
               new Paragraph({
-                text: `${effortCounts.fair} out of ${totalTests} Tests`,
                 alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: `${effortCounts.fair} out of ${totalTests} Tests`,
+                    size: 16,
+                  }),
+                ],
               }),
             ],
           }),
         ],
       }),
       new TableRow({
+        margins: { top: 100, bottom: 100, left: 150, right: 150 },
         children: [
           new TableCell({
             children: [
               new Paragraph({
-                text: "Good effort",
+                children: [new TextRun({ text: "Good effort", size: 16 })],
               }),
             ],
           }),
           new TableCell({
             children: [
               new Paragraph({
-                text: `${effortCounts.good} out of ${totalTests} Tests`,
                 alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: `${effortCounts.good} out of ${totalTests} Tests`,
+                    size: 16,
+                  }),
+                ],
               }),
             ],
           }),
         ],
       }),
+
     ],
   });
 
@@ -5366,7 +5403,7 @@ async function addTestDataContent(children, body) {
                       children: [
                         new Paragraph({
                           alignment: AlignmentType.CENTER,
-                          children: [new TextRun(`${Math.max(leftAvg, rightAvg).toFixed(0)} deg`)],
+                          children: [new TextRun({ text: `${Math.max(leftAvg, rightAvg).toFixed(0)} deg`, size: 16 })],
                         }),
                       ],
                     }),
@@ -5384,7 +5421,7 @@ async function addTestDataContent(children, body) {
                       children: [
                         new Paragraph({
                           alignment: AlignmentType.CENTER,
-                          children: [new TextRun(`${romNorm} deg`)],
+                          children: [new TextRun({ text: `${romNorm} deg`, size: 16 })],
                         }),
                       ],
                     }),
@@ -5393,7 +5430,7 @@ async function addTestDataContent(children, body) {
                       children: [
                         new Paragraph({
                           alignment: AlignmentType.CENTER,
-                          children: [new TextRun(`${Math.round((Math.max(leftAvg, rightAvg) / romNorm) * 100)}%`)],
+                          children: [new TextRun({ text: `${Math.round((Math.max(leftAvg, rightAvg) / romNorm) * 100)}%`, size: 16 })],
                         }),
                       ],
                     }),
@@ -5499,7 +5536,7 @@ async function addTestDataContent(children, body) {
                       children: [
                         new Paragraph({
                           alignment: AlignmentType.CENTER,
-                          children: [new TextRun(`${leftAvg.toFixed(1)} | ${rightAvg.toFixed(1)}`)],
+                          children: [new TextRun({ text: `${leftAvg.toFixed(1)} | ${rightAvg.toFixed(1)}`, size: 16 })],
                         }),
                       ],
                     }),
@@ -5508,7 +5545,7 @@ async function addTestDataContent(children, body) {
                       children: [
                         new Paragraph({
                           alignment: AlignmentType.CENTER,
-                          children: [new TextRun(isGripTest ? "110.5 | 120.8" : "85.0 | 90.0")],
+                          children: [new TextRun({ text: isGripTest ? "110.5 | 120.8" : "85.0 | 90.0", size: 16 })],
                         }),
                       ],
                     }),
@@ -5519,7 +5556,7 @@ async function addTestDataContent(children, body) {
                           alignment: AlignmentType.CENTER,
                           children: [
                             new TextRun(
-                              `${Math.round((leftAvg / (isGripTest ? 110.5 : 85)) * 100)}% | ${Math.round((rightAvg / (isGripTest ? 120.8 : 90)) * 100)}%`
+                              { text: `${Math.round((leftAvg / (isGripTest ? 110.5 : 85)) * 100)}% | ${Math.round((rightAvg / (isGripTest ? 120.8 : 90)) * 100)}%`, size: 16 }
                             ),
                           ],
                         }),
@@ -5530,7 +5567,7 @@ async function addTestDataContent(children, body) {
                       children: [
                         new Paragraph({
                           alignment: AlignmentType.CENTER,
-                          children: [new TextRun(`${leftCV}% | ${rightCV}%`)],
+                          children: [new TextRun({ text: `${leftCV}% | ${rightCV}%`, size: 16 })],
                         }),
                       ],
                     }),
@@ -5539,7 +5576,7 @@ async function addTestDataContent(children, body) {
                       children: [
                         new Paragraph({
                           alignment: AlignmentType.CENTER,
-                          children: [new TextRun(`${bilateralDef.toFixed(1)}%`)],
+                          children: [new TextRun({ text: `${bilateralDef.toFixed(1)}%`, size: 16 })],
                         }),
                       ],
                     }),

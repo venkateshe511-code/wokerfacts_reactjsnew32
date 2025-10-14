@@ -610,13 +610,13 @@ const map = {
 
   // Cardio (swapped per request)
   "mcaft-step-test": [
-    { src: `${BASE}/Bruce_Treadmill_Illustration.jpg`, label: "mCAFT Step" },
+    { src: `${BASE}/bruce_treadmill_illustration.jpg`, label: "mCAFT Step" },
   ],
   "kasch-step-test": [
-    { src: `${BASE}/Kasch_Step_Illustration.jpg`, label: "Kasch Step" },
+    { src: `${BASE}/kasch_step_illustration.jpg`, label: "Kasch Step" },
   ],
   "bruce-treadmill-test": [
-    { src: `${BASE}/Mcaft_Step_Illustration.jpg`, label: "Bruce Treadmill" },
+    { src: `${BASE}/mcaft_step_illustration.jpg`, label: "Bruce Treadmill" },
   ],
 };
 
