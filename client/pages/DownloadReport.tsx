@@ -2584,7 +2584,7 @@ export default function DownloadReport() {
                       if (testNameLower.includes("extension")) {
                         return {
                           requirement:
-                            "Lumbar extension ��20° for postural activities",
+                            "Lumbar extension ≥20° for postural activities",
                           norm: 20, // degrees
                           functionalMin: 15,
                           unit: "degrees",
