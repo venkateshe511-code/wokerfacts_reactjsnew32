@@ -223,9 +223,7 @@ const mtmTestConfigs: Record<string, MTMTestConfig> = {
 
 const normalizeWeightUnit = (unit?: string): string => {
   const normalized = (unit || "").toLowerCase();
-  return ["lbs", "kg", "oz", "g"].includes(normalized)
-    ? normalized
-    : "lbs";
+  return ["lbs", "kg", "oz", "g"].includes(normalized) ? normalized : "lbs";
 };
 
 // List of occupational test IDs
@@ -1829,7 +1827,8 @@ export default function TestData() {
                           Value ({liftUnit})
                         </div>
                         {[1, 2, 3, 4, 5, 6].map((trialNum) => {
-                          const key = `trial${trialNum}` as keyof TestMeasurement;
+                          const key =
+                            `trial${trialNum}` as keyof TestMeasurement;
                           const val = currentTest.leftMeasurements[key];
                           return (
                             <div key={trialNum} className="flex flex-col">

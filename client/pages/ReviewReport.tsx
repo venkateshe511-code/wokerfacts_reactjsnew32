@@ -390,9 +390,7 @@ export default function ReviewReport() {
     return key
       .split(/[-_]/)
       .filter(Boolean)
-      .map(
-        (segment) => segment.charAt(0).toUpperCase() + segment.slice(1),
-      )
+      .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
       .join(" ");
   };
 
