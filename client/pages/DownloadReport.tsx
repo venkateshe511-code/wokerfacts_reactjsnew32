@@ -4233,38 +4233,6 @@ export default function DownloadReport() {
                                             </tr>
                                         </tbody>
                                     </table>
-                                    ${(() => {
-                                      const rawEndpoint = String(
-                                        (test as any).dynamicEndpointType ||
-                                          (test as any).parameters?.dynamicEndpointType ||
-                                          "",
-                                      ).trim();
-                                      if (!rawEndpoint) {
-                                        return "";
-                                      }
-                                      if (
-                                        !(test.testName || "")
-                                          .toLowerCase()
-                                          .includes("dynamic")
-                                      ) {
-                                        return "";
-                                      }
-                                      const key = rawEndpoint.toLowerCase();
-                                      const map: Record<string, string> = {
-                                        biomechanical: "Biomechanical",
-                                        physiological: "Physiological",
-                                        psychophysical: "Psychophysical",
-                                        "task-requirement": "Task Requirement",
-                                      };
-                                      const fallback = key
-                                        .replace(/-/g, " ")
-                                        .replace(/_/g, " ")
-                                        .replace(/\b\w/g, (char) =>
-                                          char.toUpperCase(),
-                                        );
-                                      const label = map[key] || fallback;
-                                      return `<p style="font-size: 11px; margin: 6px 0 8px 0;"><strong>Endpoint Condition:</strong> ${label}</p>`;
-                                    })()}
                                 `
                                     : ""
                                 }
