@@ -4352,13 +4352,28 @@ export default function DownloadReport() {
                                               useSingleMeasurementSet ||
                                               hasLeftTrials ||
                                               hasRightTrials;
-                                            const liftTrialsAvailable =
-                                              isLiftTest &&
-                                              Object.keys(primaryMeasurements).some((key) =>
-                                                key.startsWith("trial"),
-                                              );
+                                            const liftTrialSource = (() => {
+                                              if (!isLiftTest) {
+                                                return null;
+                                              }
+                                              const leftCount = leftTrialValues.length;
+                                              const rightCount = rightTrialValues.length;
+                                              if (leftCount === 0 && rightCount === 0) {
+                                                return null;
+                                              }
+                                              if (leftCount >= rightCount) {
+                                                return {
+                                                  measurements: primaryMeasurements,
+                                                  average: leftAvg,
+                                                };
+                                              }
+                                              return {
+                                                measurements: secondaryMeasurements,
+                                                average: rightAvg,
+                                              };
+                                            })();
 
-                                            if (!hasAnyTrials && !liftTrialsAvailable) {
+                                            if (!hasAnyTrials && !liftTrialSource) {
                                               return "";
                                             }
 
@@ -4384,11 +4399,15 @@ export default function DownloadReport() {
                                                 `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`,
                                             ).join("");
 
-                                            if (isLiftTest && !hasSeparateSides) {
+                                            if (isLiftTest && liftTrialSource) {
                                               const valueCells = buildTrialCells(
-                                                primaryMeasurements,
+                                                liftTrialSource.measurements,
                                               );
-                                              const avgValue = Math.max(leftAvg, rightAvg);
+                                              const avgValue = Number.isFinite(
+                                                liftTrialSource.average,
+                                              )
+                                                ? liftTrialSource.average
+                                                : 0;
                                               return `
                                             <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                                 <thead>
