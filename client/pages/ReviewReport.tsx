@@ -628,7 +628,7 @@ export default function ReviewReport() {
                   <div className="ml-2 space-y-1">
                     <p>• Activity Overview</p>
                     <p>• Extremity Strength</p>
-                    <p>�� Occupational Tasks</p>
+                    <p>• Occupational Tasks</p>
                     <p>• Range of Motion (Spine)</p>
                   </div>
                   <p className="mt-4">Appendix One: Reference Charts</p>
@@ -2062,7 +2062,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Cervical extension ≥45�� for functional neck movement",
+                                  "Cervical extension ≥45° for functional neck movement",
                                 norm: 45, // degrees
                                 functionalMin: 45,
                                 unit: "degrees",
@@ -2597,7 +2597,7 @@ export default function ReviewReport() {
                                           ) {
                                             return `≥${jobReq.lightWork} ${jobReq.unit} (Light) / ≥${jobReq.mediumWork} ${jobReq.unit} (Medium)`;
                                           } else if (jobReq.norm) {
-                                            return `��${jobReq.norm} ${jobReq.unit}`;
+                                            return `≥${jobReq.norm} ${jobReq.unit}`;
                                           }
                                         }
 
