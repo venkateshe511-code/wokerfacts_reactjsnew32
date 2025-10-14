@@ -4255,73 +4255,76 @@ export default function DownloadReport() {
                                     ${!isCardioTest
                 ? isLiftTest
                   ? ""
-                  : `
-                                    <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
-                                        <thead>
-                                            <tr style="background: #fef3c7;">
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Side</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial 1</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial 2</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial 3</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial 4</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial 5</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial 6</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>Left</strong></td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                    .trial1 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                    .trial2 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                    .trial3 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                    .trial4 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                    .trial5 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.leftMeasurements
-                    .trial6 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${leftAvg.toFixed(
-                    1,
-                  )} lbs</strong></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>Right</strong></td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                    .trial1 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                    .trial2 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                    .trial3 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                    .trial4 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                    .trial5 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${test.rightMeasurements
-                    .trial6 || 0
-                  } lbs</td>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${rightAvg.toFixed(
-                    1,
-                  )} lbs</strong></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                            `
-                : ""
+                  : (() => {
+                      const hasAnyTrials =
+                        hasSeparateSides ||
+                        useSingleMeasurementSet ||
+                        hasLeftTrials ||
+                        hasRightTrials;
+
+                      if (!hasAnyTrials) {
+                        return "";
+                      }
+
+                      const headerLabel = useSingleMeasurementSet ? "" : "Side";
+                      const headerCells = Array.from({ length: 6 }, (_, idx) => {
+                        return `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`;
+                      }).join("");
+
+                      const buildRow = (
+                        label: string,
+                        source: Record<string, number>,
+                        averageValue: number,
+                      ) => {
+                        const valueCells = Array.from({ length: 6 }, (_, idx) => {
+                          const key = `trial${idx + 1}` as keyof typeof source;
+                          const rawValue = Number(source?.[key] ?? 0);
+                          const displayValue = Number.isFinite(rawValue) ? rawValue : 0;
+                          return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue} lbs</td>`;
+                        }).join("");
+                        const labelContent = label ? `<strong>${label}</strong>` : "&nbsp;";
+                        return `<tr>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${labelContent}</td>
+                                                ${valueCells}
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${averageValue.toFixed(
+                          1,
+                        )} lbs</strong></td>
+                                            </tr>`;
+                      };
+
+                      const rows: string[] = [];
+
+                      if (useSingleMeasurementSet) {
+                        rows.push(buildRow("", primaryMeasurements, leftAvg));
+                      } else {
+                        if (hasLeftTrials) {
+                          rows.push(buildRow("Left", primaryMeasurements, leftAvg));
+                        }
+                        if (hasSeparateSides || hasRightTrials) {
+                          rows.push(buildRow("Right", secondaryMeasurements, rightAvg));
+                        }
+                      }
+
+                      if (!rows.length) {
+                        return "";
+                      }
+
+                      return `
+                                            <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
+                                                <thead>
+                                                    <tr style="background: #fef3c7;">
+                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${headerLabel}</th>
+                                                        ${headerCells}
+                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    ${rows.join("")}
+                                                </tbody>
+                                            </table>
+                                        `;
+                    })()
+                  : ""
               }
 
                                     <!-- Visual Chart Representation (NOT FOR CARDIO TESTS) -->
