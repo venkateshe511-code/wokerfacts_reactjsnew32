@@ -4346,49 +4346,75 @@ export default function DownloadReport() {
                                     <!-- Trial-by-Trial Measurement Table (FOR NON-CARDIO TESTS) -->
                                     ${
                                       !isCardioTest
-                                        ? isLiftTest
-                                          ? ""
-                                          : (() => {
-                                              const hasAnyTrials =
-                                                hasSeparateSides ||
-                                                useSingleMeasurementSet ||
-                                                hasLeftTrials ||
-                                                hasRightTrials;
+                                        ? (() => {
+                                            const hasAnyTrials =
+                                              hasSeparateSides ||
+                                              useSingleMeasurementSet ||
+                                              hasLeftTrials ||
+                                              hasRightTrials;
+                                            const liftTrialsAvailable =
+                                              isLiftTest &&
+                                              Object.keys(primaryMeasurements).some((key) =>
+                                                key.startsWith("trial"),
+                                              );
 
-                                              if (!hasAnyTrials) {
-                                                return "";
-                                              }
+                                            if (!hasAnyTrials && !liftTrialsAvailable) {
+                                              return "";
+                                            }
 
-                                              const buildTrialCells = (
-                                                source: Record<string, number>,
-                                              ) =>
-                                                Array.from(
-                                                  { length: 6 },
-                                                  (_, idx) => {
-                                                    const key =
-                                                      `trial${idx + 1}` as keyof typeof source;
-                                                    const rawValue = Number(
-                                                      source?.[key] ?? 0,
-                                                    );
-                                                    const displayValue =
-                                                      Number.isFinite(rawValue)
-                                                        ? rawValue
-                                                        : 0;
-                                                    return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue} lbs</td>`;
-                                                  },
-                                                ).join("");
-
-                                              if (useSingleMeasurementSet) {
-                                                const headerCells = Array.from(
-                                                  { length: 6 },
-                                                  (_, idx) =>
-                                                    `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`,
-                                                ).join("");
-                                                const valueCells = buildTrialCells(
-                                                  primaryMeasurements,
+                                            const buildTrialCells = (
+                                              source: Record<string, number>,
+                                            ) =>
+                                              Array.from({ length: 6 }, (_, idx) => {
+                                                const key =
+                                                  `trial${idx + 1}` as keyof typeof source;
+                                                const rawValue = Number(
+                                                  source?.[key] ?? 0,
                                                 );
+                                                const displayValue =
+                                                  Number.isFinite(rawValue) && rawValue > 0
+                                                    ? rawValue
+                                                    : 0;
+                                                return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue} lbs</td>`;
+                                              }).join("");
 
-                                                return `
+                                            const headerCells = Array.from(
+                                              { length: 6 },
+                                              (_, idx) =>
+                                                `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`,
+                                            ).join("");
+
+                                            if (isLiftTest && !hasSeparateSides) {
+                                              const valueCells = buildTrialCells(
+                                                primaryMeasurements,
+                                              );
+                                              const avgValue = Math.max(leftAvg, rightAvg);
+                                              return `
+                                            <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
+                                                <thead>
+                                                    <tr style="background: #fef3c7;">
+                                                        ${headerCells}
+                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        ${valueCells}
+                                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${avgValue.toFixed(
+                                                          1,
+                                                        )} lbs</strong></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        `;
+                                            }
+
+                                            if (useSingleMeasurementSet) {
+                                              const valueCells = buildTrialCells(
+                                                primaryMeasurements,
+                                              );
+
+                                              return `
                                             <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                                 <thead>
                                                     <tr style="background: #fef3c7;">
@@ -4406,58 +4432,53 @@ export default function DownloadReport() {
                                                 </tbody>
                                             </table>
                                         `;
-                                              }
+                                            }
 
-                                              const headerLabel = "Side";
-                                              const headerCells = Array.from(
-                                                { length: 6 },
-                                                (_, idx) =>
-                                                  `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`,
-                                              ).join("");
+                                            const headerLabel = "Side";
 
-                                              const buildRow = (
-                                                label: string,
-                                                source: Record<string, number>,
-                                                averageValue: number,
-                                              ) => {
-                                                const valueCells = buildTrialCells(
-                                                  source,
-                                                );
-                                                return `<tr>
+                                            const buildRow = (
+                                              label: string,
+                                              source: Record<string, number>,
+                                              averageValue: number,
+                                            ) => {
+                                              const valueCells = buildTrialCells(
+                                                source,
+                                              );
+                                              return `<tr>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${label}</strong></td>
                                                 ${valueCells}
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${averageValue.toFixed(
                                                   1,
                                                 )} lbs</strong></td>
                                             </tr>`;
-                                              };
+                                            };
 
-                                              const rows: string[] = [];
+                                            const rows: string[] = [];
 
-                                              if (hasLeftTrials) {
-                                                rows.push(
-                                                  buildRow(
-                                                    "Left",
-                                                    primaryMeasurements,
-                                                    leftAvg,
-                                                  ),
-                                                );
-                                              }
-                                              if (hasSeparateSides || hasRightTrials) {
-                                                rows.push(
-                                                  buildRow(
-                                                    "Right",
-                                                    secondaryMeasurements,
-                                                    rightAvg,
-                                                  ),
-                                                );
-                                              }
+                                            if (hasLeftTrials) {
+                                              rows.push(
+                                                buildRow(
+                                                  "Left",
+                                                  primaryMeasurements,
+                                                  leftAvg,
+                                                ),
+                                              );
+                                            }
+                                            if (hasSeparateSides || hasRightTrials) {
+                                              rows.push(
+                                                buildRow(
+                                                  "Right",
+                                                  secondaryMeasurements,
+                                                  rightAvg,
+                                                ),
+                                              );
+                                            }
 
-                                              if (!rows.length) {
-                                                return "";
-                                              }
+                                            if (!rows.length) {
+                                              return "";
+                                            }
 
-                                              return `
+                                            return `
                                             <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
                                                 <thead>
                                                     <tr style="background: #fef3c7;">
