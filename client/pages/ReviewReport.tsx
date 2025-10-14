@@ -6746,7 +6746,16 @@ export default function ReviewReport() {
                             Biomechanical
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            The biomechanical stopping point follows the biomechanics of the person as they perform the activity. While you will not be able to teach proper body mechanics during the relatively short duration of an FCE, you should encourage proper body mechanics. Ultimately, you will be assessing the client’s capacity as he or she moves in their usual way to complete each task. The biomechanical stopping point relies on your clinical observation skills and knowledge of proper body mechanics.
+                            The biomechanical stopping point follows the
+                            biomechanics of the person as they perform the
+                            activity. While you will not be able to teach proper
+                            body mechanics during the relatively short duration
+                            of an FCE, you should encourage proper body
+                            mechanics. Ultimately, you will be assessing the
+                            client’s capacity as he or she moves in their usual
+                            way to complete each task. The biomechanical
+                            stopping point relies on your clinical observation
+                            skills and knowledge of proper body mechanics.
                           </td>
                         </tr>
                         <tr>
@@ -6754,7 +6763,15 @@ export default function ReviewReport() {
                             Physiological
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            Physiological response to testing refers to the client’s involuntary reactions to the tests. These reactions include heart rate, blood pressure, respiration rate, changes in pallor, and similar markers. The American College of Sports Medicine recommends keeping the client’s heart rate below 85% of age-predicted maximum heart rate (APMHR) during physically demanding testing, with a recovery to 70% APMHR before commencing the next test.
+                            Physiological response to testing refers to the
+                            client’s involuntary reactions to the tests. These
+                            reactions include heart rate, blood pressure,
+                            respiration rate, changes in pallor, and similar
+                            markers. The American College of Sports Medicine
+                            recommends keeping the client’s heart rate below 85%
+                            of age-predicted maximum heart rate (APMHR) during
+                            physically demanding testing, with a recovery to 70%
+                            APMHR before commencing the next test.
                           </td>
                         </tr>
                         <tr>
@@ -6762,7 +6779,15 @@ export default function ReviewReport() {
                             Psychophysical
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            The psychophysical ending point is based on the client’s perceived rate of exertion—that is, how the client feels or perceives the difficulty of the task. You can use a scale to rate the perception of difficulty, such as the Borg Scale, or simply ask the client to describe their comfort level with the activity. The test should be terminated at the point where the client feels they can no longer continue and has reached their maximum performance level.
+                            The psychophysical ending point is based on the
+                            client’s perceived rate of exertion—that is, how the
+                            client feels or perceives the difficulty of the
+                            task. You can use a scale to rate the perception of
+                            difficulty, such as the Borg Scale, or simply ask
+                            the client to describe their comfort level with the
+                            activity. The test should be terminated at the point
+                            where the client feels they can no longer continue
+                            and has reached their maximum performance level.
                           </td>
                         </tr>
                         <tr>
@@ -6770,7 +6795,15 @@ export default function ReviewReport() {
                             Task Requirement
                           </td>
                           <td className="border border-gray-400 border-r-gray-400 p-2">
-                            A fourth, but still important, stopping criterion is the task requirement. This applies more to return-to-work (RTW) testing when you know the specific physical demands of the job tasks and are assessing the client’s ability to perform them. When the client’s tested ability matches the defined job requirement, you should stop the test because continuing beyond the task requirement could put the client at unnecessary risk.
+                            A fourth, but still important, stopping criterion is
+                            the task requirement. This applies more to
+                            return-to-work (RTW) testing when you know the
+                            specific physical demands of the job tasks and are
+                            assessing the client’s ability to perform them. When
+                            the client’s tested ability matches the defined job
+                            requirement, you should stop the test because
+                            continuing beyond the task requirement could put the
+                            client at unnecessary risk.
                           </td>
                         </tr>
                       </tbody>
