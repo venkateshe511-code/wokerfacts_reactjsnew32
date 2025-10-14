@@ -18,8 +18,8 @@ const corsOptions = {
 };
 
 app1.use(cors(corsOptions));
-app1.use(express.json({ limit: "50mb" }));
-app1.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app1.use(express.json({ limit: "100mb" }));
+app1.use(express.urlencoded({ extended: true, limit: "100mb" }));
 app1.use("/", generateDocxRoute);
 
 app2.use(cors(corsOptions));

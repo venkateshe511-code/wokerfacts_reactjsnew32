@@ -22,7 +22,6 @@ const {
   TableLayoutType,
   VerticalAlign,
   ShadingType,
-  Alignment,
   PageNumber,
   Footer
 } = require("docx");
@@ -716,10 +715,9 @@ async function appendImageGrid(children, images, opts) {
     const data = await loadImageAsUint8(source);
     const name = img?.name || `Image ${i + 1}`;
 
-    // === ✅ Dynamic height adjustment ===
     const isHandStrengthM =
       name?.includes("Hand Strength MVE") || name?.includes("Hand Strength MMVE");
-    const imageHeight = isHandStrengthM ? baseHeight + 180 : baseHeight;
+    const imageHeight = isHandStrengthM ? baseHeight + 300 : baseHeight;
     const imageWidth = baseWidth; // keep same width
 
     cells.push(
@@ -876,7 +874,7 @@ function addBruceDocxContent(children, test) {
 
   // VO2 max explanation
   children.push(
-    new Paragraph({ children: [new TextRun({ text: "Measuring VO2 Max:", bold: true,size:16 })] }),
+    new Paragraph({ children: [new TextRun({ text: "Measuring VO2 Max:", bold: true, size: 16 })] }),
   );
   children.push(
     new Paragraph({
@@ -893,14 +891,14 @@ function addBruceDocxContent(children, test) {
   children.push(
     new Paragraph({
       children: [
-        new TextRun({ text: "Men: ", bold: true,size:16 }),
-        new TextRun({ text: "14.8 - (1.379 × T) + (0.451 × T²) - (0.012 × T³)",size:16 }),
+        new TextRun({ text: "Men: ", bold: true, size: 16 }),
+        new TextRun({ text: "14.8 - (1.379 × T) + (0.451 × T²) - (0.012 × T³)", size: 16 }),
       ],
     }),
   );
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: "Women: ", bold: true,size:16 }), new TextRun({ text: "4.38 × T - 3.9",size:16 })],
+      children: [new TextRun({ text: "Women: ", bold: true, size: 16 }), new TextRun({ text: "4.38 × T - 3.9", size: 16 })],
       spacing: { after: 160 },
     }),
   );
@@ -916,7 +914,7 @@ function addBruceDocxContent(children, test) {
     ["7", "6.0 mph", "22% grade"],
   ];
   children.push(
-    new Paragraph({ children: [new TextRun({ text: "Bruce Treadmill Test Stages, Speeds, and Inclines:", bold: true ,size:16})], spacing: { after: 80 } }),
+    new Paragraph({ children: [new TextRun({ text: "Bruce Treadmill Test Stages, Speeds, and Inclines:", bold: true, size: 16 })], spacing: { after: 80 } }),
   );
   children.push(
     new Table({
@@ -931,7 +929,7 @@ function addBruceDocxContent(children, test) {
               children: r.map(
                 (c) =>
                   new TableCell({
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c,size:16 })] })],
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
                     verticalAlign: VerticalAlign.CENTER,
                   }),
               ),
@@ -954,11 +952,11 @@ function addBruceDocxContent(children, test) {
     new Paragraph({
       spacing: { before: 160, after: 80 },
       children: [
-        new TextRun({ text: "CLASSIFICATION: ", bold: true,size:16 }),
-        new TextRun({ text: (test.classification || "").toString(), underline: {} ,size:16}),
+        new TextRun({ text: "CLASSIFICATION: ", bold: true, size: 16 }),
+        new TextRun({ text: (test.classification || "").toString(), underline: {}, size: 16 }),
         new TextRun({ text: "    " }),
-        new TextRun({ text: "VO2 MAX: ", bold: true,size:16 }),
-        new TextRun({ text: (test.vo2Max || "").toString(), underline: {} ,size:16}),
+        new TextRun({ text: "VO2 MAX: ", bold: true, size: 16 }),
+        new TextRun({ text: (test.vo2Max || "").toString(), underline: {}, size: 16 }),
       ],
     }),
   );
@@ -966,7 +964,8 @@ function addBruceDocxContent(children, test) {
   // VO2 Max Norms for Men
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: "VO2 Max Norms for Men as Measured in ml/kg/min", bold: true ,size:16})],
+      alignment: AlignmentType.CENTER,
+      children: [new TextRun({ text: "VO2 Max Norms for Men as Measured in ml/kg/min", bold: true, size: 16, color: BRAND_COLOR })],
       spacing: { before: 160, after: 80 },
     }),
   );
@@ -996,7 +995,7 @@ function addBruceDocxContent(children, test) {
         }),
         ...menNorms.map((r) => new TableRow({
           children: r.map((c) => new TableCell({
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c ,size:16})] })],
+            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
             verticalAlign: VerticalAlign.CENTER,
           }))
         })),
@@ -1015,7 +1014,8 @@ function addBruceDocxContent(children, test) {
   // VO2 Max Norms for Women
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: "VO2 Max Norms for Women as Measured in ml/kg/min", bold: true,size:16 })],
+      alignment: AlignmentType.CENTER,
+      children: [new TextRun({ text: "VO2 Max Norms for Women as Measured in ml/kg/min", bold: true, size: 16, color: BRAND_COLOR })],
       spacing: { before: 160, after: 80 },
     }),
   );
@@ -1079,7 +1079,7 @@ function addMCAFTDocxContent(children, test) {
   );
 
   // Starting stage table
-  children.push(new Paragraph({ children: [new TextRun({ text: "Starting stepping stage by gender", bold: true,size:16 })], spacing: { after: 80 } }));
+  children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Starting stepping stage by gender", bold: true, size: 16, color: BRAND_COLOR })], spacing: { after: 80 } }));
   children.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1098,7 +1098,7 @@ function addMCAFTDocxContent(children, test) {
               children: r.map(
                 (c) =>
                   new TableCell({
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c,size:16 })] })],
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
                     verticalAlign: VerticalAlign.CENTER,
                   }),
               ),
@@ -1117,7 +1117,7 @@ function addMCAFTDocxContent(children, test) {
   );
 
   // Oxygen cost table
-  children.push(new Paragraph({ children: [new TextRun({ text: "Oxygen cost in ml/kg/min", bold: true,size:16 })], spacing: { before: 160, after: 80 } }));
+  children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Oxygen cost in ml/kg/min", bold: true, size: 16, color: BRAND_COLOR })], spacing: { before: 160, after: 80 } }));
   children.push(
     new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1143,7 +1143,7 @@ function addMCAFTDocxContent(children, test) {
               children: r.map(
                 (c) =>
                   new TableCell({
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c ,size:16})] })],
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: c, size: 16 })] })],
                     verticalAlign: VerticalAlign.CENTER,
                   }),
               ),
@@ -1181,12 +1181,12 @@ function addMCAFTDocxContent(children, test) {
     new Paragraph({
       spacing: { after: 120 },
       children: [
-        new TextRun({ text: "Predicted VO2 max: ", bold: true,size:16 }),
-        new TextRun({ text: (test.predictedVo2Max || "").toString(), underline: {} ,size:16}),
-        new TextRun({ text: " (ml/kg/min)",size:16 }),
+        new TextRun({ text: "Predicted VO2 max: ", bold: true, size: 16 }),
+        new TextRun({ text: (test.predictedVo2Max || "").toString(), underline: {}, size: 16 }),
+        new TextRun({ text: " (ml/kg/min)", size: 16 }),
         new TextRun({ text: "    " }),
-        new TextRun({ text: "HBR: ", bold: true,size:16 }),
-        new TextRun({ text: (test.hbr || "").toString(), underline: {} ,size:16}),
+        new TextRun({ text: "HBR: ", bold: true, size: 16 }),
+        new TextRun({ text: (test.hbr || "").toString(), underline: {}, size: 16 }),
       ],
     }),
   );
@@ -1282,7 +1282,7 @@ function addKaschDocxContent(children, test) {
   ];
 
   function createRatingsTable(title, headerAges, rows) {
-    children.push(new Paragraph({ children: [new TextRun({ text: title, bold: true, size: 16 })], spacing: { before: 100, after: 40 } }));
+    children.push(new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: title, bold: true, size: 16, color: BRAND_COLOR })], spacing: { before: 100, after: 40 } }));
 
     children.push(
       new Table({
@@ -2141,21 +2141,21 @@ function buildConsistentCrosschecksTable(crosschecks) {
         children: [
           new TableCell({
             margins: { top: 100, bottom: 100, left: 150, right: 150 },
-            children: [new Paragraph({ children: [new TextRun({ text: ch.name,size:16 })] })]
+            children: [new Paragraph({ children: [new TextRun({ text: ch.name, size: 16 })] })]
           }),
           new TableCell({
             margins: { top: 100, bottom: 100, left: 150, right: 150 },
-            children: [new Paragraph({ children: [new TextRun({ text: ch.description ,size:16})] })]
-          }),
-          new TableCell({
-            margins: { top: 100, bottom: 100, left: 150, right: 150 },
-
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, true),size:16 })] })],
+            children: [new Paragraph({ children: [new TextRun({ text: ch.description, size: 16 })] })]
           }),
           new TableCell({
             margins: { top: 100, bottom: 100, left: 150, right: 150 },
 
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, false),size:16 })] })],
+            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, true), size: 16 })] })],
+          }),
+          new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+
+            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: makeCheckText(ch, false), size: 16 })] })],
           }),
         ],
       })
