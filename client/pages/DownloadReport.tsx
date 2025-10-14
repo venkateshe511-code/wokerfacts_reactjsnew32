@@ -4382,7 +4382,7 @@ export default function DownloadReport() {
                                                             <div style="background: linear-gradient(to top, #0891b2, #06b6d4); width: 100%; height: ${computeBarHeight(
                       primaryMeasurements?.trial6 || 0,
                       maxValue,
-                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1 px solid #0891b2;"></div>
+                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #0891b2;"></div>
                                                             <span style="font-size: 8px; color: #0891b2; font-weight: bold;">T6</span>
                                                             <span style="font-size: 7px; color: #374151;">${primaryMeasurements?.trial6 || 0}</span>
                                                         </div>
