@@ -480,6 +480,16 @@ export default function DownloadReport() {
       ].filter((value) => typeof value === "number" && !Number.isNaN(value));
     };
 
+    const computeBarHeight = (
+      value: number,
+      maxValue: number,
+      maxHeight = 100,
+    ): number => {
+      if (!maxValue || maxValue <= 0) return 0;
+      const safeValue = Math.max(0, Number(value) || 0);
+      return Math.round((safeValue / maxValue) * maxHeight);
+    };
+
 
 
     const coerceBoolean = (value: any): boolean | undefined => {
@@ -3945,6 +3955,13 @@ export default function DownloadReport() {
             const rightTrialValues = extractTrialValues(test.rightMeasurements);
             const hasSeparateSides =
               leftTrialValues.length > 0 && rightTrialValues.length > 0;
+            const combinedTrialValues = [
+              ...leftTrialValues,
+              ...rightTrialValues,
+            ];
+            const chartMaxValue = combinedTrialValues.length
+              ? Math.max(50, ...combinedTrialValues, leftAvg, rightAvg)
+              : Math.max(50, leftAvg, rightAvg);
 
             // Determine test category for appropriate illustrations and references
             const testName = test.testName.toLowerCase();
@@ -4291,19 +4308,13 @@ export default function DownloadReport() {
                                             <div style="background: #3b82f6; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">${leftChartTitle}</div>
                                             <div style="display: flex; align-items: end; justify-content: space-between; height: 120px; padding: 3px 0; position: relative; background: #f8fafc; border-radius: 4px;">
                                                 ${(() => {
-                  const maxValue = Math.max(
-                    leftAvg,
-                    rightAvg,
-                    50,
-                  );
+                  const maxValue = chartMaxValue;
                   return `
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #1e40af, #3b82f6); width: 100%; height: ${((test
-                      .leftMeasurements
-                      .trial1 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #1e40af;"></div>
+                                                            <div style="background: linear-gradient(to top, #1e40af, #3b82f6); width: 100%; height: ${computeBarHeight(
+                      test.leftMeasurements?.trial1 || 0,
+                      maxValue,
+                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #1e40af;"></div>
                                                             <span style="font-size: 8px; color: #1e40af; font-weight: bold;">T1</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                       .leftMeasurements
@@ -4311,12 +4322,10 @@ export default function DownloadReport() {
                     }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #059669, #10b981); width: 100%; height: ${((test
-                      .leftMeasurements
-                      .trial2 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #059669;"></div>
+                                                            <div style="background: linear-gradient(to top, #059669, #10b981); width: 100%; height: ${computeBarHeight(
+                      test.leftMeasurements?.trial2 || 0,
+                      maxValue,
+                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #059669;"></div>
                                                             <span style="font-size: 8px; color: #059669; font-weight: bold;">T2</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                       .leftMeasurements
@@ -4324,12 +4333,10 @@ export default function DownloadReport() {
                     }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #d97706, #f59e0b); width: 100%; height: ${((test
-                      .leftMeasurements
-                      .trial3 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #d97706;"></div>
+                                                            <div style="background: linear-gradient(to top, #d97706, #f59e0b); width: 100%; height: ${computeBarHeight(
+                      test.leftMeasurements?.trial3 || 0,
+                      maxValue,
+                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #d97706;"></div>
                                                             <span style="font-size: 8px; color: #d97706; font-weight: bold;">T3</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                       .leftMeasurements
@@ -4337,12 +4344,10 @@ export default function DownloadReport() {
                     }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #dc2626, #ef4444); width: 100%; height: ${((test
-                      .leftMeasurements
-                      .trial4 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #dc2626;"></div>
+                                                            <div style="background: linear-gradient(to top, #dc2626, #ef4444); width: 100%; height: ${computeBarHeight(
+                      test.leftMeasurements?.trial4 || 0,
+                      maxValue,
+                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #dc2626;"></div>
                                                             <span style="font-size: 8px; color: #dc2626; font-weight: bold;">T4</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                       .leftMeasurements
@@ -4350,12 +4355,10 @@ export default function DownloadReport() {
                     }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #7c3aed, #a855f7); width: 100%; height: ${((test
-                      .leftMeasurements
-                      .trial5 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #7c3aed;"></div>
+                                                            <div style="background: linear-gradient(to top, #7c3aed, #a855f7); width: 100%; height: ${computeBarHeight(
+                      test.leftMeasurements?.trial5 || 0,
+                      maxValue,
+                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #7c3aed;"></div>
                                                             <span style="font-size: 8px; color: #7c3aed; font-weight: bold;">T5</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                       .leftMeasurements
@@ -4363,12 +4366,10 @@ export default function DownloadReport() {
                     }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #0891b2, #06b6d4); width: 100%; height: ${((test
-                      .leftMeasurements
-                      .trial6 || 0) /
-                      maxValue) *
-                    100
-                    }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #0891b2;"></div>
+                                                            <div style="background: linear-gradient(to top, #0891b2, #06b6d4); width: 100%; height: ${computeBarHeight(
+                      test.leftMeasurements?.trial6 || 0,
+                      maxValue,
+                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #0891b2;"></div>
                                                             <span style="font-size: 8px; color: #0891b2; font-weight: bold;">T6</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                       .leftMeasurements
@@ -4390,19 +4391,13 @@ export default function DownloadReport() {
                                             <div style="background: #10b981; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">Right Side</div>
                                             <div style="display: flex; align-items: end; justify-content: space-between; height: 120px; padding: 3px 0; position: relative; background: #f8fafc; border-radius: 4px;">
                                                 ${(() => {
-                    const maxValue = Math.max(
-                      leftAvg,
-                      rightAvg,
-                      50,
-                    );
+                    const maxValue = chartMaxValue;
                     return `
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #1e40af, #3b82f6); width: 100%; height: ${((test
-                        .rightMeasurements
-                        .trial1 || 0) /
-                        maxValue) *
-                      100
-                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #1e40af;"></div>
+                                                            <div style="background: linear-gradient(to top, #1e40af, #3b82f6); width: 100%; height: ${computeBarHeight(
+                        test.rightMeasurements?.trial1 || 0,
+                        maxValue,
+                      )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #1e40af;"></div>
                                                             <span style="font-size: 8px; color: #1e40af; font-weight: bold;">T1</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                         .rightMeasurements
@@ -4410,12 +4405,10 @@ export default function DownloadReport() {
                       }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #059669, #10b981); width: 100%; height: ${((test
-                        .rightMeasurements
-                        .trial2 || 0) /
-                        maxValue) *
-                      100
-                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #059669;"></div>
+                                                            <div style="background: linear-gradient(to top, #059669, #10b981); width: 100%; height: ${computeBarHeight(
+                        test.rightMeasurements?.trial2 || 0,
+                        maxValue,
+                      )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #059669;"></div>
                                                             <span style="font-size: 8px; color: #059669; font-weight: bold;">T2</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                         .rightMeasurements
@@ -4423,12 +4416,10 @@ export default function DownloadReport() {
                       }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #d97706, #f59e0b); width: 100%; height: ${((test
-                        .rightMeasurements
-                        .trial3 || 0) /
-                        maxValue) *
-                      100
-                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #d97706;"></div>
+                                                            <div style="background: linear-gradient(to top, #d97706, #f59e0b); width: 100%; height: ${computeBarHeight(
+                        test.rightMeasurements?.trial3 || 0,
+                        maxValue,
+                      )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #d97706;"></div>
                                                             <span style="font-size: 8px; color: #d97706; font-weight: bold;">T3</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                         .rightMeasurements
@@ -4436,12 +4427,10 @@ export default function DownloadReport() {
                       }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #dc2626, #ef4444); width: 100%; height: ${((test
-                        .rightMeasurements
-                        .trial4 || 0) /
-                        maxValue) *
-                      100
-                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #dc2626;"></div>
+                                                            <div style="background: linear-gradient(to top, #dc2626, #ef4444); width: 100%; height: ${computeBarHeight(
+                        test.rightMeasurements?.trial4 || 0,
+                        maxValue,
+                      )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #dc2626;"></div>
                                                             <span style="font-size: 8px; color: #dc2626; font-weight: bold;">T4</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                         .rightMeasurements
@@ -4449,12 +4438,10 @@ export default function DownloadReport() {
                       }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #7c3aed, #a855f7); width: 100%; height: ${((test
-                        .rightMeasurements
-                        .trial5 || 0) /
-                        maxValue) *
-                      100
-                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #7c3aed;"></div>
+                                                            <div style="background: linear-gradient(to top, #7c3aed, #a855f7); width: 100%; height: ${computeBarHeight(
+                        test.rightMeasurements?.trial5 || 0,
+                        maxValue,
+                      )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #7c3aed;"></div>
                                                             <span style="font-size: 8px; color: #7c3aed; font-weight: bold;">T5</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                         .rightMeasurements
@@ -4462,12 +4449,10 @@ export default function DownloadReport() {
                       }</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
-                                                            <div style="background: linear-gradient(to top, #0891b2, #06b6d4); width: 100%; height: ${((test
-                        .rightMeasurements
-                        .trial6 || 0) /
-                        maxValue) *
-                      100
-                      }px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #0891b2;"></div>
+                                                            <div style="background: linear-gradient(to top, #0891b2, #06b6d4); width: 100%; height: ${computeBarHeight(
+                        test.rightMeasurements?.trial6 || 0,
+                        maxValue,
+                      )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #0891b2;"></div>
                                                             <span style="font-size: 8px; color: #0891b2; font-weight: bold;">T6</span>
                                                             <span style="font-size: 7px; color: #374151;">${test
                         .rightMeasurements
