@@ -4497,9 +4497,14 @@ export default function DownloadReport() {
                                       !isCardioTest
                                         ? `
                                     <div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0;">
-                                        <!-- Left Side Chart -->
+                                        <!-- Primary Chart -->
                                         <div style="background: #ffffff; border: 2px solid #3b82f6; border-radius: 8px; padding: 12px; page-break-inside: avoid; flex: 1; min-width: 250px;">
-                                            <div style="background: #3b82f6; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">${leftChartTitle}</div>
+                                            ${(() => {
+                                              if (!leftChartTitle) {
+                                                return "";
+                                              }
+                                              return `<div style="background: #3b82f6; color: white; padding: 1px; margin: -12px -12px 12px -12px; font-weight: bold; text-align: center; font-size: 12px;">${leftChartTitle}</div>`;
+                                            })()}
                                             <div style="display: flex; align-items: end; justify-content: space-between; height: 120px; padding: 3px 0; position: relative; background: #f8fafc; border-radius: 4px;">
                                                 ${(() => {
                                                   const maxValue =
