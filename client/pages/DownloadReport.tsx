@@ -4004,7 +4004,15 @@ export default function DownloadReport() {
               String(test.testId || testName)
                 .toLowerCase()
                 .includes("static-lift") || testName.includes("static");
-            const leftChartTitle = hasSeparateSides ? "Left Side" : "";
+            const leftChartTitle = hasSeparateSides
+              ? "Left Side"
+              : useSingleMeasurementSet
+                ? ""
+                : hasLeftTrials
+                  ? "Left Side"
+                  : hasRightTrials
+                    ? "Right Side"
+                    : "";
             const showRightChart = !isLiftTest && hasSeparateSides;
 
             // Determine if this test needs a page break
