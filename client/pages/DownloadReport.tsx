@@ -3970,7 +3970,7 @@ export default function DownloadReport() {
               String(test.testId || testName)
                 .toLowerCase()
                 .includes("static-lift") || testName.includes("static");
-            const leftChartTitle = hasSeparateSides ? "Left Side" : "Trial Results";
+            const leftChartTitle = hasSeparateSides ? "Left Side" : "";
             const showRightChart = !isLiftTest && hasSeparateSides;
 
             // Determine if this test needs a page break
