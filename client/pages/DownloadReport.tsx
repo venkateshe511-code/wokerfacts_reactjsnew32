@@ -3946,7 +3946,7 @@ export default function DownloadReport() {
             let leftAvg = calculateAverage(test.leftMeasurements);
             const rightAvg = calculateAverage(test.rightMeasurements);
             let leftCV = calculateCV(test.leftMeasurements);
-            const rightCV = calculateCV(test.rightMeasurements);
+            let rightCV = calculateCV(test.rightMeasurements);
             const leftTrialValues = extractTrialValues(test.leftMeasurements);
             const rightTrialValues = extractTrialValues(test.rightMeasurements);
             const singleTrialValues = extractTrialValues(test.measurements);
