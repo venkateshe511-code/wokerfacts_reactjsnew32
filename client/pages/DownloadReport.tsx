@@ -3943,25 +3943,42 @@ export default function DownloadReport() {
             return !isOccupational;
           })
           .map((test: any, testIndex: number) => {
-            const leftAvg = calculateAverage(test.leftMeasurements);
+            let leftAvg = calculateAverage(test.leftMeasurements);
             const rightAvg = calculateAverage(test.rightMeasurements);
-            const leftCV = calculateCV(test.leftMeasurements);
+            let leftCV = calculateCV(test.leftMeasurements);
             const rightCV = calculateCV(test.rightMeasurements);
+            const leftTrialValues = extractTrialValues(test.leftMeasurements);
+            const rightTrialValues = extractTrialValues(test.rightMeasurements);
+            const singleTrialValues = extractTrialValues(test.measurements);
+            const hasLeftTrials = leftTrialValues.length > 0;
+            const hasRightTrials = rightTrialValues.length > 0;
+            const hasSeparateSides = hasLeftTrials && hasRightTrials;
+            const useSingleMeasurementSet =
+              !hasSeparateSides && singleTrialValues.length > 0;
+            const primaryMeasurements = (useSingleMeasurementSet
+              ? test.measurements || {}
+              : test.leftMeasurements || {}) as Record<string, number>;
+            const secondaryMeasurements = (test.rightMeasurements || {}) as Record<string, number>;
+            if (!hasLeftTrials && useSingleMeasurementSet) {
+              leftAvg = calculateAverage(primaryMeasurements);
+              leftCV = calculateCV(primaryMeasurements);
+            }
+            const combinedTrialValues = hasSeparateSides
+              ? [...leftTrialValues, ...rightTrialValues]
+              : useSingleMeasurementSet
+                ? singleTrialValues
+                : hasLeftTrials
+                  ? leftTrialValues
+                  : hasRightTrials
+                    ? rightTrialValues
+                    : [];
+            const chartMaxValue = combinedTrialValues.length
+              ? Math.max(50, ...combinedTrialValues, leftAvg, rightAvg)
+              : Math.max(50, leftAvg, rightAvg);
             const bilateralDef = calculateBilateralDeficiency(
               leftAvg,
               rightAvg,
             );
-            const leftTrialValues = extractTrialValues(test.leftMeasurements);
-            const rightTrialValues = extractTrialValues(test.rightMeasurements);
-            const hasSeparateSides =
-              leftTrialValues.length > 0 && rightTrialValues.length > 0;
-            const combinedTrialValues = [
-              ...leftTrialValues,
-              ...rightTrialValues,
-            ];
-            const chartMaxValue = combinedTrialValues.length
-              ? Math.max(50, ...combinedTrialValues, leftAvg, rightAvg)
-              : Math.max(50, leftAvg, rightAvg);
 
             // Determine test category for appropriate illustrations and references
             const testName = test.testName.toLowerCase();
