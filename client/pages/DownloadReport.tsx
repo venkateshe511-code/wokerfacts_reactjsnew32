@@ -4355,23 +4355,10 @@ export default function DownloadReport() {
                                                 return "";
                                               }
 
-                                              const headerLabel =
-                                                useSingleMeasurementSet
-                                                  ? ""
-                                                  : "Side";
-                                              const headerCells = Array.from(
-                                                { length: 6 },
-                                                (_, idx) => {
-                                                  return `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`;
-                                                },
-                                              ).join("");
-
-                                              const buildRow = (
-                                                label: string,
+                                              const buildTrialCells = (
                                                 source: Record<string, number>,
-                                                averageValue: number,
-                                              ) => {
-                                                const valueCells = Array.from(
+                                              ) =>
+                                                Array.from(
                                                   { length: 6 },
                                                   (_, idx) => {
                                                     const key =
@@ -4386,11 +4373,54 @@ export default function DownloadReport() {
                                                     return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue} lbs</td>`;
                                                   },
                                                 ).join("");
-                                                const labelContent = label
-                                                  ? `<strong>${label}</strong>`
-                                                  : "&nbsp;";
+
+                                              if (useSingleMeasurementSet) {
+                                                const headerCells = Array.from(
+                                                  { length: 6 },
+                                                  (_, idx) =>
+                                                    `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`,
+                                                ).join("");
+                                                const valueCells = buildTrialCells(
+                                                  primaryMeasurements,
+                                                );
+
+                                                return `
+                                            <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 8px 0 12px 0; table-layout: auto;">
+                                                <thead>
+                                                    <tr style="background: #fef3c7;">
+                                                        ${headerCells}
+                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        ${valueCells}
+                                                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${leftAvg.toFixed(
+                                                          1,
+                                                        )} lbs</strong></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        `;
+                                              }
+
+                                              const headerLabel = "Side";
+                                              const headerCells = Array.from(
+                                                { length: 6 },
+                                                (_, idx) =>
+                                                  `<th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Trial ${idx + 1}</th>`,
+                                              ).join("");
+
+                                              const buildRow = (
+                                                label: string,
+                                                source: Record<string, number>,
+                                                averageValue: number,
+                                              ) => {
+                                                const valueCells = buildTrialCells(
+                                                  source,
+                                                );
                                                 return `<tr>
-                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${labelContent}</td>
+                                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${label}</strong></td>
                                                 ${valueCells}
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${averageValue.toFixed(
                                                   1,
@@ -4400,36 +4430,23 @@ export default function DownloadReport() {
 
                                               const rows: string[] = [];
 
-                                              if (useSingleMeasurementSet) {
+                                              if (hasLeftTrials) {
                                                 rows.push(
                                                   buildRow(
-                                                    "",
+                                                    "Left",
                                                     primaryMeasurements,
                                                     leftAvg,
                                                   ),
                                                 );
-                                              } else {
-                                                if (hasLeftTrials) {
-                                                  rows.push(
-                                                    buildRow(
-                                                      "Left",
-                                                      primaryMeasurements,
-                                                      leftAvg,
-                                                    ),
-                                                  );
-                                                }
-                                                if (
-                                                  hasSeparateSides ||
-                                                  hasRightTrials
-                                                ) {
-                                                  rows.push(
-                                                    buildRow(
-                                                      "Right",
-                                                      secondaryMeasurements,
-                                                      rightAvg,
-                                                    ),
-                                                  );
-                                                }
+                                              }
+                                              if (hasSeparateSides || hasRightTrials) {
+                                                rows.push(
+                                                  buildRow(
+                                                    "Right",
+                                                    secondaryMeasurements,
+                                                    rightAvg,
+                                                  ),
+                                                );
                                               }
 
                                               if (!rows.length) {
@@ -4450,7 +4467,7 @@ export default function DownloadReport() {
                                                 </tbody>
                                             </table>
                                         `;
-                                            })()
+                                          })()
                                         : ""
                                     }
 
