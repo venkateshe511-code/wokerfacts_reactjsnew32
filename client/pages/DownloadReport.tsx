@@ -3687,7 +3687,7 @@ export default function DownloadReport() {
                             <tr>
                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${check.name}</td>
                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">${check.description}</td>
-                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : check.pass ? "✓" : ""}</td>
+                                <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : check.pass ? "��" : ""}</td>
                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">${!check.applicable ? "N/A" : !check.pass ? "✓" : ""}</td>
                             </tr>
                         `,
@@ -4340,69 +4340,51 @@ export default function DownloadReport() {
                   return `
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #1e40af, #3b82f6); width: 100%; height: ${computeBarHeight(
-                      test.leftMeasurements?.trial1 || 0,
+                      primaryMeasurements?.trial1 || 0,
                       maxValue,
                     )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #1e40af;"></div>
                                                             <span style="font-size: 8px; color: #1e40af; font-weight: bold;">T1</span>
-                                                            <span style="font-size: 7px; color: #374151;">${test
-                      .leftMeasurements
-                      .trial1 || 0
-                    }</span>
+                                                            <span style="font-size: 7px; color: #374151;">${primaryMeasurements?.trial1 || 0}</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #059669, #10b981); width: 100%; height: ${computeBarHeight(
-                      test.leftMeasurements?.trial2 || 0,
+                      primaryMeasurements?.trial2 || 0,
                       maxValue,
                     )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #059669;"></div>
                                                             <span style="font-size: 8px; color: #059669; font-weight: bold;">T2</span>
-                                                            <span style="font-size: 7px; color: #374151;">${test
-                      .leftMeasurements
-                      .trial2 || 0
-                    }</span>
+                                                            <span style="font-size: 7px; color: #374151;">${primaryMeasurements?.trial2 || 0}</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #d97706, #f59e0b); width: 100%; height: ${computeBarHeight(
-                      test.leftMeasurements?.trial3 || 0,
+                      primaryMeasurements?.trial3 || 0,
                       maxValue,
                     )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #d97706;"></div>
                                                             <span style="font-size: 8px; color: #d97706; font-weight: bold;">T3</span>
-                                                            <span style="font-size: 7px; color: #374151;">${test
-                      .leftMeasurements
-                      .trial3 || 0
-                    }</span>
+                                                            <span style="font-size: 7px; color: #374151;">${primaryMeasurements?.trial3 || 0}</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #dc2626, #ef4444); width: 100%; height: ${computeBarHeight(
-                      test.leftMeasurements?.trial4 || 0,
+                      primaryMeasurements?.trial4 || 0,
                       maxValue,
                     )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #dc2626;"></div>
                                                             <span style="font-size: 8px; color: #dc2626; font-weight: bold;">T4</span>
-                                                            <span style="font-size: 7px; color: #374151;">${test
-                      .leftMeasurements
-                      .trial4 || 0
-                    }</span>
+                                                            <span style="font-size: 7px; color: #374151;">${primaryMeasurements?.trial4 || 0}</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #7c3aed, #a855f7); width: 100%; height: ${computeBarHeight(
-                      test.leftMeasurements?.trial5 || 0,
+                      primaryMeasurements?.trial5 || 0,
                       maxValue,
                     )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #7c3aed;"></div>
                                                             <span style="font-size: 8px; color: #7c3aed; font-weight: bold;">T5</span>
-                                                            <span style="font-size: 7px; color: #374151;">${test
-                      .leftMeasurements
-                      .trial5 || 0
-                    }</span>
+                                                            <span style="font-size: 7px; color: #374151;">${primaryMeasurements?.trial5 || 0}</span>
                                                         </div>
                                                         <div style="width: 15%; display: flex; flex-direction: column; align-items: center;">
                                                             <div style="background: linear-gradient(to top, #0891b2, #06b6d4); width: 100%; height: ${computeBarHeight(
-                      test.leftMeasurements?.trial6 || 0,
+                      primaryMeasurements?.trial6 || 0,
                       maxValue,
-                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1px solid #0891b2;"></div>
+                    )}px; margin-bottom: 4px; border-radius: 2px; min-height: 2px; border: 1 px solid #0891b2;"></div>
                                                             <span style="font-size: 8px; color: #0891b2; font-weight: bold;">T6</span>
-                                                            <span style="font-size: 7px; color: #374151;">${test
-                      .leftMeasurements
-                      .trial6 || 0
-                    }</span>
+                                                            <span style="font-size: 7px; color: #374151;">${primaryMeasurements?.trial6 || 0}</span>
                                                         </div>
                                                     `;
                 })()}
