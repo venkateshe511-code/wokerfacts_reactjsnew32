@@ -4821,26 +4821,10 @@ export default function DownloadReport() {
                               if (!isDynamicLift) {
                                 return "";
                               }
-                              const rawEndpoint = String(
-                                (test as any).dynamicEndpointType ||
-                                  (test as any).parameters
-                                    ?.dynamicEndpointType ||
-                                  "",
-                              ).trim();
-                              if (!rawEndpoint) {
+                              const label = resolveDynamicEndpointLabel(test);
+                              if (!label) {
                                 return "";
                               }
-                              const key = rawEndpoint.toLowerCase();
-                              const map: Record<string, string> = {
-                                biomechanical: "Biomechanical",
-                                physiological: "Physiological",
-                                psychophysical: "Psychophysical",
-                                "task-requirement": "Task Requirement",
-                              };
-                              const fallback = key
-                                .replace(/[-_]/g, " ")
-                                .replace(/\b\w/g, (char) => char.toUpperCase());
-                              const label = map[key] || fallback;
                               return `<div style="font-size: 11px; color: #374151; margin: 6px 0;">
                                 <strong>Endpoint Condition:</strong> ${label}
                               </div>`;
