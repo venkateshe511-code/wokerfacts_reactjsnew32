@@ -502,7 +502,15 @@ export default function TestData() {
       "wrist-muscle-flexion": "Wrist Muscle-Palmar Flexion",
       "wrist-muscle-extension": "Wrist Muscle-Dorsiflexion",
       "shoulder-muscle-internal-rotation": "Shoulder Muscle Internal Rotation",
+      "dynamic-lift-low": "Dynamic Frequent Lift Low",
+      "dynamic-lift-mid": "Dynamic Frequent Lift Mid",
+      "dynamic-lift-high": "Dynamic Frequent Lift High",
+      "dynamic-lift-overhead": "Dynamic Frequent Lift Overhead",
       "dynamic-lift-frequent": "Dynamic Frequent Lifts",
+      "dynamic-infrequent-lift-low": "Dynamic Infrequent Lift Low",
+      "dynamic-infrequent-lift-mid": "Dynamic Infrequent Lift Mid",
+      "dynamic-infrequent-lift-high": "Dynamic Infrequent Lift High",
+      "dynamic-infrequent-lift-overhead": "Dynamic Infrequent Lift Overhead",
 
       // MTM Test Names
       fingering: "Fingering",
@@ -790,7 +798,15 @@ export default function TestData() {
         "wrist-muscle-extension": "Wrist Muscle-Dorsiflexion",
         "shoulder-muscle-internal-rotation":
           "Shoulder Muscle Internal Rotation",
+        "dynamic-lift-low": "Dynamic Frequent Lift Low",
+        "dynamic-lift-mid": "Dynamic Frequent Lift Mid",
+        "dynamic-lift-high": "Dynamic Frequent Lift High",
+        "dynamic-lift-overhead": "Dynamic Frequent Lift Overhead",
         "dynamic-lift-frequent": "Dynamic Frequent Lifts",
+        "dynamic-infrequent-lift-low": "Dynamic Infrequent Lift Low",
+        "dynamic-infrequent-lift-mid": "Dynamic Infrequent Lift Mid",
+        "dynamic-infrequent-lift-high": "Dynamic Infrequent Lift High",
+        "dynamic-infrequent-lift-overhead": "Dynamic Infrequent Lift Overhead",
 
         // Add more mappings as needed
       };
