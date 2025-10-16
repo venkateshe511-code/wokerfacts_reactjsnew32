@@ -4282,6 +4282,9 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                     <!-- Trial-by-Trial Measurement Table (FOR NON-CARDIO TESTS) -->
                                     ${!isCardioTest
                 ? (() => {
+                  const unit = String(
+                    test.unitMeasure || "lbs"
+                  ).toLowerCase();
                   const hasAnyTrials =
                     hasSeparateSides ||
                     useSingleMeasurementSet ||
