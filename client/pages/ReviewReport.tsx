@@ -3950,7 +3950,7 @@ export default function ReviewReport() {
                                                       Demonstrated Activity
                                                     </th>
                                                     <th className="border border-gray-400 border-r-gray-400 p-2">
-                                                      Avg. Weight (lb)
+                                                      Avg. Weight ({displayUnit})
                                                     </th>
                                                     <th className="border border-gray-400 border-r-gray-400 p-2">
                                                       CV%
@@ -3966,7 +3966,7 @@ export default function ReviewReport() {
                                                       {test.testName}
                                                     </td>
                                                     <td className="border border-gray-400 border-r-gray-400 p-2">
-                                                      {avgLbs.toFixed(1)}
+                                                      {trialAverageDisplay}
                                                     </td>
                                                     <td className="border border-gray-400 border-r-gray-400 p-2">
                                                       {leftCV}%
