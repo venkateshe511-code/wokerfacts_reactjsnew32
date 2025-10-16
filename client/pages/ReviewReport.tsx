@@ -3891,33 +3891,6 @@ export default function ReviewReport() {
                                       // Lift Results - Six Trials (single table)
                                       <div>
                                         {(() => {
-                                          const unit = (
-                                            (test.unitMeasure as any) || ""
-                                          ).toLowerCase();
-                                          const avgLbs =
-                                            unit === "kg"
-                                              ? Math.round(
-                                                  leftAvg * 2.20462 * 10,
-                                                ) / 10
-                                              : Math.round(leftAvg * 10) / 10;
-                                          const raw = parseFloat(
-                                            (test.valueToBeTestedNumber as any) ||
-                                              "",
-                                          );
-                                          const normLbs =
-                                            !Number.isNaN(raw) && raw > 0
-                                              ? unit === "kg"
-                                                ? Math.round(
-                                                    raw * 2.20462 * 10,
-                                                  ) / 10
-                                                : Math.round(raw * 10) / 10
-                                              : 0;
-                                          const pctNorm =
-                                            normLbs > 0
-                                              ? Math.round(
-                                                  (avgLbs / normLbs) * 100,
-                                                )
-                                              : 0;
                                           const leftTrialValues =
                                             extractTrialValues(
                                               test.leftMeasurements,
@@ -3940,8 +3913,14 @@ export default function ReviewReport() {
                                               convertToLbs,
                                               displayUnit,
                                             );
-                                          // Use calculated avgLbs for display
-                                          const trialAverageDisplay = `${avgLbs} ${displayUnit}`;
+                                          // Calculate average using convertToLbs flag from user's metric selection
+                                          const avgValue =
+                                            convertToLbs
+                                              ? Math.round(
+                                                  leftAvg * 2.20462 * 10,
+                                                ) / 10
+                                              : Math.round(leftAvg * 10) / 10;
+                                          const trialAverageDisplay = `${avgValue} ${displayUnit}`;
                                           return (
                                             <>
                                               <table className="w-full border border-gray-400 text-xs mb-4">
