@@ -1976,7 +1976,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
  
         <!-- Range of Motion Question with Table -->
-        <div style="margin-bottom: 30px; page-break-inside: auto;">
+        <div style="margin-bottom: 8px; page-break-inside: auto;">
             <h4 style="font-weight: bold; margin-bottom: 8px; color: #1e40af; font-family: Arial, sans-serif;">What is the present lumbar range of motion noted for the client?</h4>
 
             <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 16px;">
