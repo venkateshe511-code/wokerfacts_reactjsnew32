@@ -1669,17 +1669,23 @@ export default function TestData() {
                           currentTest.leftMeasurements,
                         );
                         const unit = (
-                          currentTest?.unitMeasure || ""
+                          currentTest?.unitMeasure || "lbs"
                         ).toLowerCase();
-                        const avgLbs =
+                        const displayValue =
                           unit === "kg"
                             ? Math.round(avg * 2.20462 * 10) / 10
-                            : Math.round(avg * 10) / 10;
+                            : unit === "lbs"
+                              ? Math.round(avg * 10) / 10
+                              : unit === "oz"
+                                ? Math.round(avg * 16 * 10) / 10
+                                : unit === "g"
+                                  ? Math.round(avg / 453.592 * 10) / 10
+                                  : Math.round(avg * 10) / 10;
                         return (
                           <div className="bg-blue-400 text-white p-3 rounded text-center sm:col-span-2">
                             <div className="text-sm">Average Weight</div>
                             <div className="text-xl font-bold">
-                              {avgLbs} lbs
+                              {displayValue} {unit}
                             </div>
                           </div>
                         );
