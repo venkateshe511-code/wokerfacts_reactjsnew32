@@ -4325,9 +4325,6 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                     return "";
                   }
 
-                  const unit = String(
-                    test.unitMeasure || "lbs"
-                  ).toLowerCase();
                   const buildTrialCells = (
                     source: Record<string, number>,
                   ) =>
