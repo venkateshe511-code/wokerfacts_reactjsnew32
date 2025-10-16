@@ -1639,32 +1639,6 @@ export default function TestData() {
                         </div>
                       </div>
                       {(() => {
-                        const rawStr = currentTest?.valueToBeTestedNumber || "";
-                        const raw = parseFloat(rawStr);
-                        const unit = (
-                          currentTest?.unitMeasure || "lbs"
-                        ).toLowerCase();
-                        let displayValue = 0;
-                        if (!Number.isNaN(raw) && raw > 0) {
-                          displayValue =
-                            unit === "kg"
-                              ? Math.round(raw * 2.20462 * 10) / 10
-                              : unit === "lbs"
-                                ? Math.round(raw * 10) / 10
-                                : unit === "oz"
-                                  ? Math.round(raw * 16 * 10) / 10
-                                  : unit === "g"
-                                    ? Math.round(raw / 453.592 * 10) / 10
-                                    : 0;
-                        }
-                        return displayValue > 0 ? (
-                          <div className="bg-blue-400 text-white p-3 rounded text-center">
-                            <div className="text-sm">Norm Weight</div>
-                            <div className="text-xl font-bold">{displayValue} {unit}</div>
-                          </div>
-                        ) : null;
-                      })()}
-                      {(() => {
                         const avg = calculateAverage(
                           currentTest.leftMeasurements,
                         );
