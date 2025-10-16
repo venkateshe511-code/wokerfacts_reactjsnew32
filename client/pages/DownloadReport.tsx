@@ -631,6 +631,19 @@ export default function DownloadReport() {
           .filter((entry: any) => Boolean(entry.testName))
       : [];
 
+    // Sort tests: Cardio tests last, everything else in original order
+    const sortedTestArray = normalizedTestArray.sort((a: any, b: any) => {
+      const aIsCardio = a.category === "Cardio" || a.testType === "Cardio";
+      const bIsCardio = b.category === "Cardio" || b.testType === "Cardio";
+
+      // If one is cardio and the other isn't, cardio goes last
+      if (aIsCardio && !bIsCardio) return 1;
+      if (!aIsCardio && bIsCardio) return -1;
+
+      // Both are same type, maintain order
+      return 0;
+    });
+
     const normalizedCurrentIndex =
       typeof testData?.currentTestIndex === "number"
         ? testData.currentTestIndex
@@ -638,7 +651,7 @@ export default function DownloadReport() {
 
     testData = {
       ...testData,
-      tests: normalizedTestArray,
+      tests: sortedTestArray,
       currentTestIndex: normalizedCurrentIndex,
     };
 
@@ -5105,7 +5118,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                     </tr>
                     <tr>
                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Task Requirement</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">A fourth, but still important, stopping criterion is the task requirement. This applies more to return-to-work (RTW) testing when you know the specific physical demands of the job tasks and are assessing the client’s ability to perform them. When the client’s tested ability matches the defined job requirement, you should stop the test because continuing beyond the task requirement could put the client at unnecessary risk.</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">A fourth, but still important, stopping criterion is the task requirement. This applies more to return-to-work (RTW) testing when you know the specific physical demands of the job tasks and are assessing the client’s ability to perform them. When the client��s tested ability matches the defined job requirement, you should stop the test because continuing beyond the task requirement could put the client at unnecessary risk.</td>
                     </tr>
                 </tbody>
             </table>
