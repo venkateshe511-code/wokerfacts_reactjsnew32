@@ -3940,18 +3940,7 @@ export default function ReviewReport() {
                                               convertToLbs,
                                               displayUnit,
                                             );
-                                          // Calculate average using same method as DownloadReport
-                                          const unit = (
-                                            (test.unitMeasure as any) || ""
-                                          ).toLowerCase();
-                                          const avgLbs =
-                                            unit === "kg"
-                                              ? Math.round(
-                                                  leftAvg *
-                                                    2.20462 *
-                                                    10,
-                                                ) / 10
-                                              : Math.round(leftAvg * 10) / 10;
+                                          // Use calculated avgLbs for display
                                           const trialAverageDisplay = `${avgLbs} ${displayUnit}`;
                                           return (
                                             <>
