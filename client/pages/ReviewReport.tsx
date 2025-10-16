@@ -7224,36 +7224,16 @@ export default function ReviewReport() {
                             className="border rounded overflow-hidden"
                           >
                             {file.type && file.type.startsWith("image/") ? (
-                              <div className="flex flex-col">
-                                <div className="aspect-square">
-                                  <img
-                                    src={file.dataUrl || file.data}
-                                    alt={file.name || `Image ${index + 1}`}
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                                <div className="p-2 bg-gray-50">
-                                  <p
-                                    className="text-center text-xs text-gray-600 truncate"
-                                    title={file.name || `Image ${index + 1}`}
-                                  >
-                                    {file.name || `Image ${index + 1}`}
-                                  </p>
-                                </div>
+                              <div className="aspect-square">
+                                <img
+                                  src={file.dataUrl || file.data}
+                                  alt={file.name || `Image ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             ) : (
-                              <div className="flex flex-col">
-                                <div className="aspect-square bg-gray-200 flex flex-col items-center justify-center">
-                                  <div className="text-2xl mb-2">-</div>
-                                </div>
-                                <div className="p-2 bg-gray-50">
-                                  <p
-                                    className="text-center text-xs text-gray-600 truncate"
-                                    title={file.name || `Document ${index + 1}`}
-                                  >
-                                    {file.name || `Document ${index + 1}`}
-                                  </p>
-                                </div>
+                              <div className="aspect-square bg-gray-200 flex flex-col items-center justify-center">
+                                <div className="text-2xl mb-2">-</div>
                               </div>
                             )}
                           </div>
