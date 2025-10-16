@@ -4655,7 +4655,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                     <!-- Comparison Summary -->
                                     <div style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 8px; margin: 8px 0; text-align: center;">
                                         <div style="font-size: 11px; color: #666;">
-                                            <strong>Bilateral Difference:</strong> ${Math.abs(leftAvg - rightAvg).toFixed(1)} lbs |
+                                            <strong>Bilateral Difference:</strong> ${Math.abs(leftAvg - rightAvg).toFixed(1)} ${unit} |
                                             <strong>CV:</strong> L=${leftCV}% R=${rightCV}% |
                                             <strong>Bilateral Deficiency:</strong> ${bilateralDef.toFixed(1)}%
                                         </div>
