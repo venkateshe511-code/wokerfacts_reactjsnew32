@@ -1642,21 +1642,25 @@ export default function TestData() {
                         const rawStr = currentTest?.valueToBeTestedNumber || "";
                         const raw = parseFloat(rawStr);
                         const unit = (
-                          currentTest?.unitMeasure || ""
+                          currentTest?.unitMeasure || "lbs"
                         ).toLowerCase();
-                        let lbs = 0;
+                        let displayValue = 0;
                         if (!Number.isNaN(raw) && raw > 0) {
-                          lbs =
+                          displayValue =
                             unit === "kg"
                               ? Math.round(raw * 2.20462 * 10) / 10
                               : unit === "lbs"
                                 ? Math.round(raw * 10) / 10
-                                : 0;
+                                : unit === "oz"
+                                  ? Math.round(raw * 16 * 10) / 10
+                                  : unit === "g"
+                                    ? Math.round(raw / 453.592 * 10) / 10
+                                    : 0;
                         }
-                        return lbs > 0 ? (
+                        return displayValue > 0 ? (
                           <div className="bg-blue-400 text-white p-3 rounded text-center">
                             <div className="text-sm">Norm Weight</div>
-                            <div className="text-xl font-bold">{lbs} lbs</div>
+                            <div className="text-xl font-bold">{displayValue} {unit}</div>
                           </div>
                         ) : null;
                       })()}
