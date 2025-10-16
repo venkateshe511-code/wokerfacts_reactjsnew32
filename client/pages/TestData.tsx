@@ -1653,7 +1653,7 @@ export default function TestData() {
                               : unit === "oz"
                                 ? Math.round(avg * 16 * 10) / 10
                                 : unit === "g"
-                                  ? Math.round(avg / 453.592 * 10) / 10
+                                  ? Math.round((avg / 453.592) * 10) / 10
                                   : Math.round(avg * 10) / 10;
                         return (
                           <div className="bg-blue-400 text-white p-3 rounded text-center sm:col-span-2">
