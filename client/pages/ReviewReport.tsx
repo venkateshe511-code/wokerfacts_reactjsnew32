@@ -3914,12 +3914,11 @@ export default function ReviewReport() {
                                               displayUnit,
                                             );
                                           // Calculate average using convertToLbs flag from user's metric selection
-                                          const avgValue =
-                                            convertToLbs
-                                              ? Math.round(
-                                                  leftAvg * 2.20462 * 10,
-                                                ) / 10
-                                              : Math.round(leftAvg * 10) / 10;
+                                          const avgValue = convertToLbs
+                                            ? Math.round(
+                                                leftAvg * 2.20462 * 10,
+                                              ) / 10
+                                            : Math.round(leftAvg * 10) / 10;
                                           const trialAverageDisplay = `${avgValue} ${displayUnit}`;
                                           return (
                                             <>
