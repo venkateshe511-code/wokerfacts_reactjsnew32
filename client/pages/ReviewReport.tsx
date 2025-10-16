@@ -3940,22 +3940,19 @@ export default function ReviewReport() {
                                               convertToLbs,
                                               displayUnit,
                                             );
-                                          const trialAverageValue =
-                                            computeMeasurementsAverage(
-                                              primaryMeasurements,
-                                              convertToLbs,
-                                            ) ??
-                                            convertWeightMeasurement(
-                                              leftTrialValues.length > 0
-                                                ? leftAvg
-                                                : rightAvg,
-                                              convertToLbs,
-                                            );
-                                          const trialAverageDisplay =
-                                            formatWeightMeasurement(
-                                              trialAverageValue,
-                                              displayUnit,
-                                            );
+                                          // Calculate average using same method as DownloadReport
+                                          const unit = (
+                                            (test.unitMeasure as any) || ""
+                                          ).toLowerCase();
+                                          const avgLbs =
+                                            unit === "kg"
+                                              ? Math.round(
+                                                  leftAvg *
+                                                    2.20462 *
+                                                    10,
+                                                ) / 10
+                                              : Math.round(leftAvg * 10) / 10;
+                                          const trialAverageDisplay = `${avgLbs} ${displayUnit}`;
                                           return (
                                             <>
                                               <table className="w-full border border-gray-400 text-xs mb-4">
