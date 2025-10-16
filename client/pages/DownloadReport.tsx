@@ -2044,14 +2044,13 @@ padding-top: 120px; align-items: center; min-height: 0; ">
               .map(
                 (imageData, imgIndex) => `
       <div style="height: 70px; border: 1px solid #333; border-radius: 3px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-        <img src="${imageData.dataUrl || imageData.data}" 
-             alt="ROM Assessment ${imgIndex + 1}" 
+        <img src="${imageData.dataUrl || imageData.data}"
+             alt="ROM Assessment ${imgIndex + 1}"
              style="max-width: 100%; max-height: 100%; object-fit: contain;" />
       </div>`
               )
               .join("")}
 </div>
-
                         </div>
                     `;
         }
