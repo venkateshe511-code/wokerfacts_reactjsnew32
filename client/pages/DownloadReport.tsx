@@ -3998,6 +3998,11 @@ padding-top: 120px; align-items: center; min-height: 0; ">
             ) {
               rightCV = calculateCV(secondaryMeasurements);
             }
+
+            // Define unit at outer scope so it's accessible throughout the template
+            const unit = String(
+              test.unitMeasure || "lbs"
+            ).toLowerCase();
             const combinedTrialValues = hasSeparateSides
               ? [...leftTrialValues, ...rightTrialValues]
               : useSingleMeasurementSet
