@@ -5478,11 +5478,11 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
 
   // Group tests by category (mirror client)
   const categories = {
-    Cardio: [],
     Strength: [],
     "ROM Total Spine/Extremity": [],
     "ROM Hand/Foot": [],
     "Occupational Tasks": [],
+    Cardio: [],
   };
   for (const test of unifiedTests) {
     const testName = (test.testName || "").toLowerCase();

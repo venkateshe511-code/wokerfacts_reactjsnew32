@@ -2790,11 +2790,11 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
                   // Group tests by specific categories collected in software (same as ReviewReport)
                   const testsByCategory = {
-                    Cardio: [],
                     Strength: [],
                     "ROM Total Spine/Extremity": [],
                     "ROM Hand/Foot": [],
                     "Occupational Tasks": [],
+                     Cardio: [],
                   };
 
                   testData.tests?.forEach((test: any) => {
