@@ -727,6 +727,14 @@ async function loadImageAsUint8(source) {
 
     if (!source) return null;
 
+    // 🔍 Log cardio test images first
+    if (
+      source.includes("bruce") ||
+      source.includes("kasch") ||
+      source.includes("mcaft")
+    ) {
+      console.log("🫀 Loading cardio image source:", source);
+    }
     // If starts with "/" — treat as local file under functions/
     if (source.startsWith("/")) {
       const localPath = path.join(process.cwd(), source);
@@ -761,11 +769,12 @@ async function appendImageGrid(children, images, opts) {
   const rows = [];
   let cells = [];
 
+
   for (let i = 0; i < images.length; i++) {
     const img = images[i];
-    const source = img?.data ?? img?.dataUrl ?? img?.src ?? img;
-    const data = await loadImageAsUint8(source);
+    let source = img?.data ?? img?.dataUrl ?? img?.src ?? img; // use let so it can be reassigned
     const name = img?.name || `Image ${i + 1}`;
+    const data = await loadImageAsUint8(source);
 
     const isHandStrengthM =
       name?.includes("Hand Strength MVE") ||
@@ -917,7 +926,7 @@ async function appendTestImages(children, test, title = "Test Images") {
 
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: title, bold: true })],
+      children: [new TextRun({ text: title, bold: true, size: 16 })],
       spacing: { before: 200, after: 160 },
     }),
   );
@@ -931,11 +940,19 @@ async function appendTestImages(children, test, title = "Test Images") {
 // Cardio: Bruce
 function addBruceDocxContent(children, test) {
   // Protocol text
+
+  children.push(
+    new Paragraph({
+      children: [
+        new TextRun({ text: "Protocol Stages", bold: true, size: 16 }),
+      ],
+    }),
+  );
   children.push(
     new Paragraph({
       children: [
         new TextRun({
-          text: "The Bruce protocol involves getting on a treadmill and increasing speed and incline every three minutes (in stages). The test stops when you've hit 85% of your maximum heart rate, your heart rate exceeds 115 beats per minute for two stages, or the test is otherwise terminated.",
+          text: "The Bruce protocol involves getting on a treadmill and increasing speed and incline every three minutes (in stages). The test stops when you've hit 85% of your maximum heart rate, your heart rate exceeds 115 beats per minute for two stages, or it is deemed that the test should no longer continue. If your heart rate changes more than six beats per minute between the second and third minute of any given stage, you are kept at the same speed & incline for an additional minute. (As your HR has not achieved a steady state).",
           size: 16,
         }),
       ],
@@ -951,11 +968,34 @@ function addBruceDocxContent(children, test) {
       ],
     }),
   );
+
   children.push(
     new Paragraph({
       children: [
         new TextRun({
-          text: "VO2 max refers to the maximum amount of oxygen an individual can use during intense exercise (ml/kg/min). The Bruce test estimates VO2 max from total treadmill time (T, in minutes).",
+          text: "Maximal oxygen uptake (VO2 max) refers to the maximum amount of oxygen an individual can use during intense or maximal exercise. It is measured as milliliters of oxygen used in one minute per kilogram of body weight (ml/kg/min).",
+          size: 16,
+        }),
+      ],
+      spacing: { after: 80 },
+    }),
+  );
+  children.push(
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "The Bruce treadmill test is an indirect maximal oxygen uptake test. It is indirect because it estimates VO2 max using a formula and the person's performance on a treadmill as the workload increases",
+          size: 16,
+        }),
+      ],
+      spacing: { after: 80 },
+    }),
+  );
+  children.push(
+    new Paragraph({
+      children: [
+        new TextRun({
+          text: "When the Bruce protocol formula is used, T stands for total time on the treadmill and is measured as a fraction of a minute. If test time of 10 minutes 15 seconds would be written as T=10.25); this formula changes based on gender. The time you spend on the treadmill is your test score and can be used to estimate your VO2 max value. Blood pressure and ratings of perceived exertion are also often collected during the Bruce protocol test.",
           size: 16,
         }),
       ],
@@ -1056,14 +1096,14 @@ function addBruceDocxContent(children, test) {
       children: [
         new TextRun({ text: "CLASSIFICATION: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.classification || "").toString(),
+          text: (test.classification || ""),
           underline: {},
           size: 16,
         }),
         new TextRun({ text: "    " }),
         new TextRun({ text: "VO2 MAX: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.vo2Max || "").toString(),
+          text: (test.vo2Max || ""),
           underline: {},
           size: 16,
         }),
@@ -1222,7 +1262,7 @@ function addMCAFTDocxContent(children, test) {
     new Paragraph({
       children: [
         new TextRun({
-          text: "mCAFT estimates aerobic fitness with a step test at age/gender-based cadences. VO2 max is predicted using the O2 cost of the last completed stage, body mass, and age.",
+          text: "mCAFT (Modified Canadian Aerobic Fitness Test), is designed to give information about the aerobic fitness of a person, while using minimal equipment. The subject works by lifting its own body weight up and down double steps (40.6 cm in height total) while listening to set cadences from a compact disc. The end-stage of the age and gender specific stepping rate requires 65% of the age predicted maximum heart rate. The heart rate increases approximately in a linear fashion from 50% to 100% of maximal oxygen intake. The heart rate does not decrease significantly during the first fifteen seconds of recovery (O2 in). Thus, one can predict an aerobic fitness using the heart rate right after exercise of a known sub-maximal rate of working",
           size: 16,
         }),
       ],
@@ -1363,10 +1403,24 @@ function addMCAFTDocxContent(children, test) {
     }),
   );
 
+  children.push(
+    new Paragraph({
+      alignment: AlignmentType.LEFT,
+      children: [
+        new TextRun({
+          text: "mCAFT (Modified Canadian Aerobic Fitness Test) EQUATIONS TO PREDICT VO2MAX",
+          bold: true,
+          size: 16,
+          color: BRAND_COLOR,
+        }),
+      ],
+      spacing: { before: 160, after: 80 },
+    }),
+  );
   // Equation block
   children.push(
     new Paragraph({
-      spacing: { before: 160, after: 80 },
+      spacing: { before: 160, after: 100 },
       children: [
         new TextRun({
           text: "VO2 max (ml/kg/min) = 17.2 + (1.29 × O2 cost of the last completed stage) - (0.09 × mass in kg) - (0.18 × age in years)\nVO2 max (ml/kg/min) = 17.2 + (1.29 × _____) - (0.09 × _____ kg) - (0.18 × _____ )\nNote: O2 cost is provided in Table 2 on the back of this worksheet",
@@ -1384,7 +1438,7 @@ function addMCAFTDocxContent(children, test) {
       children: [
         new TextRun({ text: "Predicted VO2 max: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.predictedVo2Max || "").toString(),
+          text: (test.predictedVo2Max || ""),
           underline: {},
           size: 16,
         }),
@@ -1392,7 +1446,7 @@ function addMCAFTDocxContent(children, test) {
         new TextRun({ text: "    " }),
         new TextRun({ text: "HBR: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.hbr || "").toString(),
+          text: (test.hbr || ""),
           underline: {},
           size: 16,
         }),
@@ -1408,7 +1462,7 @@ function addKaschDocxContent(children, test) {
     new Paragraph({
       children: [
         new TextRun({
-          text: "Kasch Pulse Recovery Test (KPR Test) is a 3-minute step test used to assess cardiorespiratory fitness. Participants step up and down on a 12-inch (0.305 m) step at 24 steps per minute for three minutes, followed by one-minute seated heart rate recovery.",
+          text: "The KASCH step test, officially the Kasch Pulse Recovery Test (KPR Test), is a 3-minute step test used to assess cardiorespiratory fitness. The test involves stepping onto a 0.305-meter (12-inch) step at a rate of 24 steps per minute for three minutes, followed by immediately sitting and measuring heart rate recovery for one minute to determine fitness levels.",
           size: 16,
         }),
       ],
@@ -1416,18 +1470,6 @@ function addKaschDocxContent(children, test) {
     }),
   );
 
-  // === Results ===
-  children.push(
-    new Paragraph({
-      children: [
-        new TextRun({
-          text: "The KASCH step test, officially the Kasch Pulse Recovery Test (KPR Test), measures aerobic fitness based on post-exercise heart rate recovery. A faster recovery rate indicates better cardiorespiratory fitness.",
-          size: 16,
-        }),
-      ],
-      spacing: { after: 160 },
-    }),
-  );
 
   // === How the Test Works ===
   children.push(
@@ -1466,14 +1508,14 @@ function addKaschDocxContent(children, test) {
       children: [
         new TextRun({ text: "CLASSIFICATION: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.classification || "Average").toString(),
+          text: (test.classification),
           underline: {},
           size: 16,
         }),
         new TextRun({ text: "    " }),
         new TextRun({ text: "AEROBIC FITNESS SCORE: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.aerobicFitnessScore || "81").toString(),
+          text: (test.aerobicFitnessScore),
           underline: {},
           size: 16,
         }),
@@ -1656,7 +1698,83 @@ async function addCardioDocxContent(children, test) {
     );
   }
 
-  await appendTestImages(children, test, "Client Images");
+  // await appendTestImages(children, test, "Client Images");
+
+  // 🧩 Collect Test Images section
+  const savedFiles = test?.serializedImages || test?.clientImages || [];
+
+  children.push(
+    new Paragraph({
+      children: [new TextRun({ text: `Client Images:\n`, bold: true, size: 16 })],
+      spacing: { before: 120, after: 80 },
+    }),
+  );
+
+  if (savedFiles.length === 0) {
+    children.push(
+      new Paragraph({
+        children: [
+          new TextRun({ text: "No images found.", italics: true, size: 16 }),
+        ],
+      }),
+    );
+  } else {
+    const imagesPerRow = 6;
+    const numRows = Math.ceil(savedFiles.length / imagesPerRow);
+    const imageTableRows = [];
+
+    for (let i = 0; i < numRows; i++) {
+      const rowChildren = [];
+
+      for (let j = 0; j < imagesPerRow; j++) {
+        const index = i * imagesPerRow + j;
+        const file = savedFiles[index];
+        if (!file) continue;
+
+        let imageBuffer = null;
+
+        if (file.dataUrl) {
+          const base64 = file.dataUrl.split(",")[1];
+          imageBuffer = Buffer.from(base64, "base64");
+        } else if (file.url || file.path || file.src) {
+          imageBuffer = await getImageBuffer(file.url || file.path || file.src);
+        } else if (file.data) {
+          const cleanBase64 = file.data.replace(/^data:image\/\w+;base64,/, "");
+          imageBuffer = Buffer.from(cleanBase64, "base64");
+        }
+
+        rowChildren.push(
+          new TableCell({
+            children: [
+              new Paragraph({
+                children: [
+                  imageBuffer
+                    ? new ImageRun({
+                      data: imageBuffer,
+                      transformation: { width: 120, height: 120 },
+                    })
+                    : new TextRun({ text: "[Image Missing]", size: 16 }),
+                ],
+                alignment: AlignmentType.LEFT,
+              }),
+            ],
+            borders: noBorders,
+            margins: { top: 0, bottom: 0, left: 10, right: 10 },
+          }),
+        );
+      }
+
+      imageTableRows.push(new TableRow({ children: rowChildren }));
+    }
+
+    children.push(
+      new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        borders: noBorders,
+        rows: imageTableRows,
+      }),
+    );
+  }
 }
 
 function buildMTMTestBlockTable(testName, testData, trials = []) {
@@ -2130,6 +2248,81 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
         spacing: { before: 120, after: 80 },
       }),
     );
+    // 🧩 Collect Test Images section
+    const savedFiles = testData?.savedImageData || [];
+
+    rightCol.push(
+      new Paragraph({
+        children: [new TextRun({ text: `Test Images:\n`, bold: true, size: 16 })],
+        spacing: { before: 120, after: 80 },
+      }),
+    );
+
+    if (savedFiles.length === 0) {
+      rightCol.push(
+        new Paragraph({
+          children: [
+            new TextRun({ text: "No images found.", italics: true, size: 16 }),
+          ],
+        }),
+      );
+    } else {
+      const imagesPerRow = 6;
+      const numRows = Math.ceil(savedFiles.length / imagesPerRow);
+      const imageTableRows = [];
+
+      for (let i = 0; i < numRows; i++) {
+        const rowChildren = [];
+
+        for (let j = 0; j < imagesPerRow; j++) {
+          const index = i * imagesPerRow + j;
+          const file = savedFiles[index];
+          if (!file) continue;
+
+          let imageBuffer = null;
+
+          if (file.dataUrl) {
+            const base64 = file.dataUrl.split(",")[1];
+            imageBuffer = Buffer.from(base64, "base64");
+          } else if (file.url || file.path || file.src) {
+            imageBuffer = await getImageBuffer(file.url || file.path || file.src);
+          } else if (file.data) {
+            imageBuffer = Buffer.from(file.data, "base64");
+          }
+
+          rowChildren.push(
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    imageBuffer
+                      ? new ImageRun({
+                        data: imageBuffer,
+                        transformation: { width: 120, height: 120 },
+                      })
+                      : new TextRun({ text: "[Image Missing]", size: 16 }),
+                  ],
+                  alignment: AlignmentType.LEFT,
+                }),
+              ],
+              borders: noBorders,
+              margins: { top: 0, bottom: 0, left: 10, right: 10 },
+            }),
+          );
+        }
+
+        imageTableRows.push(new TableRow({ children: rowChildren }));
+      }
+
+      rightCol.push(
+        new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          borders: noBorders,
+          rows: imageTableRows,
+        }),
+      );
+    }
+
 
     // Comments
     const commentText = correspondingTest?.comments || testData?.comments;
@@ -2797,7 +2990,7 @@ async function addCoverPage(children, body) {
   }
 
   // Large top spacer to vertically center cover content area
-  children.push(new Paragraph({ children: [], spacing: { after: 4000 } }));
+  children.push(new Paragraph({ children: [], spacing: { after: 3000 } }));
 
   // Centered logo
   if (logoBuffer) {
@@ -6221,6 +6414,8 @@ async function addTestDataContent(children, body) {
   const hasMTM = mtmData && Object.keys(mtmData).length > 0;
   const cardioData = body?.cardioTestData || {};
   const testData = body?.testData?.tests || [];
+  console.log("[addTestDataContent] cardio keys:", Object.keys(cardioData || {}));
+  console.log("[addTestDataContent] test ids:", (body?.testData?.tests || []).map(t => t.testId));
 
   // 1) Show individual tests (do not return; we will append MTM after)
   if (testData.length === 0) {
@@ -6298,8 +6493,12 @@ async function addTestDataContent(children, body) {
           testNameLower.includes("grip") || testNameLower.includes("pinch");
         const isLiftTest =
           testNameLower.includes("lift") || testNameLower.includes("carry");
-        const isCardioTest = testNameLower.match(
-          /(bruce|treadmill|mcaft|kasch|step|cardio|cardiovascular)/,
+        // const isCardioTest = testNameLower.match(
+        //   /(bruce|treadmill|mcaft|kasch|step|cardio|cardiovascular)/,
+        // );
+        const idLower = (test.testId || "").toLowerCase();
+        const isCardioTest = /(bruce|treadmill|mcaft|kasch|step|cardio|cardiovascular)/.test(
+          `${testNameLower} ${idLower}`,
         );
 
         function safeUnitLabel(raw, fallback = "") {
@@ -6377,16 +6576,48 @@ async function addTestDataContent(children, body) {
           }),
         );
 
+
+
         if (isCardioTest) {
+          const cData =
+            cardioData?.[test.testId] ??
+            cardioData?.[safeName] ??
+            null;
+
+          // Debug
+          console.log("[Cardio] testId:", test.testId, "name:", safeName, "found:", !!cData);
+
+          if (cData) {
+            Object.assign(test, {
+              vo2Max: cData.vo2MaxScore ?? cData.vo2Max ?? "",
+              predictedVo2Max: cData.predictedVO2Max ?? cData.predictedVo2Max ?? "",
+              classification: cData.classification ?? "",
+              hbr: cData.hbr ?? "",
+              aerobicFitnessScore: cData.aerobicFitnessScore ?? "",
+              clientImages: cData.clientImages ?? [],
+              serializedImages: cData.serializedImages ?? [],
+            });
+
+            // Optional deeper debug
+            console.log("[Cardio] merged:", {
+              testId: test.testId,
+              vo2Max: test.vo2Max,
+              predictedVo2Max: test.predictedVo2Max,
+              classification: test.classification,
+              hbr: test.hbr,
+              aerobicFitnessScore: test.aerobicFitnessScore,
+              clientImages: test.clientImages ?? [],
+              serializedImages: test.serializedImages ?? [],
+            });
+          }
+
           await addCardioDocxContent(rightCol, test);
+
           rightCol.push(
             new Paragraph({
               children: [
                 new TextRun({ text: "Comments: ", bold: true, size: 16 }),
-                new TextRun({
-                  text: test.comments || "No additional comments provided.",
-                  size: 16,
-                }),
+                new TextRun({ text: test.comments || "No additional comments provided.", size: 16 }),
               ],
               spacing: { before: 200, after: 100 },
             }),
@@ -7221,7 +7452,7 @@ async function addTestDataContent(children, body) {
             rightCol.push(
               new Paragraph({
                 children: [
-                  new TextRun({ text: "Endpoint condition: ", bold: true, size: 16 }),
+                  new TextRun({ text: "Endpoint condition (for full description refer to references): ", bold: true, size: 16 }),
                   new TextRun({ text: endpointText, size: 16 }),
                 ],
                 spacing: { before: 160, after: 80 },
