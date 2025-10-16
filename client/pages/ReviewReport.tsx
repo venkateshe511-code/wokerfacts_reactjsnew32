@@ -2618,19 +2618,19 @@ export default function ReviewReport() {
                                             ?.toLowerCase()
                                             .includes("lift")
                                         ) {
-                                          // Lift tests: show average weight in lbs
+                                          // Lift tests: show average weight with selected metric
                                           const unit = (
-                                            (test.unitMeasure as any) || ""
+                                            (test.unitMeasure as any) || "lbs"
                                           ).toLowerCase();
                                           const baseAvg =
                                             leftAvg > 0 ? leftAvg : rightAvg;
-                                          const avgLbs =
+                                          const avgValue =
                                             unit === "kg"
                                               ? Math.round(
                                                 baseAvg * 2.20462 * 10,
                                               ) / 10
                                               : Math.round(baseAvg * 10) / 10;
-                                          return `${avgLbs.toFixed(1)} lbs`;
+                                          return `${avgValue.toFixed(1)} ${unit}`;
                                         } else {
                                           // Default format for strength and cardio tests
                                           return `L=${leftAvg.toFixed(1)} R=${rightAvg.toFixed(1)}`;
