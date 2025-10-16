@@ -3891,33 +3891,6 @@ export default function ReviewReport() {
                                       // Lift Results - Six Trials (single table)
                                       <div>
                                         {(() => {
-                                          const unit = (
-                                            (test.unitMeasure as any) || ""
-                                          ).toLowerCase();
-                                          const avgLbs =
-                                            unit === "kg"
-                                              ? Math.round(
-                                                  leftAvg * 2.20462 * 10,
-                                                ) / 10
-                                              : Math.round(leftAvg * 10) / 10;
-                                          const raw = parseFloat(
-                                            (test.valueToBeTestedNumber as any) ||
-                                              "",
-                                          );
-                                          const normLbs =
-                                            !Number.isNaN(raw) && raw > 0
-                                              ? unit === "kg"
-                                                ? Math.round(
-                                                    raw * 2.20462 * 10,
-                                                  ) / 10
-                                                : Math.round(raw * 10) / 10
-                                              : 0;
-                                          const pctNorm =
-                                            normLbs > 0
-                                              ? Math.round(
-                                                  (avgLbs / normLbs) * 100,
-                                                )
-                                              : 0;
                                           const leftTrialValues =
                                             extractTrialValues(
                                               test.leftMeasurements,
@@ -3940,22 +3913,13 @@ export default function ReviewReport() {
                                               convertToLbs,
                                               displayUnit,
                                             );
-                                          const trialAverageValue =
-                                            computeMeasurementsAverage(
-                                              primaryMeasurements,
-                                              convertToLbs,
-                                            ) ??
-                                            convertWeightMeasurement(
-                                              leftTrialValues.length > 0
-                                                ? leftAvg
-                                                : rightAvg,
-                                              convertToLbs,
-                                            );
-                                          const trialAverageDisplay =
-                                            formatWeightMeasurement(
-                                              trialAverageValue,
-                                              displayUnit,
-                                            );
+                                          // Calculate average using convertToLbs flag from user's metric selection
+                                          const avgValue = convertToLbs
+                                            ? Math.round(
+                                                leftAvg * 2.20462 * 10,
+                                              ) / 10
+                                            : Math.round(leftAvg * 10) / 10;
+                                          const trialAverageDisplay = `${avgValue} ${displayUnit}`;
                                           return (
                                             <>
                                               <table className="w-full border border-gray-400 text-xs mb-4">
@@ -7238,36 +7202,16 @@ export default function ReviewReport() {
                             className="border rounded overflow-hidden"
                           >
                             {file.type && file.type.startsWith("image/") ? (
-                              <div className="flex flex-col">
-                                <div className="aspect-square">
-                                  <img
-                                    src={file.dataUrl || file.data}
-                                    alt={file.name || `Image ${index + 1}`}
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                                <div className="p-2 bg-gray-50">
-                                  <p
-                                    className="text-center text-xs text-gray-600 truncate"
-                                    title={file.name || `Image ${index + 1}`}
-                                  >
-                                    {file.name || `Image ${index + 1}`}
-                                  </p>
-                                </div>
+                              <div className="aspect-square">
+                                <img
+                                  src={file.dataUrl || file.data}
+                                  alt={file.name || `Image ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
                             ) : (
-                              <div className="flex flex-col">
-                                <div className="aspect-square bg-gray-200 flex flex-col items-center justify-center">
-                                  <div className="text-2xl mb-2">-</div>
-                                </div>
-                                <div className="p-2 bg-gray-50">
-                                  <p
-                                    className="text-center text-xs text-gray-600 truncate"
-                                    title={file.name || `Document ${index + 1}`}
-                                  >
-                                    {file.name || `Document ${index + 1}`}
-                                  </p>
-                                </div>
+                              <div className="aspect-square bg-gray-200 flex flex-col items-center justify-center">
+                                <div className="text-2xl mb-2">-</div>
                               </div>
                             )}
                           </div>
