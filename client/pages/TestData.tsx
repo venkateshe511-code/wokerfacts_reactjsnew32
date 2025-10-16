@@ -1639,43 +1639,27 @@ export default function TestData() {
                         </div>
                       </div>
                       {(() => {
-                        const rawStr = currentTest?.valueToBeTestedNumber || "";
-                        const raw = parseFloat(rawStr);
-                        const unit = (
-                          currentTest?.unitMeasure || ""
-                        ).toLowerCase();
-                        let lbs = 0;
-                        if (!Number.isNaN(raw) && raw > 0) {
-                          lbs =
-                            unit === "kg"
-                              ? Math.round(raw * 2.20462 * 10) / 10
-                              : unit === "lbs"
-                                ? Math.round(raw * 10) / 10
-                                : 0;
-                        }
-                        return lbs > 0 ? (
-                          <div className="bg-blue-400 text-white p-3 rounded text-center">
-                            <div className="text-sm">Norm Weight</div>
-                            <div className="text-xl font-bold">{lbs} lbs</div>
-                          </div>
-                        ) : null;
-                      })()}
-                      {(() => {
                         const avg = calculateAverage(
                           currentTest.leftMeasurements,
                         );
                         const unit = (
-                          currentTest?.unitMeasure || ""
+                          currentTest?.unitMeasure || "lbs"
                         ).toLowerCase();
-                        const avgLbs =
+                        const displayValue =
                           unit === "kg"
                             ? Math.round(avg * 2.20462 * 10) / 10
-                            : Math.round(avg * 10) / 10;
+                            : unit === "lbs"
+                              ? Math.round(avg * 10) / 10
+                              : unit === "oz"
+                                ? Math.round(avg * 16 * 10) / 10
+                                : unit === "g"
+                                  ? Math.round((avg / 453.592) * 10) / 10
+                                  : Math.round(avg * 10) / 10;
                         return (
                           <div className="bg-blue-400 text-white p-3 rounded text-center sm:col-span-2">
                             <div className="text-sm">Average Weight</div>
                             <div className="text-xl font-bold">
-                              {avgLbs} lbs
+                              {displayValue} {unit}
                             </div>
                           </div>
                         );
