@@ -4174,7 +4174,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                         <thead>
                                             <tr style="background: #fef3c7;">
                                                 <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Demonstrated Activity</th>
-                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Avg. Weight (lb)</th>
+                                                <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Avg. Weight (${String(test.unitMeasure || "lbs").toLowerCase()})</th>
                                                 <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">CV%</th>
                                                 <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Test Date</th>
                                             </tr>
