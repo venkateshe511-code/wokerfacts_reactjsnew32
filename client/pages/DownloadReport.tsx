@@ -2057,7 +2057,6 @@ padding-top: 120px; align-items: center; min-height: 0; ">
         return "";
       })()}
         </div>
-
         <!-- Additional Referral Questions -->
         <div class="section">
             ${referralQuestionsData.questions &&
