@@ -4322,6 +4322,9 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                     return "";
                   }
 
+                  const unit = String(
+                    test.unitMeasure || "lbs"
+                  ).toLowerCase();
                   const buildTrialCells = (
                     source: Record<string, number>,
                   ) =>
@@ -4338,7 +4341,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                             rawValue > 0
                             ? rawValue
                             : 0;
-                        return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue} lbs</td>`;
+                        return `<td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${displayValue}</td>`;
                       },
                     ).join("");
 
@@ -4363,7 +4366,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                                 <thead>
                                                     <tr style="background: #fef3c7;">
                                                         ${headerCells}
-                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average</th>
+                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average (${unit})</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -4371,7 +4374,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                                         ${valueCells}
                                                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${avgValue.toFixed(
                       1,
-                    )} lbs</strong></td>
+                    )} ${unit}</strong></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -4389,7 +4392,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                                 <thead>
                                                     <tr style="background: #fef3c7;">
                                                         ${headerCells}
-                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average</th>
+                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average (${unit})</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -4397,7 +4400,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                                         ${valueCells}
                                                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${leftAvg.toFixed(
                       1,
-                    )} lbs</strong></td>
+                    )} ${unit}</strong></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -4418,7 +4421,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                                 ${valueCells}
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;"><strong>${averageValue.toFixed(
                       1,
-                    )} lbs</strong></td>
+                    )} ${unit}</strong></td>
                                             </tr>`;
                   };
 
@@ -4456,7 +4459,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                                     <tr style="background: #fef3c7;">
                                                         <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${headerLabel}</th>
                                                         ${headerCells}
-                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average</th>
+                                                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Average (${unit})</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -4543,7 +4546,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                 })()}
                                             </div>
                                             <div style="text-align: center; font-size: 10px; color: #1e40af; margin-top: 8px; font-weight: bold; background: #dbeafe; padding: 4px; border-radius: 4px;">
-                                                Avg: ${leftAvg.toFixed(1)} lbs
+                                                Avg: ${leftAvg.toFixed(1)} ${unit}
                                             </div>
                                         </div>
 
@@ -4639,7 +4642,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                   })()}
                                             </div>
                                             <div style="text-align: center; font-size: 10px; color: #10b981; margin-top: 8px; font-weight: bold; background: #d1fae5; padding: 4px; border-radius: 4px;">
-                                                Avg: ${rightAvg.toFixed(1)} lbs
+                                                Avg: ${rightAvg.toFixed(1)} ${unit}
                                             </div>
                                         </div
                                         `
