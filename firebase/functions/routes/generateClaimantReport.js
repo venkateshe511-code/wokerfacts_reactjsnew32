@@ -24,6 +24,7 @@ const {
   ShadingType,
   PageNumber,
   Footer,
+  Header,
 } = require("docx");
 const {
   getSampleIllustrations,
@@ -3095,7 +3096,7 @@ async function addCoverPage(children, body) {
       }),
     );
 
-  children.__coverFooter = new (require("docx").Footer)({
+  children.__coverFooter = new Footer({
     children: footerChildren,
   });
 }
@@ -3228,7 +3229,7 @@ async function addContentsOfReport(children) {
 }
 
 async function addClientInformation(children, body) {
-  children.push(new Paragraph({ children: [new PageBreak()] }));
+  // children.push(new Paragraph({ children: [new PageBreak()] }));
 
   const headerLines = [
     "Functional Abilities Determination",
@@ -3473,7 +3474,7 @@ async function addClientInformation(children, body) {
                     new TextRun({
                       text: row[0],
                       bold: true,
-                      size: 20,
+                      size: 16,
                     }),
                   ],
                   spacing: { after: 0 },
@@ -3488,7 +3489,7 @@ async function addClientInformation(children, body) {
                   children: [
                     new TextRun({
                       text: row[1],
-                      size: 20,
+                      size: 16,
                     }),
                   ],
                   spacing: { after: 0 },
@@ -3504,7 +3505,7 @@ async function addClientInformation(children, body) {
                     new TextRun({
                       text: row[2],
                       bold: true,
-                      size: 20,
+                      size: 16,
                     }),
                   ],
                   spacing: { after: 0 },
@@ -3519,7 +3520,7 @@ async function addClientInformation(children, body) {
                   children: [
                     new TextRun({
                       text: row[3],
-                      size: 20,
+                      size: 16,
                     }),
                   ],
                   spacing: { after: 0 },
@@ -3633,7 +3634,7 @@ async function addClientInformation(children, body) {
               borders: {
                 top: { style: BorderStyle.SINGLE, size: 0, color: "FFFFFF" },
                 bottom: { style: BorderStyle.SINGLE, size: 0, color: "FFFFFF" },
-                left: { style: BorderStyle.SINGLE, size: 1, color: "000000" }, // vertical dividing line
+                left: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" }, // vertical dividing line
                 right: { style: BorderStyle.SINGLE, size: 0, color: "FFFFFF" },
               },
 
@@ -5999,7 +6000,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
 
   const table = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
-    layout: TableLayoutType.FIXED,
+    // layout: TableLayoutType.FIXED,
     rows,
     alignment: AlignmentType.CENTER,
   });
@@ -6087,7 +6088,7 @@ async function addFunctionalAbilitiesDeterminationContent(children, body) {
 
   const consistencyOverviewTable = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
-    layout: TableLayoutType.FIXED,
+    // layout: TableLayoutType.FIXED,
     rows: [
       // === Header Row ===
       new TableRow({
@@ -7494,7 +7495,7 @@ async function addTestDataContent(children, body) {
                       left: {
                         style: BorderStyle.SINGLE,
                         size: 8,
-                        color: "000000",
+                        color: "CCCCCC",
                       },
                     },
                     children: [],
@@ -7525,6 +7526,9 @@ async function addTestDataContent(children, body) {
 
 // ===== Route =====
 router.post("/", async (req, res) => {
+  console.log("📥 Request received for DOCX generation at:", new Date().toISOString());
+  console.log("Request body keys:", Object.keys(req.body));
+
   try {
     if (req.query.dryRun === "1") {
       return res.status(200).json({ ok: true, body: req.body || {} });
@@ -7546,7 +7550,8 @@ router.post("/", async (req, res) => {
     // Build remaining pages in a separate children array (no footer)
     const restChildren = [];
     // Contents of Report on current page; page break will be inserted after inside the function
-    await addContentsOfReport(restChildren);
+    const contentsChildren = [];
+    await addContentsOfReport(contentsChildren);
     await addClientInformation(restChildren, body);
     await addReferralQuestionsContent(restChildren, body);
     await addConclusionContent(restChildren, body);
@@ -7612,21 +7617,28 @@ router.post("/", async (req, res) => {
         {
           properties: {
             page: {
+              margin: { top: 1440, right: 720, bottom: 720, left: 720 },
+            },
+          },
+          footers: { default: new Footer({ children: [] }) },
+          children: contentsChildren,
+        },
+        {
+          properties: {
+            page: {
               margin: { top: 1480, right: 720, bottom: 720, left: 720 },
               pageNumberStart: 3,
             },
           },
           headers: {
-            default: new (require("docx").Footer)({
+            default: new Header({
               children: [
                 new Paragraph({
                   alignment: AlignmentType.RIGHT,
                   children: [
-                    new TextRun({
-                      children: ["Page ", PageNumber.CURRENT],
-                      font: NARROW_FONT,
-                      size: 16,
-                    }),
+                    new TextRun({ text: "Page ", font: NARROW_FONT, size: 16 }),
+                    new TextRun({ children: [PageNumber.CURRENT], font: NARROW_FONT, size: 16 }),
+
                   ],
                 }),
               ],
@@ -7649,18 +7661,26 @@ router.post("/", async (req, res) => {
 
     const buffer = await Packer.toBuffer(doc);
 
+    console.log("✅ DOCX buffer generated successfully, size:", buffer.length, "bytes");
+
+    // Check first bytes
+    console.log("Buffer signature:", buffer.slice(0, 4).toString("hex")); // should start with 504b
+
     return res
       .status(200)
-      .set(
-        "Content-Type",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      )
-      .set(
-        "Content-Disposition",
-        `attachment; filename=FCE_Report_${claimantName.replace(/[^a-zA-Z0-9]/g, "_")}_${new Date().toISOString().split("T")[0]
-        }.docx`,
-      )
-      .send(buffer);
+      .set({
+        "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "Content-Disposition": `attachment; filename="FCE_Report_${claimantName.replace(
+          /[^a-zA-Z0-9]/g,
+          "_"
+        )}_${new Date().toISOString().split("T")[0]}.docx"`,
+        "Cache-Control": "no-store, no-transform", // ✅ combine in one header correctly
+        "Content-Encoding": "binary",              // ✅ prevents UTF-8 / gzip transformation
+        "Content-Length": buffer.length,
+      })
+      .end(Buffer.from(buffer)); // ✅ ensure binary mode
+
+
   } catch (err) {
     return res.status(500).json({
       error: "Internal Server Error generating DOCX",
