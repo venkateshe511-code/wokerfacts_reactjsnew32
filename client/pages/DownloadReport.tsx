@@ -4955,16 +4955,16 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
         <!-- Dynamic Lift Test End Point Conditions -->
         <div style="margin-bottom: 20px; margin-top: 0; page-break-inside: avoid;">
-  <h3 style="font-weight: bold; margin-bottom: 8px; font-family: Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
+  <h3 style="font-weight: bold; margin-bottom: 5px; font-family: Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
             <div style="border: 1px solid #333;">
-            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 9px; text-align: center;">
+            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 8px; text-align: center;">
                 <thead>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;" colspan="2">Test End Point Conditions</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; text-align: center;" colspan="2">Test End Point Conditions</th>
                     </tr>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">CONDITION</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">DESCRIPTION</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; text-align: center;">CONDITION</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; text-align: center;">DESCRIPTION</th>
                     </tr>
                 </thead>
                 <tbody>
