@@ -4901,14 +4901,14 @@ padding-top: 120px; align-items: center; min-height: 0; ">
             <h3 style="font-weight: bold; margin-bottom: 8px; font-family: Arial, sans-serif;">PDC Categories based on Sustainable Energy Level</h3>
 
             <div style="border: 1px solid #333; margin-bottom: 0;">
-            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px; text-align: center;">
+            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 9px; text-align: center;">
                 <thead>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;" colspan="2">PDC Categories based on Sustainable Energy Level (Energy Cost) over an 8-hour workday</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; text-align: center;" colspan="2">PDC Categories based on Sustainable Energy Level (Energy Cost) over an 8-hour workday</th>
                     </tr>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">PDC Category</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;">Sustainable Energy Level</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; text-align: center;">PDC Category</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; text-align: center;">Sustainable Energy Level</th>
                     </tr>
                 </thead>
                 <tbody>
