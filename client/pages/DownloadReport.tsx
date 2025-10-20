@@ -1770,7 +1770,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
     <!-- Right: Claimant Info -->
     <div style="margin-left: 25px;">
-    <h3 style="font-weight: bold; margin-bottom: 8px; margin-top: 5px; margin-left: -15px; font-family: Arial, sans-serif;">Client Information</h3>
+    <h3 style="font-weight: bold; margin-bottom: 8px; margin-top: 5px; margin-left: -15px; font-family: Arial, sans-serif;color: #4472C4;">Client Information</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 11px; font-family: Arial, sans-serif; line-height: 1.2;">
             <div>
                 <div style="margin: 1px 0; display: flex;"><span style="font-weight: bold; width: 90px;">Name:</span><span>${claimantData.firstName || ""} ${claimantData.lastName || ""}</span></div>
@@ -1800,7 +1800,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
         <!-- Mechanism and History of Injury (Below Client Information) -->
         <div style="margin-bottom: 8px; margin-left: 193px; margin-top: -15px;">
-            <h3 style="font-weight: bold; margin-bottom: 8px; margin-left: -15px; font-family: Arial, sans-serif;">Mechanism and History of Injury</h3>
+            <h3 style="font-weight: bold; margin-bottom: 8px; margin-left: -15px; font-family: Arial, sans-serif;color: #4472C4;">Mechanism and History of Injury</h3>
 
             <!-- Header row -->
             <div style="display: flex; margin-bottom: 4px; font-size: 11px; font-family: Arial, sans-serif;">
@@ -1822,7 +1822,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
     <!-- Pain/Symptom Illustration Section -->
     <div style="margin-top: 5px; padding-left: 0;">
-    <h3 style="font-weight: bold; margin-bottom: 5px; margin-left: -15px; font-family: Arial, sans-serif; color: #4472C4; font-size: 13px;">Pain/Symptom Illustration</h3>
+    <h3 style="font-weight: bold; margin-bottom: 8px; margin-left: -15px; font-family: Arial, sans-serif;color: #4472C4;">Pain/Symptom Illustration</h3>
     <div style="display: flex; gap: 8px; align-items: start;">
         <div style="padding: 4px; width: 640px; margin-left: 0; float: left;">
             <div style="display: flex; gap: 2px; justify-content: center; align-items: flex-start;">
