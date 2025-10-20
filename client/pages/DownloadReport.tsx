@@ -4923,7 +4923,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
         </div>
 
         <!-- General Patterns of Activity Descriptors -->
-        <div style="margin-bottom: 40px; page-break-inside: avoid;">
+        <div style="margin-bottom: 20px; page-break-inside: avoid;">
 
 <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">General Patterns of Activity Descriptors</h3>
             <div style="font-size: 11px; line-height: 1.5;">
