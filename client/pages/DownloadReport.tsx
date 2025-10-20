@@ -4896,11 +4896,11 @@ padding-top: 120px; align-items: center; min-height: 0; ">
         </div>
 
         <!-- PDC Categories based on Sustainable Energy Level -->
-        <div style="margin-bottom: 40px; page-break-inside: avoid;">
+        <div style="margin-bottom: 15px; page-break-inside: avoid;">
 
-            <h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">PDC Categories based on Sustainable Energy Level</h3>
+            <h3 style="font-weight: bold; margin-bottom: 8px; font-family: Arial, sans-serif;">PDC Categories based on Sustainable Energy Level</h3>
 
-            <div style="border: 1px solid #333; margin-bottom: 20px;">
+            <div style="border: 1px solid #333; margin-bottom: 0;">
             <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px; text-align: center;">
                 <thead>
                     <tr style="background: #fef3c7;">
@@ -4923,38 +4923,38 @@ padding-top: 120px; align-items: center; min-height: 0; ">
         </div>
 
         <!-- General Patterns of Activity Descriptors -->
-        <div style="margin-bottom: 20px; page-break-inside: avoid;">
+        <div style="margin-bottom: 8px; page-break-inside: avoid;">
 
-<h3 style="font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif;">General Patterns of Activity Descriptors</h3>
-            <div style="font-size: 11px; line-height: 1.5;">
-                <div style="margin-bottom: 12px;">
-                    <p style="font-weight: bold; text-decoration: underline; margin-bottom: 4px;">(S) Sedentary Work</p>
-                    <p style="line-height: 1.4; text-align: justify;">Exerting up to 10 lbs of force occasionally and/or a negligible amount of force frequently to lift, carry, push, pull, or otherwise move objects, including the human body. Sedentary work involves sitting most of the time but may involve walking or standing for brief periods of time. Jobs are sedentary if walking and standing are required occasionally and all other sedentary criteria are met.</p>
+<h3 style="font-weight: bold; margin-bottom: 8px; font-family: Arial, sans-serif;">General Patterns of Activity Descriptors</h3>
+            <div style="font-size: 10px; line-height: 1.3;">
+                <div style="margin-bottom: 6px;">
+                    <p style="font-weight: bold; text-decoration: underline; margin-bottom: 2px;">(S) Sedentary Work</p>
+                    <p style="line-height: 1.3; text-align: justify;">Exerting up to 10 lbs of force occasionally and/or a negligible amount of force frequently to lift, carry, push, pull, or otherwise move objects, including the human body. Sedentary work involves sitting most of the time but may involve walking or standing for brief periods of time. Jobs are sedentary if walking and standing are required occasionally and all other sedentary criteria are met.</p>
                 </div>
 
-                <div style="margin-bottom: 12px;">
-                    <p style="font-weight: bold; text-decoration: underline; margin-bottom: 4px;">(L) Light Work</p>
-                    <p style="line-height: 1.4; text-align: justify;">Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated "Light Work: (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting.</p>
+                <div style="margin-bottom: 6px;">
+                    <p style="font-weight: bold; text-decoration: underline; margin-bottom: 2px;">(L) Light Work</p>
+                    <p style="line-height: 1.3; text-align: justify;">Exerting up to 20 lb of force occasionally, and/or up to 10 lb of force frequently, and/or a negligible amount of force constantly to move objects. Physical demand requirements are in excess of those for sedentary work. Even though the weight lifted may be only negligible, a job should be rated "Light Work: (1) when it requires walking or standing to a significant degree; or (2) when it requires sitting most of the time but entails pushing and/or pulling of arm or leg controls; and/or (3) when the job requires working at a production rate pace entailing the constant pushing and/or pulling of materials even though the weight of those materials is negligible. The constant stress and strain of maintaining a production rate pace, especially in an industrial setting, can be and is physically exhausting.</p>
                 </div>
 
-                <div style="margin-bottom: 12px;">
-                    <p style="font-weight: bold; text-decoration: underline; margin-bottom: 4px;">(M) Medium Work</p>
-                    <p style="line-height: 1.4; text-align: justify;">Exerting 20 to 50 lbs of force occasionally, and/or 10 to 25 lbs of force frequently, and/or greater than negligible up to 10 lbs of force constantly to move objects. Physical demand requirements are in excess of those for light work.</p>
+                <div style="margin-bottom: 6px;">
+                    <p style="font-weight: bold; text-decoration: underline; margin-bottom: 2px;">(M) Medium Work</p>
+                    <p style="line-height: 1.3; text-align: justify;">Exerting 20 to 50 lbs of force occasionally, and/or 10 to 25 lbs of force frequently, and/or greater than negligible up to 10 lbs of force constantly to move objects. Physical demand requirements are in excess of those for light work.</p>
                 </div>
 
-                <div style="margin-bottom: 12px;">
-                    <p style="font-weight: bold; text-decoration: underline; margin-bottom: 4px;">(H) Heavy Work</p>
-                    <p style="line-height: 1.4; text-align: justify;">Exerting 50 to 100 lbs of force occasionally, and/or 25 to 50 lbs of force frequently, and/or 10 to 20 lbs of force constantly to move objects. Physical demand requirements are in excess of those for medium work.</p>
+                <div style="margin-bottom: 6px;">
+                    <p style="font-weight: bold; text-decoration: underline; margin-bottom: 2px;">(H) Heavy Work</p>
+                    <p style="line-height: 1.3; text-align: justify;">Exerting 50 to 100 lbs of force occasionally, and/or 25 to 50 lbs of force frequently, and/or 10 to 20 lbs of force constantly to move objects. Physical demand requirements are in excess of those for medium work.</p>
                 </div>
 
-                <div style="margin-bottom: 15px;">
-                    <p style="font-style: italic; color: #666; line-height: 1.4; text-align: justify;">*"Occasionally" indicates that an activity or condition exists up to one third of the time; "frequently" indicates that an activity or condition exists from one third to two thirds of the time; "constantly" indicates that an activity or condition exists two thirds or more of the time.</p>
+                <div style="margin-bottom: 8px;">
+                    <p style="font-style: italic; color: #666; line-height: 1.3; font-size: 9px; text-align: justify;">*"Occasionally" indicates that an activity or condition exists up to one third of the time; "frequently" indicates that an activity or condition exists from one third to two thirds of the time; "constantly" indicates that an activity or condition exists two thirds or more of the time.</p>
                 </div>
             </div>
         </div>
 
         <!-- Dynamic Lift Test End Point Conditions -->
-        <div style="margin-bottom: 20px; margin-top: 15px; page-break-inside: avoid;">
+        <div style="margin-bottom: 20px; margin-top: 0; page-break-inside: avoid;">
   <h3 style="font-weight: bold; margin-bottom: 8px; font-family: Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
             <div style="border: 1px solid #333;">
             <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 9px; text-align: center;">
