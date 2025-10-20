@@ -4912,11 +4912,11 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Sedentary</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">&lt; 1.7 Kcal/min</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">1.7 to 3.2 Kcal/min</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Medium</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">3.3 to 5.7 Kcal/min</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">5.8 to 8.2 Kcal/min</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Very Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">8.3 or more Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; font-weight: bold;">Sedentary</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px;">&lt; 1.7 Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; font-weight: bold;">Light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px;">1.7 to 3.2 Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; font-weight: bold;">Medium</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px;">3.3 to 5.7 Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; font-weight: bold;">Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px;">5.8 to 8.2 Kcal/min</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; font-weight: bold;">Very Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px;">8.3 or more Kcal/min</td></tr>
                 </tbody>
             </table>
             </div>
