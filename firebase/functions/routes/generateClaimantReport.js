@@ -4208,32 +4208,59 @@ async function addReferenceChartsContent(children) {
     rows: [
       new TableRow({
         children: [
-          paddedCell("Physical Demand Characteristics of Work", {
-            bold: true,
-            size: 16,
-            fill: "FFFF99",
-            align: AlignmentType.CENTER,
+          new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+            verticalAlign: VerticalAlign.CENTER,
+            borders: {
+              top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+            },
+            columnSpan: 4,
+            shading: { fill: "FFFF99" },
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: "Physical Demand Characteristics of Work",
+                    bold: true,
+                    size: 16,
+                  }),
+                ],
+              }),
+            ],
           }),
         ],
-        tableCellMargin: { left: 150, right: 150 },
-        cantSplit: true,
-        height: { value: 300 },
       }),
       new TableRow({
         children: [
-          paddedCell(
-            "(Dictionary of Occupational Titles - Volume II, Fourth Edition, Revised 1991)",
-            {
-              bold: true,
-              size: 16,
-              fill: "FFFF99",
-              align: AlignmentType.CENTER,
+          new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+            verticalAlign: VerticalAlign.CENTER,
+            borders: {
+              top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
             },
-          ),
+            columnSpan: 4,
+            shading: { fill: "FFFF99" },
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: "(Dictionary of Occupational Titles - Volume II, Fourth Edition, Revised 1991)",
+                    bold: true,
+                    size: 16,
+                  }),
+                ],
+              }),
+            ],
+          }),
         ],
-        tableCellMargin: { left: 150, right: 150 },
-        cantSplit: true,
-        height: { value: 300 },
       }),
       new TableRow({
         children: [
@@ -4316,19 +4343,31 @@ async function addReferenceChartsContent(children) {
     rows: [
       new TableRow({
         children: [
-          paddedCell(
-            "PDC Categories based on Sustainable Energy Level (Energy Cost) over an 8-hour workday",
-            {
-              bold: true,
-              size: 16,
-              fill: "FFFF99",
-              align: AlignmentType.CENTER,
+          new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+            verticalAlign: VerticalAlign.CENTER,
+            borders: {
+              top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
             },
-          ),
+            columnSpan: 2,
+            shading: { fill: "FFFF99" },
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: "PDC Categories based on Sustainable Energy Level (Energy Cost) over an 8-hour workday",
+                    bold: true,
+                    size: 16,
+                  }),
+                ],
+              }),
+            ],
+          }),
         ],
-        tableCellMargin: { left: 150, right: 150 },
-        cantSplit: true,
-        height: { value: 300 },
       }),
       new TableRow({
         children: [
@@ -4469,11 +4508,29 @@ async function addReferenceChartsContent(children) {
     rows: [
       new TableRow({
         children: [
-          paddedCell("Test End Point Conditions", {
-            bold: true,
-            size: 16,
-            fill: "FFFF99",
-            align: AlignmentType.CENTER,
+          new TableCell({
+            margins: { top: 100, bottom: 100, left: 150, right: 150 },
+            verticalAlign: VerticalAlign.CENTER,
+            borders: {
+              top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+              right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+            },
+            columnSpan: 2,
+            shading: { fill: "FFFF99" },
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: "Test End Point Conditions",
+                    bold: true,
+                    size: 16,
+                  }),
+                ],
+              }),
+            ],
           }),
         ],
       }),
@@ -4782,32 +4839,59 @@ async function addReferralQuestionsContent(children, body) {
           rows: [
             new TableRow({
               children: [
-                paddedCell("Physical Demand Characteristics of Work", {
-                  bold: true,
-                  size: 16,
-                  fill: "FFFF99",
-                  align: AlignmentType.CENTER,
+                new TableCell({
+                  margins: { top: 100, bottom: 100, left: 150, right: 150 },
+                  verticalAlign: VerticalAlign.CENTER,
+                  borders: {
+                    top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                  },
+                  columnSpan: 4,
+                  shading: { fill: "FFFF99" },
+                  children: [
+                    new Paragraph({
+                      alignment: AlignmentType.CENTER,
+                      children: [
+                        new TextRun({
+                          text: "Physical Demand Characteristics of Work",
+                          bold: true,
+                          size: 16,
+                        }),
+                      ],
+                    }),
+                  ],
                 }),
               ],
-              tableCellMargin: { left: 150, right: 150 },
-              cantSplit: true,
-              height: { value: 300 },
             }),
             new TableRow({
               children: [
-                paddedCell(
-                  "(Dictionary of Occupational Titles - Volume II, Fourth Edition, Revised 1991)",
-                  {
-                    bold: true,
-                    size: 16,
-                    fill: "FFFF99",
-                    align: AlignmentType.CENTER,
+                new TableCell({
+                  margins: { top: 100, bottom: 100, left: 150, right: 150 },
+                  verticalAlign: VerticalAlign.CENTER,
+                  borders: {
+                    top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
                   },
-                ),
+                  columnSpan: 4,
+                  shading: { fill: "FFFF99" },
+                  children: [
+                    new Paragraph({
+                      alignment: AlignmentType.CENTER,
+                      children: [
+                        new TextRun({
+                          text: "(Dictionary of Occupational Titles - Volume II, Fourth Edition, Revised 1991)",
+                          bold: true,
+                          size: 16,
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
               ],
-              tableCellMargin: { left: 150, right: 150 },
-              cantSplit: true,
-              height: { value: 300 },
             }),
             new TableRow({
               children: [

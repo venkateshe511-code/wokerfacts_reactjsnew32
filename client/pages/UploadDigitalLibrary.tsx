@@ -189,16 +189,16 @@ export default function UploadDigitalLibrary() {
 
       // Pick 10 real images from public folder
       const imagePaths = [
-        "/clinical-software-overview.jpg",
-        "/functional-assessment.jpg",
-        "/grip-exerciser.jpg",
-        "/hand-grip.jpg",
-        "/kasch-step-illustration.jpg",
-        "/mcaft-step-illustration.jpg",
-        "/occupational-task-1.jpg",
-        "/occupational-task-2.jpg",
-        "/workplace-wellness-round.jpg",
-        "/home_page_background_image.jpg",
+        "/digitalLibrary/a.png",
+        "/digitalLibrary/b.png",
+        "/digitalLibrary/c.png",
+        "/digitalLibrary/d.png",
+        "/digitalLibrary/e.png",
+        "/digitalLibrary/f.png",
+        "/digitalLibrary/g.png",
+        "/digitalLibrary/h.png",
+        "/digitalLibrary/i.png",
+        "/digitalLibrary/j.png",
       ];
 
       // Fetch images and build File objects
@@ -868,11 +868,10 @@ export default function UploadDigitalLibrary() {
           <CardContent className="p-8">
             {/* Upload Area */}
             <div
-              className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                dragActive
+              className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${dragActive
                   ? "border-blue-400 bg-blue-50"
                   : "border-gray-300 hover:border-gray-400"
-              }`}
+                }`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
@@ -895,11 +894,10 @@ export default function UploadDigitalLibrary() {
                 variant="outline"
                 onClick={() => document.getElementById("file-upload")?.click()}
                 disabled={libraryData.files.length >= 40 || uploadingImages}
-                className={`${
-                  libraryData.files.length >= 40 || uploadingImages
+                className={`${libraryData.files.length >= 40 || uploadingImages
                     ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : "bg-blue-100 text-blue-600 hover:bg-blue-200"
-                }`}
+                  }`}
               >
                 <Upload className="mr-2 h-4 w-4" />
                 {uploadingImages
