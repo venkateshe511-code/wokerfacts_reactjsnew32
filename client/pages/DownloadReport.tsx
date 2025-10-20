@@ -4969,7 +4969,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Biomechanical</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 0px; font-weight: bold;">Biomechanical</td>
                         <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-family: Arial, sans-serif;">The biomechanical stopping point follows the biomechanics of the person as they perform the activity. While you will not be able to teach proper body mechanics during the relatively short duration of an FCE, you should encourage proper body mechanics. Ultimately, you will be assessing the client’s capacity as he or she moves in their usual way to complete each task. The biomechanical stopping point relies on your clinical observation skills and knowledge of proper body mechanics.</td>
                     </tr>
                     <tr>
