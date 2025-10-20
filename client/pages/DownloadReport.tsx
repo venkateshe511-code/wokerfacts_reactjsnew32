@@ -1085,8 +1085,8 @@ export default function DownloadReport() {
             </p>
 
             <!-- How the Test Works -->
-            <div style="margin-bottom: 16px;">
-              <h5 style="font-weight: bold; margin-bottom: 8px; font-size: 11px;">How the Kasch Pulse Recovery Test (KPR Test) Works</h5>
+            <div style="margin-bottom: 8px;">
+              <h5 style="font-weight: bold; margin-bottom: 2px; font-size: 11px;">How the Kasch Pulse Recovery Test (KPR Test) Works</h5>
               <ol style="font-size: 9px; list-style-type: decimal; margin-left: 20px; line-height: 1.4;">
                 <li style="margin-bottom: 4px;">
                   <strong>Preparation:</strong> Participants are fitted with a heart rate monitor and rest until a steady-state heart rate is achieved.
@@ -1335,7 +1335,7 @@ export default function DownloadReport() {
             ${
               testData.hrPre || testData.hrPost
                 ? `
-                <div style="font-size: 11px; color: #374151; margin-bottom: 8px;">
+                <div style="font-size: 11px; color: #374151; margin-bottom: 2px;">
                     <strong>Heart Rate:</strong>
                     ${testData.hrPre ? ` Pre: ${testData.hrPre} bpm` : ""}
                     ${testData.hrPost ? ` Post: ${testData.hrPost} bpm` : ""}
@@ -4164,9 +4164,9 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                             testName.includes("treadmill")
                                             ? "The Bruce Treadmill Test (Bruce Protocol) is commonly used to help identify a person's level of aerobic endurance by providing an all-out maximal oxygen uptake or VO₂ max, which measures the capacity to perform sustained exercise and is linked to aerobic endurance."
                                             : testName.includes("mcaft")
-                                              ? "The mCAFT assesses aerobic fitness using minimal equipment. The subject steps up and down double steps (40.6 cm) at set cadences until reaching about 65% of age-predicted max heart rate. Fitness is estimated from post-exercise heart rate."
+                                              ? ""
                                               : testName.includes("kasch")
-                                                ? "The Kasch Step Test (KPR) is a 3-minute step test for cardiorespiratory fitness. Participants step on a 30.5-cm platform at 24 steps/min for 3 minutes, then rest while heart rate recovery is measured to assess fitness."
+                                                ? ""
                                                 : "The client was tested in our facility using standardized cardiovascular assessment protocols. The test results were compared to normative data when available."
                                           : "The client was tested in our facility using standardized assessment protocols. The test results were compared to normative data when available."
                                 }
@@ -4174,7 +4174,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
                             <!-- Results Section with Combined Tables and Charts -->
                             <div style="margin: 0;">
-                                <h4 style="font-weight: bold; margin-bottom: 8px; font-size: 12px;">Results:</h4>
+                                <h4 style="font-weight: bold; margin-bottom: 2px; font-size: 12px;">Results:</h4>
 
                                 ${
                                   isRangeOfMotion
@@ -4745,7 +4745,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
                                 ${
                                   test.effort
-                                    ? `<p style="font-size: 11px; margin: 8px 0 12px 0;">*Rating of Perceived Effort = ${
+                                    ? `<p style="font-size: 11px; margin: 4px 0 0px 0;">*Rating of Perceived Effort = ${
                                         test.perceived || test.effort
                                       }</p>`
                                     : ""
@@ -4798,7 +4798,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                               );
                               return pre || post
                                 ? `
-                                  <div style="font-size: 11px; color: #374151; margin: 6px 0;">
+                                  <div style="font-size: 11px; color: #374151; margin:0;">
                                     <strong>Heart Rate:</strong>
                                     ${pre ? ` Pre: ${pre} bpm` : ""}
                                     ${post ? ` Post: ${post} bpm` : ""}
@@ -4833,13 +4833,13 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                            
                             ${
                               test.comments
-                                ? `<p style="font-style: italic; font-size: 11px; margin: 8px 0 12px 0;"><strong>Comments:</strong> ${test.comments}</p>`
+                                ? `<p style="font-style: italic; font-size: 11px; margin: 0px 0 0px 0;"><strong>Comments:</strong> ${test.comments}</p>`
                                 : ""
                             }
 
               <!-- References section for each test -->
-              <div class="test-references" style="margin-top: 12px; padding: 8px; background: #f9f9f9; border-left: 3px solid #ddd;">
-                  <p style="font-size: 9px; font-weight: bold; color: #666; margin-bottom: 4px; font-family: Arial, sans-serif;">References:</p>
+              <div class="test-references" style="margin-top: 0px; padding: 4px; background: #f9f9f9; border-left: 3px solid #ddd;">
+                  <p style="font-size: 9px; font-weight: bold; color: #666; margin-bottom: 2px; font-family: Arial, sans-serif;">References:</p>
                   <div style="font-size: 8px; color: #888; line-height: 1.3; font-family: Arial, sans-serif;">
                       ${(() => {
                         // Check test type and return specific references
