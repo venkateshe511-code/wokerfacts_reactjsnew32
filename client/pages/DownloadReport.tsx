@@ -4954,10 +4954,10 @@ padding-top: 120px; align-items: center; min-height: 0; ">
         </div>
 
         <!-- Dynamic Lift Test End Point Conditions -->
-        <div style="margin-bottom: 20px; page-break-inside: auto;">
-  <h3 style="font-weight: bold; margin-bottom: 10px; font-family: Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
+        <div style="margin-bottom: 20px; margin-top: 15px; page-break-inside: avoid;">
+  <h3 style="font-weight: bold; margin-bottom: 8px; font-family: Arial, sans-serif;">Dynamic Lift Test End Point Conditions</h3>
             <div style="border: 1px solid #333;">
-            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 10px; text-align: center;">
+            <table class="center-cells" style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #333; font-size: 9px; text-align: center;">
                 <thead>
                     <tr style="background: #fef3c7;">
                         <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; text-align: center;" colspan="2">Test End Point Conditions</th>
