@@ -1637,13 +1637,30 @@ export default function ReviewReport() {
                         What would be the Physical Demand Classification (PDC)
                         for this client?
                       </h4>
-                      <p className="mb-4">
-                        *
-                        {getPhysicalDemandLevel(
-                          reportData.activityRatingData?.activities || [],
-                        )}{" "}
-                        which is in line with full return to duties.
-                      </p>
+                      {(() => {
+                        const qa =
+                          reportData.referralQuestionsData?.questions?.find(
+                            (x: any) =>
+                              x?.question &&
+                              x.question.includes(
+                                "Physical Demand Classification",
+                              ),
+                          );
+                        const selectedLevel = qa?.answer
+                          ? String(qa.answer)
+                              .split("|")[0]
+                              .replace("PDC:", "")
+                          : null;
+
+                        if (!selectedLevel) return null;
+
+                        return (
+                          <p className="mb-4">
+                            *{selectedLevel} which is in line with full return
+                            to duties.
+                          </p>
+                        );
+                      })()}
 
                       {(() => {
                         const PDC_MAP: Record<
@@ -2255,7 +2272,7 @@ export default function ReviewReport() {
                           if (testNameLower.includes("lift")) {
                             return {
                               requirement:
-                                "Lifting capacity ≥10 kg (Light) / ≥25 kg (Medium work)",
+                                "Lifting capacity ≥10 kg (Light) / ���25 kg (Medium work)",
                               lightWork: 10, // kg - DOT Level 2
                               mediumWork: 25, // kg - DOT Level 3
                               unit: "kg",
