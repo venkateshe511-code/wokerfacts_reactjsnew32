@@ -1741,76 +1741,78 @@ export default function ReviewReport() {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td className="border border-gray-300 p-2 font-semibold">
-                              Sedentary
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              1 - 10 lbs.
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              Negligible
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              Negligible
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="border border-gray-300 p-2 font-semibold">
-                              Light
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              11 - 20 lbs.
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              1 - 10 lbs.
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              Negligible
-                            </td>
-                          </tr>
-                          <tr className="bg-blue-100">
-                            <td className="border border-gray-300 p-2 font-semibold">
-                              Medium
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              21 - 50 lbs.
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              11 - 25 lbs.
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              1 - 10 lbs.
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="border border-gray-300 p-2 font-semibold">
-                              Heavy
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              51 - 100 lbs.
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              26 - 50 lbs.
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              11 - 20 lbs.
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="border border-gray-300 p-2 font-semibold">
-                              Very Heavy
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              Over 100 lbs.
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              Over 50 lbs.
-                            </td>
-                            <td className="border border-gray-300 p-2">
-                              Over 20 lbs.
-                            </td>
-                          </tr>
+                          {(() => {
+                            const qa =
+                              reportData.referralQuestionsData?.questions?.find(
+                                (x: any) =>
+                                  x?.question &&
+                                  x.question.includes(
+                                    "Physical Demand Classification",
+                                  ),
+                              );
+                            const selectedLevel = qa?.answer
+                              ? String(qa.answer)
+                                  .split("|")[0]
+                                  .replace("PDC:", "")
+                              : null;
+
+                            const levels = [
+                              {
+                                name: "Sedentary",
+                                occasional: "1 - 10 lbs.",
+                                frequent: "Negligible",
+                                constant: "Negligible",
+                              },
+                              {
+                                name: "Light",
+                                occasional: "11 - 20 lbs.",
+                                frequent: "1 - 10 lbs.",
+                                constant: "Negligible",
+                              },
+                              {
+                                name: "Medium",
+                                occasional: "21 - 50 lbs.",
+                                frequent: "11 - 25 lbs.",
+                                constant: "1 - 10 lbs.",
+                              },
+                              {
+                                name: "Heavy",
+                                occasional: "51 - 100 lbs.",
+                                frequent: "26 - 50 lbs.",
+                                constant: "11 - 20 lbs.",
+                              },
+                              {
+                                name: "Very Heavy",
+                                occasional: "Over 100 lbs.",
+                                frequent: "Over 50 lbs.",
+                                constant: "Over 20 lbs.",
+                              },
+                            ];
+
+                            return levels.map((level, index) => (
+                              <tr
+                                key={index}
+                                className={
+                                  selectedLevel === level.name
+                                    ? "bg-blue-100"
+                                    : ""
+                                }
+                              >
+                                <td className="border border-gray-300 p-2 font-semibold">
+                                  {level.name}
+                                </td>
+                                <td className="border border-gray-300 p-2">
+                                  {level.occasional}
+                                </td>
+                                <td className="border border-gray-300 p-2">
+                                  {level.frequent}
+                                </td>
+                                <td className="border border-gray-300 p-2">
+                                  {level.constant}
+                                </td>
+                              </tr>
+                            ));
+                          })()}
                         </tbody>
                       </table>
 
