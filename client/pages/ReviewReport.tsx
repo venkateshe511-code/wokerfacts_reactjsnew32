@@ -1336,11 +1336,11 @@ export default function ReviewReport() {
                               Lumbar Flexion
                             </td>
                             <td className="border border-gray-300 p-2">
-                              49 deg
+                              49 °
                             </td>
                             <td className="border border-gray-300 p-2">Pass</td>
                             <td className="border border-gray-300 p-2">
-                              60 deg
+                              60 °
                             </td>
                             <td className="border border-gray-300 p-2">82%</td>
                           </tr>
@@ -1349,11 +1349,11 @@ export default function ReviewReport() {
                               Lumbar Extension
                             </td>
                             <td className="border border-gray-300 p-2">
-                              28 deg
+                              28 °
                             </td>
                             <td className="border border-gray-300 p-2">Pass</td>
                             <td className="border border-gray-300 p-2">
-                              25 deg
+                              25 °
                             </td>
                             <td className="border border-gray-300 p-2">112%</td>
                           </tr>
@@ -1362,11 +1362,11 @@ export default function ReviewReport() {
                               Lumbar Lateral Flexion - Left
                             </td>
                             <td className="border border-gray-300 p-2">
-                              27 deg
+                              27 °
                             </td>
                             <td className="border border-gray-300 p-2">Pass</td>
                             <td className="border border-gray-300 p-2">
-                              25 deg
+                              25 °
                             </td>
                             <td className="border border-gray-300 p-2">108%</td>
                           </tr>
@@ -1375,11 +1375,11 @@ export default function ReviewReport() {
                               Lumbar Lateral Flexion - Right
                             </td>
                             <td className="border border-gray-300 p-2">
-                              25 deg
+                              25 °
                             </td>
                             <td className="border border-gray-300 p-2">Pass</td>
                             <td className="border border-gray-300 p-2">
-                              25 deg
+                              25 °
                             </td>
                             <td className="border border-gray-300 p-2">116%</td>
                           </tr>
@@ -3826,7 +3826,7 @@ export default function ReviewReport() {
                                                   leftAvg,
                                                   rightAvg,
                                                 ).toFixed(0)}{" "}
-                                                deg
+                                                °
                                               </td>
                                               <td className="border border-gray-400 border-r-gray-400 p-2">
                                                 {test.demonstrated
@@ -3835,12 +3835,12 @@ export default function ReviewReport() {
                                               </td>
                                               <td className="border border-gray-400 border-r-gray-400 p-2">
                                                 {testName.includes("flexion")
-                                                  ? "60 deg"
+                                                  ? "60 °"
                                                   : testName.includes(
                                                     "extension",
                                                   )
-                                                    ? "25 deg"
-                                                    : "25 deg"}
+                                                    ? "25 °"
+                                                    : "25 °"}
                                               </td>
                                               <td className="border border-gray-400 border-r-gray-400 p-2">
                                                 {Math.round(

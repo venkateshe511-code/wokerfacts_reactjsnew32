@@ -1982,41 +1982,41 @@ padding-top: 120px; align-items: center; min-height: 0; ">
             <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 16px;">
                 <thead>
                     <tr style="background: #fef3c7;">
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; text-align: left;">Area Evaluated:</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Data:</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Valid?</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Norm:</th>
-                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">% of Norm:</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; text-align: center;">Area Evaluated:</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Data:</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Valid?</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Norm:</th>
+                        <th style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">% of Norm:</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Lumbar Flexion</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">49 deg</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Pass</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">60 deg</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">82%</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Lumbar Flexion</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">49 °</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Pass</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">60 °</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">82%</td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Lumbar Extension</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">28 deg</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Pass</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">25 deg</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">112%</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Lumbar Extension</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">28 °</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Pass</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">25 °</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">112%</td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Lumbar Lateral Flexion - Left</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">27 deg</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Pass</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">25 deg</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">108%</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Lumbar Lateral Flexion - Left</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">27 °</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Pass</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">25 °</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">108%</td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Lumbar Lateral Flexion - Right</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">25 deg</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Pass</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">25 deg</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">116%</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Lumbar Lateral Flexion - Right</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">25 °</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">Pass</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">25 °</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">116%</td>
                     </tr>
                 </tbody>
             </table>
@@ -4056,10 +4056,21 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
             // Define unit at outer scope so it's accessible throughout the template
             // const unit = String(test.unitMeasure || "lbs").toLowerCase();
+            // const isRangeOfMotion =
+            //   testName.includes("flexion") ||
+            //   testName.includes("extension") ||
+            //   testName.includes("range");
             const isRangeOfMotion =
               testName.includes("flexion") ||
               testName.includes("extension") ||
-              testName.includes("range");
+              testName.includes("range") ||
+              testName.includes("Thumb") ||
+              testName.includes("rotation") ||
+              testName.includes("raise") ||
+              testName.includes("supination") ||
+              testName.includes("radial") ||
+              testName.includes("abduction") ||
+              testName.includes("inversion");
             const isGripTest =
               testName.includes("grip") || testName.includes("pinch");
             const isLiftTest =
@@ -4199,18 +4210,18 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">${Math.max(
                   leftAvg,
                   rightAvg,
-                ).toFixed(0)} deg</td>
+                ).toFixed(0)} °</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">${test.demonstrated
                   ? "Pass"
                   : "Fail"
                 }</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">${testName.includes("flexion")
-                  ? "60 deg"
+                  ? "60 °"
                   : testName.includes(
                     "extension",
                   )
-                    ? "25 deg"
-                    : "25 deg"
+                    ? "25 °"
+                    : "25 °"
                 }</td>
                                                 <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;text-align: center;">${Math.round(
                   (Math.max(leftAvg, rightAvg) /
@@ -4948,11 +4959,11 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Sedentary</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">1 - 10 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Negligible</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Negligible</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">11 - 20 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">1 - 10 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Negligible</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Medium</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">21 - 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">11 - 25 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">1 - 10 lbs.</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">51 - 100 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">26 - 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">11 - 20 lbs.</td></tr>
-                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px; font-weight: bold;">Very Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Over 100 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Over 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;">Over 20 lbs.</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center; font-weight: bold;">Sedentary</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">1 - 10 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">Negligible</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">Negligible</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center; font-weight: bold;">Light</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">11 - 20 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">1 - 10 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">Negligible</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center; font-weight: bold;">Medium</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">21 - 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">11 - 25 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">1 - 10 lbs.</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center; font-weight: bold;">Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">51 - 100 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">26 - 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">11 - 20 lbs.</td></tr>
+                    <tr><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center; font-weight: bold;">Very Heavy</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">Over 100 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">Over 50 lbs.</td><td style="border: 1px solid #333; border-right: 1px solid #333; padding: 1px;text-align: center;">Over 20 lbs.</td></tr>
                 </tbody>
             </table>
             </div>

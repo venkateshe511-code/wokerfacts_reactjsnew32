@@ -182,20 +182,40 @@ function createHeaderCell(text) {
   });
 }
 
-function createSideTrialTable(test, measurementUnit) {
+function createSideTrialTable(test, measurementUnit, forceSingleRowOnly = false) {
   // --- Unit detection ---
+
+  const safeName = test?.testName || "Test";
+  const testNameLower = safeName.toLowerCase();
+  const isRangeOfMotion =
+    testNameLower.includes("flexion") ||
+    testNameLower.includes("extension") ||
+    testNameLower.includes("range") ||
+    testNameLower.includes("thumb") ||
+    testNameLower.includes("rotation") ||
+    testNameLower.includes("raise") ||
+    testNameLower.includes("supination") ||
+    testNameLower.includes("radial") ||
+    testNameLower.includes("abduction") ||
+    testNameLower.includes("inversion");
   const name = (test?.testName || "").toLowerCase();
-  const unit =
-    measurementUnit ||
-    test?.unitMeasure ||
-    test?.valueToBeTestedUnit ||
-    test?.unit ||
-    test?.units ||
-    (name.match(/(rom|range|flexion|extension|deg)/)
-      ? "deg"
-      : name.match(/(weight|strength|force|pressure|load|grip|resistance|torque)/)
-        ? "lbs"
-        : "lbs");
+  const rawUnit = String(measurementUnit || test.unitMeasure || "").toLowerCase();
+  const unit = isRangeOfMotion
+    ? "°"
+    : !rawUnit || rawUnit === "weight"
+      ? "lbs"
+      : rawUnit;
+  // const unit =
+  //   measurementUnit ||
+  //   test?.unitMeasure ||
+  //   test?.valueToBeTestedUnit ||
+  //   test?.unit ||
+  //   test?.units ||
+  //   (name.match(/(rom|range|flexion|extension|deg)/)
+  //     ? "°"
+  //     : name.match(/(weight|strength|force|pressure|load|grip|resistance|torque)/)
+  //       ? "lbs"
+  //       : "lbs");
 
   // --- Helpers ---
   const toNumber = (v) => {
@@ -233,9 +253,16 @@ function createSideTrialTable(test, measurementUnit) {
   };
 
   // --- Extract trials ---
-  const leftTrials = readTrials(test?.leftMeasurements);
-  const rightTrials = readTrials(test?.rightMeasurements);
-  const singleTrials = readTrials(test?.measurements);
+  let leftTrials = readTrials(test?.leftMeasurements);
+  let rightTrials = readTrials(test?.rightMeasurements);
+  let singleTrials = readTrials(test?.measurements);
+
+  // For single-row-only mode (like lift tests), if we only have left trials, treat as single row
+  if (forceSingleRowOnly && singleTrials.length === 0 && leftTrials.length > 0) {
+    singleTrials = leftTrials;
+    leftTrials = [];
+    rightTrials = [];
+  }
 
   const trialCount = Math.max(leftTrials.length, rightTrials.length, singleTrials.length);
   const trialHeaders = Array.from({ length: trialCount }, (_, i) => `Trial ${i + 1}`);
@@ -245,7 +272,6 @@ function createSideTrialTable(test, measurementUnit) {
   const rightAvgNum = average(rightTrials);
   const singleAvgNum = average(singleTrials);
 
-  // --- DOCX cell helper ---
   const makeCell = (text, options = {}) =>
     new TableCell({
       margins: { top: 100, bottom: 100, left: 150, right: 150 },
@@ -271,50 +297,50 @@ function createSideTrialTable(test, measurementUnit) {
       ],
     });
 
+
+  const averageLabel = isRangeOfMotion
+    ? "Average (range of motion)"
+    : "Average (weight)";
+
   const rows = [];
 
-  // --- Header Row ---
+  // --- Header row ---
   const headerCells = [
-    ...(leftTrials.length || rightTrials.length ? [makeCell("Side", { bold: true, shading: true })] : []),
+    ...(!forceSingleRowOnly && (leftTrials.length || rightTrials.length) ? [makeCell("Side", { bold: true, shading: true })] : []),
     ...trialHeaders.map((h) => makeCell(h, { bold: true, shading: true })),
-    makeCell("Average", { bold: true, shading: true }),
+    makeCell(averageLabel, { bold: true, shading: true }),
   ];
   rows.push(new TableRow({ children: headerCells }));
-
-  // --- Detect type ---
-  const isSideBased = leftTrials.length || rightTrials.length;
-
+    // --- Detect type ---
+  const isSideBased = !forceSingleRowOnly && (leftTrials.length || rightTrials.length);
   if (isSideBased) {
-    // ✅ Left Row
+    // ✅ Both Left and Right have real data → build both rows
     rows.push(
       new TableRow({
         children: [
           makeCell("Left", { bold: true }),
-          ...trialHeaders.map((_, i) => {
-            const v = leftTrials[i];
-            return makeCell(v != null ? `${formatVal(v)} ${unit}` : "");
-          }),
+          ...trialHeaders.map((_, i) =>
+            makeCell(leftTrials[i] != null ? `${formatVal(leftTrials[i])}` : "")
+          ),
           makeCell(leftAvgNum != null ? `${leftAvgNum.toFixed(1)} ${unit}` : "-", { bold: true }),
         ],
       })
     );
 
-    // ✅ Right Row
     rows.push(
       new TableRow({
         children: [
           makeCell("Right", { bold: true }),
-          ...trialHeaders.map((_, i) => {
-            const v = rightTrials[i];
-            return makeCell(v != null ? `${formatVal(v)} ${unit}` : "");
-          }),
+          ...trialHeaders.map((_, i) =>
+            makeCell(rightTrials[i] != null ? `${formatVal(rightTrials[i])}` : "")
+          ),
           makeCell(rightAvgNum != null ? `${rightAvgNum.toFixed(1)} ${unit}` : "-", { bold: true }),
         ],
       })
     );
   } else {
-    // ✅ Single-line Trial Table (no Left/Right)
-    rows.push(
+    // ✅ Only one set (either singleMeasurements, or only left/right side exists)
+   rows.push(
       new TableRow({
         children: [
           ...trialHeaders.map((_, i) => {
@@ -2951,8 +2977,6 @@ function getEndpointConditionText(test) {
 }
 
 
-
-
 // ===== Section builders =====
 async function addCoverPage(children, body) {
   const {
@@ -4800,6 +4824,17 @@ async function addReferralQuestionsContent(children, body) {
           new Paragraph({
             children: [
               new TextRun({
+                text: `*${level} which is in line with full return to duties.`,
+                size: 16,
+              }),
+            ],
+            spacing: { after: 50 },
+          }),
+        );
+        children.push(
+          new Paragraph({
+            children: [
+              new TextRun({
                 text: info.title,
                 bold: true,
                 color: BRAND_COLOR,
@@ -4910,46 +4945,62 @@ async function addReferralQuestionsContent(children, body) {
                 }),
               ],
             }),
-            new TableRow({
-              children: [
-                paddedCell("Sedentary"),
-                paddedCell("Up to 10 lbs of force"),
-                paddedCell("Negligible weight"),
-                paddedCell("Negligible weight"),
-              ],
-            }),
-            new TableRow({
-              children: [
-                paddedCell("Light"),
-                paddedCell("Up to 20 lbs of force"),
-                paddedCell("Up to 10 lbs of force"),
-                paddedCell("Negligible weight"),
-              ],
-            }),
-            new TableRow({
-              children: [
-                paddedCell("Medium"),
-                paddedCell("20–50 lbs of force"),
-                paddedCell("10–25 lbs of force"),
-                paddedCell("Up to 10 lbs of force"),
-              ],
-            }),
-            new TableRow({
-              children: [
-                paddedCell("Heavy"),
-                paddedCell("50–100 lbs of force"),
-                paddedCell("25–50 lbs of force"),
-                paddedCell("10–20 lbs of force"),
-              ],
-            }),
-            new TableRow({
-              children: [
-                paddedCell("Very Heavy"),
-                paddedCell("Over 100 lbs of force"),
-                paddedCell("Over 50 lbs of force"),
-                paddedCell("Over 20 lbs of force"),
-              ],
-            }),
+            ...[
+              ["Sedentary", "Up to 10 lbs of force", "Negligible weight", "Negligible weight"],
+              ["Light", "Up to 20 lbs of force", "Up to 10 lbs of force", "Negligible weight"],
+              ["Medium", "20–50 lbs of force", "10–25 lbs of force", "Up to 10 lbs of force"],
+              ["Heavy", "50–100 lbs of force", "25–50 lbs of force", "10–20 lbs of force"],
+              ["Very Heavy", "Over 100 lbs of force", "Over 50 lbs of force", "Over 20 lbs of force"],
+            ].map(([demandLevel, occasional, frequent, constant]) =>
+              new TableRow({
+                children: [
+                  paddedCell(demandLevel, { fill: demandLevel === level ? "DBEAFE" : undefined }),
+                  paddedCell(occasional, { fill: demandLevel === level ? "DBEAFE" : undefined }),
+                  paddedCell(frequent, { fill: demandLevel === level ? "DBEAFE" : undefined }),
+                  paddedCell(constant, { fill: demandLevel === level ? "DBEAFE" : undefined }),
+                ],
+              }),
+            ),
+            // new TableRow({
+            //   children: [
+            //     paddedCell("Sedentary"),
+            //     paddedCell("Up to 10 lbs of force"),
+            //     paddedCell("Negligible weight"),
+            //     paddedCell("Negligible weight"),
+            //   ],
+            // }),
+            // new TableRow({
+            //   children: [
+            //     paddedCell("Light"),
+            //     paddedCell("Up to 20 lbs of force"),
+            //     paddedCell("Up to 10 lbs of force"),
+            //     paddedCell("Negligible weight"),
+            //   ],
+            // }),
+            // new TableRow({
+            //   children: [
+            //     paddedCell("Medium"),
+            //     paddedCell("20–50 lbs of force"),
+            //     paddedCell("10–25 lbs of force"),
+            //     paddedCell("Up to 10 lbs of force"),
+            //   ],
+            // }),
+            // new TableRow({
+            //   children: [
+            //     paddedCell("Heavy"),
+            //     paddedCell("50–100 lbs of force"),
+            //     paddedCell("25–50 lbs of force"),
+            //     paddedCell("10–20 lbs of force"),
+            //   ],
+            // }),
+            // new TableRow({
+            //   children: [
+            //     paddedCell("Very Heavy"),
+            //     paddedCell("Over 100 lbs of force"),
+            //     paddedCell("Over 50 lbs of force"),
+            //     paddedCell("Over 20 lbs of force"),
+            //   ],
+            // }),
           ],
         });
 
@@ -4969,6 +5020,63 @@ async function addReferralQuestionsContent(children, body) {
           );
         }
       }
+
+      // Add reference images (if any) before continue
+      if (Array.isArray(images) && images.length > 0) {
+        const imageCells = [];
+
+        for (const item of images) {
+          try {
+            let buffer = null;
+            if (typeof item === "string") {
+              if (/^data:image\//i.test(item)) {
+                const base64 = item.split(",")[1] || item.replace(/^data:image\/\w+;base64,/, "");
+                buffer = base64 ? Buffer.from(base64, "base64") : null;
+              } else {
+                buffer = await getImageBuffer(item);
+              }
+            } else if (item && typeof item === "object") {
+              if (item.dataUrl && /^data:image\//i.test(item.dataUrl)) {
+                const base64 = String(item.dataUrl).split(",")[1] || String(item.dataUrl).replace(/^data:image\/\w+;base64,/, "");
+                buffer = base64 ? Buffer.from(base64, "base64") : null;
+              } else if (item.url || item.path || item.src) {
+                buffer = await getImageBuffer(item.url || item.path || item.src);
+              } else if (item.data) {
+                buffer = Buffer.from(String(item.data), "base64");
+              }
+            }
+
+            if (!buffer) continue;
+
+            imageCells.push(
+              new TableCell({
+                borders: noBorders,
+                width: { size: 2400, type: WidthType.DXA },
+                children: [
+                  new Paragraph({
+                    alignment: AlignmentType.CENTER,
+                    children: [new ImageRun({ data: buffer, transformation: { width: 100, height: 80 } })],
+                  }),
+                ],
+                margins: { top: 100, bottom: 100, left: 100, right: 100 },
+              }),
+            );
+          } catch (e) {
+            console.warn("[DOCX] Failed to insert image:", e);
+          }
+        }
+
+        if (imageCells.length > 0) {
+          children.push(
+            new Table({
+              rows: [new TableRow({ children: imageCells })],
+              width: { size: 10000, type: WidthType.DXA },
+              alignment: AlignmentType.CENTER,
+            }),
+          );
+        }
+      }
+
 
       continue; // skip to next question
     }
@@ -5168,7 +5276,7 @@ async function addConclusionContent(children, body) {
   // === Signature of Evaluator Header ===
   children.push(
     new Paragraph({
-      spacing: { before: 400, after: 200 },
+      spacing: { before: 100, after: 100 },
       children: [],
     }),
   );
@@ -6574,6 +6682,9 @@ async function addTestDataContent(children, body) {
           testNameLower.includes("flexion") ||
           testNameLower.includes("extension") ||
           testNameLower.includes("range");
+        const averageLabel = isRangeOfMotion
+          ? "Average (range of motion)"
+          : "Average (weight)";
         const isGripTest =
           testNameLower.includes("grip") || testNameLower.includes("pinch");
         const isLiftTest =
@@ -6592,13 +6703,19 @@ async function addTestDataContent(children, body) {
           return str || fallback;
         }
         // Unit
-        const measurementUnit = safeUnitLabel(
-          test.unitMeasure ||
-          test.valueToBeTestedUnit ||
-          test.unit ||
-          (isRangeOfMotion ? "deg" : "lbs"),
-          isRangeOfMotion ? "deg" : "lbs",
-        );
+        const rawUnit = String(test.unitMeasure || "").toLowerCase();
+        const measurementUnit = isRangeOfMotion
+          ? "°"
+          : !rawUnit || rawUnit === "weight"
+            ? "lbs"
+            : rawUnit;
+        // const measurementUnit = safeUnitLabel(
+        //   test.unitMeasure ||
+        //   test.valueToBeTestedUnit ||
+        //   test.unit ||
+        //   (isRangeOfMotion ? "°" : "lbs"),
+        //   isRangeOfMotion ? "°" : "lbs",
+        // );
         // Header
         children.push(
           new Paragraph({
@@ -6770,7 +6887,7 @@ async function addTestDataContent(children, body) {
                             alignment: AlignmentType.CENTER,
                             children: [
                               new TextRun({
-                                text: `${Math.max(leftAvg, rightAvg).toFixed(0)} deg`,
+                                text: `${Math.max(leftAvg, rightAvg).toFixed(0)} °`,
                                 size: 16,
                               }),
                             ],
@@ -6797,7 +6914,7 @@ async function addTestDataContent(children, body) {
                           new Paragraph({
                             alignment: AlignmentType.CENTER,
                             children: [
-                              new TextRun({ text: `${romNorm} deg`, size: 16 }),
+                              new TextRun({ text: `${romNorm} °`, size: 16 }),
                             ],
                           }),
                         ],
@@ -6918,11 +7035,7 @@ async function addTestDataContent(children, body) {
             rightCol.push(
               new Paragraph({ spacing: { before: 100, after: 50 } }),
             );
-            // Add side-by-trial breakdown table (below the main summary)
-            rightCol.push(
-              new Paragraph({ spacing: { before: 100, after: 50 } }),
-            );
-            rightCol.push(createSideTrialTable(test, measurementUnit));
+            rightCol.push(createSideTrialTable(test, measurementUnit,true));
             rightCol.push(
               new Paragraph({ spacing: { before: 100, after: 50 } }),
             );
@@ -7179,7 +7292,7 @@ async function addTestDataContent(children, body) {
                   spacing: { before: 80 },
                   children: [
                     new TextRun({
-                      text: `Average: ${Number.isFinite(averageValue) ? averageValue.toFixed(1) : "n/a"
+                      text: `${averageLabel}: ${Number.isFinite(averageValue) ? averageValue.toFixed(1) : "n/a"
                         }${unitLabel ? ` ${unitLabel}` : ""}`,
                       color: "444444",
                       size: 16,
@@ -7346,11 +7459,15 @@ async function addTestDataContent(children, body) {
           // Extract series
           const leftSeries = extractTrialSeries(test.leftMeasurements || {});
           const rightSeries = extractTrialSeries(test.rightMeasurements || {});
+          // let singleSeries = [];
           let singleSeries = [];
-          if (
-            !hasMeaningfulTrialData(leftSeries) &&
-            !hasMeaningfulTrialData(rightSeries)
-          ) {
+
+          // Detect meaningful left/right
+          const hasLeftSeries = hasMeaningfulTrialData(leftSeries);
+          const hasRightSeries = hasMeaningfulTrialData(rightSeries);
+
+
+          if (!hasLeftSeries && !hasRightSeries) {
             singleSeries = extractTrialSeries(
               test.measurements ||
               test.trials ||
@@ -7360,10 +7477,9 @@ async function addTestDataContent(children, body) {
               [],
             );
           }
-
           // What do we actually have?
-          const hasLeftSeries = hasMeaningfulTrialData(leftSeries);
-          const hasRightSeries = hasMeaningfulTrialData(rightSeries);
+          // const hasLeftSeries = hasMeaningfulTrialData(leftSeries);
+          // const hasRightSeries = hasMeaningfulTrialData(rightSeries);
           const hasSingleSeries = hasMeaningfulTrialData(singleSeries);
           const canShowRight = !isLiftTest && hasRightSeries;
 
