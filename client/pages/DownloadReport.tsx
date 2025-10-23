@@ -2180,9 +2180,18 @@ padding-top: 120px; align-items: center; min-height: 0; ">
         <!-- Physical Demand Classification Question (moved to end) -->
         <div style="margin-bottom: 30px; page-break-inside: auto;">
             <h4 style="font-weight: bold; margin-bottom: 8px; color: #1e40af; font-family: Arial, sans-serif;">What would be the Physical Demand Classification (PDC) for this client?</h4>
-            <p style="font-size: 11px; line-height: 1.5; margin-bottom: 12px; font-family: Arial, sans-serif;">*${getPhysicalDemandLevel(
-        activityRatingData?.activities || [],
-      )} which is in line with full return to duties.</p>
+            ${(() => {
+        const qa = referralQuestionsData?.questions?.find(
+          (x: any) =>
+            x?.question &&
+            x.question.includes("Physical Demand Classification"),
+        );
+        const selectedLevel = qa?.answer
+          ? String(qa.answer).split("|")[0].replace("PDC:", "")
+          : null;
+        if (!selectedLevel) return "";
+        return `<p style="font-size: 11px; line-height: 1.5; margin-bottom: 12px; font-family: Arial, sans-serif;">*${selectedLevel} which is in line with full return to duties.</p>`;
+      })()}
 
             ${(() => {
         const map: Record<
