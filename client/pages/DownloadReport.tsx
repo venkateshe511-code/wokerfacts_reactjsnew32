@@ -2247,36 +2247,55 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; font-weight: bold;">Sedentary</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">1 - 10 lbs.</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Negligible</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Negligible</td>
+                    ${(() => {
+          const pdcLevels = [
+            {
+              name: "Sedentary",
+              occasional: "1 - 10 lbs.",
+              frequent: "Negligible",
+              constant: "Negligible",
+            },
+            {
+              name: "Light",
+              occasional: "11 - 20 lbs.",
+              frequent: "1 - 10 lbs.",
+              constant: "Negligible",
+            },
+            {
+              name: "Medium",
+              occasional: "21 - 50 lbs.",
+              frequent: "11 - 25 lbs.",
+              constant: "1 - 10 lbs.",
+            },
+            {
+              name: "Heavy",
+              occasional: "51 - 100 lbs.",
+              frequent: "26 - 50 lbs.",
+              constant: "11 - 20 lbs.",
+            },
+            {
+              name: "Very Heavy",
+              occasional: "Over 100 lbs.",
+              frequent: "Over 50 lbs.",
+              constant: "Over 20 lbs.",
+            },
+          ];
+
+          const selectedLevel = String(level).trim();
+
+          return pdcLevels
+            .map(
+              (lvl) => `
+                    <tr${selectedLevel === lvl.name ? ' style="background: #dbeafe;"' : ""}>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; font-weight: bold;">${lvl.name}</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${lvl.occasional}</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${lvl.frequent}</td>
+                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">${lvl.constant}</td>
                     </tr>
-                    <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; font-weight: bold;">Light</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">11 - 20 lbs.</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">1 - 10 lbs.</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Negligible</td>
-                    </tr>
-                    <tr style="background: #dbeafe;">
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; font-weight: bold;">Medium</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">21 - 50 lbs.</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">11 - 25 lbs.</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">1 - 10 lbs.</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; font-weight: bold;">Heavy</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">51 - 100 lbs.</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">26 - 50 lbs.</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">11 - 20 lbs.</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px; font-weight: bold;">Very Heavy</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Over 100 lbs.</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Over 50 lbs.</td>
-                        <td style="border: 1px solid #333; border-right: 1px solid #333; padding: 6px;">Over 20 lbs.</td>
-                    </tr>
+              `,
+            )
+            .join("");
+        })()}
                 </tbody>
             </table>
 
