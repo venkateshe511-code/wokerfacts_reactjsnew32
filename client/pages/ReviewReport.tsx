@@ -381,7 +381,36 @@ export default function ReviewReport() {
     const targetUnit = `${testEntry?.valueToBeTestedUnit ?? ""}`
       .trim()
       .toLowerCase();
+    const testName = `${testEntry?.testName ?? ""}`.toLowerCase();
 
+    const isRangeOfMotion =
+      testName.includes("flexion") ||
+      testName.includes("extension") ||
+      testName.includes("range") ||
+      testName.includes("lateral") ||
+      testName.includes("rotation") ||
+      testName.includes("oblique") ||
+      testName.includes("abduction") ||
+      testName.includes("adduction") ||
+      testName.includes("radial") ||
+      testName.includes("ulnar") ||
+      testName.includes("deviation") ||
+      testName.includes("supination") ||
+      testName.includes("pronation") ||
+      testName.includes("inversion") ||
+      testName.includes("eversion") ||
+      testName.includes("dorsi") ||
+      testName.includes("dorsiflexion") ||
+      testName.includes("palmar") ||
+      testName.includes("straight-leg") ||
+      (testName.includes("straight") &&
+        testName.includes("leg") &&
+        testName.includes("raise")) ||
+      testName.includes("slr");
+    // If it's a range of motion test → always show degrees
+    if (isRangeOfMotion) {
+      return { convertToLbs: false, displayUnit: "°" };
+    }
     const kgTokens = ["kg", "kgs", "kilogram", "kilograms"];
     const lbTokens = ["lb", "lbs", "pound", "pounds"];
 
@@ -423,13 +452,13 @@ export default function ReviewReport() {
 
   const buildTrialDisplayRow = (
     measurements: any,
-    convertToLbs: boolean,
-    unitLabel: string,
+    // convertToLbs: boolean,
+    // unitLabel: string,
   ): string[] => {
     return Array.from({ length: 6 }, (_, index) => {
       const rawValue = measurements?.[`trial${index + 1}`];
-      const converted = convertWeightMeasurement(rawValue, convertToLbs);
-      return formatWeightMeasurement(converted, unitLabel);
+      // const converted = convertWeightMeasurement(rawValue, convertToLbs);
+      return rawValue;
     });
   };
 
@@ -446,8 +475,8 @@ export default function ReviewReport() {
   const resolveDynamicEndpointLabel = (test: any): string | null => {
     const rawEndpoint = String(
       (test as any)?.dynamicEndpointType ??
-        (test as any)?.parameters?.dynamicEndpointType ??
-        "",
+      (test as any)?.parameters?.dynamicEndpointType ??
+      "",
     ).trim();
 
     if (!rawEndpoint) {
@@ -1202,7 +1231,7 @@ export default function ReviewReport() {
                   {/* Pain Illustration Reference Images */}
                   {reportData.painIllustrationData?.savedImageData &&
                     reportData.painIllustrationData.savedImageData.length >
-                      0 && (
+                    0 && (
                       <div className="mt-6">
                         <h4
                           className="font-semibold mb-3"
@@ -1391,7 +1420,7 @@ export default function ReviewReport() {
                                     >
                                       <div className="bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
                                         {image.type &&
-                                        image.type.startsWith("image/") ? (
+                                          image.type.startsWith("image/") ? (
                                           <>
                                             <img
                                               src={image.dataUrl}
@@ -1504,7 +1533,7 @@ export default function ReviewReport() {
                                         >
                                           <div className="bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
                                             {image.type &&
-                                            image.type.startsWith("image/") ? (
+                                              image.type.startsWith("image/") ? (
                                               <>
                                                 <img
                                                   src={image.dataUrl}
@@ -1570,13 +1599,13 @@ export default function ReviewReport() {
                             {/* Show placeholder if no images */}
                             {(!qa.savedImageData ||
                               qa.savedImageData.length === 0) && (
-                              <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded">
-                                <p className="text-xs text-gray-600 italic">
-                                  No supporting images provided for this
-                                  question.
-                                </p>
-                              </div>
-                            )}
+                                <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded">
+                                  <p className="text-xs text-gray-600 italic">
+                                    No supporting images provided for this
+                                    question.
+                                  </p>
+                                </div>
+                              )}
                           </div>
                         ))}
                     </div>
@@ -1608,11 +1637,10 @@ export default function ReviewReport() {
                                   Status:{" "}
                                 </span>
                                 <span
-                                  className={`inline-block px-2 py-1 rounded text-xs font-medium ${
-                                    status.toUpperCase().includes("PASS")
-                                      ? "bg-green-100 text-green-800"
-                                      : "bg-red-100 text-red-800"
-                                  }`}
+                                  className={`inline-block px-2 py-1 rounded text-xs font-medium ${status.toUpperCase().includes("PASS")
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-red-100 text-red-800"
+                                    }`}
                                 >
                                   {status}
                                 </span>
@@ -1768,8 +1796,8 @@ export default function ReviewReport() {
                               );
                             const selectedLevel = qa?.answer
                               ? String(qa.answer)
-                                  .split("|")[0]
-                                  .replace("PDC:", "")
+                                .split("|")[0]
+                                .replace("PDC:", "")
                               : null;
 
                             const levels = [
@@ -1861,7 +1889,7 @@ export default function ReviewReport() {
                                     >
                                       <div className="bg-white border border-gray-300 rounded-lg overflow-hidden shadow-sm">
                                         {image.type &&
-                                        image.type.startsWith("image/") ? (
+                                          image.type.startsWith("image/") ? (
                                           <>
                                             <img
                                               src={image.dataUrl}
@@ -2610,7 +2638,7 @@ export default function ReviewReport() {
                                         } else if (
                                           category === "ROM Hand/Foot" ||
                                           category ===
-                                            "ROM Total Spine/Extremity"
+                                          "ROM Total Spine/Extremity"
                                         ) {
                                           // ROM tests: check if it's flexion/extension or left/right
                                           const testNameLower =
@@ -2641,8 +2669,8 @@ export default function ReviewReport() {
                                           const avgValue =
                                             unit === "kg"
                                               ? Math.round(
-                                                  baseAvg * 2.20462 * 10,
-                                                ) / 10
+                                                baseAvg * 2.20462 * 10,
+                                              ) / 10
                                               : Math.round(baseAvg * 10) / 10;
                                           return `${avgValue.toFixed(1)} ${unit}`;
                                         } else {
@@ -3002,19 +3030,19 @@ export default function ReviewReport() {
                         const gripMVEValid =
                           gripTests.length > 0
                             ? gripTests.every((test: any) => {
-                                const leftAvg = calculateAverage(
-                                  test.leftMeasurements,
+                              const leftAvg = calculateAverage(
+                                test.leftMeasurements,
+                              );
+                              const rightAvg = calculateAverage(
+                                test.rightMeasurements,
+                              );
+                              const bilateralDiff =
+                                calculateBilateralDeficiency(
+                                  leftAvg,
+                                  rightAvg,
                                 );
-                                const rightAvg = calculateAverage(
-                                  test.rightMeasurements,
-                                );
-                                const bilateralDiff =
-                                  calculateBilateralDeficiency(
-                                    leftAvg,
-                                    rightAvg,
-                                  );
-                                return bilateralDiff <= 20; // MVE criteria
-                              })
+                              return bilateralDiff <= 20; // MVE criteria
+                            })
                             : null;
 
                         crosschecks.push({
@@ -3029,14 +3057,14 @@ export default function ReviewReport() {
                         const pinchValid =
                           pinchTests.length > 0
                             ? pinchTests.every((test: any) => {
-                                const leftCV = calculateCV(
-                                  test.leftMeasurements,
-                                );
-                                const rightCV = calculateCV(
-                                  test.rightMeasurements,
-                                );
-                                return leftCV <= 15 && rightCV <= 15;
-                              })
+                              const leftCV = calculateCV(
+                                test.leftMeasurements,
+                              );
+                              const rightCV = calculateCV(
+                                test.rightMeasurements,
+                              );
+                              return leftCV <= 15 && rightCV <= 15;
+                            })
                             : null; // No pinch tests available
 
                         crosschecks.push({
@@ -3063,16 +3091,16 @@ export default function ReviewReport() {
                         const hrConsistent =
                           dynamicLifts.length > 0
                             ? dynamicLifts.some((test: any) => {
-                                const preHR =
-                                  test.leftMeasurements?.preHeartRate ??
-                                  test.rightMeasurements?.preHeartRate ??
-                                  0;
-                                const postHR =
-                                  test.leftMeasurements?.postHeartRate ??
-                                  test.rightMeasurements?.postHeartRate ??
-                                  0;
-                                return postHR > preHR;
-                              })
+                              const preHR =
+                                test.leftMeasurements?.preHeartRate ??
+                                test.rightMeasurements?.preHeartRate ??
+                                0;
+                              const postHR =
+                                test.leftMeasurements?.postHeartRate ??
+                                test.rightMeasurements?.postHeartRate ??
+                                0;
+                              return postHR > preHR;
+                            })
                             : null; // Not applicable if no dynamic lifts found
 
                         crosschecks.push({
@@ -3087,74 +3115,74 @@ export default function ReviewReport() {
                         const romValid =
                           romTests.length > 0
                             ? romTests.every((test: any) => {
-                                // Extract trial values from measurement objects
-                                const leftTrials = test.leftMeasurements
-                                  ? [
-                                      test.leftMeasurements.trial1,
-                                      test.leftMeasurements.trial2,
-                                      test.leftMeasurements.trial3,
-                                      test.leftMeasurements.trial4,
-                                      test.leftMeasurements.trial5,
-                                      test.leftMeasurements.trial6,
-                                    ].filter(
-                                      (val) => val != null && !isNaN(val),
-                                    )
-                                  : [];
+                              // Extract trial values from measurement objects
+                              const leftTrials = test.leftMeasurements
+                                ? [
+                                  test.leftMeasurements.trial1,
+                                  test.leftMeasurements.trial2,
+                                  test.leftMeasurements.trial3,
+                                  test.leftMeasurements.trial4,
+                                  test.leftMeasurements.trial5,
+                                  test.leftMeasurements.trial6,
+                                ].filter(
+                                  (val) => val != null && !isNaN(val),
+                                )
+                                : [];
 
-                                const rightTrials = test.rightMeasurements
-                                  ? [
-                                      test.rightMeasurements.trial1,
-                                      test.rightMeasurements.trial2,
-                                      test.rightMeasurements.trial3,
-                                      test.rightMeasurements.trial4,
-                                      test.rightMeasurements.trial5,
-                                      test.rightMeasurements.trial6,
-                                    ].filter(
-                                      (val) => val != null && !isNaN(val),
-                                    )
-                                  : [];
+                              const rightTrials = test.rightMeasurements
+                                ? [
+                                  test.rightMeasurements.trial1,
+                                  test.rightMeasurements.trial2,
+                                  test.rightMeasurements.trial3,
+                                  test.rightMeasurements.trial4,
+                                  test.rightMeasurements.trial5,
+                                  test.rightMeasurements.trial6,
+                                ].filter(
+                                  (val) => val != null && !isNaN(val),
+                                )
+                                : [];
 
-                                const allMeasurements = [
-                                  ...leftTrials,
-                                  ...rightTrials,
-                                ];
-                                if (allMeasurements.length < 6) return false;
+                              const allMeasurements = [
+                                ...leftTrials,
+                                ...rightTrials,
+                              ];
+                              if (allMeasurements.length < 6) return false;
 
-                                // Find three consecutive trials within 5 degrees and 10% of each other
-                                for (
-                                  let i = 0;
-                                  i <= allMeasurements.length - 3;
-                                  i++
-                                ) {
-                                  const trial1 = allMeasurements[i];
-                                  const trial2 = allMeasurements[i + 1];
-                                  const trial3 = allMeasurements[i + 2];
+                              // Find three consecutive trials within 5 degrees and 10% of each other
+                              for (
+                                let i = 0;
+                                i <= allMeasurements.length - 3;
+                                i++
+                              ) {
+                                const trial1 = allMeasurements[i];
+                                const trial2 = allMeasurements[i + 1];
+                                const trial3 = allMeasurements[i + 2];
 
-                                  // Check if three consecutive trials are within 5 degrees of each other
-                                  const maxDiff = Math.max(
-                                    Math.abs(trial1 - trial2),
-                                    Math.abs(trial2 - trial3),
-                                    Math.abs(trial1 - trial3),
-                                  );
+                                // Check if three consecutive trials are within 5 degrees of each other
+                                const maxDiff = Math.max(
+                                  Math.abs(trial1 - trial2),
+                                  Math.abs(trial2 - trial3),
+                                  Math.abs(trial1 - trial3),
+                                );
 
-                                  // Check if within 10% of each other
-                                  const avgValue =
-                                    (trial1 + trial2 + trial3) / 3;
-                                  const maxPercDiff = Math.max(
-                                    (Math.abs(trial1 - avgValue) / avgValue) *
-                                      100,
-                                    (Math.abs(trial2 - avgValue) / avgValue) *
-                                      100,
-                                    (Math.abs(trial3 - avgValue) / avgValue) *
-                                      100,
-                                  );
+                                // Check if within 10% of each other
+                                const avgValue =
+                                  (trial1 + trial2 + trial3) / 3;
+                                const maxPercDiff = Math.max(
+                                  (Math.abs(trial1 - avgValue) / avgValue) *
+                                  100,
+                                  (Math.abs(trial2 - avgValue) / avgValue) *
+                                  100,
+                                  (Math.abs(trial3 - avgValue) / avgValue) *
+                                  100,
+                                );
 
-                                  if (maxDiff <= 5 && maxPercDiff <= 10) {
-                                    return true; // Found valid consecutive trials
-                                  }
+                                if (maxDiff <= 5 && maxPercDiff <= 10) {
+                                  return true; // Found valid consecutive trials
                                 }
-                                return false;
-                              })
+                              }
+                              return false;
+                            })
                             : null;
 
                         crosschecks.push({
@@ -3433,8 +3461,8 @@ export default function ReviewReport() {
                                   borderLeft: "1px solid #374151",
                                   borderBottom:
                                     index ===
-                                    reportData.activityRatingData.activities
-                                      ?.length -
+                                      reportData.activityRatingData.activities
+                                        ?.length -
                                       1
                                       ? "1px solid #374151"
                                       : "none",
@@ -3604,13 +3632,13 @@ export default function ReviewReport() {
                           resolveWeightDisplayOptions(test);
                         const leftTrialCells = buildTrialDisplayRow(
                           test.leftMeasurements,
-                          convertToLbs,
-                          displayUnit,
+                          // convertToLbs,
+                          // displayUnit,
                         );
                         const rightTrialCells = buildTrialDisplayRow(
                           test.rightMeasurements,
-                          convertToLbs,
-                          displayUnit,
+                          // convertToLbs,
+                          // displayUnit,
                         );
                         const leftAverageDisplay = formatWeightMeasurement(
                           computeMeasurementsAverage(
@@ -3666,7 +3694,7 @@ export default function ReviewReport() {
                                         {illos.map((ill, i) => (
                                           <div key={i} className="text-center">
                                             {ill.yPercent === undefined ||
-                                            ill.yPercent === null ? (
+                                              ill.yPercent === null ? (
                                               <img
                                                 src={ill.src}
                                                 alt={ill.label}
@@ -3742,7 +3770,7 @@ export default function ReviewReport() {
                                       `The client was tested in our facility using a dynamic lift evaluation apparatus. The test results were compared to normative data when available.`}
                                     {isCardioTest &&
                                       (testName.includes("bruce") ||
-                                      testName.includes("treadmill")
+                                        testName.includes("treadmill")
                                         ? `The Bruce Treadmill Test (Bruce Protocol) is commonly used to help identify a person's level of aerobic endurance by providing an all-out maximal oxygen uptake or VO2 max, which measures the capacity to perform sustained exercise and is linked to aerobic endurance.`
                                         : testName.includes("mcaft")
                                           ? `mCAFT is designed to give information about the aerobic fitness of a person, while using minimal equipment. The subject works by lifting its own body weight up and down double steps (40.6 cm in height total) while listening to set cadences from a compact disc. The end-stage of the age and gender specific stepping rate requires 65% of the age-predicted maximum heart rate. The heart rate increases approximately in a linear fashion from 50% to 100% of maximal oxygen intake. The heart rate does not decrease significantly during the first fifteen seconds of recovery (O₂ in). Thus, one can predict an aerobic fitness using the heart rate right after exercise of a known sub-maximal rate of working.`
@@ -3809,8 +3837,8 @@ export default function ReviewReport() {
                                                 {testName.includes("flexion")
                                                   ? "60 deg"
                                                   : testName.includes(
-                                                        "extension",
-                                                      )
+                                                    "extension",
+                                                  )
                                                     ? "25 deg"
                                                     : "25 deg"}
                                               </td>
@@ -3822,7 +3850,7 @@ export default function ReviewReport() {
                                                     )
                                                       ? 60
                                                       : 25)) *
-                                                    100,
+                                                  100,
                                                 )}
                                                 %
                                               </td>
@@ -3860,7 +3888,7 @@ export default function ReviewReport() {
                                                 Trial 6
                                               </th>
                                               <th className="border border-black px-2 py-1 font-bold">
-                                                Average
+                                                Average (range of motion)
                                               </th>
                                             </tr>
                                           </thead>
@@ -3927,14 +3955,14 @@ export default function ReviewReport() {
                                           const trialCells =
                                             buildTrialDisplayRow(
                                               primaryMeasurements,
-                                              convertToLbs,
-                                              displayUnit,
+                                              // convertToLbs,
+                                              // displayUnit,
                                             );
                                           // Calculate average using convertToLbs flag from user's metric selection
                                           const avgValue = convertToLbs
                                             ? Math.round(
-                                                leftAvg * 2.20462 * 10,
-                                              ) / 10
+                                              leftAvg * 2.20462 * 10,
+                                            ) / 10
                                             : Math.round(leftAvg * 10) / 10;
                                           const trialAverageDisplay = `${avgValue} ${displayUnit}`;
                                           return (
@@ -3997,7 +4025,7 @@ export default function ReviewReport() {
                                                       Trial 6
                                                     </th>
                                                     <th className="border border-black px-2 py-1 font-bold">
-                                                      Average
+                                                      Average (weight)
                                                     </th>
                                                   </tr>
                                                 </thead>
@@ -4023,7 +4051,7 @@ export default function ReviewReport() {
                                           );
                                         })()}
                                         {isDynamicLift &&
-                                        endpointConditionLabel ? (
+                                          endpointConditionLabel ? (
                                           <div className="text-xs mb-2">
                                             <span className="font-semibold">
                                               Endpoint Condition:
@@ -4038,600 +4066,600 @@ export default function ReviewReport() {
                                         {/* Bruce Treadmill Test */}
                                         {(testName.includes("bruce") ||
                                           testName.includes("treadmill")) && (
-                                          <div className="space-y-4">
-                                            {/* Protocol Stages */}
-                                            <div>
-                                              <h5 className="font-semibold mb-2">
-                                                Protocol Stages
-                                              </h5>
-                                              <p className="text-xs mb-3">
-                                                The Bruce protocol involves
-                                                getting on a treadmill and
-                                                increasing speed and incline
-                                                every three minutes (in stages).
-                                                The test stops when you've hit
-                                                85% of your maximum heart rate,
-                                                your heart rate exceeds 115
-                                                beats per minute for two stages,
-                                                or it is deemed that the test
-                                                should no longer continue. If
-                                                your heart rate changes more
-                                                than six beats per minute
-                                                between the second and third
-                                                minute of any given stage, you
-                                                are kept at the same speed &
-                                                incline for an additional
-                                                minute. (As your HR has not
-                                                achieved a steady state).
-                                              </p>
-                                            </div>
-
-                                            {/* Measuring VO2 Max */}
-                                            <div className="grid grid-cols-2 gap-6">
+                                            <div className="space-y-4">
+                                              {/* Protocol Stages */}
                                               <div>
                                                 <h5 className="font-semibold mb-2">
-                                                  Measuring VO2 Max:
+                                                  Protocol Stages
                                                 </h5>
                                                 <p className="text-xs mb-3">
-                                                  Maximal oxygen uptake (VO2
-                                                  max) refers to the maximum
-                                                  amount of oxygen an individual
-                                                  can use during intense or
-                                                  maximal exercise. It is
-                                                  measured as milliliters of
-                                                  oxygen used in one minute per
-                                                  kilogram of body weight
-                                                  (ml/kg/min).
-                                                </p>
-                                                <p className="text-xs mb-3">
-                                                  The Bruce treadmill test is an
-                                                  indirect maximal oxygen uptake
-                                                  test. It is indirect because
-                                                  it estimates VO2 max using a
-                                                  formula and the person's
-                                                  performance on a treadmill as
-                                                  the workload increases.
-                                                </p>
-                                                <p className="text-xs mb-3">
-                                                  When the Bruce protocol
-                                                  formula is used, T stands for
-                                                  total time on the treadmill
-                                                  and is measured as a fraction
-                                                  of a minute. If test time of
-                                                  10 minutes 15 seconds would be
-                                                  written as T=10.25); this
-                                                  formula changes based on
-                                                  gender. The time you spend on
-                                                  the treadmill is your test
-                                                  score and can be used to
-                                                  estimate your VO2 max value.
-                                                  Blood pressure and ratings of
-                                                  perceived exertion are also
-                                                  often collected during the
-                                                  Bruce protocol test.
-                                                </p>
-                                                <p className="text-xs">
-                                                  <strong>Men:</strong> 14.8 -
-                                                  (1.379 × T) + (0.451 × T²) -
-                                                  (0.012 × T³) = VO₂ max
-                                                  <br />
-                                                  <strong>Women:</strong> 4.38 ×
-                                                  T - 3.9 = VO₂ max
+                                                  The Bruce protocol involves
+                                                  getting on a treadmill and
+                                                  increasing speed and incline
+                                                  every three minutes (in stages).
+                                                  The test stops when you've hit
+                                                  85% of your maximum heart rate,
+                                                  your heart rate exceeds 115
+                                                  beats per minute for two stages,
+                                                  or it is deemed that the test
+                                                  should no longer continue. If
+                                                  your heart rate changes more
+                                                  than six beats per minute
+                                                  between the second and third
+                                                  minute of any given stage, you
+                                                  are kept at the same speed &
+                                                  incline for an additional
+                                                  minute. (As your HR has not
+                                                  achieved a steady state).
                                                 </p>
                                               </div>
 
-                                              <div>
-                                                <h5 className="font-semibold mb-2">
-                                                  Bruce Treadmill Test Stages,
-                                                  Speeds, and Inclines:
-                                                </h5>
-                                                <table className="w-full border border-gray-400 text-xs">
-                                                  <thead>
-                                                    <tr className="bg-gray-200">
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Stage
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Treadmill Speed
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Treadmill Incline
-                                                      </th>
-                                                    </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        1
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        1.7 mph
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        10% grade
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        2
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        2.5 mph
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        12% grade
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        3
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        3.4 mph
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        14% grade
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        4.2 mph
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        16% grade
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        5
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        5.0 mph
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        18% grade
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        6
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        5.5 mph
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        20% grade
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        7
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        6.0 mph
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        22% grade
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                              </div>
-                                            </div>
-
-                                            {/* Classification and VO2 Max */}
-                                            <div className="flex space-x-8 mt-4">
-                                              <div>
-                                                <span className="font-semibold">
-                                                  CLASSIFICATION:{" "}
-                                                </span>
-                                                <span className="border-b border-gray-400 px-4 py-1 inline-block min-w-[120px]">
-                                                  {test.classification || ""}
-                                                </span>
-                                              </div>
-                                              <div>
-                                                <span className="font-semibold">
-                                                  VO2 MAX:{" "}
-                                                </span>
-                                                <span className="border-b border-gray-400 px-4 py-1 inline-block min-w-[120px]">
-                                                  {test.vo2Max || ""}
-                                                </span>
-                                              </div>
-                                            </div>
-
-                                            {/* VO2 Max Norms Tables */}
-                                            <div className="grid grid-cols-2 gap-3 mt-4">
-                                              <div>
-                                                <h6 className="text-xs font-semibold text-center mb-1">
-                                                  VO2 Max Norms for Men as
-                                                  Measured in ml/kg/min
-                                                </h6>
-                                                <table className="w-full border border-gray-400 text-[10px]">
-                                                  <thead>
-                                                    <tr className="bg-gray-200">
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Age
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Very Poor
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Poor
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Fair
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Good
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Excellent
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Superior
-                                                      </th>
-                                                    </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        13-19
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;35.0
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        35.0-38.3
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        38.4-45.1
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        45.2-50.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        51.0-55.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;55.9
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        20-29
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;33.0
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        33.0-36.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        36.5-42.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        42.5-46.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        46.5-52.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;52.4
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        30-39
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;31.5
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        31.5-35.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        35.5-40.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        41.0-44.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        45.0-49.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;49.4
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        40-49
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;30.2
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        30.2-33.5
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        33.6-38.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        39.0-43.7
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        43.8-48.0
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;48.0
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        50-59
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;26.1
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        26.1-30.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        31.0-35.7
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        35.8-40.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        41.0-45.3
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;45.3
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        60+
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;20.5
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        20.5-26.0
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        26.1-32.2
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        32.3-36.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        36.5-44.2
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;44.2
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                              </div>
-
-                                              <div>
-                                                <h6 className="text-xs font-semibold text-center mb-1">
-                                                  VO2 Max Norms for Women as
-                                                  Measured in ml/kg/min
-                                                </h6>
-                                                <table className="w-full border border-gray-400 text-[10px]">
-                                                  <thead>
-                                                    <tr className="bg-gray-200">
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Age
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Very Poor
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Poor
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Fair
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Good
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Excellent
-                                                      </th>
-                                                      <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
-                                                        Superior
-                                                      </th>
-                                                    </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        13-19
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;25.0
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        25.0-30.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        31.0-34.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        35.0-38.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        39.0-41.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;41.9
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        20-29
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;23.6
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        23.6-28.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        29.0-32.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        33.0-36.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        37.0-41.0
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;41.0
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        30-39
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;22.8
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        22.8-26.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        27.0-31.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        31.5-35.6
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        35.7-40.0
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;40.0
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        40-49
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;21.0
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        21.0-24.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        24.5-28.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        29.0-32.8
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        32.9-36.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;36.9
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        50-59
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;20.2
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        20.2-22.7
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        22.8-26.9
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        27.0-31.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        31.5-35.7
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;35.7
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        60+
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &lt;17.5
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        17.5-20.1
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        20.2-24.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        24.5-30.2
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        30.3-31.4
-                                                      </td>
-                                                      <td className="border border-gray-400 px-1 py-0.5">
-                                                        &gt;31.4
-                                                      </td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                              </div>
-                                            </div>
-
-                                            {/* Client Images - Only show header if images exist */}
-                                            {test.serializedImages &&
-                                              test.serializedImages.length >
-                                                0 && (
-                                                <div className="mt-4">
+                                              {/* Measuring VO2 Max */}
+                                              <div className="grid grid-cols-2 gap-6">
+                                                <div>
                                                   <h5 className="font-semibold mb-2">
-                                                    CLIENT IMAGES:
+                                                    Measuring VO2 Max:
                                                   </h5>
-                                                  <div className="grid grid-cols-2 gap-4">
-                                                    {test.serializedImages.map(
-                                                      (
-                                                        img: any,
-                                                        idx: number,
-                                                      ) => (
-                                                        <div
-                                                          key={idx}
-                                                          className="border border-gray-400 p-1 bg-white"
-                                                        >
-                                                          <img
-                                                            src={img.data}
-                                                            alt={
-                                                              img.name ||
-                                                              `Bruce Treadmill Image ${idx + 1}`
-                                                            }
-                                                            className="w-full h-32 object-contain"
-                                                          />
-                                                          {img.name && (
-                                                            <p className="text-xs mt-1 truncate">
-                                                              {img.name}
-                                                            </p>
-                                                          )}
-                                                        </div>
-                                                      ),
-                                                    )}
-                                                  </div>
+                                                  <p className="text-xs mb-3">
+                                                    Maximal oxygen uptake (VO2
+                                                    max) refers to the maximum
+                                                    amount of oxygen an individual
+                                                    can use during intense or
+                                                    maximal exercise. It is
+                                                    measured as milliliters of
+                                                    oxygen used in one minute per
+                                                    kilogram of body weight
+                                                    (ml/kg/min).
+                                                  </p>
+                                                  <p className="text-xs mb-3">
+                                                    The Bruce treadmill test is an
+                                                    indirect maximal oxygen uptake
+                                                    test. It is indirect because
+                                                    it estimates VO2 max using a
+                                                    formula and the person's
+                                                    performance on a treadmill as
+                                                    the workload increases.
+                                                  </p>
+                                                  <p className="text-xs mb-3">
+                                                    When the Bruce protocol
+                                                    formula is used, T stands for
+                                                    total time on the treadmill
+                                                    and is measured as a fraction
+                                                    of a minute. If test time of
+                                                    10 minutes 15 seconds would be
+                                                    written as T=10.25); this
+                                                    formula changes based on
+                                                    gender. The time you spend on
+                                                    the treadmill is your test
+                                                    score and can be used to
+                                                    estimate your VO2 max value.
+                                                    Blood pressure and ratings of
+                                                    perceived exertion are also
+                                                    often collected during the
+                                                    Bruce protocol test.
+                                                  </p>
+                                                  <p className="text-xs">
+                                                    <strong>Men:</strong> 14.8 -
+                                                    (1.379 × T) + (0.451 × T²) -
+                                                    (0.012 × T³) = VO₂ max
+                                                    <br />
+                                                    <strong>Women:</strong> 4.38 ×
+                                                    T - 3.9 = VO₂ max
+                                                  </p>
                                                 </div>
-                                              )}
-                                          </div>
-                                        )}
+
+                                                <div>
+                                                  <h5 className="font-semibold mb-2">
+                                                    Bruce Treadmill Test Stages,
+                                                    Speeds, and Inclines:
+                                                  </h5>
+                                                  <table className="w-full border border-gray-400 text-xs">
+                                                    <thead>
+                                                      <tr className="bg-gray-200">
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Stage
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Treadmill Speed
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Treadmill Incline
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          1
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          1.7 mph
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          10% grade
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          2
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          2.5 mph
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          12% grade
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          3
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          3.4 mph
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          14% grade
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          4.2 mph
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          16% grade
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          5
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          5.0 mph
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          18% grade
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          6
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          5.5 mph
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          20% grade
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          7
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          6.0 mph
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          22% grade
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+
+                                              {/* Classification and VO2 Max */}
+                                              <div className="flex space-x-8 mt-4">
+                                                <div>
+                                                  <span className="font-semibold">
+                                                    CLASSIFICATION:{" "}
+                                                  </span>
+                                                  <span className="border-b border-gray-400 px-4 py-1 inline-block min-w-[120px]">
+                                                    {test.classification || ""}
+                                                  </span>
+                                                </div>
+                                                <div>
+                                                  <span className="font-semibold">
+                                                    VO2 MAX:{" "}
+                                                  </span>
+                                                  <span className="border-b border-gray-400 px-4 py-1 inline-block min-w-[120px]">
+                                                    {test.vo2Max || ""}
+                                                  </span>
+                                                </div>
+                                              </div>
+
+                                              {/* VO2 Max Norms Tables */}
+                                              <div className="grid grid-cols-2 gap-3 mt-4">
+                                                <div>
+                                                  <h6 className="text-xs font-semibold text-center mb-1">
+                                                    VO2 Max Norms for Men as
+                                                    Measured in ml/kg/min
+                                                  </h6>
+                                                  <table className="w-full border border-gray-400 text-[10px]">
+                                                    <thead>
+                                                      <tr className="bg-gray-200">
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Age
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Very Poor
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Poor
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Fair
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Good
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Excellent
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Superior
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          13-19
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;35.0
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          35.0-38.3
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          38.4-45.1
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          45.2-50.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          51.0-55.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;55.9
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          20-29
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;33.0
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          33.0-36.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          36.5-42.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          42.5-46.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          46.5-52.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;52.4
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          30-39
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;31.5
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          31.5-35.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          35.5-40.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          41.0-44.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          45.0-49.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;49.4
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          40-49
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;30.2
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          30.2-33.5
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          33.6-38.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          39.0-43.7
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          43.8-48.0
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;48.0
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          50-59
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;26.1
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          26.1-30.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          31.0-35.7
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          35.8-40.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          41.0-45.3
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;45.3
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          60+
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;20.5
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          20.5-26.0
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          26.1-32.2
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          32.3-36.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          36.5-44.2
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;44.2
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+
+                                                <div>
+                                                  <h6 className="text-xs font-semibold text-center mb-1">
+                                                    VO2 Max Norms for Women as
+                                                    Measured in ml/kg/min
+                                                  </h6>
+                                                  <table className="w-full border border-gray-400 text-[10px]">
+                                                    <thead>
+                                                      <tr className="bg-gray-200">
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Age
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Very Poor
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Poor
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Fair
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Good
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Excellent
+                                                        </th>
+                                                        <th className="border border-gray-400 px-1 py-0.5 text-[10px]">
+                                                          Superior
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          13-19
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;25.0
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          25.0-30.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          31.0-34.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          35.0-38.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          39.0-41.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;41.9
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          20-29
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;23.6
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          23.6-28.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          29.0-32.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          33.0-36.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          37.0-41.0
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;41.0
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          30-39
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;22.8
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          22.8-26.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          27.0-31.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          31.5-35.6
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          35.7-40.0
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;40.0
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          40-49
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;21.0
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          21.0-24.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          24.5-28.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          29.0-32.8
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          32.9-36.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;36.9
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          50-59
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;20.2
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          20.2-22.7
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          22.8-26.9
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          27.0-31.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          31.5-35.7
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;35.7
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          60+
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &lt;17.5
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          17.5-20.1
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          20.2-24.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          24.5-30.2
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          30.3-31.4
+                                                        </td>
+                                                        <td className="border border-gray-400 px-1 py-0.5">
+                                                          &gt;31.4
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+
+                                              {/* Client Images - Only show header if images exist */}
+                                              {test.serializedImages &&
+                                                test.serializedImages.length >
+                                                0 && (
+                                                  <div className="mt-4">
+                                                    <h5 className="font-semibold mb-2">
+                                                      CLIENT IMAGES:
+                                                    </h5>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                      {test.serializedImages.map(
+                                                        (
+                                                          img: any,
+                                                          idx: number,
+                                                        ) => (
+                                                          <div
+                                                            key={idx}
+                                                            className="border border-gray-400 p-1 bg-white"
+                                                          >
+                                                            <img
+                                                              src={img.data}
+                                                              alt={
+                                                                img.name ||
+                                                                `Bruce Treadmill Image ${idx + 1}`
+                                                              }
+                                                              className="w-full h-32 object-contain"
+                                                            />
+                                                            {img.name && (
+                                                              <p className="text-xs mt-1 truncate">
+                                                                {img.name}
+                                                              </p>
+                                                            )}
+                                                          </div>
+                                                        ),
+                                                      )}
+                                                    </div>
+                                                  </div>
+                                                )}
+                                            </div>
+                                          )}
 
                                         {/* mCAFT Test */}
                                         {testName.includes("mcaft") && (
@@ -4876,7 +4904,7 @@ export default function ReviewReport() {
                                             {/* Client Images - Only show header if images exist */}
                                             {test.serializedImages &&
                                               test.serializedImages.length >
-                                                0 && (
+                                              0 && (
                                                 <div className="mt-4">
                                                   <h5 className="font-semibold mb-2">
                                                     CLIENT IMAGES:
@@ -4991,7 +5019,7 @@ export default function ReviewReport() {
                                             {/* Client Images - Only show header if images exist */}
                                             {test.serializedImages &&
                                               test.serializedImages.length >
-                                                0 && (
+                                              0 && (
                                                 <div className="mt-4">
                                                   <h5 className="font-semibold mb-2">
                                                     CLIENT IMAGES:
@@ -5442,14 +5470,14 @@ export default function ReviewReport() {
                                         const leftTrialCells =
                                           buildTrialDisplayRow(
                                             test.leftMeasurements,
-                                            convertToLbs,
-                                            displayUnit,
+                                            // convertToLbs,
+                                            // displayUnit,
                                           );
                                         const rightTrialCells =
                                           buildTrialDisplayRow(
                                             test.rightMeasurements,
-                                            convertToLbs,
-                                            displayUnit,
+                                            // convertToLbs,
+                                            // displayUnit,
                                           );
                                         const leftAverageDisplay =
                                           formatWeightMeasurement(
@@ -5457,10 +5485,10 @@ export default function ReviewReport() {
                                               test.leftMeasurements,
                                               convertToLbs,
                                             ) ??
-                                              convertWeightMeasurement(
-                                                leftAvg,
-                                                convertToLbs,
-                                              ),
+                                            convertWeightMeasurement(
+                                              leftAvg,
+                                              convertToLbs,
+                                            ),
                                             displayUnit,
                                           );
                                         const rightAverageDisplay =
@@ -5469,10 +5497,10 @@ export default function ReviewReport() {
                                               test.rightMeasurements,
                                               convertToLbs,
                                             ) ??
-                                              convertWeightMeasurement(
-                                                rightAvg,
-                                                convertToLbs,
-                                              ),
+                                            convertWeightMeasurement(
+                                              rightAvg,
+                                              convertToLbs,
+                                            ),
                                             displayUnit,
                                           );
                                         return (
@@ -5542,7 +5570,7 @@ export default function ReviewReport() {
                                                         (isGripTest
                                                           ? 110.5
                                                           : 85.0)) *
-                                                        100,
+                                                      100,
                                                     )}
                                                     % |{" "}
                                                     {Math.round(
@@ -5550,7 +5578,7 @@ export default function ReviewReport() {
                                                         (isGripTest
                                                           ? 120.8
                                                           : 90.0)) *
-                                                        100,
+                                                      100,
                                                     )}
                                                     %
                                                   </td>
@@ -5594,7 +5622,7 @@ export default function ReviewReport() {
                                                     Trial 6
                                                   </th>
                                                   <th className="border border-black px-2 py-1 font-bold">
-                                                    Average
+                                                    Average (weight)
                                                   </th>
                                                 </tr>
                                               </thead>
@@ -5661,7 +5689,7 @@ export default function ReviewReport() {
                                             Limited by pain/discomfort
                                           </p>
                                           {isDynamicLift &&
-                                          endpointConditionLabel ? (
+                                            endpointConditionLabel ? (
                                             <>
                                               <p className="text-sm font-semibold mt-2">
                                                 Endpoint Condition:
@@ -5879,17 +5907,17 @@ export default function ReviewReport() {
                                               ];
                                               const maxVal = Math.max(
                                                 test.leftMeasurements?.trial1 ||
-                                                  0,
+                                                0,
                                                 test.leftMeasurements?.trial2 ||
-                                                  0,
+                                                0,
                                                 test.leftMeasurements?.trial3 ||
-                                                  0,
+                                                0,
                                                 test.leftMeasurements?.trial4 ||
-                                                  0,
+                                                0,
                                                 test.leftMeasurements?.trial5 ||
-                                                  0,
+                                                0,
                                                 test.leftMeasurements?.trial6 ||
-                                                  0,
+                                                0,
                                                 1,
                                               );
                                               return (
@@ -5942,16 +5970,16 @@ export default function ReviewReport() {
                                     const pre = Number(
                                       (test.leftMeasurements
                                         ?.preHeartRate as any) ||
-                                        (test.rightMeasurements
-                                          ?.preHeartRate as any) ||
-                                        0,
+                                      (test.rightMeasurements
+                                        ?.preHeartRate as any) ||
+                                      0,
                                     );
                                     const post = Number(
                                       (test.leftMeasurements
                                         ?.postHeartRate as any) ||
-                                        (test.rightMeasurements
-                                          ?.postHeartRate as any) ||
-                                        0,
+                                      (test.rightMeasurements
+                                        ?.postHeartRate as any) ||
+                                      0,
                                     );
                                     if (!pre && !post) return null;
                                     return (
@@ -6208,32 +6236,32 @@ export default function ReviewReport() {
                                 const testName =
                                   testData.testName ||
                                   testType.charAt(0).toUpperCase() +
-                                    testType.slice(1);
+                                  testType.slice(1);
 
                                 // Calculate averages from actual trial data
                                 const avgTime =
                                   trials.length > 0
                                     ? trials.reduce(
-                                        (sum: number, t: any) =>
-                                          sum + getTrialTime(t),
-                                        0,
-                                      ) / trials.length
+                                      (sum: number, t: any) =>
+                                        sum + getTrialTime(t),
+                                      0,
+                                    ) / trials.length
                                     : 0;
                                 const avgPercentIS =
                                   trials.length > 0
                                     ? trials.reduce(
-                                        (sum: number, t: any) =>
-                                          sum + (t.percentIS || 0),
-                                        0,
-                                      ) / trials.length
+                                      (sum: number, t: any) =>
+                                        sum + (t.percentIS || 0),
+                                      0,
+                                    ) / trials.length
                                     : 0;
                                 const avgReps =
                                   trials.length > 0
                                     ? trials.reduce(
-                                        (sum: number, t: any) =>
-                                          sum + (t.reps || 0),
-                                        0,
-                                      ) / trials.length
+                                      (sum: number, t: any) =>
+                                        sum + (t.reps || 0),
+                                      0,
+                                    ) / trials.length
                                     : 0;
 
                                 return (
@@ -6249,11 +6277,11 @@ export default function ReviewReport() {
                                             {testName} -{" "}
                                             {new Date(
                                               testData.completedAt ||
-                                                Date.now(),
+                                              Date.now(),
                                             ).toLocaleDateString()}{" "}
                                             {new Date(
                                               testData.completedAt ||
-                                                Date.now(),
+                                              Date.now(),
                                             ).toLocaleTimeString()}
                                           </th>
                                         </tr>

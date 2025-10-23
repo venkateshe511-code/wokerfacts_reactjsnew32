@@ -541,9 +541,9 @@ export default function TestData() {
       generateSampleTestData(
         testId,
         testNames[testId] ||
-          testId
-            .replace(/-/g, " ")
-            .replace(/\b\w/g, (l: string) => l.toUpperCase()),
+        testId
+          .replace(/-/g, " ")
+          .replace(/\b\w/g, (l: string) => l.toUpperCase()),
       ),
     );
 
@@ -1473,7 +1473,7 @@ export default function TestData() {
               key={`mtm-${currentTest.testId}-${mtmTestData[currentTest.testId]?.trials?.length || 0}`}
               testType={currentTest.testId}
               onSave={(data) => handleMTMTestSave(currentTest.testId, data)}
-              onBack={() => {}}
+              onBack={() => { }}
               embeddedMode
             />
           </div>
@@ -1642,9 +1642,11 @@ export default function TestData() {
                         const avg = calculateAverage(
                           currentTest.leftMeasurements,
                         );
-                        const unit = (
-                          currentTest?.unitMeasure || "lbs"
-                        ).toLowerCase();
+                        const rawUnit = currentTest?.unitMeasure?.toLowerCase();
+                        const unit = !rawUnit || rawUnit === "weight" ? "lbs" : rawUnit;
+                        // const unit = (
+                        //   currentTest?.unitMeasure || "lbs"
+                        // ).toLowerCase();
                         const displayValue =
                           unit === "kg"
                             ? Math.round(avg * 2.20462 * 10) / 10
@@ -1743,11 +1745,10 @@ export default function TestData() {
                           ].map((opt) => (
                             <label
                               key={opt.key}
-                              className={`flex items-start space-x-2 p-3 rounded border cursor-pointer hover:bg-blue-50 ${
-                                currentTest.dynamicEndpointType === opt.key
+                              className={`flex items-start space-x-2 p-3 rounded border cursor-pointer hover:bg-blue-50 ${currentTest.dynamicEndpointType === opt.key
                                   ? "border-blue-600"
                                   : "border-gray-300"
-                              }`}
+                                }`}
                               title={opt.desc}
                             >
                               <input
@@ -2029,11 +2030,10 @@ export default function TestData() {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab as any)}
-                    className={`px-4 py-2 rounded-t text-sm font-medium ${
-                      activeTab === tab
+                    className={`px-4 py-2 rounded-t text-sm font-medium ${activeTab === tab
                         ? "bg-blue-500 text-white"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
+                      }`}
                   >
                     {tab === "jobRequirements"
                       ? "Job Requirements"
@@ -2295,15 +2295,15 @@ export default function TestData() {
                               )}
                               {currentTest.valueToBeTestedUnit ===
                                 "Distance" && (
-                                <>
-                                  <SelectItem value="ft">ft</SelectItem>
-                                  <SelectItem value="m">m</SelectItem>
-                                  <SelectItem value="cm">cm</SelectItem>
-                                  <SelectItem value="in">in</SelectItem>
-                                  <SelectItem value="km">km</SelectItem>
-                                  <SelectItem value="mi">mi</SelectItem>
-                                </>
-                              )}
+                                  <>
+                                    <SelectItem value="ft">ft</SelectItem>
+                                    <SelectItem value="m">m</SelectItem>
+                                    <SelectItem value="cm">cm</SelectItem>
+                                    <SelectItem value="in">in</SelectItem>
+                                    <SelectItem value="km">km</SelectItem>
+                                    <SelectItem value="mi">mi</SelectItem>
+                                  </>
+                                )}
                               {currentTest.valueToBeTestedUnit === "Time" && (
                                 <>
                                   <SelectItem value="sec">sec</SelectItem>
@@ -2336,13 +2336,13 @@ export default function TestData() {
                               )}
                               {currentTest.valueToBeTestedUnit ===
                                 "Frequency" && (
-                                <>
-                                  <SelectItem value="Hz">Hz</SelectItem>
-                                  <SelectItem value="rpm">rpm</SelectItem>
-                                  <SelectItem value="bpm">bpm</SelectItem>
-                                  <SelectItem value="/min">/min</SelectItem>
-                                </>
-                              )}
+                                  <>
+                                    <SelectItem value="Hz">Hz</SelectItem>
+                                    <SelectItem value="rpm">rpm</SelectItem>
+                                    <SelectItem value="bpm">bpm</SelectItem>
+                                    <SelectItem value="/min">/min</SelectItem>
+                                  </>
+                                )}
                             </SelectContent>
                           </Select>
                         )}
@@ -2375,7 +2375,7 @@ export default function TestData() {
               <div className="flex items-center">
                 <Save className="mr-2 h-5 w-5" />
                 {testDataState.currentTestIndex ===
-                testDataState.tests.length - 1
+                  testDataState.tests.length - 1
                   ? "Save & Finish"
                   : "Save & Continue"}
               </div>
