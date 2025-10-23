@@ -2290,7 +2290,14 @@ padding-top: 120px; align-items: center; min-height: 0; ">
             },
           ];
 
-          const selectedLevel = String(level).trim();
+          const pdcQuestion = referralQuestionsData?.questions?.find(
+            (x: any) =>
+              x?.question &&
+              x.question.includes("Physical Demand Classification"),
+          );
+          const selectedLevel = pdcQuestion?.answer
+            ? String(pdcQuestion.answer).split("|")[0].replace("PDC:", "")
+            : null;
 
           return pdcLevels
             .map(
@@ -2618,7 +2625,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
               if (testNameLower.includes("extension")) {
                 return {
                   requirement:
-                    "Shoulder extension ≥45° for reach-behind activities",
+                    "Shoulder extension ��45° for reach-behind activities",
                   norm: 45, // degrees
                   functionalMin: 30,
                   unit: "degrees",
