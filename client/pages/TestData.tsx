@@ -1912,13 +1912,6 @@ export default function TestData() {
                                     parseFloat(e.target.value) || 0,
                                   )
                                 }
-                                onWheel={(e) => {
-                                  const target = e.currentTarget;
-                                  const delta = e.deltaY > 0 ? -1 : 1;
-                                  const newValue = (leftVal || 0) + delta;
-                                  updateMeasurement("left", key, Math.max(0, newValue));
-                                  e.preventDefault();
-                                }}
                                 className={`text-center border-2 ${leftVal > 250 ? "border-red-600" : "border-blue-300"} focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-xs sm:text-sm h-8 sm:h-10 bg-blue-50 font-medium`}
                               />
                               {leftVal > 250 && (
