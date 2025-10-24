@@ -1923,6 +1923,7 @@ export default function TestData() {
                                     parseFloat(e.target.value) || 0,
                                   )
                                 }
+                                onWheel={(e) => e.preventDefault()}
                                 className={`text-center border-2 ${rightVal > 250 ? "border-red-600" : "border-green-300"} focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none text-xs sm:text-sm h-8 sm:h-10 bg-green-50 font-medium`}
                               />
                               {rightVal > 250 && (
