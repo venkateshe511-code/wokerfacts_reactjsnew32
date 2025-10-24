@@ -311,14 +311,14 @@ export default function TestData() {
   // Disable scroll-based input value changes for number inputs
   React.useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      if (e.target instanceof HTMLInputElement && e.target.type === 'number') {
+      if (e.target instanceof HTMLInputElement && e.target.type === "number") {
         e.preventDefault();
       }
     };
 
-    document.addEventListener('wheel', handleWheel, { passive: false });
+    document.addEventListener("wheel", handleWheel, { passive: false });
     return () => {
-      document.removeEventListener('wheel', handleWheel);
+      document.removeEventListener("wheel", handleWheel);
     };
   }, []);
 
@@ -1877,7 +1877,8 @@ export default function TestData() {
                                 : "Left"}
                         </div>
                         {[1, 2, 3, 4, 5, 6].map((trialNum) => {
-                          const key = `trial${trialNum}` as keyof TestMeasurement;
+                          const key =
+                            `trial${trialNum}` as keyof TestMeasurement;
                           const leftVal = currentTest.leftMeasurements[key];
 
                           return (
@@ -1918,7 +1919,8 @@ export default function TestData() {
                                 : "Right"}
                         </div>
                         {[1, 2, 3, 4, 5, 6].map((trialNum) => {
-                          const key = `trial${trialNum}` as keyof TestMeasurement;
+                          const key =
+                            `trial${trialNum}` as keyof TestMeasurement;
                           const rightVal = currentTest.rightMeasurements[key];
 
                           return (
