@@ -4185,6 +4185,13 @@ padding-top: 120px; align-items: center; min-height: 0; ">
               }
                             </p>
 
+                            ${test.testId?.startsWith("dynamic-lift-") && !test.testId.includes("infrequent")
+                ? `<div style="margin-bottom: 12px; padding: 8px; background-color: #3b82f6; color: white; border-radius: 6px; text-align: center; font-weight: 500; font-size: 11px;">
+                                    Note: frequent lifts are four lifts per cycle.
+                                </div>`
+                : ""
+              }
+
                             <!-- Results Section with Combined Tables and Charts -->
                             <div style="margin: 0;">
                                 <h4 style="font-weight: bold; margin-bottom: 2px; font-size: 12px;">Results:</h4>
