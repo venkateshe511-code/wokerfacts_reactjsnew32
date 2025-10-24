@@ -1916,7 +1916,7 @@ export default function TestData() {
                       })}
                     </div>
                   )}
-                  {currentTest.testId === "dynamic-lift-mid" && (
+                  {currentTest.testId?.startsWith("dynamic-lift-") && !currentTest.testId.includes("infrequent") && (
                     <div className="mt-6 p-4 bg-blue-500 text-white rounded-lg text-center font-medium">
                       Note: frequent lifts are four lifts per cycle.
                     </div>
