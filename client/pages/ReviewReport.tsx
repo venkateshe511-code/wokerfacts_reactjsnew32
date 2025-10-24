@@ -2184,7 +2184,7 @@ export default function ReviewReport() {
                             if (testNameLower.includes("extension")) {
                               return {
                                 requirement:
-                                  "Cervical extension ≥45° for functional neck movement",
+                                  "Cervical extension ��45° for functional neck movement",
                                 norm: 45, // degrees
                                 functionalMin: 45,
                                 unit: "degrees",
@@ -3783,6 +3783,12 @@ export default function ReviewReport() {
                                       !isCardioTest &&
                                       `The client was tested in our facility using standardized assessment protocols. The test results were compared to normative data when available.`}
                                   </p>
+
+                                  {test.testId?.startsWith("dynamic-lift-") && !test.testId.includes("infrequent") && (
+                                    <div className="mb-4 p-3 bg-blue-500 text-white rounded-lg text-center font-medium text-sm">
+                                      Note: frequent lifts are four lifts per cycle.
+                                    </div>
+                                  )}
 
                                   {/* Results Section */}
                                   <div>
