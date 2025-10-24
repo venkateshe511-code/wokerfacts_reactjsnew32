@@ -308,6 +308,20 @@ export default function TestData() {
   // Alert state for threshold violations
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
+  // Disable scroll-based input value changes for number inputs
+  React.useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (e.target instanceof HTMLInputElement && e.target.type === 'number') {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      document.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
+
   const generateSampleTestData = (
     testId: string,
     testName: string,
