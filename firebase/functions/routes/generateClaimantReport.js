@@ -6771,6 +6771,25 @@ async function addTestDataContent(children, body) {
             spacing: { after: 100 },
           }),
         );
+
+        if (test.testId?.startsWith("dynamic-lift-") && !test.testId.includes("infrequent")) {
+          rightCol.push(
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "Note: frequent lifts are four lifts per cycle.",
+                  bold: true,
+                  size: 16,
+                  color: "FFFFFF",
+                }),
+              ],
+              shading: { fill: "3B82F6" },
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 0, after: 100 },
+            }),
+          );
+        }
+
         rightCol.push(
           new Paragraph({
             children: [new TextRun({ text: "Results:", bold: true, size: 16 })],
