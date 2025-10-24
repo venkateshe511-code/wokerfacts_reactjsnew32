@@ -1882,34 +1882,26 @@ export default function TestData() {
                       </div>
                     </>
                   ) : (
-                    <div className="grid grid-cols-2 gap-2 sm:gap-4 items-center text-xs sm:text-sm">
-                      <div className="text-center font-semibold">
-                        {isRangeOfMotionTest
-                          ? romPair?.[0] || "Primary"
-                          : isBalanceTest
-                            ? "Trial 1"
-                            : isCardioTest
-                              ? "Pre-Test"
-                              : "Left"}
-                      </div>
-                      <div className="text-center font-semibold">
-                        {isRangeOfMotionTest
-                          ? romPair?.[1] || "Secondary"
-                          : isBalanceTest
-                            ? "Trial 2"
-                            : isCardioTest
-                              ? "Post-Test"
-                              : "Right"}
-                      </div>
+                    <div className="grid grid-cols-2 gap-2 sm:gap-4 items-start text-xs sm:text-sm">
+                      <div className="space-y-2">
+                        <div className="text-center font-bold text-sm py-2 text-blue-700">
+                          {isRangeOfMotionTest
+                            ? romPair?.[0] || "Primary"
+                            : isBalanceTest
+                              ? "Trial 1"
+                              : isCardioTest
+                                ? "Pre-Test"
+                                : "Left"}
+                        </div>
+                        {[1, 2, 3, 4, 5, 6].map((trialNum) => {
+                          const key = `trial${trialNum}` as keyof TestMeasurement;
+                          const leftVal = currentTest.leftMeasurements[key];
 
-                      {[1, 2, 3, 4, 5, 6].map((trialNum) => {
-                        const key = `trial${trialNum}` as keyof TestMeasurement;
-                        const leftVal = currentTest.leftMeasurements[key];
-                        const rightVal = currentTest.rightMeasurements[key];
-
-                        return (
-                          <React.Fragment key={trialNum}>
-                            <div className="flex flex-col">
+                          return (
+                            <div key={trialNum} className="flex flex-col">
+                              <label className="text-xs font-semibold text-gray-600 mb-1 text-center">
+                                Trial {trialNum}
+                              </label>
                               <Input
                                 type="number"
                                 value={leftVal || ""}
@@ -1920,7 +1912,14 @@ export default function TestData() {
                                     parseFloat(e.target.value) || 0,
                                   )
                                 }
-                                className={`text-center border-2 ${leftVal > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
+                                onWheel={(e) => {
+                                  const target = e.currentTarget;
+                                  const delta = e.deltaY > 0 ? -1 : 1;
+                                  const newValue = (leftVal || 0) + delta;
+                                  updateMeasurement("left", key, Math.max(0, newValue));
+                                  e.preventDefault();
+                                }}
+                                className={`text-center border-2 ${leftVal > 250 ? "border-red-600" : "border-blue-300"} focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-xs sm:text-sm h-8 sm:h-10 bg-blue-50 font-medium`}
                               />
                               {leftVal > 250 && (
                                 <div className="text-red-700 text-xs mt-1">
@@ -1928,8 +1927,29 @@ export default function TestData() {
                                 </div>
                               )}
                             </div>
+                          );
+                        })}
+                      </div>
 
-                            <div className="flex flex-col">
+                      <div className="space-y-2">
+                        <div className="text-center font-bold text-sm py-2 text-green-700">
+                          {isRangeOfMotionTest
+                            ? romPair?.[1] || "Secondary"
+                            : isBalanceTest
+                              ? "Trial 2"
+                              : isCardioTest
+                                ? "Post-Test"
+                                : "Right"}
+                        </div>
+                        {[1, 2, 3, 4, 5, 6].map((trialNum) => {
+                          const key = `trial${trialNum}` as keyof TestMeasurement;
+                          const rightVal = currentTest.rightMeasurements[key];
+
+                          return (
+                            <div key={trialNum} className="flex flex-col">
+                              <label className="text-xs font-semibold text-gray-600 mb-1 text-center">
+                                Trial {trialNum}
+                              </label>
                               <Input
                                 type="number"
                                 value={rightVal || ""}
@@ -1940,7 +1960,14 @@ export default function TestData() {
                                     parseFloat(e.target.value) || 0,
                                   )
                                 }
-                                className={`text-center border-2 ${rightVal > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
+                                onWheel={(e) => {
+                                  const target = e.currentTarget;
+                                  const delta = e.deltaY > 0 ? -1 : 1;
+                                  const newValue = (rightVal || 0) + delta;
+                                  updateMeasurement("right", key, Math.max(0, newValue));
+                                  e.preventDefault();
+                                }}
+                                className={`text-center border-2 ${rightVal > 250 ? "border-red-600" : "border-green-300"} focus:border-green-500 focus:ring-2 focus:ring-green-200 focus:outline-none text-xs sm:text-sm h-8 sm:h-10 bg-green-50 font-medium`}
                               />
                               {rightVal > 250 && (
                                 <div className="text-red-700 text-xs mt-1">
@@ -1948,9 +1975,9 @@ export default function TestData() {
                                 </div>
                               )}
                             </div>
-                          </React.Fragment>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
                   {currentTest.testId?.startsWith("dynamic-lift-") &&
