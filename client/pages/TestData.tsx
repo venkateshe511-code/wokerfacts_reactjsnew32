@@ -1816,7 +1816,7 @@ export default function TestData() {
                         </Select>
                       </div>
                       <div className="grid grid-cols-1 gap-2 sm:gap-3 items-center text-xs sm:text-sm">
-                        <div className="text-center font-semibold">
+                        <div className="text-center font-bold text-sm py-2 text-blue-700">
                           Value ({liftUnit})
                         </div>
                         {[1, 2, 3, 4, 5, 6].map((trialNum) => {
@@ -1825,6 +1825,9 @@ export default function TestData() {
                           const val = currentTest.leftMeasurements[key];
                           return (
                             <div key={trialNum} className="flex flex-col">
+                              <label className="text-xs font-semibold text-gray-600 mb-1 text-center">
+                                Trial {trialNum}
+                              </label>
                               <Input
                                 type="number"
                                 value={val || ""}
@@ -1835,7 +1838,7 @@ export default function TestData() {
                                     parseFloat(e.target.value) || 0,
                                   )
                                 }
-                                className={`text-center border-2 ${val > 250 ? "border-red-600" : "border-black"} focus:ring-0 focus:outline-none text-xs sm:text-sm h-8 sm:h-10`}
+                                className={`text-center border-2 ${val > 250 ? "border-red-600" : "border-blue-300"} focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-xs sm:text-sm h-8 sm:h-10 bg-blue-50 font-medium`}
                               />
                               {val > 250 && (
                                 <div className="text-red-700 text-xs mt-1">
