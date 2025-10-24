@@ -1120,40 +1120,6 @@ export default function TestData() {
     return Math.max(...values);
   };
 
-  const ScrollableNumberInput = ({
-    value,
-    onChange,
-    onWheel,
-    className,
-    ...props
-  }: {
-    value: number | string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onWheel: (e: React.WheelEvent<HTMLInputElement>) => void;
-    className: string;
-    [key: string]: any;
-  }) => (
-    <Input
-      {...props}
-      type="number"
-      value={value}
-      onChange={onChange}
-      onWheel={onWheel}
-      className={className}
-      style={{
-        WebkitOuterSpinButton: {
-          WebkitAppearance: 'none',
-          margin: 0,
-        } as any,
-        WebkitInnerSpinButton: {
-          WebkitAppearance: 'none',
-          margin: 0,
-        } as any,
-        MozAppearance: 'textfield',
-      } as any}
-    />
-  );
-
   const BarChart = ({
     measurements,
     side,
