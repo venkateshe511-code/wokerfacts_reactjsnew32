@@ -1619,6 +1619,11 @@ export default function TestData() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
+                  {currentTest.testId === "dynamic-lift-mid" && (
+                    <div className="mb-6 p-4 bg-blue-500 text-white rounded-lg text-center font-medium">
+                      Note: frequent lifts are four lifts per cycle.
+                    </div>
+                  )}
                   {isLiftTest && (
                     <div className="mb-6">
                       <BarChart
