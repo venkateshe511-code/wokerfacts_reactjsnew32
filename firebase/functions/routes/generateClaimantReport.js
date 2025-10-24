@@ -137,7 +137,7 @@ const getImageBuffer = async (src) => {
       try {
         const tmpPath = path.join(os.tmpdir(), `docx_img_${Date.now()}.bin`);
         fs.writeFileSync(tmpPath, buffer);
-      } catch { }
+      } catch {}
     }
 
     return buffer;
@@ -182,7 +182,11 @@ function createHeaderCell(text) {
   });
 }
 
-function createSideTrialTable(test, measurementUnit, forceSingleRowOnly = false) {
+function createSideTrialTable(
+  test,
+  measurementUnit,
+  forceSingleRowOnly = false,
+) {
   // --- Unit detection ---
 
   const safeName = test?.testName || "Test";
@@ -199,7 +203,9 @@ function createSideTrialTable(test, measurementUnit, forceSingleRowOnly = false)
     testNameLower.includes("abduction") ||
     testNameLower.includes("inversion");
   const name = (test?.testName || "").toLowerCase();
-  const rawUnit = String(measurementUnit || test.unitMeasure || "").toLowerCase();
+  const rawUnit = String(
+    measurementUnit || test.unitMeasure || "",
+  ).toLowerCase();
   const unit = isRangeOfMotion
     ? "°"
     : !rawUnit || rawUnit === "weight"
@@ -234,7 +240,9 @@ function createSideTrialTable(test, measurementUnit, forceSingleRowOnly = false)
     if (typeof src === "object") {
       const out = [];
       for (let i = 1; i <= 30; i++) {
-        const key = [`trial${i}`, `t${i}`, String(i)].find((k) => src[k] != null);
+        const key = [`trial${i}`, `t${i}`, String(i)].find(
+          (k) => src[k] != null,
+        );
         if (key) out.push(toNumber(src[key]));
       }
       return out;
@@ -258,14 +266,25 @@ function createSideTrialTable(test, measurementUnit, forceSingleRowOnly = false)
   let singleTrials = readTrials(test?.measurements);
 
   // For single-row-only mode (like lift tests), if we only have left trials, treat as single row
-  if (forceSingleRowOnly && singleTrials.length === 0 && leftTrials.length > 0) {
+  if (
+    forceSingleRowOnly &&
+    singleTrials.length === 0 &&
+    leftTrials.length > 0
+  ) {
     singleTrials = leftTrials;
     leftTrials = [];
     rightTrials = [];
   }
 
-  const trialCount = Math.max(leftTrials.length, rightTrials.length, singleTrials.length);
-  const trialHeaders = Array.from({ length: trialCount }, (_, i) => `Trial ${i + 1}`);
+  const trialCount = Math.max(
+    leftTrials.length,
+    rightTrials.length,
+    singleTrials.length,
+  );
+  const trialHeaders = Array.from(
+    { length: trialCount },
+    (_, i) => `Trial ${i + 1}`,
+  );
 
   // --- Averages ---
   const leftAvgNum = average(leftTrials);
@@ -297,7 +316,6 @@ function createSideTrialTable(test, measurementUnit, forceSingleRowOnly = false)
       ],
     });
 
-
   const averageLabel = isRangeOfMotion
     ? "Average (range of motion)"
     : "Average (weight)";
@@ -306,13 +324,16 @@ function createSideTrialTable(test, measurementUnit, forceSingleRowOnly = false)
 
   // --- Header row ---
   const headerCells = [
-    ...(!forceSingleRowOnly && (leftTrials.length || rightTrials.length) ? [makeCell("Side", { bold: true, shading: true })] : []),
+    ...(!forceSingleRowOnly && (leftTrials.length || rightTrials.length)
+      ? [makeCell("Side", { bold: true, shading: true })]
+      : []),
     ...trialHeaders.map((h) => makeCell(h, { bold: true, shading: true })),
     makeCell(averageLabel, { bold: true, shading: true }),
   ];
   rows.push(new TableRow({ children: headerCells }));
-    // --- Detect type ---
-  const isSideBased = !forceSingleRowOnly && (leftTrials.length || rightTrials.length);
+  // --- Detect type ---
+  const isSideBased =
+    !forceSingleRowOnly && (leftTrials.length || rightTrials.length);
   if (isSideBased) {
     // ✅ Both Left and Right have real data → build both rows
     rows.push(
@@ -320,11 +341,16 @@ function createSideTrialTable(test, measurementUnit, forceSingleRowOnly = false)
         children: [
           makeCell("Left", { bold: true }),
           ...trialHeaders.map((_, i) =>
-            makeCell(leftTrials[i] != null ? `${formatVal(leftTrials[i])}` : "")
+            makeCell(
+              leftTrials[i] != null ? `${formatVal(leftTrials[i])}` : "",
+            ),
           ),
-          makeCell(leftAvgNum != null ? `${leftAvgNum.toFixed(1)} ${unit}` : "-", { bold: true }),
+          makeCell(
+            leftAvgNum != null ? `${leftAvgNum.toFixed(1)} ${unit}` : "-",
+            { bold: true },
+          ),
         ],
-      })
+      }),
     );
 
     rows.push(
@@ -332,24 +358,32 @@ function createSideTrialTable(test, measurementUnit, forceSingleRowOnly = false)
         children: [
           makeCell("Right", { bold: true }),
           ...trialHeaders.map((_, i) =>
-            makeCell(rightTrials[i] != null ? `${formatVal(rightTrials[i])}` : "")
+            makeCell(
+              rightTrials[i] != null ? `${formatVal(rightTrials[i])}` : "",
+            ),
           ),
-          makeCell(rightAvgNum != null ? `${rightAvgNum.toFixed(1)} ${unit}` : "-", { bold: true }),
+          makeCell(
+            rightAvgNum != null ? `${rightAvgNum.toFixed(1)} ${unit}` : "-",
+            { bold: true },
+          ),
         ],
-      })
+      }),
     );
   } else {
     // ✅ Only one set (either singleMeasurements, or only left/right side exists)
-   rows.push(
+    rows.push(
       new TableRow({
         children: [
           ...trialHeaders.map((_, i) => {
             const v = singleTrials[i];
             return makeCell(v != null ? `${formatVal(v)} ${unit}` : "");
           }),
-          makeCell(singleAvgNum != null ? `${singleAvgNum.toFixed(1)} ${unit}` : "-", { bold: true }),
+          makeCell(
+            singleAvgNum != null ? `${singleAvgNum.toFixed(1)} ${unit}` : "-",
+            { bold: true },
+          ),
         ],
-      })
+      }),
     );
   }
 
@@ -796,7 +830,6 @@ async function appendImageGrid(children, images, opts) {
   const rows = [];
   let cells = [];
 
-
   for (let i = 0; i < images.length; i++) {
     const img = images[i];
     let source = img?.data ?? img?.dataUrl ?? img?.src ?? img; // use let so it can be reassigned
@@ -816,13 +849,13 @@ async function appendImageGrid(children, images, opts) {
             alignment: AlignmentType.START,
             children: data
               ? [
-                new ImageRun({
-                  data,
-                  transformation: { width: imageWidth, height: imageHeight },
-                }),
-                new TextRun({ text: "\n" }),
-                new TextRun({ text: name, size: 16, color: "6B7280" }),
-              ]
+                  new ImageRun({
+                    data,
+                    transformation: { width: imageWidth, height: imageHeight },
+                  }),
+                  new TextRun({ text: "\n" }),
+                  new TextRun({ text: name, size: 16, color: "6B7280" }),
+                ]
               : [new TextRun({ text: name })],
           }),
         ],
@@ -844,12 +877,12 @@ async function appendImageGrid(children, images, opts) {
       rows: rows.length
         ? rows
         : [
-          new TableRow({
-            children: [
-              new TableCell({ children: [new Paragraph("No images")] }),
-            ],
-          }),
-        ],
+            new TableRow({
+              children: [
+                new TableCell({ children: [new Paragraph("No images")] }),
+              ],
+            }),
+          ],
     }),
   );
 }
@@ -912,13 +945,13 @@ async function appendSampleIllustrationsForTest(children, test) {
 function appendHeartRateLine(children, test) {
   const pre = Number(
     test.leftMeasurements?.preHeartRate ||
-    test.rightMeasurements?.preHeartRate ||
-    0,
+      test.rightMeasurements?.preHeartRate ||
+      0,
   );
   const post = Number(
     test.leftMeasurements?.postHeartRate ||
-    test.rightMeasurements?.postHeartRate ||
-    0,
+      test.rightMeasurements?.postHeartRate ||
+      0,
   );
   if (!pre && !post) return;
 
@@ -1123,14 +1156,14 @@ function addBruceDocxContent(children, test) {
       children: [
         new TextRun({ text: "CLASSIFICATION: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.classification || ""),
+          text: test.classification || "",
           underline: {},
           size: 16,
         }),
         new TextRun({ text: "    " }),
         new TextRun({ text: "VO2 MAX: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.vo2Max || ""),
+          text: test.vo2Max || "",
           underline: {},
           size: 16,
         }),
@@ -1465,7 +1498,7 @@ function addMCAFTDocxContent(children, test) {
       children: [
         new TextRun({ text: "Predicted VO2 max: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.predictedVo2Max || ""),
+          text: test.predictedVo2Max || "",
           underline: {},
           size: 16,
         }),
@@ -1473,7 +1506,7 @@ function addMCAFTDocxContent(children, test) {
         new TextRun({ text: "    " }),
         new TextRun({ text: "HBR: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.hbr || ""),
+          text: test.hbr || "",
           underline: {},
           size: 16,
         }),
@@ -1496,7 +1529,6 @@ function addKaschDocxContent(children, test) {
       spacing: { after: 120 },
     }),
   );
-
 
   // === How the Test Works ===
   children.push(
@@ -1535,14 +1567,14 @@ function addKaschDocxContent(children, test) {
       children: [
         new TextRun({ text: "CLASSIFICATION: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.classification),
+          text: test.classification,
           underline: {},
           size: 16,
         }),
         new TextRun({ text: "    " }),
         new TextRun({ text: "AEROBIC FITNESS SCORE: ", bold: true, size: 16 }),
         new TextRun({
-          text: (test.aerobicFitnessScore),
+          text: test.aerobicFitnessScore,
           underline: {},
           size: 16,
         }),
@@ -1636,23 +1668,23 @@ function addKaschDocxContent(children, test) {
                 children: r.map((c, idx) =>
                   idx === 0
                     ? new TableCell({
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [
-                            new TextRun({ text: c, bold: true, size: 16 }),
-                          ],
-                        }),
-                      ],
-                    })
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [
+                              new TextRun({ text: c, bold: true, size: 16 }),
+                            ],
+                          }),
+                        ],
+                      })
                     : new TableCell({
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [new TextRun({ text: c, size: 16 })],
-                        }),
-                      ],
-                    }),
+                        children: [
+                          new Paragraph({
+                            alignment: AlignmentType.CENTER,
+                            children: [new TextRun({ text: c, size: 16 })],
+                          }),
+                        ],
+                      }),
                 ),
               }),
           ),
@@ -1732,7 +1764,9 @@ async function addCardioDocxContent(children, test) {
 
   children.push(
     new Paragraph({
-      children: [new TextRun({ text: `Client Images:\n`, bold: true, size: 16 })],
+      children: [
+        new TextRun({ text: `Client Images:\n`, bold: true, size: 16 }),
+      ],
       spacing: { before: 120, after: 80 },
     }),
   );
@@ -1777,9 +1811,9 @@ async function addCardioDocxContent(children, test) {
                 children: [
                   imageBuffer
                     ? new ImageRun({
-                      data: imageBuffer,
-                      transformation: { width: 120, height: 120 },
-                    })
+                        data: imageBuffer,
+                        transformation: { width: 120, height: 120 },
+                      })
                     : new TextRun({ text: "[Image Missing]", size: 16 }),
                 ],
                 alignment: AlignmentType.LEFT,
@@ -1994,7 +2028,10 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun({ text: Number.isFinite(avgReps) ? format1(avgReps) : "", size: 16 }),
+                new TextRun({
+                  text: Number.isFinite(avgReps) ? format1(avgReps) : "",
+                  size: 16,
+                }),
               ],
             }),
           ],
@@ -2008,7 +2045,10 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun({ text: Number.isFinite(avgTime) ? format2(avgTime) : "", size: 16 }),
+                new TextRun({
+                  text: Number.isFinite(avgTime) ? format2(avgTime) : "",
+                  size: 16,
+                }),
               ],
             }),
           ],
@@ -2022,7 +2062,10 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun({ text: Number.isFinite(avgIS) ? format1(avgIS) : "", size: 16 }),
+                new TextRun({
+                  text: Number.isFinite(avgIS) ? format1(avgIS) : "",
+                  size: 16,
+                }),
               ],
             }),
           ],
@@ -2043,7 +2086,10 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun({ text: Number.isFinite(sumTime) ? format1(sumTime) : "", size: 16 }),
+                new TextRun({
+                  text: Number.isFinite(sumTime) ? format1(sumTime) : "",
+                  size: 16,
+                }),
               ],
             }),
           ],
@@ -2069,7 +2115,9 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
           },
           children: [
             new Paragraph({
-              children: [new TextRun({ text: "Total IS%:", bold: true, size: 16 })],
+              children: [
+                new TextRun({ text: "Total IS%:", bold: true, size: 16 }),
+              ],
             }),
           ],
         }),
@@ -2087,7 +2135,10 @@ function buildMTMTestBlockTable(testName, testData, trials = []) {
             new Paragraph({
               alignment: AlignmentType.CENTER,
               children: [
-                new TextRun({ text: Number.isFinite(avgIS) ? `${format1(avgIS)}%` : "", size: 16 }),
+                new TextRun({
+                  text: Number.isFinite(avgIS) ? `${format1(avgIS)}%` : "",
+                  size: 16,
+                }),
               ],
             }),
           ],
@@ -2280,7 +2331,9 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
 
     rightCol.push(
       new Paragraph({
-        children: [new TextRun({ text: `Test Images:\n`, bold: true, size: 16 })],
+        children: [
+          new TextRun({ text: `Test Images:\n`, bold: true, size: 16 }),
+        ],
         spacing: { before: 120, after: 80 },
       }),
     );
@@ -2312,7 +2365,9 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
             const base64 = file.dataUrl.split(",")[1];
             imageBuffer = Buffer.from(base64, "base64");
           } else if (file.url || file.path || file.src) {
-            imageBuffer = await getImageBuffer(file.url || file.path || file.src);
+            imageBuffer = await getImageBuffer(
+              file.url || file.path || file.src,
+            );
           } else if (file.data) {
             imageBuffer = Buffer.from(file.data, "base64");
           }
@@ -2324,9 +2379,9 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
                   children: [
                     imageBuffer
                       ? new ImageRun({
-                        data: imageBuffer,
-                        transformation: { width: 120, height: 120 },
-                      })
+                          data: imageBuffer,
+                          transformation: { width: 120, height: 120 },
+                        })
                       : new TextRun({ text: "[Image Missing]", size: 16 }),
                   ],
                   alignment: AlignmentType.LEFT,
@@ -2350,7 +2405,6 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
       );
     }
 
-
     // Comments
     const commentText = correspondingTest?.comments || testData?.comments;
     rightCol.push(
@@ -2359,7 +2413,7 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
           new TextRun({ text: "Comments: ", bold: true, size: 16 }),
           new TextRun({
             text: commentText || "No additional comments provided.",
-            size: 16
+            size: 16,
           }),
         ],
         spacing: { after: 220 },
@@ -2411,7 +2465,8 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
           children: [
             new TableCell({
               verticalAlign: VerticalAlign.CENTER,
-              borders: noBorders, children: leftCol
+              borders: noBorders,
+              children: leftCol,
             }),
             new TableCell({
               verticalAlign: VerticalAlign.CENTER,
@@ -2422,7 +2477,8 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
             }),
             new TableCell({
               verticalAlign: VerticalAlign.CENTER,
-              borders: noBorders, children: rightCol
+              borders: noBorders,
+              children: rightCol,
             }),
           ],
         }),
@@ -2596,20 +2652,20 @@ function computeCrosschecksFromUnifiedTests(
   // Hand grip MVE
   const gripMVEValid = gripTests.length
     ? gripTests.every((test) => {
-      const leftAvg = _calcAverage(test.leftMeasurements);
-      const rightAvg = _calcAverage(test.rightMeasurements);
-      const bilateralDiff = _bilateralDeficiency(leftAvg, rightAvg);
-      return bilateralDiff <= 20;
-    })
+        const leftAvg = _calcAverage(test.leftMeasurements);
+        const rightAvg = _calcAverage(test.rightMeasurements);
+        const bilateralDiff = _bilateralDeficiency(leftAvg, rightAvg);
+        return bilateralDiff <= 20;
+      })
     : null;
 
   // Pinch grip CV
   const pinchValid = pinchTests.length
     ? pinchTests.every((test) => {
-      const leftCV = _calcCV(test.leftMeasurements);
-      const rightCV = _calcCV(test.rightMeasurements);
-      return leftCV <= 15 && rightCV <= 15;
-    })
+        const leftCV = _calcCV(test.leftMeasurements);
+        const rightCV = _calcCV(test.rightMeasurements);
+        return leftCV <= 15 && rightCV <= 15;
+      })
     : null;
 
   // Dynamic lift HR fluctuation
@@ -2627,52 +2683,52 @@ function computeCrosschecksFromUnifiedTests(
 
   const hrConsistent = dynamicLifts.length
     ? dynamicLifts.some((test) => {
-      const preHR =
-        (test.leftMeasurements &&
-          Number(test.leftMeasurements.preHeartRate)) ||
-        (test.rightMeasurements &&
-          Number(test.rightMeasurements.preHeartRate)) ||
-        0;
-      const postHR =
-        (test.leftMeasurements &&
-          Number(test.leftMeasurements.postHeartRate)) ||
-        (test.rightMeasurements &&
-          Number(test.rightMeasurements.postHeartRate)) ||
-        0;
-      return postHR > preHR;
-    })
+        const preHR =
+          (test.leftMeasurements &&
+            Number(test.leftMeasurements.preHeartRate)) ||
+          (test.rightMeasurements &&
+            Number(test.rightMeasurements.preHeartRate)) ||
+          0;
+        const postHR =
+          (test.leftMeasurements &&
+            Number(test.leftMeasurements.postHeartRate)) ||
+          (test.rightMeasurements &&
+            Number(test.rightMeasurements.postHeartRate)) ||
+          0;
+        return postHR > preHR;
+      })
     : null;
 
   // ROM consistency
   const romValid = romTests.length
     ? romTests.every((test) => {
-      const leftTrials = _getTrialValues(test.leftMeasurements);
-      const rightTrials = _getTrialValues(test.rightMeasurements);
-      const all = [...leftTrials, ...rightTrials].filter((v) =>
-        Number.isFinite(v),
-      );
-      if (all.length < 6) return false;
+        const leftTrials = _getTrialValues(test.leftMeasurements);
+        const rightTrials = _getTrialValues(test.rightMeasurements);
+        const all = [...leftTrials, ...rightTrials].filter((v) =>
+          Number.isFinite(v),
+        );
+        if (all.length < 6) return false;
 
-      for (let i = 0; i <= all.length - 3; i++) {
-        const t1 = all[i],
-          t2 = all[i + 1],
-          t3 = all[i + 2];
-        const maxDiff = Math.max(
-          Math.abs(t1 - t2),
-          Math.abs(t2 - t3),
-          Math.abs(t1 - t3),
-        );
-        const avg = (t1 + t2 + t3) / 3;
-        const denom = avg === 0 ? 1 : avg;
-        const maxPerc = Math.max(
-          (Math.abs(t1 - avg) / denom) * 100,
-          (Math.abs(t2 - avg) / denom) * 100,
-          (Math.abs(t3 - avg) / denom) * 100,
-        );
-        if (maxDiff <= 5 && maxPerc <= 10) return true;
-      }
-      return false;
-    })
+        for (let i = 0; i <= all.length - 3; i++) {
+          const t1 = all[i],
+            t2 = all[i + 1],
+            t3 = all[i + 2];
+          const maxDiff = Math.max(
+            Math.abs(t1 - t2),
+            Math.abs(t2 - t3),
+            Math.abs(t1 - t3),
+          );
+          const avg = (t1 + t2 + t3) / 3;
+          const denom = avg === 0 ? 1 : avg;
+          const maxPerc = Math.max(
+            (Math.abs(t1 - avg) / denom) * 100,
+            (Math.abs(t2 - avg) / denom) * 100,
+            (Math.abs(t3 - avg) / denom) * 100,
+          );
+          if (maxDiff <= 5 && maxPerc <= 10) return true;
+        }
+        return false;
+      })
     : null;
 
   // Test/retest trial consistency
@@ -2707,12 +2763,12 @@ function computeCrosschecksFromUnifiedTests(
   // Dominant side monitoring
   const dominantSideValid = allTests.length
     ? allTests.every((test) => {
-      const l = _calcAverage(test.leftMeasurements);
-      const r = _calcAverage(test.rightMeasurements);
-      if (Math.min(l, r) === 0) return true; // avoid divide-by-zero
-      const ratio = Math.max(l, r) / Math.min(l, r);
-      return ratio <= 1.1; // ~10%
-    })
+        const l = _calcAverage(test.leftMeasurements);
+        const r = _calcAverage(test.rightMeasurements);
+        if (Math.min(l, r) === 0) return true; // avoid divide-by-zero
+        const ratio = Math.max(l, r) / Math.min(l, r);
+        return ratio <= 1.1; // ~10%
+      })
     : null;
 
   // Distraction test (6b) and diagnosis consistency (6c)
@@ -2810,25 +2866,25 @@ function computeCrosschecksFromUnifiedTests(
     ...(distractionPass === null
       ? []
       : [
-        {
-          name: "Distraction test consistency",
-          description:
-            "When performing distraction tests for sustained posture the client should demonstrate similar limitations and or abilities.",
-          pass: distractionPass,
-          applicable: true,
-        },
-      ]),
+          {
+            name: "Distraction test consistency",
+            description:
+              "When performing distraction tests for sustained posture the client should demonstrate similar limitations and or abilities.",
+            pass: distractionPass,
+            applicable: true,
+          },
+        ]),
     ...(diagnosisPass === null
       ? []
       : [
-        {
-          name: "Consistency with diagnosis",
-          description:
-            "Based on the diagnosis and complaints of the individual it is expected that those issues would relate to a similar function performance pattern during testing.",
-          pass: diagnosisPass,
-          applicable: true,
-        },
-      ]),
+          {
+            name: "Consistency with diagnosis",
+            description:
+              "Based on the diagnosis and complaints of the individual it is expected that those issues would relate to a similar function performance pattern during testing.",
+            pass: diagnosisPass,
+            applicable: true,
+          },
+        ]),
     {
       name: "Coefficient of Variation (CV)",
       description:
@@ -2942,8 +2998,7 @@ function isDynamicLiftTest(test, testNameLower, isLiftTest) {
     .toLowerCase();
 
   return (
-    isLiftTest &&
-    (haystack.includes("dynamic") || test?.isDynamic === true)
+    isLiftTest && (haystack.includes("dynamic") || test?.isDynamic === true)
   );
 }
 
@@ -2969,13 +3024,18 @@ function getEndpointConditionText(test) {
     if (typeof v === "object") {
       const o = v;
       const s =
-        o.condition || o.reason || o.label || o.name || o.value || o.text || o.title;
+        o.condition ||
+        o.reason ||
+        o.label ||
+        o.name ||
+        o.value ||
+        o.text ||
+        o.title;
       if (s) return String(s);
     }
   }
   return "";
 }
-
 
 // ===== Section builders =====
 async function addCoverPage(children, body) {
@@ -3011,7 +3071,6 @@ async function addCoverPage(children, body) {
     logoBuffer = await getImageBuffer(
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/256px-React-icon.svg.png",
     );
-
   }
 
   // Large top spacer to vertically center cover content area
@@ -3081,8 +3140,9 @@ async function addCoverPage(children, body) {
   children.push(coverRow("Date of Evaluation(s)", displayEvalDate));
 
   // Return footer content so caller can place at page bottom
-  const phoneFax = `Phone: ${clinicPhone || ""}${clinicPhone && clinicFax ? "    " : ""
-    }${clinicFax ? `Fax: ${clinicFax}` : ""}`.trim();
+  const phoneFax = `Phone: ${clinicPhone || ""}${
+    clinicPhone && clinicFax ? "    " : ""
+  }${clinicFax ? `Fax: ${clinicFax}` : ""}`.trim();
 
   const footerChildren = [];
   footerChildren.push(
@@ -3267,14 +3327,14 @@ async function addClientInformation(children, body) {
   const dob = cd.dateOfBirth || "";
   const age = dob
     ? (() => {
-      try {
-        const d = new Date(dob);
-        const diff = Date.now() - d.getTime();
-        return Math.max(0, Math.floor(diff / (365.25 * 24 * 3600 * 1000)));
-      } catch {
-        return "";
-      }
-    })()
+        try {
+          const d = new Date(dob);
+          const diff = Date.now() - d.getTime();
+          return Math.max(0, Math.floor(diff / (365.25 * 24 * 3600 * 1000)));
+        } catch {
+          return "";
+        }
+      })()
     : "";
   const heightDisp = `${cd.height || ""} ${cd.heightUnit || ""}`.trim();
   const weightDisp = `${cd.weight || ""} ${cd.weightUnit || ""}`.trim();
@@ -3326,7 +3386,6 @@ async function addClientInformation(children, body) {
     logoBuffer = await getImageBuffer(
       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/256px-React-icon.svg.png",
     );
-
   }
 
   if (logoBuffer) {
@@ -3601,42 +3660,42 @@ async function addClientInformation(children, body) {
                 }),
                 sampleImageBuffer
                   ? new Paragraph({
-                    children: [
-                      new ImageRun({
-                        data: sampleImageBuffer,
-                        transformation: { width: 120, height: 120 },
-                      }),
-                    ],
-                    alignment: AlignmentType.CENTER,
-                    spacing: { after: 10 },
-                  })
+                      children: [
+                        new ImageRun({
+                          data: sampleImageBuffer,
+                          transformation: { width: 120, height: 120 },
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                      spacing: { after: 10 },
+                    })
                   : new Paragraph({
-                    text: "[Photo Placeholder]",
-                    alignment: AlignmentType.START,
-                    spacing: { after: 10 },
-                    border: {
-                      top: {
-                        style: BorderStyle.SINGLE,
-                        size: 1,
-                        color: "CCCCCC",
+                      text: "[Photo Placeholder]",
+                      alignment: AlignmentType.START,
+                      spacing: { after: 10 },
+                      border: {
+                        top: {
+                          style: BorderStyle.SINGLE,
+                          size: 1,
+                          color: "CCCCCC",
+                        },
+                        bottom: {
+                          style: BorderStyle.SINGLE,
+                          size: 1,
+                          color: "CCCCCC",
+                        },
+                        left: {
+                          style: BorderStyle.SINGLE,
+                          size: 1,
+                          color: "CCCCCC",
+                        },
+                        right: {
+                          style: BorderStyle.SINGLE,
+                          size: 1,
+                          color: "CCCCCC",
+                        },
                       },
-                      bottom: {
-                        style: BorderStyle.SINGLE,
-                        size: 1,
-                        color: "CCCCCC",
-                      },
-                      left: {
-                        style: BorderStyle.SINGLE,
-                        size: 1,
-                        color: "CCCCCC",
-                      },
-                      right: {
-                        style: BorderStyle.SINGLE,
-                        size: 1,
-                        color: "CCCCCC",
-                      },
-                    },
-                  }),
+                    }),
 
                 new Paragraph({
                   children: [
@@ -3839,11 +3898,11 @@ async function addClientInformation(children, body) {
             spacing: { before: 0, after: 0 },
             children: buf
               ? [
-                new ImageRun({
-                  data: buf,
-                  transformation: { width: 130, height: 200 },
-                }),
-              ]
+                  new ImageRun({
+                    data: buf,
+                    transformation: { width: 130, height: 200 },
+                  }),
+                ]
               : [new TextRun(`Image ${idx + 1} not available`)],
           }),
         ],
@@ -4569,7 +4628,8 @@ async function addReferenceChartsContent(children) {
           paddedCell("Biomechanical", { size: 16 }),
           paddedCell(
             "The biomechanical stopping point follows the biomechanics of the person as they perform the activity. While you will not be able to teach proper body mechanics during the relatively short duration of an FCE, you should encourage proper body mechanics. Ultimately, you will be assessing the client’s capacity as he or she moves in their usual way to complete each task. The biomechanical stopping point relies on your clinical observation skills and knowledge of proper body mechanics.",
-            { size: 16 }),
+            { size: 16 },
+          ),
         ],
       }),
       new TableRow({
@@ -4577,7 +4637,8 @@ async function addReferenceChartsContent(children) {
           paddedCell("Physiological", { size: 16 }),
           paddedCell(
             "Physiological response to testing refers to the client’s involuntary reactions to the tests. These reactions include heart rate, blood pressure, respiration rate, changes in pallor, and similar markers. The American College of Sports Medicine recommends keeping the client’s heart rate below 85% of age-predicted maximum heart rate (APMHR) during physically demanding testing, with a recovery to 70% APMHR before commencing the next test.",
-            { size: 16 }),
+            { size: 16 },
+          ),
         ],
       }),
       new TableRow({
@@ -4585,7 +4646,8 @@ async function addReferenceChartsContent(children) {
           paddedCell("Psychophysical", { size: 16 }),
           paddedCell(
             "The psychophysical ending point is based on the client’s perceived rate of exertion—that is, how the client feels or perceives the difficulty of the task. You can use a scale to rate the perception of difficulty, such as the Borg Scale, or simply ask the client to describe their comfort level with the activity. The test should be terminated at the point where the client feels they can no longer continue and has reached their maximum performance level.",
-            { size: 16 }),
+            { size: 16 },
+          ),
         ],
       }),
       new TableRow({
@@ -4593,7 +4655,8 @@ async function addReferenceChartsContent(children) {
           paddedCell("Task Requirement", { size: 16 }),
           paddedCell(
             "A fourth, but still important, stopping criterion is the task requirement. This applies more to return-to-work (RTW) testing when you know the specific physical demands of the job tasks and are assessing the client’s ability to perform them. When the client’s tested ability matches the defined job requirement, you should stop the test because continuing beyond the task requirement could put the client at unnecessary risk.",
-            { size: 16 }),
+            { size: 16 },
+          ),
         ],
       }),
     ],
@@ -4664,9 +4727,9 @@ async function addDigitalLibraryContent(children, body) {
                 children: [
                   imageBuffer
                     ? new ImageRun({
-                      data: imageBuffer,
-                      transformation: { width: 120, height: 120 },
-                    })
+                        data: imageBuffer,
+                        transformation: { width: 120, height: 120 },
+                      })
                     : new TextRun({ text: "[Image Missing]", size: 16 }),
                 ],
                 alignment: AlignmentType.CENTER,
@@ -4878,10 +4941,26 @@ async function addReferralQuestionsContent(children, body) {
                   margins: { top: 100, bottom: 100, left: 150, right: 150 },
                   verticalAlign: VerticalAlign.CENTER,
                   borders: {
-                    top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                    bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                    left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                    right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    top: {
+                      style: BorderStyle.SINGLE,
+                      size: 1,
+                      color: "000000",
+                    },
+                    bottom: {
+                      style: BorderStyle.SINGLE,
+                      size: 1,
+                      color: "000000",
+                    },
+                    left: {
+                      style: BorderStyle.SINGLE,
+                      size: 1,
+                      color: "000000",
+                    },
+                    right: {
+                      style: BorderStyle.SINGLE,
+                      size: 1,
+                      color: "000000",
+                    },
                   },
                   columnSpan: 4,
                   shading: { fill: "FFFF99" },
@@ -4906,10 +4985,26 @@ async function addReferralQuestionsContent(children, body) {
                   margins: { top: 100, bottom: 100, left: 150, right: 150 },
                   verticalAlign: VerticalAlign.CENTER,
                   borders: {
-                    top: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                    bottom: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                    left: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
-                    right: { style: BorderStyle.SINGLE, size: 1, color: "000000" },
+                    top: {
+                      style: BorderStyle.SINGLE,
+                      size: 1,
+                      color: "000000",
+                    },
+                    bottom: {
+                      style: BorderStyle.SINGLE,
+                      size: 1,
+                      color: "000000",
+                    },
+                    left: {
+                      style: BorderStyle.SINGLE,
+                      size: 1,
+                      color: "000000",
+                    },
+                    right: {
+                      style: BorderStyle.SINGLE,
+                      size: 1,
+                      color: "000000",
+                    },
                   },
                   columnSpan: 4,
                   shading: { fill: "FFFF99" },
@@ -4946,20 +5041,54 @@ async function addReferralQuestionsContent(children, body) {
               ],
             }),
             ...[
-              ["Sedentary", "Up to 10 lbs of force", "Negligible weight", "Negligible weight"],
-              ["Light", "Up to 20 lbs of force", "Up to 10 lbs of force", "Negligible weight"],
-              ["Medium", "20–50 lbs of force", "10–25 lbs of force", "Up to 10 lbs of force"],
-              ["Heavy", "50–100 lbs of force", "25–50 lbs of force", "10–20 lbs of force"],
-              ["Very Heavy", "Over 100 lbs of force", "Over 50 lbs of force", "Over 20 lbs of force"],
-            ].map(([demandLevel, occasional, frequent, constant]) =>
-              new TableRow({
-                children: [
-                  paddedCell(demandLevel, { fill: demandLevel === level ? "DBEAFE" : undefined }),
-                  paddedCell(occasional, { fill: demandLevel === level ? "DBEAFE" : undefined }),
-                  paddedCell(frequent, { fill: demandLevel === level ? "DBEAFE" : undefined }),
-                  paddedCell(constant, { fill: demandLevel === level ? "DBEAFE" : undefined }),
-                ],
-              }),
+              [
+                "Sedentary",
+                "Up to 10 lbs of force",
+                "Negligible weight",
+                "Negligible weight",
+              ],
+              [
+                "Light",
+                "Up to 20 lbs of force",
+                "Up to 10 lbs of force",
+                "Negligible weight",
+              ],
+              [
+                "Medium",
+                "20–50 lbs of force",
+                "10–25 lbs of force",
+                "Up to 10 lbs of force",
+              ],
+              [
+                "Heavy",
+                "50–100 lbs of force",
+                "25–50 lbs of force",
+                "10–20 lbs of force",
+              ],
+              [
+                "Very Heavy",
+                "Over 100 lbs of force",
+                "Over 50 lbs of force",
+                "Over 20 lbs of force",
+              ],
+            ].map(
+              ([demandLevel, occasional, frequent, constant]) =>
+                new TableRow({
+                  children: [
+                    paddedCell(demandLevel, {
+                      fill: demandLevel === level ? "DBEAFE" : undefined,
+                    }),
+                    paddedCell(occasional, {
+                      fill: demandLevel === level ? "DBEAFE" : undefined,
+                    }),
+                    paddedCell(frequent, {
+                      fill: demandLevel === level ? "DBEAFE" : undefined,
+                    }),
+                    paddedCell(constant, {
+                      fill: demandLevel === level ? "DBEAFE" : undefined,
+                    }),
+                  ],
+                }),
             ),
             // new TableRow({
             //   children: [
@@ -5030,17 +5159,23 @@ async function addReferralQuestionsContent(children, body) {
             let buffer = null;
             if (typeof item === "string") {
               if (/^data:image\//i.test(item)) {
-                const base64 = item.split(",")[1] || item.replace(/^data:image\/\w+;base64,/, "");
+                const base64 =
+                  item.split(",")[1] ||
+                  item.replace(/^data:image\/\w+;base64,/, "");
                 buffer = base64 ? Buffer.from(base64, "base64") : null;
               } else {
                 buffer = await getImageBuffer(item);
               }
             } else if (item && typeof item === "object") {
               if (item.dataUrl && /^data:image\//i.test(item.dataUrl)) {
-                const base64 = String(item.dataUrl).split(",")[1] || String(item.dataUrl).replace(/^data:image\/\w+;base64,/, "");
+                const base64 =
+                  String(item.dataUrl).split(",")[1] ||
+                  String(item.dataUrl).replace(/^data:image\/\w+;base64,/, "");
                 buffer = base64 ? Buffer.from(base64, "base64") : null;
               } else if (item.url || item.path || item.src) {
-                buffer = await getImageBuffer(item.url || item.path || item.src);
+                buffer = await getImageBuffer(
+                  item.url || item.path || item.src,
+                );
               } else if (item.data) {
                 buffer = Buffer.from(String(item.data), "base64");
               }
@@ -5055,7 +5190,12 @@ async function addReferralQuestionsContent(children, body) {
                 children: [
                   new Paragraph({
                     alignment: AlignmentType.CENTER,
-                    children: [new ImageRun({ data: buffer, transformation: { width: 100, height: 80 } })],
+                    children: [
+                      new ImageRun({
+                        data: buffer,
+                        transformation: { width: 100, height: 80 },
+                      }),
+                    ],
                   }),
                 ],
                 margins: { top: 100, bottom: 100, left: 100, right: 100 },
@@ -5076,7 +5216,6 @@ async function addReferralQuestionsContent(children, body) {
           );
         }
       }
-
 
       continue; // skip to next question
     }
@@ -6607,8 +6746,14 @@ async function addTestDataContent(children, body) {
   const hasMTM = mtmData && Object.keys(mtmData).length > 0;
   const cardioData = body?.cardioTestData || {};
   const testData = body?.testData?.tests || [];
-  console.log("[addTestDataContent] cardio keys:", Object.keys(cardioData || {}));
-  console.log("[addTestDataContent] test ids:", (body?.testData?.tests || []).map(t => t.testId));
+  console.log(
+    "[addTestDataContent] cardio keys:",
+    Object.keys(cardioData || {}),
+  );
+  console.log(
+    "[addTestDataContent] test ids:",
+    (body?.testData?.tests || []).map((t) => t.testId),
+  );
 
   // 1) Show individual tests (do not return; we will append MTM after)
   if (testData.length === 0) {
@@ -6693,9 +6838,10 @@ async function addTestDataContent(children, body) {
         //   /(bruce|treadmill|mcaft|kasch|step|cardio|cardiovascular)/,
         // );
         const idLower = (test.testId || "").toLowerCase();
-        const isCardioTest = /(bruce|treadmill|mcaft|kasch|step|cardio|cardiovascular)/.test(
-          `${testNameLower} ${idLower}`,
-        );
+        const isCardioTest =
+          /(bruce|treadmill|mcaft|kasch|step|cardio|cardiovascular)/.test(
+            `${testNameLower} ${idLower}`,
+          );
 
         function safeUnitLabel(raw, fallback = "") {
           const str =
@@ -6765,14 +6911,15 @@ async function addTestDataContent(children, body) {
 
         rightCol.push(
           new Paragraph({
-            children: [
-              new TextRun({ text: description, size: 16 }),
-            ],
+            children: [new TextRun({ text: description, size: 16 })],
             spacing: { after: 100 },
           }),
         );
 
-        if (test.testId?.startsWith("dynamic-lift-") && !test.testId.includes("infrequent")) {
+        if (
+          test.testId?.startsWith("dynamic-lift-") &&
+          !test.testId.includes("infrequent")
+        ) {
           rightCol.push(
             new Paragraph({
               children: [
@@ -6797,21 +6944,25 @@ async function addTestDataContent(children, body) {
           }),
         );
 
-
-
         if (isCardioTest) {
           const cData =
-            cardioData?.[test.testId] ??
-            cardioData?.[safeName] ??
-            null;
+            cardioData?.[test.testId] ?? cardioData?.[safeName] ?? null;
 
           // Debug
-          console.log("[Cardio] testId:", test.testId, "name:", safeName, "found:", !!cData);
+          console.log(
+            "[Cardio] testId:",
+            test.testId,
+            "name:",
+            safeName,
+            "found:",
+            !!cData,
+          );
 
           if (cData) {
             Object.assign(test, {
               vo2Max: cData.vo2MaxScore ?? cData.vo2Max ?? "",
-              predictedVo2Max: cData.predictedVO2Max ?? cData.predictedVo2Max ?? "",
+              predictedVo2Max:
+                cData.predictedVO2Max ?? cData.predictedVo2Max ?? "",
               classification: cData.classification ?? "",
               hbr: cData.hbr ?? "",
               aerobicFitnessScore: cData.aerobicFitnessScore ?? "",
@@ -6838,7 +6989,10 @@ async function addTestDataContent(children, body) {
             new Paragraph({
               children: [
                 new TextRun({ text: "Comments: ", bold: true, size: 16 }),
-                new TextRun({ text: test.comments || "No additional comments provided.", size: 16 }),
+                new TextRun({
+                  text: test.comments || "No additional comments provided.",
+                  size: 16,
+                }),
               ],
               spacing: { before: 200, after: 100 },
             }),
@@ -7054,11 +7208,10 @@ async function addTestDataContent(children, body) {
             rightCol.push(
               new Paragraph({ spacing: { before: 100, after: 50 } }),
             );
-            rightCol.push(createSideTrialTable(test, measurementUnit,true));
+            rightCol.push(createSideTrialTable(test, measurementUnit, true));
             rightCol.push(
               new Paragraph({ spacing: { before: 100, after: 50 } }),
             );
-
           } else {
             rightCol.push(
               new Table({
@@ -7258,8 +7411,13 @@ async function addTestDataContent(children, body) {
             trialLabels = [],
             trialValues = [],
           }) {
-            const { buffer, width: srcW = 640, height: srcH = 200 } = chartImage || {};
-            if (!buffer) return new TableCell({ borders: noBorders, children: [] });
+            const {
+              buffer,
+              width: srcW = 640,
+              height: srcH = 200,
+            } = chartImage || {};
+            if (!buffer)
+              return new TableCell({ borders: noBorders, children: [] });
 
             const aspect = srcH / srcW;
             const imgHeightPx = Math.round(imgWidthPx * aspect);
@@ -7271,10 +7429,12 @@ async function addTestDataContent(children, body) {
 
             const titleNode = title
               ? new Paragraph({
-                alignment: AlignmentType.CENTER,
-                spacing: { after: 80 },
-                children: [new TextRun({ text: title, bold: true, size: 16 })],
-              })
+                  alignment: AlignmentType.CENTER,
+                  spacing: { after: 80 },
+                  children: [
+                    new TextRun({ text: title, bold: true, size: 16 }),
+                  ],
+                })
               : null;
 
             return new TableCell({
@@ -7292,27 +7452,37 @@ async function addTestDataContent(children, body) {
                   children: [
                     new ImageRun({
                       data: buffer,
-                      transformation: { width: imgWidthPx, height: imgHeightPx },
+                      transformation: {
+                        width: imgWidthPx,
+                        height: imgHeightPx,
+                      },
                     }),
                   ],
                 }),
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
                   spacing: { before: 120, after: 20 },
-                  children: [new TextRun({ text: labelLine, bold: true, size: 14 })],
+                  children: [
+                    new TextRun({ text: labelLine, bold: true, size: 14 }),
+                  ],
                 }),
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
                   spacing: { after: 60 },
-                  children: [new TextRun({ text: valueLine, size: 14, color: "444444" })],
+                  children: [
+                    new TextRun({ text: valueLine, size: 14, color: "444444" }),
+                  ],
                 }),
                 new Paragraph({
                   alignment: AlignmentType.CENTER,
                   spacing: { before: 80 },
                   children: [
                     new TextRun({
-                      text: `${averageLabel}: ${Number.isFinite(averageValue) ? averageValue.toFixed(1) : "n/a"
-                        }${unitLabel ? ` ${unitLabel}` : ""}`,
+                      text: `${averageLabel}: ${
+                        Number.isFinite(averageValue)
+                          ? averageValue.toFixed(1)
+                          : "n/a"
+                      }${unitLabel ? ` ${unitLabel}` : ""}`,
                       color: "444444",
                       size: 16,
                     }),
@@ -7389,7 +7559,7 @@ async function addTestDataContent(children, body) {
                   ChartJS.defaults.font.family = "Arial";
                   ChartJS.defaults.font.size = 12;
                   ChartJS.defaults.color = "#333";
-                } catch { }
+                } catch {}
               },
             });
             const labels = dataSeries.map((_, i) => `T${i + 1}`);
@@ -7485,15 +7655,14 @@ async function addTestDataContent(children, body) {
           const hasLeftSeries = hasMeaningfulTrialData(leftSeries);
           const hasRightSeries = hasMeaningfulTrialData(rightSeries);
 
-
           if (!hasLeftSeries && !hasRightSeries) {
             singleSeries = extractTrialSeries(
               test.measurements ||
-              test.trials ||
-              test.series ||
-              test.results ||
-              test.data ||
-              [],
+                test.trials ||
+                test.series ||
+                test.results ||
+                test.data ||
+                [],
             );
           }
           // What do we actually have?
@@ -7553,7 +7722,7 @@ async function addTestDataContent(children, body) {
                     chartImage: img,
                     averageValue:
                       singleSeries.reduce((a, b) => a + b, 0) /
-                      singleSeries.length || 0,
+                        singleSeries.length || 0,
                     unitLabel: measurementUnit,
                     imgWidthPx: chartImgWidthPx,
                     trialLabels,
@@ -7573,7 +7742,8 @@ async function addTestDataContent(children, body) {
                   const trialValues = leftSeries;
                   chartCells.push(
                     createTrialChartCell({
-                      title: showSideTitles ? "Left Side" : "", chartImage: img,
+                      title: showSideTitles ? "Left Side" : "",
+                      chartImage: img,
                       averageValue: leftAvg,
                       unitLabel: measurementUnit,
                       imgWidthPx: chartImgWidthPx,
@@ -7666,13 +7836,22 @@ async function addTestDataContent(children, body) {
               }),
             );
           }
-          const isDynamicLift = isDynamicLiftTest(test, testNameLower, isLiftTest);
+          const isDynamicLift = isDynamicLiftTest(
+            test,
+            testNameLower,
+            isLiftTest,
+          );
           if (isDynamicLift) {
-            const endpointText = getEndpointConditionText(test) || "Not recorded.";
+            const endpointText =
+              getEndpointConditionText(test) || "Not recorded.";
             rightCol.push(
               new Paragraph({
                 children: [
-                  new TextRun({ text: "Endpoint condition (for full description refer to references): ", bold: true, size: 16 }),
+                  new TextRun({
+                    text: "Endpoint condition (for full description refer to references): ",
+                    bold: true,
+                    size: 16,
+                  }),
                   new TextRun({ text: endpointText, size: 16 }),
                 ],
                 spacing: { before: 160, after: 80 },
@@ -7745,7 +7924,10 @@ async function addTestDataContent(children, body) {
 
 // ===== Route =====
 router.post("/", async (req, res) => {
-  console.log("📥 Request received for DOCX generation at:", new Date().toISOString());
+  console.log(
+    "📥 Request received for DOCX generation at:",
+    new Date().toISOString(),
+  );
   console.log("Request body keys:", Object.keys(req.body));
 
   try {
@@ -7856,8 +8038,11 @@ router.post("/", async (req, res) => {
                   alignment: AlignmentType.RIGHT,
                   children: [
                     new TextRun({ text: "Page ", font: NARROW_FONT, size: 16 }),
-                    new TextRun({ children: [PageNumber.CURRENT], font: NARROW_FONT, size: 16 }),
-
+                    new TextRun({
+                      children: [PageNumber.CURRENT],
+                      font: NARROW_FONT,
+                      size: 16,
+                    }),
                   ],
                 }),
               ],
@@ -7880,7 +8065,11 @@ router.post("/", async (req, res) => {
 
     const buffer = await Packer.toBuffer(doc);
 
-    console.log("✅ DOCX buffer generated successfully, size:", buffer.length, "bytes");
+    console.log(
+      "✅ DOCX buffer generated successfully, size:",
+      buffer.length,
+      "bytes",
+    );
 
     // Check first bytes
     console.log("Buffer signature:", buffer.slice(0, 4).toString("hex")); // should start with 504b
@@ -7888,18 +8077,17 @@ router.post("/", async (req, res) => {
     return res
       .status(200)
       .set({
-        "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "Content-Disposition": `attachment; filename="FCE_Report_${claimantName.replace(
           /[^a-zA-Z0-9]/g,
-          "_"
+          "_",
         )}_${new Date().toISOString().split("T")[0]}.docx"`,
         "Cache-Control": "no-store, no-transform", // ✅ combine in one header correctly
-        "Content-Encoding": "binary",              // ✅ prevents UTF-8 / gzip transformation
+        "Content-Encoding": "binary", // ✅ prevents UTF-8 / gzip transformation
         "Content-Length": buffer.length,
       })
       .end(Buffer.from(buffer)); // ✅ ensure binary mode
-
-
   } catch (err) {
     return res.status(500).json({
       error: "Internal Server Error generating DOCX",
