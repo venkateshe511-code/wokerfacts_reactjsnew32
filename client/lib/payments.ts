@@ -94,7 +94,7 @@ export async function startCheckout(params: {
 
   
   const data = (await res.json()) as { url?: string; id?: string };
-  const pk = "pk_live_51S8p0mFL0RRXkupDkZL201I4NCneLLerALw8MdD5H4WtFhfWtpbpEcdsrGUseSETOgjirTq37VDIQoLlrSCJZKmD00K3r73Q4W";
+  const pk = "pk_live_51SNEa6Jm0n6uZx7IFpVNEewxlyKSCD2z9FTLpKoKCWevjH7JPU6ppUcsZIzIkLXhaRjpB80V3KPhY8emzlPb7p0k00LzoGvZmK";
 
   // Prefer Stripe.js redirect when pk and session id are available
   if (pk && data?.id) {
