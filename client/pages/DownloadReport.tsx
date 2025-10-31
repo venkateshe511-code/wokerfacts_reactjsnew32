@@ -1737,12 +1737,18 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                   }</span></div>`
             }
             <h1 style="font-size: 22px; font-weight: bold; color: #4472C4; margin: 8px 0; font-family: Arial, sans-serif;">Functional Abilities Evaluation</h1>
-            <p style="font-size: 12px; color: #666; margin: 4px 0; font-family: Arial, sans-serif;">${
-              evaluatorData.address || "Address"
+             <div style="font-size: 9px; line-height: 1.2; font-family: Arial, sans-serif;">
+            <p style="font-weight: bold; margin-bottom: 1px; font-family: Arial, sans-serif;">${
+              evaluatorData.clinicName || "MedSource"
             }</p>
-            <p style="font-size: 12px; color: #666; margin: 4px 0; font-family: Arial, sans-serif;">Phone: ${
-              evaluatorData.phone || "N/A"
-            } | Email: ${evaluatorData.email || "N/A"}</p>
+            <p style="margin-bottom: 1px; font-family: Arial, sans-serif;">${
+              evaluatorData.address ||
+              "1490-5A Quarterpath Road #242, Williamsburg, VA  23185"
+            }</p>
+            <p style="font-family: Arial, sans-serif;">Phone: ${
+              evaluatorData.phone || "757-220-5051"
+            } &nbsp;&nbsp; Fax: ${evaluatorData.fax || "757-273-6198"}</p>
+        </div>
         </div>
 
        <div style="display: grid; grid-template-columns: 128px 1fr; gap: 40px; margin-bottom: 5px; position: relative;">
