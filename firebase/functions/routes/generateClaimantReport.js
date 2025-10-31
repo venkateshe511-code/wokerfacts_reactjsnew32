@@ -46,7 +46,7 @@ function createTableCellForPain(text, bold = false, background = "") {
       }),
     ],
     shading: background ? { type: "clear", fill: background } : undefined,
-    margins: { top: 0, bottom: 0, left: 40, right: 40 },
+    margins: { top: 10, bottom: 10, left: 40, right: 40 },
   });
 }
 
@@ -85,6 +85,7 @@ function createColoredSymbolCell(text) {
         spacing: { before: 0, after: 0 },
       }),
     ],
+    margins: { top: 10, bottom: 10, left: 40, right: 40 },
   });
 }
 
@@ -3843,7 +3844,7 @@ async function addClientInformation(children, body) {
           size: 18,
         }),
       ],
-      spacing: { before: 150, after: 150 },
+      spacing: { before: 0, after: 50 },
     }),
   );
 
@@ -3919,88 +3920,46 @@ async function addClientInformation(children, body) {
   );
 
   // Side-by-side diagram and legend
-  children.push(
-    new Table({
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      layout: TableLayoutType.FIXED,
-      borders: noBorders,
-      columnWidths: [7500, 2000],
-      rows: [
-        new TableRow({
-          children: [
-            // LEFT COLUMN with 4 images
-            new TableCell({
-              shading: { fill: "F9FAFA" },
-              borders: noBorders,
-              children: [
-                new Table({
-                  width: { size: 100, type: WidthType.PERCENTAGE },
-                  layout: TableLayoutType.FIXED,
-                  borders: noBorders,
-                  columnWidths: [1700, 1700, 1700, 1700],
-                  rows: [
-                    new TableRow({
-                      tableHeader: false,
-                      children: [
-                        ...(diagramCells.length
-                          ? diagramCells.slice(0, 4)
-                          : []),
-                      ],
-                      height: { value: 1800, rule: HeightRule.ATLEAST }, // ensures vertical space for centering
-                    }),
-                  ],
-                }),
-              ],
-            }),
+  const rows = [];
 
-            // RIGHT COLUMN: legend
-            new TableCell({
-              children: [legendTable],
-              borders: noBorders,
-              margins: { top: 0, bottom: 0, left: 20, right: 0 },
-            }),
-          ],
-        }),
-      ],
-    }),
+  // LEFT COLUMN TABLE (4 images + reference images)
+  const leftTableRows = [];
+
+  // Row for main 4 images
+  leftTableRows.push(
+    new TableRow({
+      tableHeader: false,
+      children: diagramCells.length ? diagramCells.slice(0, 4) : [],
+      height: { value: 1800, rule: HeightRule.ATLEAST }, // ensures vertical space for centering
+    })
   );
 
-  children.push(
-    new Paragraph({
-      children: [
-        new TextRun({
-          text: "",
-        }),
-      ],
-      spacing: { before: 0, after: 200 },
-    }),
-  );
-  // After your existing 4-image layout table
+  // If reference images exist, add them below
   if (
     body?.painIllustrationData?.savedImageData &&
     body?.painIllustrationData?.savedImageData?.length > 0
   ) {
-    // Create table for reference images
     const referenceImageCells = [];
 
-    body?.painIllustrationData?.savedImageData?.forEach((ref) => {
+    body.painIllustrationData.savedImageData.forEach((ref) => {
       const imgCellChildren = [];
 
-      const title = typeof ref === "object" ? ref.title || ref.name || "" : "";
+      const title =
+        typeof ref === "object" ? ref.title || ref.name || "" : "";
       if (title) {
         imgCellChildren.push(
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 100, after: 50 },
+            spacing: { before: 10, after: 10 },
             children: [
               new TextRun({
                 text: title,
                 color: BRAND_COLOR,
                 bold: true,
-                size: 18,
+                size: 16,
               }),
             ],
-          }),
+          })
         );
       }
 
@@ -4011,14 +3970,14 @@ async function addClientInformation(children, body) {
       if (dataUrl) {
         imgCellChildren.push(
           new Paragraph({
+            alignment: AlignmentType.CENTER,
             children: [
               new ImageRun({
                 data: dataUrl,
-                transformation: { width: 100, height: 100 },
+                transformation: { width: 50, height: 50 },
               }),
             ],
-            alignment: AlignmentType.CENTER,
-          }),
+          })
         );
       }
 
@@ -4027,23 +3986,54 @@ async function addClientInformation(children, body) {
           children: imgCellChildren,
           borders: noBorders,
           verticalAlign: VerticalAlign.CENTER,
-        }),
+        })
       );
     });
 
-    // Add table row with all reference images
-    children.push(
-      new Table({
-        width: { size: 100, type: WidthType.PERCENTAGE },
-        layout: TableLayoutType.FIXED,
-        borders: noBorders,
-        columnWidths: Array(referenceImageCells.length).fill(
-          9000 / referenceImageCells.length,
-        ),
-        rows: [new TableRow({ children: referenceImageCells })],
-      }),
+    // Add row for reference images
+    leftTableRows.push(
+      new TableRow({
+        children: referenceImageCells,
+      })
     );
   }
+
+  // Create LEFT COLUMN table
+  const leftColumnTable = new Table({
+    width: { size: 100, type: WidthType.PERCENTAGE },
+    layout: TableLayoutType.FIXED,
+    borders: noBorders,
+    columnWidths: [1700, 1700, 1700, 1700],
+    rows: leftTableRows,
+  });
+
+  // MAIN TWO-COLUMN TABLE (diagram + legend)
+  children.push(
+    new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      layout: TableLayoutType.FIXED,
+      borders: noBorders,
+      columnWidths: [7500, 2000],
+      rows: [
+        new TableRow({
+          children: [
+            // LEFT COLUMN
+            new TableCell({
+              borders: noBorders,
+              children: [leftColumnTable],
+            }),
+
+            // RIGHT COLUMN (legend)
+            new TableCell({
+              children: [legendTable],
+              borders: noBorders,
+              margins: { top: 0, bottom: 0, left: 20, right: 0 },
+            }),
+          ],
+        }),
+      ],
+    })
+  );
 }
 
 async function addReferenceChartsContent(children) {
@@ -7488,8 +7478,8 @@ async function addTestDataContent(children, body) {
                   children: [
                     new TextRun({
                       text: `${averageLabel}: ${Number.isFinite(averageValue)
-                          ? averageValue.toFixed(1)
-                          : "n/a"
+                        ? averageValue.toFixed(1)
+                        : "n/a"
                         }${unitLabel ? ` ${unitLabel}` : ""}`,
                       color: "444444",
                       size: 16,
