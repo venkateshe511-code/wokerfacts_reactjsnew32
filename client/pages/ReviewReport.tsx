@@ -983,11 +983,11 @@ export default function ReviewReport() {
                           image: "/humanBody/back_view.png",
                         },
                         left: {
-                          label: "Left Side",
+                          label: "Right Side",
                           image: "/humanBody/left_view.png",
                         },
                         right: {
-                          label: "Right Side",
+                          label: "Left Side",
                           image: "/humanBody/right_view.png",
                         },
                       };
