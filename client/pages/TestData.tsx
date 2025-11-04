@@ -658,6 +658,31 @@ export default function TestData() {
     }
 
     // Generate sample MTM test data for occupational tests
+    // Static baseline times for standard/good performance by test type
+    const baselineTimesByTest: Record<string, number> = {
+      "reach-flat": 8,
+      "reach-overhead": 8.5,
+      "reach-with-weight": 9,
+      "grasp-palm-grip": 6,
+      "grasp-3-jaw": 6.5,
+      "grasp-pinch": 7,
+      carry: 10,
+      fingering: 8,
+      "move-object": 9,
+      position: 7,
+      "turn-object": 7.5,
+      "climb-stairs": 8,
+      "climb-ladder": 8.5,
+      balance: 8,
+      "lift-occasional": 9,
+      "lift-frequent": 8.5,
+      "push-pull": 9,
+      "hip-flexion": 8,
+      "knee-extension": 8,
+      "ankle-dorsiflexion": 7.5,
+      "shoulder-flexion": 8.5,
+    };
+
     const sampleMtmData: Record<string, any> = {};
     selectedTests.forEach((testId: string) => {
       if (occupationalTestIds.includes(testId) || mtmTestConfigs[testId]) {
@@ -665,9 +690,18 @@ export default function TestData() {
         if (config) {
           const trials = [];
           const numberOfTrials = config.numberOfTrials || 3;
+          // Get baseline time for this test, or use 8 seconds as default
+          const baselineTime = baselineTimesByTest[testId] || 8;
+
+          // Create 3 different static times around the baseline for good performance variation
+          const trialTimes = [
+            baselineTime - 0.3, // Trial 1: slightly faster
+            baselineTime, // Trial 2: baseline
+            baselineTime + 0.3, // Trial 3: slightly slower
+          ];
 
           for (let i = 1; i <= numberOfTrials; i++) {
-            const timeSec = Math.round((Math.random() * 12 + 6) * 10) / 10; // 6–18s typical
+            const timeSec = trialTimes[i - 1] || baselineTime;
             const percentIS = calculatePercentISByTest(testId, timeSec, {
               position: config.position,
               weight: config.weight,
@@ -1523,7 +1557,7 @@ export default function TestData() {
                   <CardHeader className="bg-blue-400 text-white">
                     <CardTitle>
                       {isRangeOfMotionTest
-                        ? romPair?.[0] || "Primary"
+                        ? romPair?.[0] || "Left"
                         : isBalanceTest
                           ? "Trial 1"
                           : "Left"}
@@ -1569,7 +1603,7 @@ export default function TestData() {
                         <div className="bg-blue-400 text-white p-3 rounded text-center">
                           <div className="text-sm">
                             {isRangeOfMotionTest
-                              ? "Primary to Secondary Difference"
+                              ? "Left to Right Difference"
                               : "Left to Right Deficiency"}
                           </div>
                           <div className="text-xl font-bold">
@@ -1587,7 +1621,7 @@ export default function TestData() {
                             <div className="bg-blue-400 text-white p-3 rounded text-center">
                               <div className="text-sm">
                                 {isRangeOfMotionTest
-                                  ? "Primary Norm"
+                                  ? "Left Norm"
                                   : "Left Norm"}
                               </div>
                               <div className="text-xl font-bold">
@@ -1597,7 +1631,7 @@ export default function TestData() {
                             <div className="bg-blue-400 text-white p-3 rounded text-center">
                               <div className="text-sm">
                                 {isRangeOfMotionTest
-                                  ? "Primary % of Norm"
+                                  ? "Left % of Norm"
                                   : "Left % of Norm"}
                               </div>
                               <div className="text-xl font-bold">
@@ -1869,7 +1903,7 @@ export default function TestData() {
                       <div className="space-y-2">
                         <div className="text-center font-bold text-sm py-2 text-blue-700">
                           {isRangeOfMotionTest
-                            ? romPair?.[0] || "Primary"
+                            ? romPair?.[0] || "Left"
                             : isBalanceTest
                               ? "Trial 1"
                               : isCardioTest
@@ -1911,7 +1945,7 @@ export default function TestData() {
                       <div className="space-y-2">
                         <div className="text-center font-bold text-sm py-2 text-green-700">
                           {isRangeOfMotionTest
-                            ? romPair?.[1] || "Secondary"
+                            ? romPair?.[1] || "Right"
                             : isBalanceTest
                               ? "Trial 2"
                               : isCardioTest
@@ -1968,7 +2002,7 @@ export default function TestData() {
                   <CardHeader className="bg-blue-400 text-white">
                     <CardTitle>
                       {isRangeOfMotionTest
-                        ? romPair?.[1] || "Secondary"
+                        ? romPair?.[1] || "Right"
                         : isBalanceTest
                           ? "Trial 2"
                           : "Right"}
@@ -2014,7 +2048,7 @@ export default function TestData() {
                         <div className="bg-blue-400 text-white p-3 rounded text-center">
                           <div className="text-sm">
                             {isRangeOfMotionTest
-                              ? "Secondary to Primary Difference"
+                              ? "Right to Left Difference"
                               : "Right to Left Deficiency"}
                           </div>
                           <div className="text-xl font-bold">
@@ -2032,7 +2066,7 @@ export default function TestData() {
                             <div className="bg-blue-400 text-white p-3 rounded text-center">
                               <div className="text-sm">
                                 {isRangeOfMotionTest
-                                  ? "Secondary Norm"
+                                  ? "Right Norm"
                                   : "Right Norm"}
                               </div>
                               <div className="text-xl font-bold">
@@ -2042,7 +2076,7 @@ export default function TestData() {
                             <div className="bg-blue-400 text-white p-3 rounded text-center">
                               <div className="text-sm">
                                 {isRangeOfMotionTest
-                                  ? "Secondary % of Norm"
+                                  ? "Right % of Norm"
                                   : "Right % of Norm"}
                               </div>
                               <div className="text-xl font-bold">

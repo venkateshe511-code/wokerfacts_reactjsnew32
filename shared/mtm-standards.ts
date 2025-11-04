@@ -62,7 +62,7 @@ function interpolatePercent(actualTime: number, table: ISLookupTable): number {
     if (t2 === t1) return y1;
     const slope = (y2 - y1) / (t2 - t1);
     const y = y1 + slope * (actualTime - t1);
-    return Math.round(y * 10) / 10;
+    return Math.max(0, Math.round(y * 10) / 10);
   }
 
   // Above range -> linear extrapolation using last two points
@@ -74,7 +74,7 @@ function interpolatePercent(actualTime: number, table: ISLookupTable): number {
     if (t2 === t1) return y2;
     const slope = (y2 - y1) / (t2 - t1);
     const y = y2 + slope * (actualTime - t2);
-    return Math.round(y * 10) / 10;
+    return Math.max(0, Math.round(y * 10) / 10);
   }
 
   // Linear interpolation between nearest lower and upper breakpoints
@@ -90,7 +90,8 @@ function interpolatePercent(actualTime: number, table: ISLookupTable): number {
   const y1 = table[lower];
   const y2 = table[upper];
   const t = (actualTime - lower) / (upper - lower);
-  return Math.round(((y1 + (y2 - y1) * t) as number) * 10) / 10;
+  const result = Math.round(((y1 + (y2 - y1) * t) as number) * 10) / 10;
+  return Math.max(0, result);
 }
 
 export interface ISContext {
