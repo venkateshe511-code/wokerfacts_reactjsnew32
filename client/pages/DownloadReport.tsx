@@ -1832,7 +1832,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
     <div style="display: flex; gap: 8px; align-items: start;">
         <div style="padding: 4px; width: 640px; margin-left: 0; float: left;">
             <div style="display: flex; gap: 2px; justify-content: center; align-items: flex-start;">
-                ${["front", "back", "left", "right"]
+                ${["front", "back", "right", "left"]
                   .map((view) => {
                     const labelMap = {
                       front: "Anterior View",
