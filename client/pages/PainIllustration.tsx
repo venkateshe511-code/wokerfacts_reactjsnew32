@@ -983,8 +983,8 @@ export default function PainIllustration() {
                   <BodyDiagram view="back" title="Back View" />
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
-                  <BodyDiagram view="right" title="Right Side" />
-                  <BodyDiagram view="left" title="Left Side" />
+                  <BodyDiagram view="right" title="Left Side" />
+                  <BodyDiagram view="left" title="Right Side" />
                 </div>
 
                 {/* Upload Controls */}
