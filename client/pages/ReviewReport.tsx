@@ -972,7 +972,7 @@ export default function ReviewReport() {
                   {/* Comprehensive Anatomical Reference Diagrams */}
                   <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mb-6">
                     {/* Utility function to render markers */}
-                    {["front", "back", "left", "right"].map((viewType, i) => {
+                    {["front", "back", "right", "left"].map((viewType, i) => {
                       const viewMap = {
                         front: {
                           label: "Front View",
@@ -983,11 +983,11 @@ export default function ReviewReport() {
                           image: "/humanBody/back_view.png",
                         },
                         left: {
-                          label: "Left Side",
+                          label: "Right Side",
                           image: "/humanBody/left_view.png",
                         },
                         right: {
-                          label: "Right Side",
+                          label: "Left Side",
                           image: "/humanBody/right_view.png",
                         },
                       };
