@@ -976,11 +976,13 @@ export default function UploadDigitalLibrary() {
 
                     return (
                       <div key={file.id} className="relative group">
-                        <img
-                          src={imageSrc}
-                          alt={file.name}
-                          className="w-full h-32 object-cover rounded-lg border shadow-sm"
-                        />
+                        <div className="w-full aspect-square bg-gray-100 rounded-lg border shadow-sm flex items-center justify-center overflow-hidden">
+                          <img
+                            src={imageSrc}
+                            alt={file.name}
+                            className="max-w-full max-h-full object-contain"
+                          />
+                        </div>
                         <Button
                           type="button"
                           variant="outline"
