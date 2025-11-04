@@ -658,6 +658,31 @@ export default function TestData() {
     }
 
     // Generate sample MTM test data for occupational tests
+    // Static baseline times for standard/good performance by test type
+    const baselineTimesByTest: Record<string, number> = {
+      "reach-flat": 8,
+      "reach-overhead": 8.5,
+      "reach-with-weight": 9,
+      "grasp-palm-grip": 6,
+      "grasp-3-jaw": 6.5,
+      "grasp-pinch": 7,
+      "carry": 10,
+      "fingering": 8,
+      "move-object": 9,
+      "position": 7,
+      "turn-object": 7.5,
+      "climb-stairs": 8,
+      "climb-ladder": 8.5,
+      "balance": 8,
+      "lift-occasional": 9,
+      "lift-frequent": 8.5,
+      "push-pull": 9,
+      "hip-flexion": 8,
+      "knee-extension": 8,
+      "ankle-dorsiflexion": 7.5,
+      "shoulder-flexion": 8.5,
+    };
+
     const sampleMtmData: Record<string, any> = {};
     selectedTests.forEach((testId: string) => {
       if (occupationalTestIds.includes(testId) || mtmTestConfigs[testId]) {
@@ -665,9 +690,11 @@ export default function TestData() {
         if (config) {
           const trials = [];
           const numberOfTrials = config.numberOfTrials || 3;
+          // Get baseline time for this test, or use 8 seconds as default
+          const baselineTime = baselineTimesByTest[testId] || 8;
 
           for (let i = 1; i <= numberOfTrials; i++) {
-            const timeSec = Math.round((Math.random() * 12 + 6) * 10) / 10; // 6–18s typical
+            const timeSec = baselineTime; // Static baseline for good performance
             const percentIS = calculatePercentISByTest(testId, timeSec, {
               position: config.position,
               weight: config.weight,
