@@ -2014,7 +2014,7 @@ export default function TestData() {
                         <div className="bg-blue-400 text-white p-3 rounded text-center">
                           <div className="text-sm">
                             {isRangeOfMotionTest
-                              ? "Secondary to Primary Difference"
+                              ? "Right to Left Difference"
                               : "Right to Left Deficiency"}
                           </div>
                           <div className="text-xl font-bold">
