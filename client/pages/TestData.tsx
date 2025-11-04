@@ -666,14 +666,14 @@ export default function TestData() {
       "grasp-palm-grip": 6,
       "grasp-3-jaw": 6.5,
       "grasp-pinch": 7,
-      "carry": 10,
-      "fingering": 8,
+      carry: 10,
+      fingering: 8,
       "move-object": 9,
-      "position": 7,
+      position: 7,
       "turn-object": 7.5,
       "climb-stairs": 8,
       "climb-ladder": 8.5,
-      "balance": 8,
+      balance: 8,
       "lift-occasional": 9,
       "lift-frequent": 8.5,
       "push-pull": 9,
@@ -695,9 +695,9 @@ export default function TestData() {
 
           // Create 3 different static times around the baseline for good performance variation
           const trialTimes = [
-            baselineTime - 0.3,  // Trial 1: slightly faster
-            baselineTime,        // Trial 2: baseline
-            baselineTime + 0.3,  // Trial 3: slightly slower
+            baselineTime - 0.3, // Trial 1: slightly faster
+            baselineTime, // Trial 2: baseline
+            baselineTime + 0.3, // Trial 3: slightly slower
           ];
 
           for (let i = 1; i <= numberOfTrials; i++) {
