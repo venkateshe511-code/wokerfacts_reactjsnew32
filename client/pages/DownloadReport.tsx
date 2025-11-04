@@ -1837,8 +1837,8 @@ padding-top: 120px; align-items: center; min-height: 0; ">
                     const labelMap = {
                       front: "Anterior View",
                       back: "Posterior View",
-                      left: "Left Lateral View",
-                      right: "Right Lateral View",
+                      left: "Right Lateral View",
+                      right: "Left Lateral View",
                     };
                     const imageMap = {
                       front: "/humanBody/front_view.png",
