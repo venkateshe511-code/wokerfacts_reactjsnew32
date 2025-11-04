@@ -693,8 +693,15 @@ export default function TestData() {
           // Get baseline time for this test, or use 8 seconds as default
           const baselineTime = baselineTimesByTest[testId] || 8;
 
+          // Create 3 different static times around the baseline for good performance variation
+          const trialTimes = [
+            baselineTime - 0.3,  // Trial 1: slightly faster
+            baselineTime,        // Trial 2: baseline
+            baselineTime + 0.3,  // Trial 3: slightly slower
+          ];
+
           for (let i = 1; i <= numberOfTrials; i++) {
-            const timeSec = baselineTime; // Static baseline for good performance
+            const timeSec = trialTimes[i - 1] || baselineTime;
             const percentIS = calculatePercentISByTest(testId, timeSec, {
               position: config.position,
               weight: config.weight,
