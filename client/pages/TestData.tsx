@@ -1523,7 +1523,7 @@ export default function TestData() {
                   <CardHeader className="bg-blue-400 text-white">
                     <CardTitle>
                       {isRangeOfMotionTest
-                        ? romPair?.[0] || "Primary"
+                        ? romPair?.[0] || "Left"
                         : isBalanceTest
                           ? "Trial 1"
                           : "Left"}
@@ -1569,7 +1569,7 @@ export default function TestData() {
                         <div className="bg-blue-400 text-white p-3 rounded text-center">
                           <div className="text-sm">
                             {isRangeOfMotionTest
-                              ? "Primary to Secondary Difference"
+                              ? "Left to Right Difference"
                               : "Left to Right Deficiency"}
                           </div>
                           <div className="text-xl font-bold">
@@ -1587,7 +1587,7 @@ export default function TestData() {
                             <div className="bg-blue-400 text-white p-3 rounded text-center">
                               <div className="text-sm">
                                 {isRangeOfMotionTest
-                                  ? "Primary Norm"
+                                  ? "Left Norm"
                                   : "Left Norm"}
                               </div>
                               <div className="text-xl font-bold">
@@ -1597,7 +1597,7 @@ export default function TestData() {
                             <div className="bg-blue-400 text-white p-3 rounded text-center">
                               <div className="text-sm">
                                 {isRangeOfMotionTest
-                                  ? "Primary % of Norm"
+                                  ? "Left % of Norm"
                                   : "Left % of Norm"}
                               </div>
                               <div className="text-xl font-bold">
@@ -1869,7 +1869,7 @@ export default function TestData() {
                       <div className="space-y-2">
                         <div className="text-center font-bold text-sm py-2 text-blue-700">
                           {isRangeOfMotionTest
-                            ? romPair?.[0] || "Primary"
+                            ? romPair?.[0] || "Left"
                             : isBalanceTest
                               ? "Trial 1"
                               : isCardioTest
@@ -1911,7 +1911,7 @@ export default function TestData() {
                       <div className="space-y-2">
                         <div className="text-center font-bold text-sm py-2 text-green-700">
                           {isRangeOfMotionTest
-                            ? romPair?.[1] || "Secondary"
+                            ? romPair?.[1] || "Right"
                             : isBalanceTest
                               ? "Trial 2"
                               : isCardioTest
@@ -1968,7 +1968,7 @@ export default function TestData() {
                   <CardHeader className="bg-blue-400 text-white">
                     <CardTitle>
                       {isRangeOfMotionTest
-                        ? romPair?.[1] || "Secondary"
+                        ? romPair?.[1] || "Right"
                         : isBalanceTest
                           ? "Trial 2"
                           : "Right"}
@@ -2032,7 +2032,7 @@ export default function TestData() {
                             <div className="bg-blue-400 text-white p-3 rounded text-center">
                               <div className="text-sm">
                                 {isRangeOfMotionTest
-                                  ? "Secondary Norm"
+                                  ? "Right Norm"
                                   : "Right Norm"}
                               </div>
                               <div className="text-xl font-bold">
@@ -2042,7 +2042,7 @@ export default function TestData() {
                             <div className="bg-blue-400 text-white p-3 rounded text-center">
                               <div className="text-sm">
                                 {isRangeOfMotionTest
-                                  ? "Secondary % of Norm"
+                                  ? "Right % of Norm"
                                   : "Right % of Norm"}
                               </div>
                               <div className="text-xl font-bold">
