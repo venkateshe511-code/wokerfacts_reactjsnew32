@@ -3320,9 +3320,10 @@ async function addClientInformation(children, body) {
     body?.evaluatorData?.clinicAddress ||
     body?.clinicAddress ||
     "1490-5A Quarterpath Road #242, Williamsburg, VA 23185";
-  const phoneFax =
-    body?.evaluatorData?.clinicPhone ||
-    "Phone: 757-220-5051 Fax: 757-273-6198";
+  // const phoneFax =
+  //   body?.evaluatorData?.clinicPhone || body?.clinicPhone ||
+  //   "Phone: 757-220-5051 Fax: 757-273-6198";
+      const phoneFax = `Phone: ${body?.clinicPhone || ""} Fax: ${body?.clinicPhone || ""}`.trim();
 
   // --- 🔹 Dynamic Header Lines ---
   const headerLines = [
