@@ -1346,19 +1346,19 @@ export default function Index() {
                   href="https://youtu.be/rouB2-VuomQ"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
+                  className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
                 >
                   <Play className="h-5 w-5 group-hover:animate-pulse" />
-                  <span>Watch Demo 1</span>
+                  <span>Website & Report Overview</span>
                 </a>
                 <a
                   href="https://youtu.be/9PK8uhjpn9A"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
+                  className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
                 >
                   <Play className="h-5 w-5 group-hover:animate-pulse" />
-                  <span>Watch Demo 2</span>
+                  <span>FCE Software Tour</span>
                 </a>
               </div>
             </div>
