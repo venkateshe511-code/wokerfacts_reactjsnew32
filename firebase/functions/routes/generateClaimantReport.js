@@ -3142,7 +3142,7 @@ async function addCoverPage(children, body) {
 
   // Return footer content so caller can place at page bottom
   const phoneFax = `Phone: ${clinicPhone || ""}${clinicPhone && clinicFax ? "    " : ""
-    }${clinicFax ? `Fax: ${clinicFax}` : ""}`.trim();
+    }${clinicPhone ? `Fax: ${clinicPhone}` : ""}`.trim();
 
   const footerChildren = [];
   footerChildren.push(
@@ -3321,8 +3321,7 @@ async function addClientInformation(children, body) {
     body?.clinicAddress ||
     "1490-5A Quarterpath Road #242, Williamsburg, VA 23185";
   const phoneFax =
-    body?.evaluatorData?.clinicContact ||
-    body?.clinicContact ||
+    body?.evaluatorData?.clinicPhone ||
     "Phone: 757-220-5051 Fax: 757-273-6198";
 
   // --- 🔹 Dynamic Header Lines ---
@@ -7421,10 +7420,13 @@ async function addTestDataContent(children, body) {
             const aspect = srcH / srcW;
             const imgHeightPx = Math.round(imgWidthPx * aspect);
 
-            const labelLine = trialLabels.join("      ");
+            const labelLine = trialLabels.join("         ");
+            // const valueLine = trialValues
+            //   .map((v) => (Number.isFinite(v) ? v.toFixed(1) : "n/a"))
+            //   .join("      ");
             const valueLine = trialValues
-              .map((v) => (Number.isFinite(v) ? v.toFixed(1) : "n/a"))
-              .join("      ");
+              .map((v) => (Number.isFinite(v) ? v.toString() : "n/a"))
+              .join("         ");
 
             const titleNode = title
               ? new Paragraph({

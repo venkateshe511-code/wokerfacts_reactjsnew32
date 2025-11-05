@@ -1687,7 +1687,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
             }</p>
             <p style="font-family: Arial, sans-serif;">Phone: ${
               evaluatorData.phone || "757-220-5051"
-            } &nbsp;&nbsp; Fax: ${evaluatorData.fax || "757-273-6198"}</p>
+            } &nbsp;&nbsp; Fax: ${evaluatorData.phone || "757-273-6198"}</p>
         </div>
     </div>
 </div>
@@ -1747,7 +1747,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
             }</p>
             <p style="font-family: Arial, sans-serif;">Phone: ${
               evaluatorData.phone || "757-220-5051"
-            } &nbsp;&nbsp; Fax: ${evaluatorData.fax || "757-273-6198"}</p>
+            } &nbsp;&nbsp; Fax: ${evaluatorData.phone || "757-273-6198"}</p>
         </div>
         </div>
 
@@ -5747,7 +5747,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
             evaluatorData.address ||
             "1490-5A Quarterpath Road #242, Williamsburg, VA  23185",
           clinicPhone: evaluatorData.phone || "757-220-5051",
-          clinicFax: evaluatorData.fax || "757-273-6198",
+          clinicFax: evaluatorData.phone || "757-273-6198",
           // Provide evaluatorData with clinicLogo too, for server-side compatibility
           evaluatorData: {
             ...(evaluatorData || {}),

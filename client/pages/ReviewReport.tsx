@@ -281,6 +281,7 @@ export default function ReviewReport() {
               website: d.website || "",
               profilePhoto: d.profilePhoto || null,
               clinicLogo: d.clinicLogo || null,
+              fax:d.fax || "",
             };
           }
         } catch (e) {
@@ -704,8 +705,7 @@ export default function ReviewReport() {
                     </div>
                     <p>{reportData.evaluatorData.address}</p>
                     <p>
-                      Phone: {reportData.evaluatorData.phone} | Email:{" "}
-                      {reportData.evaluatorData.email}
+                      Phone: {reportData.evaluatorData.phone} |  Fax: {reportData.evaluatorData.phone}
                     </p>
                   </div>
                 </div>
@@ -761,7 +761,7 @@ export default function ReviewReport() {
                       {reportData.evaluatorData.address}
                     </p>
                     <p className="text-sm text-gray-600">
-                      Phone: {reportData.evaluatorData.phone} | Fax: N/A
+                      Phone: {reportData.evaluatorData.phone} | Fax: {reportData.evaluatorData.phone}
                     </p>
                   </div>
                   <div className="text-right text-sm">
