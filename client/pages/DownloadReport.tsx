@@ -5578,8 +5578,8 @@ padding-top: 120px; align-items: center; min-height: 0; ">
         const imageUrls = [
           "/humanBody/front_view.png",
           "/humanBody/back_view.png",
-          "/humanBody/left_view.png",
           "/humanBody/right_view.png",
+          "/humanBody/left_view.png",
         ];
         // Compose pain markers onto 4 anatomy views (front/back/left/right) into data URLs
         async function composePainViews(
