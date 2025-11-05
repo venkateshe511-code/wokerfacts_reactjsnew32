@@ -1335,9 +1335,31 @@ export default function Index() {
 
             <div className="text-right">
               <h4 className="text-xl font-bold mb-4">Get in touch</h4>
-              <div className="flex items-center justify-end space-x-2">
+              <div className="flex items-center justify-end space-x-2 mb-6">
                 <Mail className="h-5 w-5 text-gray-400" />
                 <span className="text-gray-300">workerfacts@gmail.com</span>
+              </div>
+
+              {/* YouTube Demo Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-end">
+                <a
+                  href="https://youtu.be/rouB2-VuomQ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
+                >
+                  <Play className="h-5 w-5 group-hover:animate-pulse" />
+                  <span>Watch Demo 1</span>
+                </a>
+                <a
+                  href="https://youtu.be/9PK8uhjpn9A"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
+                >
+                  <Play className="h-5 w-5 group-hover:animate-pulse" />
+                  <span>Watch Demo 2</span>
+                </a>
               </div>
             </div>
           </div>
