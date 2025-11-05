@@ -1349,7 +1349,7 @@ export default function Index() {
                   className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
                 >
                   <Play className="h-5 w-5 group-hover:animate-pulse" />
-                  <span>Website & Report Overview</span>
+                  <span>FCE Software Tour</span>
                 </a>
                 <a
                   href="https://youtu.be/9PK8uhjpn9A"
@@ -1358,7 +1358,7 @@ export default function Index() {
                   className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
                 >
                   <Play className="h-5 w-5 group-hover:animate-pulse" />
-                  <span>FCE Software Tour</span>
+                  <span>Website & Report Overview </span>
                 </a>
               </div>
             </div>
