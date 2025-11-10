@@ -106,15 +106,40 @@ const calculateCV = (measurements = {}) => {
     vals.reduce((s, v) => s + Math.pow(v - avg, 2), 0) / vals.length;
   const stdDev = Math.sqrt(variance);
   const cv = (stdDev / avg) * 100;
-  return Math.round(cv * 10) / 10; // Round to 1 decimal place
+  return Math.round(cv); // Round to 1 decimal place
 };
+
+// function extractValidTrials(measurements) {
+//   if (!measurements || typeof measurements !== "object") return [];
+
+//   const vals = [];
+//   for (let i = 1; i <= 6; i++) {
+//     const v = measurements[`trial${i}`];
+//     if (typeof v === "number" && !isNaN(v) && v > 0) vals.push(v);
+//   }
+
+//   return vals;
+// }
+
+// function calculateCV(measurements = {}) {
+//   const vals = extractValidTrials(measurements);
+//   if (vals.length < 2) return 0;
+
+//   const mean = vals.reduce((sum, v) => sum + v, 0) / vals.length;
+//   const variance =
+//     vals.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / vals.length;
+//   const stdDev = Math.sqrt(variance);
+
+//   const cv = (stdDev / mean) * 100;
+//   return Math.round(cv * 10) / 10; // round to one decimal
+// }
 
 const calculateBilateralDeficiency = (leftAvg, rightAvg) => {
   if (!leftAvg || !rightAvg) return 0;
   const max = Math.max(leftAvg, rightAvg);
   const min = Math.min(leftAvg, rightAvg);
   const deficiency = ((max - min) / max) * 100;
-  return Math.round(deficiency * 10) / 10; // Round to 1 decimal place
+  return Math.round(deficiency);
 };
 
 const getImageBuffer = async (src) => {
@@ -473,68 +498,358 @@ const calculateAverage = (measurements) => {
 };
 
 //  Define all reference texts grouped by category
-const testReferences = {
+// const testReferences = {
+//   "static-lift": [
+//     "Matheson, L. N., et al. (1995). Development of a database of functional assessment measures related to work disability. *Journal of Occupational Rehabilitation*, 5(4), 191–204.",
+//     "Snook, S. H., & Ciriello, V. M. (1991). The design of manual handling tasks: Revised tables of maximum acceptable weights and forces. *Ergonomics*, 34(9), 1197–1213.",
+//     "NIOSH (1994). Applications Manual for the Revised NIOSH Lifting Equation. *U.S. Department of Health and Human Services, Cincinnati, OH.*",
+//   ],
+
+//   "dynamic-lift": [
+//     "Matheson, L. N., et al. (2002). Reliability and validity of functional capacity evaluation using dynamic lifting tests. *Work*, 19(2), 87–93.",
+//     "Waters, T. R., et al. (1993). Revised NIOSH equation for the design and evaluation of manual lifting tasks. *Ergonomics*, 36(7), 749–776.",
+//     "Snook, S. H., & Ciriello, V. M. (1991). *Ergonomics*, 34(9), 1197–1213.",
+//   ],
+
+//   "hand-strength": [
+//     "Mathiowetz, V., et al. (1985). Grip and pinch strength: Normative data for adults. *Archives of Physical Medicine and Rehabilitation*, 66(2), 69–74.",
+//     "Innes, E., & Straker, L. (1999). Reliability of work-related assessments. *Work*, 13(2), 107–124.",
+//   ],
+
+//   "pinch-strength": [
+//     "Mathiowetz, V., et al. (1985). Grip and pinch strength: Normative data for adults. *Archives of Physical Medicine and Rehabilitation*, 66(2), 69–74.",
+//     "Peters, M. J., & Baldwin, M. L. (2007). Pinch strength measurement considerations in clinical evaluation. *Clinical Biomechanics*, 22(9), 1022–1028.",
+//   ],
+
+//   "range-of-motion": [
+//     "American Academy of Orthopaedic Surgeons (AAOS). (1965). *Joint Motion: Method of Measuring and Recording.* Chicago: AAOS.",
+//     "Norkin, C. C., & White, D. J. (2016). *Measurement of Joint Motion: A Guide to Goniometry.* F.A. Davis Company.",
+//   ],
+
+//   "muscle-test": [
+//     "Kendall, F. P., et al. (2005). *Muscles: Testing and Function with Posture and Pain.* Lippincott Williams & Wilkins.",
+//     "Medical Research Council (1978). *Aids to the Examination of the Peripheral Nervous System.* Her Majesty’s Stationery Office.",
+//   ],
+
+//   goniometers: [
+//     "American Academy of Orthopaedic Surgeons (AAOS). (1965). *Joint Motion: Method of Measuring and Recording.*",
+//     "Norkin, C. C., & White, D. J. (2016). *Measurement of Joint Motion: A Guide to Goniometry.*",
+//   ],
+
+//   mtm: [
+//     "Maynard, W. S., & Stegemerten, G. (1948). *Methods-Time Measurement (MTM-1): The Foundation of Motion Time Systems.* McGraw-Hill.",
+//     "Barnes, R. M. (1980). *Motion and Time Study: Design and Measurement of Work.* John Wiley & Sons.",
+//   ],
+
+//   "bruce-treadmill": [
+//     "Bires, A. M., Lawson, D., Wasser, T. E., & Raber-Baer, D. (2013). Comparison of the Bruce and Modified Bruce treadmill protocols. *Journal of Nuclear Medicine Technology*, 41(4), 274–278.",
+//     "Bruce, R. A., et al. (1973). Exercise testing in adult normal subjects and cardiac patients. *Annals of Clinical Research*, 3(3), 144–152.",
+//   ],
+
+//   mcaft: [
+//     "Weller, I. M., Thomas, S., Gledhill, N., & Paterson, D. H. (1993). Prediction of maximal oxygen uptake from a modified Canadian Aerobic Fitness Test. *Canadian Journal of Applied Physiology*, 18(2), 175–188.",
+//     "Weller, I. M., Thomas, S., Gledhill, N., & Paterson, D. H. (1995). A study to validate the Canadian Aerobic Fitness Test. *Canadian Journal of Applied Physiology*, 20(2), 211–221.",
+//   ],
+
+//   kasch: [
+//     "Davis, J. A., & Wilmore, J. H. (1979). Validation of a bench stepping test for cardiorespiratory fitness classification of emergency service personnel. *Journal of Occupational Medicine*, 21(6), 501–506.",
+//     "Kasch, F. W. (1961). A step test for assessing physical fitness in adults. *Journal of Physical Education*, 58, 37–39.",
+//   ],
+// };
+
+ const testReferences = {
+  // Static Lift Strength
   "static-lift": [
-    "Matheson, L. N., et al. (1995). Development of a database of functional assessment measures related to work disability. *Journal of Occupational Rehabilitation*, 5(4), 191–204.",
-    "Snook, S. H., & Ciriello, V. M. (1991). The design of manual handling tasks: Revised tables of maximum acceptable weights and forces. *Ergonomics*, 34(9), 1197–1213.",
-    "NIOSH (1994). Applications Manual for the Revised NIOSH Lifting Equation. *U.S. Department of Health and Human Services, Cincinnati, OH.*",
+    {
+      author: "William M. Keyserling",
+      title:
+        "Isometric Strength Testing in Selecting Workers for Strenuous Jobs",
+      journal: "University of Michigan",
+      year: 1979,
+    },
+    {
+      author: "Don B. Chaffin, PhD.",
+      title: "Pre-employment Strength Testing: An Updated Position",
+      journal: "Journal of Occupational Medicine",
+      year: 1978,
+      volume: "Vol. 20 No. 6",
+      pages: "June 1978",
+    },
+    {
+      author: "Donald Badges PhD.",
+      title: "Work Practices Guide to Manual Lifting",
+      publisher: "NIOSH",
+      year: 1981,
+    },
+    {
+      author: "Don Chaffin, PhD.",
+      title: "Ergonomics Guide for the Assessment of Human Static Strength",
+      journal: "American Industrial Hygiene Association Journal",
+      year: 1975,
+      pages: "July 1975",
+    },
+    {
+      author: "Harber & SooHoo",
+      title:
+        "Static Ergonomic Strength Testing in Evaluating Occupational Back Pain",
+      journal: "Journal of Occupational Medicine",
+      year: 1984,
+      volume: "Vol. 26 No. 12",
+      pages: "Dec 1984",
+    },
   ],
 
+  // Dynamic Lift Strength
   "dynamic-lift": [
-    "Matheson, L. N., et al. (2002). Reliability and validity of functional capacity evaluation using dynamic lifting tests. *Work*, 19(2), 87–93.",
-    "Waters, T. R., et al. (1993). Revised NIOSH equation for the design and evaluation of manual lifting tasks. *Ergonomics*, 36(7), 749–776.",
-    "Snook, S. H., & Ciriello, V. M. (1991). *Ergonomics*, 34(9), 1197–1213.",
+    {
+      author: "Mayer et al.",
+      title:
+        "Progressive Iso-inertial Lifting Evaluation: A Standardized Protocol and Normative Database",
+      journal: "Spine",
+      year: 1988,
+      volume: "Volume 13 Num. 9",
+      pages: "pp. 993",
+    },
   ],
 
+  // Hand Dynamometer and Pinch Grip
   "hand-strength": [
-    "Mathiowetz, V., et al. (1985). Grip and pinch strength: Normative data for adults. *Archives of Physical Medicine and Rehabilitation*, 66(2), 69–74.",
-    "Innes, E., & Straker, L. (1999). Reliability of work-related assessments. *Work*, 13(2), 107–124.",
+    {
+      author: "V. Mathiowetz et al.",
+      title: "Grip and Pinch Strength: Normative Data for Adults",
+      journal: "Arch Pys Med Rehab",
+      year: 1985,
+      volume: "Vol. 66",
+      pages: "pp. 69 (Feb 1985)",
+    },
+    {
+      author: "H. Stokes",
+      title: "The Seriously Uninjured Hand-Weakness of Grip",
+      journal: "Journal of Occupational Medicine",
+      year: 1983,
+      pages: "pp. 683-684 (Sep 1983)",
+    },
+    {
+      author: "L. Matheson, et al.",
+      title:
+        "Grip Strength in a Disabled Sample: Reliability and Normative Standards",
+      journal: "Industrial Rehabilitation Quarterly",
+      year: 1988,
+      volume: "Vol. 1, no. 3",
+      pages: "Fall 1988",
+    },
+    {
+      author: "Hildreth et al.",
+      title: "Detection of Submaximal effort by use of the rapid exchange grip",
+      journal: "Journal of Hand Surgery",
+      year: 1989,
+      pages: "pp. 742 (Jul 1989)",
+    },
   ],
 
+  // Pinch Strength
   "pinch-strength": [
-    "Mathiowetz, V., et al. (1985). Grip and pinch strength: Normative data for adults. *Archives of Physical Medicine and Rehabilitation*, 66(2), 69–74.",
-    "Peters, M. J., & Baldwin, M. L. (2007). Pinch strength measurement considerations in clinical evaluation. *Clinical Biomechanics*, 22(9), 1022–1028.",
+    {
+      author: "V. Mathiowetz et al.",
+      title: "Grip and Pinch Strength: Normative Data for Adults",
+      journal: "Arch Pys Med Rehab",
+      year: 1985,
+      volume: "Vol. 66",
+      pages: "pp. 69 (Feb 1985)",
+    },
+    {
+      author: "H. Stokes",
+      title: "The Seriously Uninjured Hand-Weakness of Grip",
+      journal: "Journal of Occupational Medicine",
+      year: 1983,
+      pages: "pp. 683-684 (Sep 1983)",
+    },
+    {
+      author: "L. Matheson, et al.",
+      title:
+        "Grip Strength in a Disabled Sample: Reliability and Normative Standards",
+      journal: "Industrial Rehabilitation Quarterly",
+      year: 1988,
+      volume: "Vol. 1, no. 3",
+      pages: "Fall 1988",
+    },
+    {
+      author: "Hildreth et al.",
+      title: "Detection of Submaximal effort by use of the rapid exchange grip",
+      journal: "Journal of Hand Surgery",
+      year: 1989,
+      pages: "pp. 742 (Jul 1989)",
+    },
   ],
 
+  // Range of Motion
   "range-of-motion": [
-    "American Academy of Orthopaedic Surgeons (AAOS). (1965). *Joint Motion: Method of Measuring and Recording.* Chicago: AAOS.",
-    "Norkin, C. C., & White, D. J. (2016). *Measurement of Joint Motion: A Guide to Goniometry.* F.A. Davis Company.",
+    {
+      author: "American Medical Association",
+      title: "Guides to the Evaluation of Permanent Impairment",
+      year: 1993,
+      publisher: "4th ed.",
+      pages: "pp. 112-135",
+    },
+    {
+      author: "American Medical Association",
+      title: "Guides to the Evaluation of Permanent Impairment",
+      year: 1990,
+      publisher: "3rd ed.",
+      pages: "pp. 81-102",
+    },
   ],
 
-  "muscle-test": [
-    "Kendall, F. P., et al. (2005). *Muscles: Testing and Function with Posture and Pain.* Lippincott Williams & Wilkins.",
-    "Medical Research Council (1978). *Aids to the Examination of the Peripheral Nervous System.* Her Majesty’s Stationery Office.",
-  ],
-
+  // Goniometers
   goniometers: [
-    "American Academy of Orthopaedic Surgeons (AAOS). (1965). *Joint Motion: Method of Measuring and Recording.*",
-    "Norkin, C. C., & White, D. J. (2016). *Measurement of Joint Motion: A Guide to Goniometry.*",
+    {
+      author: "American Medical Association",
+      title: "Guides to the Evaluation of Permanent Impairment",
+      year: 1993,
+      publisher: "4th ed.",
+      pages: "pp. 90-92",
+    },
+    {
+      author: "American Medical Association",
+      title: "Guides to the Evaluation of Permanent Impairment",
+      year: 1990,
+      publisher: "3rd ed.",
+      pages: "pp. 20-38, 101",
+    },
   ],
 
+  // Manual Muscle Tester
+  "muscle-test": [
+    {
+      author: "A.W. Andrews",
+      title: "Hand-held Dynamometry for Measuring Muscle Strength",
+      journal: "Journal of Human Muscle Performance",
+      year: 1991,
+      pages: "pp. 35 (Jun 1991)",
+    },
+  ],
+
+  // Horizontal Validity
+  "horizontal-validity": [
+    {
+      author: "Berryhill et al",
+      title:
+        "Horizontal Strength Changes: An Ergometric Measure for Determining Validity of Effort in Impairment Evaluations-A Preliminary Report",
+      journal: "Journal of Disability",
+      year: 1993,
+      volume: "Vol. 3, Num. 14",
+      pages: "pp. 143, (Jul 1993)",
+    },
+    {
+      author: "L. A. Owens",
+      title:
+        "Assessing Reliability of Performance in the Functional Capacity Assessment",
+      journal: "Journal of Disability",
+      year: 1993,
+      volume: "Vol. 3, Num. 14",
+      pages: "pp. 149, (Jul 1993)",
+    },
+  ],
+
+  // Method Time Measurement (MTM)
   mtm: [
-    "Maynard, W. S., & Stegemerten, G. (1948). *Methods-Time Measurement (MTM-1): The Foundation of Motion Time Systems.* McGraw-Hill.",
-    "Barnes, R. M. (1980). *Motion and Time Study: Design and Measurement of Work.* John Wiley & Sons.",
+    {
+      author: "Anderson, D.S. and Edstrom D.P.",
+      title:
+        "MTM Personnel Selection Tests; Validation at a Northwestern National Life Insurance Company",
+      journal: "Journal of Methods-Time Measurement",
+      year: 1975,
+      volume: "15, (3)",
+    },
+    {
+      author: "Birdsong, J.H. and Chyatte, S.B.",
+      title: "Further medical applications of methods-time measurement",
+      journal: "Journal of Methods-Time Measurement",
+      year: 1970,
+      volume: "15",
+      pages: "19-27",
+    },
+    {
+      author: "Brickey",
+      title: "MTM in a Sheltered Workshop",
+      journal: "Journal of Methods-Time Measurement",
+      year: 1975,
+      volume: "8, (3)",
+      pages: "2-7",
+    },
+    {
+      author: "Chyatte, S.B. and Birdsong, J.H.",
+      title: "Methods time measurement in assessment of motor performance",
+      journal: "Archives of Physical Medicine and Rehabilitation",
+      year: 1972,
+      volume: "53",
+      pages: "38-44",
+    },
+    {
+      author: "Foulke, J.A.",
+      title: "Estimating Individual Operator Performance",
+      journal: "Journal of Methods-Time Measurement",
+      year: 1975,
+      volume: "15, (1)",
+      pages: "18-23",
+    },
+    {
+      author: "Grant, G.W.B., Moores, B. and Whelan, E.",
+      title:
+        "Applications of Methods-time measurement in training centers for the mentally handicapped",
+      journal: "Journal of Methods-Time Measurement",
+      year: 1975,
+      volume: "11",
+      pages: "23-30",
+    },
   ],
 
+  // Bruce Treadmill Test
   "bruce-treadmill": [
-    "Bires, A. M., Lawson, D., Wasser, T. E., & Raber-Baer, D. (2013). Comparison of the Bruce and Modified Bruce treadmill protocols. *Journal of Nuclear Medicine Technology*, 41(4), 274–278.",
-    "Bruce, R. A., et al. (1973). Exercise testing in adult normal subjects and cardiac patients. *Annals of Clinical Research*, 3(3), 144–152.",
+    {
+      author: "Bruce AM, Lawson D, Wasser TE, Raber-Baer D",
+      title:
+        "Comparison of Bruce treadmill exercise test protocols: Is ramped Bruce equal or superior to standard bruce in producing clinically valid studies for patients presenting for evaluation of cardiac ischemia or arrhythmia with body mass index equal to or greater than 30?",
+      journal: "J Nucl Med Technol",
+      year: 2013,
+      volume: "41(4)",
+      pages: "274-8",
+    },
+    {
+      author: "Poehlman CP, Llewellyn TL",
+      title:
+        "The Effects of Submaximal and Maximal Exercise on Heart Rate Variability",
+      journal: "Int J Exerc Sci",
+      year: 2019,
+      volume: "12(9)",
+      pages: "9-14",
+    },
   ],
 
+  // mCAFT Test
   mcaft: [
-    "Weller, I. M., Thomas, S., Gledhill, N., & Paterson, D. H. (1993). Prediction of maximal oxygen uptake from a modified Canadian Aerobic Fitness Test. *Canadian Journal of Applied Physiology*, 18(2), 175–188.",
-    "Weller, I. M., Thomas, S., Gledhill, N., & Paterson, D. H. (1995). A study to validate the Canadian Aerobic Fitness Test. *Canadian Journal of Applied Physiology*, 20(2), 211–221.",
+    {
+      author: "Canadian Society for Exercise Physiology",
+      title: "mCAFT: modified Canadian Aerobic Fitness Test",
+      journal: "Health Canada",
+      year: 2003,
+    },
   ],
 
+  // Kasch Step Test
   kasch: [
-    "Davis, J. A., & Wilmore, J. H. (1979). Validation of a bench stepping test for cardiorespiratory fitness classification of emergency service personnel. *Journal of Occupational Medicine*, 21(6), 501–506.",
-    "Kasch, F. W. (1961). A step test for assessing physical fitness in adults. *Journal of Physical Education*, 58, 37–39.",
+    {
+      author: "Davis JA, Wilmore JH",
+      title:
+        "Validation of a bench stepping test for cardiorespiratory fitness classification of emergency service personnel",
+      journal: "Journal of Occupational Medicine",
+      year: 1979,
+      pages: "PMID: 5014456",
+    },
   ],
 };
-
-const getReferencesForTest = (testId) => {
   // Map test IDs to reference categories
-  const testToCategory = {
+ const testToCategory= {
     // Static Lift Tests
     "static-lift-low": "static-lift",
     "static-lift-mid": "static-lift",
@@ -663,125 +978,83 @@ const getReferencesForTest = (testId) => {
     "kasch-test": "kasch",
     "kasch-step": "kasch",
   };
+const getReferencesForTest = (testId) => {
 
   const category = testToCategory[testId];
-  return category ? testReferences[category] || [] : [];
+  return category && testReferences[category] ? testReferences[category] : [];
 };
+
+function formatReference(reference) {
+  let formatted = `${reference.title}, ${reference.author}`;
+
+  if (reference.journal) formatted += `, ${reference.journal}`;
+  if (reference.volume) formatted += `, ${reference.volume}`;
+  if (reference.pages) formatted += `, ${reference.pages}`;
+  else if (reference.year) formatted += ` (${reference.year})`;
+  if (reference.publisher && !reference.journal)
+    formatted += `, ${reference.publisher}`;
+
+  return formatted + ".";
+}
 
 // Build the "References" block as docx.Paragraph[].
 function buildReferenceParagraphs(test, opts = {}) {
   const {
     includeHeading = true,
-    bullet = false,
     font = "Arial",
     sizePt = 8,
-    color = "888888",
+    color = "444444",
     spacingAfter = 80,
     headingColor = "666666",
     headingSizePt = 9,
-    // allow a custom formatter to be passed in
-    formatReference,
   } = opts;
 
-  const toHalfPoints = (pt) => Math.max(1, Math.round(pt * 2));
+  const toHalfPoints = (pt) => Math.round(pt * 2);
 
-  const para = (text, options = {}) => {
-    const run = new TextRun({
-      text,
-      bold: !!options.bold,
-      color: options.color || color,
-      size: toHalfPoints(options.sizePt || sizePt),
-      font,
+  const createPara = (text, bold = false, isHeading = false) =>
+    new Paragraph({
+      children: [
+        new TextRun({
+          text,
+          bold,
+          color: isHeading ? headingColor : color,
+          font,
+          size: toHalfPoints(isHeading ? headingSizePt : sizePt),
+        }),
+      ],
+      spacing: { after: spacingAfter },
     });
 
-    return new Paragraph({
-      children: [run],
-      spacing: { after: options.after != null ? options.after : spacingAfter },
-      ...(options.bullet || (bullet && !options.noBullet)
-        ? { bullet: { level: 0 } }
-        : {}),
-    });
-  };
+  const output = [];
 
-  const safeFormatRef = (ref) => {
-    if (typeof ref === "string") return ref;
-    if (ref && typeof ref === "object") {
-      if (typeof formatReference === "function") return formatReference(ref);
-      // default object formatting
-      const parts = [
-        ref.author,
-        ref.title,
-        ref.journal,
-        ref.year,
-        ref.pages,
-      ].filter(Boolean);
-      return parts.join(". ");
-    }
-    return "";
-  };
-
-  const out = [];
   if (includeHeading) {
-    out.push(
-      para("References:", {
-        bold: true,
-        color: headingColor,
-        sizePt: headingSizePt,
-        after: 120,
-        noBullet: true,
-      }),
-    );
+    output.push(createPara("References:", true, true));
   }
 
-  const testName = (test?.testName || "").toLowerCase();
+  const refs = getReferencesForTest(test?.testId) || [];
 
-  if (testName.includes("kasch")) {
-    out.push(
-      para(
-        "Validation of a bench stepping test for cardiorespiratory fitness classification of emergency service personnel J A Davis, J H Wilmore, PMID: 501456",
+  if (refs.length === 0) {
+    output.push(
+      createPara(
+        "Grip and Pinch Strength: Normative Data for Adults, V. Mathiowetz et al., Arch Pys Med Rehab, Vol. 66, pp. 69 (Feb 1985)."
       ),
-    );
-  } else if (testName.includes("mcaft")) {
-    out.push(
-      para(
-        "Weller et al. Prediction of maximal oxygen uptake from a modified Canadian aerobic fitness test. Can. J. Appl. Physiol. 18(2) 175-188, 1993",
+      createPara(
+        "The Seriously Uninjured Hand-Weakness of Grip, H. Stokes, Journal of Occupational Medicine, pp. 683-684 (Sep 1983)."
       ),
-      para(
-        "Weller et al. A study to validate the Canadian aerobic fitness test. Can. J. Appl. Physiol. 20(2) 211-221, 1995",
+      createPara(
+        "Grip Strength in a Disabled Sample: Reliability and Normative Standards, L. Matheson, et al., Industrial Rehabilitation Quarterly, Vol. 1, no. 3, Fall 1988."
       ),
-    );
-  } else if (testName.includes("bruce") || testName.includes("treadmill")) {
-    out.push(
-      para(
-        "Bires AM, Lawson D, Wasser TE, Raber-Baer D. ... J Nucl Med Technol. 2013 Dec;41(4):274-8",
-      ),
-      para("Poehling CP, Llewellyn TL. ... Int J Exerc Sci. 2019;12(2):9-14."),
+      createPara(
+        "Detection of Submaximal effort by use of the rapid exchange grip, Hildreth et al., Journal of Hand Surgery, pp. 742 (Jul 1989)."
+      )
     );
   } else {
-    const refs = getReferencesForTest(test?.testId) ?? [];
-
-    if (!refs.length) {
-      out.push(
-        para(
-          "Innes, E., & Straker, L. (1999). Reliability of work-related assessments. Work, 13(2), 107-124.",
-        ),
-        para(
-          "Matheson, L.N., et al. (1995). Development of a database of functional assessment measures related to work disability. Journal of Occupational Rehabilitation, 5(4), 191-204.",
-        ),
-        para(
-          "Reneman, M.F., et al. (2002). Reliability of a functional capacity evaluation in patients with chronic low back pain. Journal of Occupational Rehabilitation, 12(4), 277-286.",
-        ),
-      );
-    } else {
-      refs.forEach((ref) => {
-        const text = safeFormatRef(ref);
-        if (text) out.push(para(text));
-      });
-    }
+    refs.forEach((ref) => output.push(createPara(formatReference(ref))));
   }
 
-  return out;
+  return output;
 }
+
 // Load any image-like into Uint8Array (dataUrl | data | Blob/File | http URL)
 async function loadImageAsUint8(source) {
   try {
@@ -2196,6 +2469,30 @@ function getMTMTime(trial) {
   if (trial?.time?.value) return Number(trial.time.value);
   return 0;
 }
+const toNumber = (v) => {
+  if (v === null || v === undefined || v === "") return null;
+  if (typeof v === "number") return Number.isFinite(v) ? v : null;
+  if (typeof v === "string") {
+    const n = Number(v.replace(/[^\d.-]/g, ""));
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
+};
+const readTrials = (src) => {
+  if (!src) return [];
+  if (Array.isArray(src)) return src.map(toNumber);
+  if (typeof src === "object") {
+    const out = [];
+    for (let i = 1; i <= 30; i++) {
+      const key = [`trial${i}`, `t${i}`, String(i)].find(
+        (k) => src[k] != null,
+      );
+      if (key) out.push(toNumber(src[key]));
+    }
+    return out;
+  }
+  return [];
+};
 
 function average(arr) {
   const vals = arr.filter((v) => typeof v === "number" && Number.isFinite(v));
@@ -2237,7 +2534,7 @@ async function generateMTMContentDocx(mtmData, mainTestData) {
           text: "Occupational Tasks Methods Time Measurement Analysis",
           bold: true,
           color: TITLE_COLOR,
-          size: 22,
+          size: 16,
         }),
       ],
       spacing: { after: 120 },
@@ -3323,7 +3620,7 @@ async function addClientInformation(children, body) {
   // const phoneFax =
   //   body?.evaluatorData?.clinicPhone || body?.clinicPhone ||
   //   "Phone: 757-220-5051 Fax: 757-273-6198";
-      const phoneFax = `Phone: ${body?.clinicPhone || ""} Fax: ${body?.clinicPhone || ""}`.trim();
+  const phoneFax = `Phone: ${body?.clinicPhone || ""} Fax: ${body?.clinicPhone || ""}`.trim();
 
   // --- 🔹 Dynamic Header Lines ---
   const headerLines = [
@@ -6816,8 +7113,12 @@ async function addTestDataContent(children, body) {
         const safeName = test?.testName || "Test";
         const testNameLower = safeName.toLowerCase();
 
-        const leftAvg = calculateAverage(test.leftMeasurements);
-        const rightAvg = calculateAverage(test.rightMeasurements);
+        let leftTrials = readTrials(test?.leftMeasurements);
+        let rightTrials = readTrials(test?.rightMeasurements);
+        let singleTrials = readTrials(test?.measurements);
+        const leftAvg = average(leftTrials);
+        const rightAvg = average(rightTrials);
+        const singleAvg = average(singleTrials);
         const leftCV = calculateCV(test.leftMeasurements);
         const rightCV = calculateCV(test.rightMeasurements);
         const bilateralDef = calculateBilateralDeficiency(leftAvg, rightAvg);
@@ -6825,7 +7126,17 @@ async function addTestDataContent(children, body) {
         const isRangeOfMotion =
           testNameLower.includes("flexion") ||
           testNameLower.includes("extension") ||
-          testNameLower.includes("range");
+          testNameLower.includes("range") ||
+          testNameLower.includes("thumb") ||
+          testNameLower.includes("rotation") ||
+          testNameLower.includes("raise") ||
+          testNameLower.includes("supination") ||
+          testNameLower.includes("radial") ||
+          testNameLower.includes("abduction") ||
+          testNameLower.includes("inversion");
+        // testNameLower.includes("flexion") ||
+        // testNameLower.includes("extension") ||
+        // testNameLower.includes("range");
         const averageLabel = isRangeOfMotion
           ? "Average (range of motion)"
           : "Average (weight)";
@@ -7721,9 +8032,7 @@ async function addTestDataContent(children, body) {
                   createTrialChartCell({
                     title: "",
                     chartImage: img,
-                    averageValue:
-                      singleSeries.reduce((a, b) => a + b, 0) /
-                      singleSeries.length || 0,
+                    averageValue: singleAvg,
                     unitLabel: measurementUnit,
                     imgWidthPx: chartImgWidthPx,
                     trialLabels,
