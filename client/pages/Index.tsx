@@ -61,11 +61,15 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { VideoInfoPopup } from "@/components/VideoInfoPopup";
+import { VIDEOS, VideoInfo } from "@/lib/videoData";
 
 export default function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activePopup, setActivePopup] = useState<string | null>(null);
   const [showContactSuccess, setShowContactSuccess] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<VideoInfo | null>(null);
+  const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [contactForm, setContactForm] = useState({
     name: "",
     clinicName: "",
@@ -130,6 +134,19 @@ export default function Index() {
 
   const closePopup = () => {
     setActivePopup(null);
+  };
+
+  const openVideoPopup = (videoKey: string) => {
+    const video = VIDEOS[videoKey];
+    if (video) {
+      setSelectedVideo(video);
+      setShowVideoPopup(true);
+    }
+  };
+
+  const closeVideoPopup = () => {
+    setShowVideoPopup(false);
+    setSelectedVideo(null);
   };
 
   const handleContactFormChange = (field: string, value: string) => {
@@ -1342,24 +1359,20 @@ export default function Index() {
 
               {/* YouTube Demo Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-end">
-                <a
-                  href="https://youtu.be/rouB2-VuomQ"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => openVideoPopup("fce_software_tour")}
                   className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
                 >
                   <Play className="h-5 w-5 group-hover:animate-pulse" />
                   <span>FCE Software Tour</span>
-                </a>
-                <a
-                  href="https://youtu.be/9PK8uhjpn9A"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                </button>
+                <button
+                  onClick={() => openVideoPopup("website_report_overview")}
                   className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg font-semibold group"
                 >
                   <Play className="h-5 w-5 group-hover:animate-pulse" />
-                  <span>Website & Report Overview </span>
-                </a>
+                  <span>Website & Report Overview</span>
+                </button>
               </div>
             </div>
           </div>
