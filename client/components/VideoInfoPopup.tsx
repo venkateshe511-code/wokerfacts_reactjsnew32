@@ -20,25 +20,10 @@ export function VideoInfoPopup({
   onClose,
   video,
 }: VideoInfoPopupProps) {
-  const [imageError, setImageError] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
-
   if (!video) return null;
-
-  const handlePlayClick = () => {
-    setIsPlaying(true);
-  };
 
   const handleWatchClick = () => {
     window.open(video.youtubeUrl, "_blank", "noopener,noreferrer");
-  };
-
-  // Placeholder gradient colors based on video
-  const getPlaceholderGradient = () => {
-    if (video.id === "rouB2-VuomQ") {
-      return "from-blue-600 to-blue-800";
-    }
-    return "from-indigo-600 to-purple-800";
   };
 
   return (
