@@ -21,12 +21,16 @@ export function VideoInfoPopup({
   video,
 }: VideoInfoPopupProps) {
   const [imageError, setImageError] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   if (!video) return null;
 
+  const handlePlayClick = () => {
+    setIsPlaying(true);
+  };
+
   const handleWatchClick = () => {
     window.open(video.youtubeUrl, "_blank", "noopener,noreferrer");
-    onClose();
   };
 
   // Placeholder gradient colors based on video
