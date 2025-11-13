@@ -60,32 +60,48 @@ export function VideoInfoPopup({
 
         <div className="overflow-y-auto flex-1 px-0 py-4">
           <div className="space-y-6 px-6">
-            {/* Video Thumbnail */}
-            <div
-              className={`relative overflow-hidden rounded-lg aspect-video flex items-center justify-center group bg-gradient-to-br ${getPlaceholderGradient()}`}
-            >
-              {!imageError && (
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
-                  className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
-                  onError={() => setImageError(true)}
+            {/* Video Player */}
+            {isPlaying ? (
+              <div className="relative overflow-hidden rounded-lg aspect-video bg-black">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${video.id}?autoplay=1`}
+                  title={video.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0"
                 />
-              )}
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 group-hover:bg-black/50 transition-colors">
-                <div className="bg-red-600 rounded-full p-4 group-hover:scale-110 transition-transform mb-3">
-                  <Play className="h-8 w-8 text-white fill-white" />
-                </div>
-                <p className="text-white text-sm font-semibold text-center px-4">
-                  {video.title}
-                </p>
               </div>
-              {video.duration && (
-                <div className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-semibold">
-                  {video.duration}
+            ) : (
+              <div
+                className={`relative overflow-hidden rounded-lg aspect-video flex items-center justify-center group bg-gradient-to-br cursor-pointer ${getPlaceholderGradient()}`}
+                onClick={handlePlayClick}
+              >
+                {!imageError && (
+                  <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                    onError={() => setImageError(true)}
+                  />
+                )}
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 group-hover:bg-black/50 transition-colors">
+                  <div className="bg-red-600 rounded-full p-4 group-hover:scale-110 transition-transform mb-3">
+                    <Play className="h-8 w-8 text-white fill-white" />
+                  </div>
+                  <p className="text-white text-sm font-semibold text-center px-4">
+                    {video.title}
+                  </p>
                 </div>
-              )}
-            </div>
+                {video.duration && (
+                  <div className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-semibold">
+                    {video.duration}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Description */}
             <div>
