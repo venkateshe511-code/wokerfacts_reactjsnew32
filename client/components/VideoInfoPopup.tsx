@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,11 +20,21 @@ export function VideoInfoPopup({
   onClose,
   video,
 }: VideoInfoPopupProps) {
+  const [imageError, setImageError] = useState(false);
+
   if (!video) return null;
 
   const handleWatchClick = () => {
     window.open(video.youtubeUrl, "_blank", "noopener,noreferrer");
     onClose();
+  };
+
+  // Placeholder gradient colors based on video
+  const getPlaceholderGradient = () => {
+    if (video.id === "rouB2-VuomQ") {
+      return "from-blue-600 to-blue-800";
+    }
+    return "from-indigo-600 to-purple-800";
   };
 
   return (
@@ -46,16 +56,24 @@ export function VideoInfoPopup({
 
         <div className="space-y-6">
           {/* Video Thumbnail */}
-          <div className="relative overflow-hidden rounded-lg bg-black aspect-video flex items-center justify-center group">
-            <img
-              src={video.thumbnail}
-              alt={video.title}
-              className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
-            />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/50 transition-colors">
-              <div className="bg-red-600 rounded-full p-4 group-hover:scale-110 transition-transform">
+          <div
+            className={`relative overflow-hidden rounded-lg aspect-video flex items-center justify-center group bg-gradient-to-br ${getPlaceholderGradient()}`}
+          >
+            {!imageError && (
+              <img
+                src={video.thumbnail}
+                alt={video.title}
+                className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                onError={() => setImageError(true)}
+              />
+            )}
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 group-hover:bg-black/50 transition-colors">
+              <div className="bg-red-600 rounded-full p-4 group-hover:scale-110 transition-transform mb-3">
                 <Play className="h-8 w-8 text-white fill-white" />
               </div>
+              <p className="text-white text-sm font-semibold text-center px-4">
+                {video.title}
+              </p>
             </div>
             {video.duration && (
               <div className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-semibold">
