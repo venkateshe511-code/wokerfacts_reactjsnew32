@@ -21,7 +21,7 @@ export function VideoInfoPopup({
   video,
 }: VideoInfoPopupProps) {
   const [imageError, setImageError] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   if (!video) return null;
 
