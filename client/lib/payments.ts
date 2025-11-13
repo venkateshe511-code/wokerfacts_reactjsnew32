@@ -34,7 +34,7 @@ export async function startCheckout(params: {
   if (externalUrl) candidates.push(buildUrl(externalUrl));
   candidates.push(
     buildUrl(
-      "https://us-central1-workerfacts-60c02.cloudfunctions.net/createCheckoutSessionApi",
+      "https://us-central1-workerfacts-43760.cloudfunctions.net/createCheckoutSessionApi",
     ),
     buildUrl("https://createcheckoutsessionapi-e355r2gb5q-uc.a.run.app"),
   );

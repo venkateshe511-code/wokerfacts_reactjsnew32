@@ -4148,9 +4148,9 @@ async function addClientInformation(children, body) {
   // Prepare up to 4 images for a 2x2 grid with robust fallbacks
   const defaultDiagramUrls = [
     "https://melodic-capybara-28bf3c.netlify.app/workerfacts-logo.png",
-    "https://firebasestorage.googleapis.com/v0/b/workerfacts-60c02.firebasestorage.app/o/human_anatomy_bodies%2Ffront_view.png?alt=media&token=dcfd579a-affc-41b0-a242-2ce6a7765282",
-    "https://firebasestorage.googleapis.com/v0/b/workerfacts-60c02.firebasestorage.app/o/human_anatomy_bodies%2Fleft_view.png?alt=media&token=be1c07f2-1bee-470a-b463-e2fa5d55eeb6",
-    "https://firebasestorage.googleapis.com/v0/b/workerfacts-60c02.firebasestorage.app/o/human_anatomy_bodies%2Fright_view.png?alt=media&token=f513bcfb-f6d8-4466-a0bd-18368908d1aa",
+    "https://firebasestorage.googleapis.com/v0/b/workerfacts-43760.firebasestorage.app/o/human_anatomy_bodies%2Ffront_view.png?alt=media&token=dcfd579a-affc-41b0-a242-2ce6a7765282",
+    "https://firebasestorage.googleapis.com/v0/b/workerfacts-43760.firebasestorage.app/o/human_anatomy_bodies%2Fleft_view.png?alt=media&token=be1c07f2-1bee-470a-b463-e2fa5d55eeb6",
+    "https://firebasestorage.googleapis.com/v0/b/workerfacts-43760.firebasestorage.app/o/human_anatomy_bodies%2Fright_view.png?alt=media&token=f513bcfb-f6d8-4466-a0bd-18368908d1aa",
   ];
 
   const providedViews = Array.isArray(
