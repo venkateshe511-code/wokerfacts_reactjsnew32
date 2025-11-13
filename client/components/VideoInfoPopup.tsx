@@ -39,8 +39,8 @@ export function VideoInfoPopup({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col gap-0">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center text-2xl">
             <Button
               variant="ghost"
@@ -54,62 +54,64 @@ export function VideoInfoPopup({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Video Thumbnail */}
-          <div
-            className={`relative overflow-hidden rounded-lg aspect-video flex items-center justify-center group bg-gradient-to-br ${getPlaceholderGradient()}`}
-          >
-            {!imageError && (
-              <img
-                src={video.thumbnail}
-                alt={video.title}
-                className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
-                onError={() => setImageError(true)}
-              />
-            )}
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 group-hover:bg-black/50 transition-colors">
-              <div className="bg-red-600 rounded-full p-4 group-hover:scale-110 transition-transform mb-3">
-                <Play className="h-8 w-8 text-white fill-white" />
+        <div className="overflow-y-auto flex-1 px-0 py-4">
+          <div className="space-y-6 px-6">
+            {/* Video Thumbnail */}
+            <div
+              className={`relative overflow-hidden rounded-lg aspect-video flex items-center justify-center group bg-gradient-to-br ${getPlaceholderGradient()}`}
+            >
+              {!imageError && (
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                  onError={() => setImageError(true)}
+                />
+              )}
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 group-hover:bg-black/50 transition-colors">
+                <div className="bg-red-600 rounded-full p-4 group-hover:scale-110 transition-transform mb-3">
+                  <Play className="h-8 w-8 text-white fill-white" />
+                </div>
+                <p className="text-white text-sm font-semibold text-center px-4">
+                  {video.title}
+                </p>
               </div>
-              <p className="text-white text-sm font-semibold text-center px-4">
-                {video.title}
+              {video.duration && (
+                <div className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-semibold">
+                  {video.duration}
+                </div>
+              )}
+            </div>
+
+            {/* Description */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-600 mb-2">
+                About this video
+              </h3>
+              <p className="text-gray-700 leading-relaxed text-base">
+                {video.description}
               </p>
             </div>
-            {video.duration && (
-              <div className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-semibold">
-                {video.duration}
-              </div>
-            )}
           </div>
+        </div>
 
-          {/* Description */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-600 mb-2">
-              About this video
-            </h3>
-            <p className="text-gray-700 leading-relaxed text-base">
-              {video.description}
-            </p>
-          </div>
-
-          {/* Call to Action */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
-            <Button
-              onClick={handleWatchClick}
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 h-auto flex items-center justify-center gap-2 group"
-            >
-              <Play className="h-5 w-5 group-hover:animate-pulse" />
-              <span>Watch on YouTube</span>
-              <ExternalLink className="h-4 w-4 ml-auto" />
-            </Button>
-            <Button
-              onClick={onClose}
-              variant="outline"
-              className="flex-1 font-semibold py-2 h-auto"
-            >
-              Close
-            </Button>
-          </div>
+        {/* Call to Action */}
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 px-6 border-t flex-shrink-0">
+          <Button
+            onClick={handleWatchClick}
+            className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 h-auto flex items-center justify-center gap-2 group"
+          >
+            <Play className="h-5 w-5 group-hover:animate-pulse" />
+            <span>Watch on YouTube</span>
+            <ExternalLink className="h-4 w-4 ml-auto" />
+          </Button>
+          <Button
+            onClick={onClose}
+            variant="outline"
+            className="flex-1 font-semibold py-2 h-auto"
+          >
+            Close
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
