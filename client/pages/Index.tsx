@@ -1993,7 +1993,7 @@ export default function Index() {
                   transit and at rest using industry-standard protocols
                 </p>
                 <p>
-                  • <strong>Access Controls:</strong> Role-based access with
+                  �� <strong>Access Controls:</strong> Role-based access with
                   multi-factor authentication
                 </p>
                 <p>
@@ -2130,6 +2130,13 @@ export default function Index() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Video Info Popup */}
+      <VideoInfoPopup
+        isOpen={showVideoPopup}
+        onClose={closeVideoPopup}
+        video={selectedVideo}
+      />
 
       {/* Cache Status Indicator */}
       <CacheStatus />
