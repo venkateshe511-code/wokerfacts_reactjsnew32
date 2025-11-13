@@ -6146,7 +6146,7 @@ padding-top: 120px; align-items: center; min-height: 0; ">
 
         const isLocal = process.env.NODE_ENV === "development";
         const apiUrl =
-          "https://generateclaimantreportapi-e355r2gb5q-uc.a.run.app/";
+          "https://generateclaimantreportapi-tn63kvymra-uc.a.run.app";
         const response = await fetch(apiUrl, {
           method: "POST",
           headers: {

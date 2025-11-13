@@ -36,7 +36,7 @@ export async function startCheckout(params: {
     buildUrl(
       "https://us-central1-workerfacts-43760.cloudfunctions.net/createCheckoutSessionApi",
     ),
-    buildUrl("https://createcheckoutsessionapi-e355r2gb5q-uc.a.run.app"),
+    buildUrl("https://createcheckoutsessionapi-tn63kvymra-uc.a.run.app"),
   );
 
   const attempts: { url: string; status?: number; text?: string }[] = [];
