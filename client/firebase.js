@@ -13,13 +13,13 @@ import { getAuth, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
 // };
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDnKn5KgsfhsQEPmwefcc1OAIWXi7IPYMA",
-  authDomain: "workerfacts-60c02.firebaseapp.com",
-  projectId: "workerfacts-60c02",
-  storageBucket: "workerfacts-60c02.firebasestorage.app",
-  messagingSenderId: "474718663619",
-  appId: "1:474718663619:web:df8d6c7a99ee66168a4376",
-  measurementId: "G-VKEBTTW6NS",
+  apiKey: "YOUR_NEW_API_KEY",
+  authDomain: "YOUR_NEW_AUTH_DOMAIN",
+  projectId: "YOUR_NEW_PROJECT_ID",
+  storageBucket: "YOUR_NEW_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_NEW_MESSAGING_SENDER_ID",
+  appId: "YOUR_NEW_APP_ID",
+  measurementId: "YOUR_NEW_MEASUREMENT_ID",
 };
 
 const app = initializeApp(firebaseConfig);
