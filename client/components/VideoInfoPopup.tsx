@@ -117,21 +117,50 @@ export function VideoInfoPopup({
 
         {/* Call to Action */}
         <div className="flex flex-col sm:flex-row gap-3 pt-4 px-6 border-t flex-shrink-0">
-          <Button
-            onClick={handleWatchClick}
-            className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 h-auto flex items-center justify-center gap-2 group"
-          >
-            <Play className="h-5 w-5 group-hover:animate-pulse" />
-            <span>Watch on YouTube</span>
-            <ExternalLink className="h-4 w-4 ml-auto" />
-          </Button>
-          <Button
-            onClick={onClose}
-            variant="outline"
-            className="flex-1 font-semibold py-2 h-auto"
-          >
-            Close
-          </Button>
+          {isPlaying ? (
+            <>
+              <Button
+                onClick={() => setIsPlaying(false)}
+                variant="outline"
+                className="flex-1 font-semibold py-2 h-auto"
+              >
+                <ArrowLeft className="h-5 w-5 mr-2" />
+                Back to Preview
+              </Button>
+              <Button
+                onClick={handleWatchClick}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 h-auto flex items-center justify-center gap-2 group"
+              >
+                <ExternalLink className="h-5 w-5" />
+                <span>Open on YouTube</span>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={handlePlayClick}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 h-auto flex items-center justify-center gap-2 group"
+              >
+                <Play className="h-5 w-5 group-hover:animate-pulse" />
+                <span>Play Video</span>
+              </Button>
+              <Button
+                onClick={handleWatchClick}
+                variant="outline"
+                className="flex-1 font-semibold py-2 h-auto flex items-center justify-center gap-2"
+              >
+                <ExternalLink className="h-4 w-4" />
+                <span>YouTube</span>
+              </Button>
+              <Button
+                onClick={onClose}
+                variant="outline"
+                className="flex-1 font-semibold py-2 h-auto"
+              >
+                Close
+              </Button>
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>
